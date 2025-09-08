@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/utils/helper/on_genrated_routes.dart';
 import 'package:test/core/services/app_state_service.dart';
+import 'package:test/core/services/network/dio_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      locale: Locale('ar'),
+      locale: Locale('en'),
       localizationsDelegates: [
         S.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -48,6 +49,11 @@ class MyApp extends StatelessWidget {
       supportedLocales: S.delegate.supportedLocales,
       onGenerateRoute: onGenratedRoutes,
       initialRoute: initialRoute,
+      builder: (context, child) {
+        // Set DioService context for proper language header handling
+        DioService.instance.setContext(context);
+        return child!;
+      },
     );
   }
 }

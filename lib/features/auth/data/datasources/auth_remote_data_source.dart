@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:test/core/models/api_response.dart';
 import 'package:test/core/services/network/dio_service.dart';
 import 'package:test/core/utils/constant/api_endpoints.dart';
 import 'package:test/features/auth/data/models/user_model.dart';
 import 'package:test/features/auth/data/models/login_request_model.dart';
 
 abstract class AuthRemoteDataSource {
-  Future<UserModel> login(LoginRequestModel loginRequest);
+  Future<ApiResponse<UserModel>> login(LoginRequestModel loginRequest);
   Future<UserModel> register({
     required String name,
     required String email,
@@ -17,7 +18,7 @@ abstract class AuthRemoteDataSource {
     required int cityId,
     required int regionId,
   });
-  Future<void> logout();
+  Future<ApiResponse<void>> logout();
   Future<void> resetPassword(String email);
 }
 
@@ -27,23 +28,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   AuthRemoteDataSourceImpl({required this.dioService});
 
   @override
-  Future<UserModel> login(LoginRequestModel loginRequest) async {
-    try {
-      final response = await dioService.post(
-        ApiEndpoints.login,
-        data: loginRequest.toJson(),
-      );
-
-      if (response.statusCode == 200 && response.data['status'] == 200) {
-        return UserModel.fromJson(response.data['data']);
-      } else {
-        // Extract server message for better error handling
-        final serverMessage = response.data['message'] ?? 'Login failed';
-        throw Exception(serverMessage);
-      }
-    } catch (e) {
-      rethrow;
-    }
+  Future<ApiResponse<UserModel>> login(LoginRequestModel loginRequest) async {
+    return await dioService.postWithResponse<UserModel>(
+      ApiEndpoints.login,
+      data: loginRequest.toJson(),
+      dataParser: (data) => UserModel.fromJson(data),
+    );
   }
 
   @override
@@ -89,23 +79,19 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> logout() async {
-    try {
-      await dioService.post(ApiEndpoints.logout);
-    } catch (e) {
-      rethrow;
-    }
+  Future<ApiResponse<void>> logout() async {
+    final response = await dioService.postWithResponse<void>(
+      ApiEndpoints.logout,
+    );
+    return response;
   }
 
   @override
-  Future<void> resetPassword(String email) async {
-    try {
-      await dioService.post(
-        '${ApiEndpoints.baseUrl}reset-password',
-        data: {'email': email},
-      );
-    } catch (e) {
-      rethrow;
-    }
+  Future<ApiResponse<void>> resetPassword(String email) async {
+    final response = await dioService.postWithResponse<void>(
+      '${ApiEndpoints.baseUrl}reset-password',
+      data: {'email': email},
+    );
+    return response;
   }
 }

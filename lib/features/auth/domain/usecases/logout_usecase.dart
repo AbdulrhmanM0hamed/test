@@ -1,3 +1,4 @@
+import 'package:test/core/models/api_response.dart';
 import 'package:test/features/auth/domain/repositories/auth_repository.dart';
 
 class LogoutUseCase {
@@ -5,7 +6,7 @@ class LogoutUseCase {
 
   const LogoutUseCase(this.repository);
 
-  Future<void> call() async {
+  Future<ApiResponse<void>> call() async {
     return await repository.logout();
   }
 }

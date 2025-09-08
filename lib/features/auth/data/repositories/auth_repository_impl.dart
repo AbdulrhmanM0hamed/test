@@ -1,3 +1,4 @@
+import 'package:test/core/models/api_response.dart';
 import 'package:test/features/auth/domain/entities/user.dart';
 import 'package:test/features/auth/domain/entities/login_request.dart';
 import 'package:test/features/auth/domain/repositories/auth_repository.dart';
@@ -10,7 +11,7 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<User> login(LoginRequest loginRequest) async {
+  Future<ApiResponse<User>> login(LoginRequest loginRequest) async {
     final loginRequestModel = LoginRequestModel.fromEntity(loginRequest);
     return await remoteDataSource.login(loginRequestModel);
   }
@@ -41,7 +42,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> logout() async {
+  Future<ApiResponse<void>> logout() async {
     return await remoteDataSource.logout();
   }
 

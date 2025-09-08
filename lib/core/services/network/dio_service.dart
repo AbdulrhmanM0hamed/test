@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:test/core/models/api_response.dart';
 import 'package:test/core/services/token_storage_service.dart';
 import 'package:test/core/utils/constant/api_endpoints.dart';
@@ -8,6 +9,7 @@ class DioService {
   static DioService? _instance;
   late Dio _dio;
   TokenStorageService? _tokenStorageService;
+  BuildContext? _context;
 
   DioService._internal() {
     _dio = Dio();
@@ -16,6 +18,10 @@ class DioService {
 
   void setTokenStorageService(TokenStorageService tokenStorageService) {
     _tokenStorageService = tokenStorageService;
+  }
+
+  void setContext(BuildContext context) {
+    _context = context;
   }
 
   static DioService get instance {
@@ -41,10 +47,20 @@ class DioService {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
+          // Add authorization token
           final token = _tokenStorageService?.accessToken;
           if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';
           }
+          
+          // Add language header based on app locale
+          String language = 'ar'; // Default to Arabic
+          if (_context != null) {
+            final locale = Localizations.localeOf(_context!);
+            language = locale.languageCode == 'en' ? 'en' : 'ar';
+          }
+          options.headers['lang'] = language;
+          
           if (kDebugMode) {
             print('🚀 REQUEST: ${options.method} ${options.uri}');
             print('📤 DATA: ${options.data}');
@@ -76,82 +92,53 @@ class DioService {
     );
   }
 
-  // Generic GET request
-  Future<Response> get(
-    String endpoint, {
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-  }) async {
-    try {
-      return await _dio.get(
-        endpoint,
-        queryParameters: queryParameters,
-        options: options,
-      );
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  // Generic POST request
-  Future<Response> post(
+  // Internal method for making requests
+  Future<Response> _makeRequest(
+    String method,
     String endpoint, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) async {
     try {
-      return await _dio.post(
-        endpoint,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-      );
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  // Generic PUT request
-  Future<Response> put(
-    String endpoint, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-  }) async {
-    try {
-      return await _dio.put(
-        endpoint,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-      );
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  // Generic DELETE request
-  Future<Response> delete(
-    String endpoint, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-  }) async {
-    try {
-      return await _dio.delete(
-        endpoint,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-      );
+      switch (method.toUpperCase()) {
+        case 'GET':
+          return await _dio.get(
+            endpoint,
+            queryParameters: queryParameters,
+            options: options,
+          );
+        case 'POST':
+          return await _dio.post(
+            endpoint,
+            data: data,
+            queryParameters: queryParameters,
+            options: options,
+          );
+        case 'PUT':
+          return await _dio.put(
+            endpoint,
+            data: data,
+            queryParameters: queryParameters,
+            options: options,
+          );
+        case 'DELETE':
+          return await _dio.delete(
+            endpoint,
+            data: data,
+            queryParameters: queryParameters,
+            options: options,
+          );
+        default:
+          throw ArgumentError('Unsupported HTTP method: $method');
+      }
     } catch (e) {
       rethrow;
     }
   }
 
   /// Handle server response and create structured ApiResponse
-  static ApiResponse<T> handleResponse<T>(
+  ApiResponse<T> _handleResponse<T>(
     Response response, {
     T Function(dynamic)? dataParser,
   }) {
@@ -206,7 +193,7 @@ class DioService {
   }
 
   /// Handle DioException and create structured ApiException
-  static ApiException handleDioException(DioException error) {
+  ApiException _handleDioException(DioException error) {
     String message = 'حدث خطأ غير متوقع';
     Map<String, dynamic>? errors;
     int? statusCode = error.response?.statusCode;
@@ -256,7 +243,31 @@ class DioService {
     );
   }
 
-  /// Enhanced POST method with structured response handling
+  /// Enhanced request method with structured response handling
+  Future<ApiResponse<T>> requestWithResponse<T>(
+    String method,
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    T Function(dynamic)? dataParser,
+  }) async {
+    try {
+      final response = await _makeRequest(
+        method,
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+      );
+
+      return _handleResponse<T>(response, dataParser: dataParser);
+    } on DioException catch (e) {
+      throw _handleDioException(e);
+    }
+  }
+
+  /// POST method with structured response handling
   Future<ApiResponse<T>> postWithResponse<T>(
     String path, {
     dynamic data,
@@ -264,41 +275,33 @@ class DioService {
     Options? options,
     T Function(dynamic)? dataParser,
   }) async {
-    try {
-      final response = await post(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-      );
-
-      return handleResponse<T>(response, dataParser: dataParser);
-    } on DioException catch (e) {
-      throw handleDioException(e);
-    }
+    return requestWithResponse<T>(
+      'POST',
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      dataParser: dataParser,
+    );
   }
 
-  /// Enhanced GET method with structured response handling
+  /// GET method with structured response handling
   Future<ApiResponse<T>> getWithResponse<T>(
     String path, {
     Map<String, dynamic>? queryParameters,
     Options? options,
     T Function(dynamic)? dataParser,
   }) async {
-    try {
-      final response = await get(
-        path,
-        queryParameters: queryParameters,
-        options: options,
-      );
-
-      return handleResponse<T>(response, dataParser: dataParser);
-    } on DioException catch (e) {
-      throw handleDioException(e);
-    }
+    return requestWithResponse<T>(
+      'GET',
+      path,
+      queryParameters: queryParameters,
+      options: options,
+      dataParser: dataParser,
+    );
   }
 
-  /// Enhanced PUT method with structured response handling
+  /// PUT method with structured response handling
   Future<ApiResponse<T>> putWithResponse<T>(
     String path, {
     dynamic data,
@@ -306,21 +309,17 @@ class DioService {
     Options? options,
     T Function(dynamic)? dataParser,
   }) async {
-    try {
-      final response = await put(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-      );
-
-      return handleResponse<T>(response, dataParser: dataParser);
-    } on DioException catch (e) {
-      throw handleDioException(e);
-    }
+    return requestWithResponse<T>(
+      'PUT',
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      dataParser: dataParser,
+    );
   }
 
-  /// Enhanced DELETE method with structured response handling
+  /// DELETE method with structured response handling
   Future<ApiResponse<T>> deleteWithResponse<T>(
     String path, {
     dynamic data,
@@ -328,17 +327,72 @@ class DioService {
     Options? options,
     T Function(dynamic)? dataParser,
   }) async {
-    try {
-      final response = await delete(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-      );
+    return requestWithResponse<T>(
+      'DELETE',
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      dataParser: dataParser,
+    );
+  }
 
-      return handleResponse<T>(response, dataParser: dataParser);
-    } on DioException catch (e) {
-      throw handleDioException(e);
-    }
+  // Legacy methods for backward compatibility
+  Future<Response> get(
+    String endpoint, {
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async {
+    return await _makeRequest(
+      'GET',
+      endpoint,
+      queryParameters: queryParameters,
+      options: options,
+    );
+  }
+
+  Future<Response> post(
+    String endpoint, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async {
+    return await _makeRequest(
+      'POST',
+      endpoint,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+    );
+  }
+
+  Future<Response> put(
+    String endpoint, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async {
+    return await _makeRequest(
+      'PUT',
+      endpoint,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+    );
+  }
+
+  Future<Response> delete(
+    String endpoint, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async {
+    return await _makeRequest(
+      'DELETE',
+      endpoint,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+    );
   }
 }

@@ -83,7 +83,7 @@ class _LoginViewState extends State<LoginView> {
           if (state is AuthSuccess) {
             CustomSnackbar.showSuccess(
               context: context,
-              message: 'تم تسجيل الدخول بنجاح',
+              message: state.message,
             );
             Navigator.pushReplacementNamed(context, BottomNavBar.routeName);
           } else if (state is AuthError) {

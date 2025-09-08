@@ -30,29 +30,37 @@ class AuthCubit extends Cubit<AuthState> {
 
       final loginRequest = LoginRequest(email: email, password: password);
 
-      final user = await loginUseCase(loginRequest);
+      final response = await loginUseCase(loginRequest);
 
-      // Store token and user data
-      await tokenStorageService.saveTokens(
-        accessToken: user.token,
-        refreshToken: user.token,
-        sessionToken: user.token,
-      );
-      await tokenStorageService.saveUserData(
-        userId: user.id,
-        userUuid: user.id.toString(),
-        userEmail: user.email,
-        userStatus: user.status,
-      );
+      if (response.success && response.data != null) {
+        final user = response.data!;
 
-      // Handle app state for persistent login
-      await appStateService.handleSuccessfulLogin(
-        rememberMe: rememberMe,
-        email: email,
-        password: password,
-      );
+        // Store token and user data
+        await tokenStorageService.saveTokens(
+          accessToken: user.token,
+          refreshToken: user.token,
+          sessionToken: user.token,
+        );
+        await tokenStorageService.saveUserData(
+          userId: user.id,
+          userUuid: user.id.toString(),
+          userEmail: user.email,
+          userStatus: user.status,
+        );
 
-      emit(AuthSuccess(user));
+        // Handle app state for persistent login
+        await appStateService.handleSuccessfulLogin(
+          rememberMe: rememberMe,
+          email: email,
+          password: password,
+        );
+
+        emit(AuthSuccess(user, message: response.message));
+      } else {
+        String errorMessage =
+            response.getFirstErrorMessage() ?? response.message;
+        emit(AuthError(errorMessage));
+      }
     } catch (e) {
       final errorMessage = ErrorHandler.extractErrorMessage(e);
       emit(AuthError(errorMessage));
@@ -64,7 +72,7 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthLoading());
 
       // Call logout API
-      await logoutUseCase();
+      final response = await logoutUseCase();
 
       // Clear stored tokens
       await tokenStorageService.clearAll();
@@ -72,7 +80,12 @@ class AuthCubit extends Cubit<AuthState> {
       // Handle app state for logout
       await appStateService.handleLogout();
 
-      emit(AuthLoggedOut());
+      if (response.success) {
+        emit(AuthLoggedOut(message: response.message));
+      } else {
+        String errorMessage = response.getFirstErrorMessage() ?? response.message;
+        emit(AuthError(errorMessage));
+      }
     } catch (e) {
       final errorMessage = ErrorHandler.extractErrorMessage(e);
       emit(AuthError(errorMessage));

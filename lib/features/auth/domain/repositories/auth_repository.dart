@@ -1,8 +1,9 @@
+import 'package:test/core/models/api_response.dart';
 import 'package:test/features/auth/domain/entities/user.dart';
 import 'package:test/features/auth/domain/entities/login_request.dart';
 
 abstract class AuthRepository {
-  Future<User> login(LoginRequest loginRequest);
+  Future<ApiResponse<User>> login(LoginRequest loginRequest);
   Future<User> register({
     required String name,
     required String email,
@@ -14,6 +15,6 @@ abstract class AuthRepository {
     required int cityId,
     required int regionId,
   });
-  Future<void> logout();
+  Future<ApiResponse<void>> logout();
   Future<void> resetPassword(String email);
 }
