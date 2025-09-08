@@ -60,8 +60,6 @@ class _ProductCardState extends State<ProductCard>
 
   @override
   Widget build(BuildContext context) {
-    final textDirection = Directionality.of(context);
-    final isRTL = textDirection == TextDirection.rtl;
 
     return GestureDetector(
       onTap: _handleTap,

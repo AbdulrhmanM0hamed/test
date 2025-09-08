@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
-import 'package:test/generated/l10n.dart';
 
 class RegistrationTermsCheckbox extends StatelessWidget {
   final bool acceptTerms;
@@ -16,10 +15,9 @@ class RegistrationTermsCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final S s = S.of(context);
 
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Checkbox(
           value: acceptTerms,
@@ -27,7 +25,7 @@ class RegistrationTermsCheckbox extends StatelessWidget {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
           onChanged: onChanged,
         ),
-        const SizedBox(width: 8),
+        
         Expanded(
           child: GestureDetector(
             onTap: () => onChanged(!acceptTerms),

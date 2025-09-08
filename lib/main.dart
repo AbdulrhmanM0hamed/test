@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      locale: Locale('en'),
+      locale: Locale('ar'),
       localizationsDelegates: [
         S.delegate,
         GlobalMaterialLocalizations.delegate,

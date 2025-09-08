@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
-import 'package:test/generated/l10n.dart';
 
 class RegistrationPersonalInfo extends StatelessWidget {
   final DateTime? selectedBirthDate;
@@ -20,7 +19,6 @@ class RegistrationPersonalInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final S s = S.of(context);
 
     return Column(
       children: [

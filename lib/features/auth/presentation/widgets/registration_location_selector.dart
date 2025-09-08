@@ -8,7 +8,6 @@ import 'package:test/features/auth/presentation/cubit/location_state.dart';
 import 'package:test/features/profile/domain/entities/city.dart';
 import 'package:test/features/profile/domain/entities/country.dart';
 import 'package:test/features/profile/domain/entities/region.dart';
-import 'package:test/generated/l10n.dart';
 
 class RegistrationLocationSelector extends StatelessWidget {
   final Country? selectedCountry;
@@ -30,7 +29,6 @@ class RegistrationLocationSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final S s = S.of(context);
 
     return BlocBuilder<LocationCubit, LocationState>(
       builder: (context, state) {
@@ -430,7 +428,7 @@ class RegistrationLocationSelector extends StatelessWidget {
         );
       }
       return DropdownButtonFormField<City>(
-        value: selectedCity,
+        initialValue: selectedCity,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(16),
           border: OutlineInputBorder(
@@ -538,7 +536,7 @@ class RegistrationLocationSelector extends StatelessWidget {
 
     if (state is LocationRegionsLoaded) {
       return DropdownButtonFormField<Region>(
-        value: selectedRegion,
+        initialValue: selectedRegion,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(16),
           border: OutlineInputBorder(

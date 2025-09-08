@@ -38,10 +38,10 @@ class RegistrationRepositoryImpl implements RegistrationRepository {
         gender: response.data!.gender ?? 'unknown',
         status: response.data!.status ?? '1',
         createdAt:
-            response.data!.createdAt?.toString() ??
+            response.data!.createdAt.toString() ??
             DateTime.now().toIso8601String(),
         updatedAt:
-            response.data!.updatedAt?.toString() ??
+            response.data!.updatedAt.toString() ??
             DateTime.now().toIso8601String(),
         countryId: response.data!.countryId ?? 0,
         cityId: response.data!.cityId ?? 0,
