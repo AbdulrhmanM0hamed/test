@@ -9,6 +9,8 @@ import '../widgets/dots_indicator.dart';
 import '../widgets/next_button.dart';
 import '../../../../generated/l10n.dart';
 import '../../../../features/auth/presentation/view/login_view.dart';
+import '../../../../core/di/dependency_injection.dart';
+import '../../../../core/services/app_state_service.dart';
 
 class OnboardingView extends StatefulWidget {
   static const String routeName = '/onboarding';
@@ -70,11 +72,17 @@ class _OnboardingViewState extends State<OnboardingView> {
         curve: Curves.easeInOut,
       );
     } else {
-      Navigator.pushReplacementNamed(context, LoginView.routeName);
+      _completeOnboarding();
     }
   }
 
   void _skipOnboarding() {
+    _completeOnboarding();
+  }
+
+  void _completeOnboarding() async {
+    final appStateService = DependencyInjection.getIt.get<AppStateService>();
+    await appStateService.setOnboardingCompleted(true);
     Navigator.pushReplacementNamed(context, LoginView.routeName);
   }
 

@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/core/services/network/dio_service.dart';
 import 'package:test/core/services/token_storage_service.dart';
+import 'package:test/core/services/app_state_service.dart';
 import 'package:test/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:test/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:test/features/auth/domain/repositories/auth_repository.dart';
@@ -18,6 +19,7 @@ class DependencyInjection {
   static final GetIt getIt = GetIt.instance;
 
   static TokenStorageService? _tokenStorageService;
+  static AppStateService? _appStateService;
   static DioService? _dioService;
   static AuthRemoteDataSource? _authRemoteDataSource;
   static AuthRepository? _authRepository;
@@ -30,8 +32,9 @@ class DependencyInjection {
   static Future<void> init() async {
     final sharedPreferences = await SharedPreferences.getInstance();
 
-    // Initialize token storage service
+    // Initialize services
     _tokenStorageService = TokenStorageService(sharedPreferences);
+    _appStateService = AppStateService(sharedPreferences);
 
     // Initialize dio service
     _dioService = DioService.instance;
@@ -56,6 +59,7 @@ class DependencyInjection {
 
     // Register with GetIt
     getIt.registerSingleton<TokenStorageService>(_tokenStorageService!);
+    getIt.registerSingleton<AppStateService>(_appStateService!);
     getIt.registerSingleton<DioService>(_dioService!);
     getIt.registerSingleton<AuthRepository>(_authRepository!);
     getIt.registerSingleton<LoginUseCase>(_loginUseCase!);
@@ -69,6 +73,7 @@ class DependencyInjection {
         loginUseCase: getIt<LoginUseCase>(),
         logoutUseCase: getIt<LogoutUseCase>(),
         tokenStorageService: getIt<TokenStorageService>(),
+        appStateService: getIt<AppStateService>(),
       ),
     );
 
@@ -81,7 +86,7 @@ class DependencyInjection {
   }
 
   static AuthCubit createAuthCubit() {
-    if (_loginUseCase == null || _tokenStorageService == null) {
+    if (_loginUseCase == null || _tokenStorageService == null || _appStateService == null) {
       throw Exception(
         'DependencyInjection not initialized. Call DependencyInjection.init() first.',
       );
@@ -90,6 +95,7 @@ class DependencyInjection {
       loginUseCase: _loginUseCase!,
       logoutUseCase: _logoutUseCase!,
       tokenStorageService: _tokenStorageService!,
+      appStateService: _appStateService!,
     );
   }
 

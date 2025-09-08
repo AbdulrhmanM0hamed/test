@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/utils/helper/on_genrated_routes.dart';
+import 'package:test/core/services/app_state_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +29,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.1
   @override
   Widget build(BuildContext context) {
+    // Get initial route based on app state
+    final appStateService = DependencyInjection.getIt.get<AppStateService>();
+    final initialRoute = appStateService.getInitialRoute();
+
     return MaterialApp(
       title: 'دكاكين',
       debugShowCheckedModeBanner: false,
@@ -43,7 +48,7 @@ class MyApp extends StatelessWidget {
       ],
       supportedLocales: S.delegate.supportedLocales,
       onGenerateRoute: onGenratedRoutes,
-      initialRoute: OnboardingView.routeName,
+      initialRoute: initialRoute,
     );
   }
 }

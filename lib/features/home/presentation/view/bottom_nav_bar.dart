@@ -8,6 +8,9 @@ import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/features/home/presentation/view/home_page.dart';
 import 'package:test/features/categories/presentation/view/categories_view.dart';
+import 'package:test/core/di/dependency_injection.dart';
+import 'package:test/core/services/app_state_service.dart';
+import 'package:test/features/home/presentation/widgets/login_prompt_widget.dart';
 
 class BottomNavBar extends StatefulWidget {
   static const String routeName = '/home';
@@ -21,13 +24,26 @@ class BottomNavBar extends StatefulWidget {
 class _HomeViewState extends State<BottomNavBar> {
   int _selectedIndex = 0;
 
-  final List<Widget> _screens = [
-    const HomePage(),
-    const CategoriesView(),
-    const Center(child: Text('Favorites')),
-    const Center(child: Text('Cart')),
-    const ProfileWrapper(),
-  ];
+  late final List<Widget> _screens;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeScreens();
+  }
+
+  void _initializeScreens() {
+    final appStateService = DependencyInjection.getIt.get<AppStateService>();
+    final isLoggedIn = appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+    
+    _screens = [
+      const HomePage(),
+      const CategoriesView(),
+      const Center(child: Text('Favorites')),
+      const Center(child: Text('Cart')),
+      isLoggedIn ? const ProfileWrapper() : const LoginPromptWidget(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {

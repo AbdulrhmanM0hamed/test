@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/services/token_storage_service.dart';
+import 'package:test/core/services/app_state_service.dart';
 import 'package:test/core/utils/error/error_handler.dart';
 import 'package:test/features/auth/domain/entities/login_request.dart';
 import 'package:test/features/auth/domain/usecases/login_usecase.dart';
@@ -10,14 +11,20 @@ class AuthCubit extends Cubit<AuthState> {
   final LoginUseCase loginUseCase;
   final LogoutUseCase logoutUseCase;
   final TokenStorageService tokenStorageService;
+  final AppStateService appStateService;
 
   AuthCubit({
     required this.loginUseCase,
     required this.logoutUseCase,
     required this.tokenStorageService,
+    required this.appStateService,
   }) : super(AuthInitial());
 
-  Future<void> login({required String email, required String password}) async {
+  Future<void> login({
+    required String email, 
+    required String password,
+    bool rememberMe = false,
+  }) async {
     try {
       emit(AuthLoading());
 
@@ -38,6 +45,13 @@ class AuthCubit extends Cubit<AuthState> {
         userStatus: user.status,
       );
 
+      // Handle app state for persistent login
+      await appStateService.handleSuccessfulLogin(
+        rememberMe: rememberMe,
+        email: email,
+        password: password,
+      );
+
       emit(AuthSuccess(user));
     } catch (e) {
       final errorMessage = ErrorHandler.extractErrorMessage(e);
@@ -54,6 +68,9 @@ class AuthCubit extends Cubit<AuthState> {
 
       // Clear stored tokens
       await tokenStorageService.clearAll();
+
+      // Handle app state for logout
+      await appStateService.handleLogout();
 
       emit(AuthLoggedOut());
     } catch (e) {

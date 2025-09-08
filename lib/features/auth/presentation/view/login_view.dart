@@ -15,6 +15,7 @@ import 'package:test/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:test/features/auth/presentation/cubit/auth_state.dart';
 import 'package:test/features/home/presentation/view/bottom_nav_bar.dart';
 import 'package:test/generated/l10n.dart';
+import 'package:test/core/services/app_state_service.dart';
 
 class LoginView extends StatefulWidget {
   static const String routeName = '/login';
@@ -29,6 +30,13 @@ class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _rememberMe = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedCredentials();
+  }
 
   @override
   void dispose() {
@@ -37,11 +45,25 @@ class _LoginViewState extends State<LoginView> {
     super.dispose();
   }
 
+  void _loadSavedCredentials() async {
+    final appStateService = DependencyInjection.getIt.get<AppStateService>();
+    final savedCredentials = appStateService.getSavedCredentials();
+    
+    if (savedCredentials['email'] != null && savedCredentials['password'] != null) {
+      setState(() {
+        _emailController.text = savedCredentials['email']!;
+        _passwordController.text = savedCredentials['password']!;
+        _rememberMe = appStateService.getRememberMe();
+      });
+    }
+  }
+
   void _login(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       context.read<AuthCubit>().login(
         email: _emailController.text.trim(),
         password: _passwordController.text,
+        rememberMe: _rememberMe,
       );
     }
   }
@@ -154,26 +176,55 @@ class _LoginViewState extends State<LoginView> {
                               ),
                             ],
                           ),
+                          const SizedBox(height: 16),
 
-                          // Forgot Password
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  '/forgot-password',
-                                );
-                              },
-                              child: Text(
-                                s.forgotPassword,
-                                style: getRegularStyle(
-                                  fontFamily: FontConstant.cairo,
-                                  fontSize: FontSize.size14,
-                                  color: AppColors.textSecondary,
+                          // Remember Me and Forgot Password Row
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Remember Me Checkbox
+                              Row(
+                                children: [
+                                  Checkbox(
+                                    value: _rememberMe,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _rememberMe = value ?? false;
+                                      });
+                                    },
+                                    activeColor: AppColors.primary,
+                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    'تذكرني',
+                                    style: getRegularStyle(
+                                      fontFamily: FontConstant.cairo,
+                                      fontSize: FontSize.size14,
+                                      color: AppColors.textPrimary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              
+                              // Forgot Password
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/forgot-password',
+                                  );
+                                },
+                                child: Text(
+                                  s.forgotPassword,
+                                  style: getRegularStyle(
+                                    fontFamily: FontConstant.cairo,
+                                    fontSize: FontSize.size14,
+                                    color: AppColors.textSecondary,
+                                  ),
                                 ),
                               ),
-                            ),
+                            ],
                           ),
 
                           const SizedBox(height: 24),
