@@ -2,8 +2,8 @@ class Region {
   final int id;
   final String titleEn;
   final String titleAr;
-  final String code;
-  final String status;
+  final String? code;
+  final String? status;
   final int cityId;
   final String? createdAt;
   final String? updatedAt;
@@ -12,8 +12,8 @@ class Region {
     required this.id,
     required this.titleEn,
     required this.titleAr,
-    required this.code,
-    required this.status,
+    this.code,
+    this.status,
     required this.cityId,
     this.createdAt,
     this.updatedAt,

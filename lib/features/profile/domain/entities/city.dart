@@ -3,8 +3,8 @@ class City {
   final String? image;
   final String titleEn;
   final String titleAr;
-  final String code;
-  final String status;
+  final String? code;
+  final String? status;
   final int countryId;
   final String? createdAt;
   final String? updatedAt;
@@ -14,8 +14,8 @@ class City {
     this.image,
     required this.titleEn,
     required this.titleAr,
-    required this.code,
-    required this.status,
+    this.code,
+    this.status,
     required this.countryId,
     this.createdAt,
     this.updatedAt,

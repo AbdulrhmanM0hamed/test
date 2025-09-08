@@ -41,6 +41,10 @@ class AppAssets {
   static const String shoe2Image = '$_imagesPath/test/shose2.png';
   static const String watchImage = '$_imagesPath/test/watch.png';
 
+  // flags
+  static const String egypt = '$_imagesPath/egypt.svg';
+  static const String saudi = '$_imagesPath/saudi.svg';
+
   // Bottom Navigation Icons
   static const String homeIcon = '$_iconsPath/bottom_icon_bold/home-2.svg';
   static const String homeIconOutline = '$_iconsPath/bottom_icon_outline/home-1.svg';

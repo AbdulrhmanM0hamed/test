@@ -5,11 +5,11 @@ class Country {
   final String titleAr;
   final String shortcut;
   final String code;
-  final String status;
+  final String? status;
   final String? createdAt;
   final String? updatedAt;
-  final String currency;
-  final String currencyAr;
+  final String? currency;
+  final String? currencyAr;
 
   const Country({
     required this.id,
@@ -18,11 +18,11 @@ class Country {
     required this.titleAr,
     required this.shortcut,
     required this.code,
-    required this.status,
+    this.status,
     this.createdAt,
     this.updatedAt,
-    required this.currency,
-    required this.currencyAr,
+    this.currency,
+    this.currencyAr,
   });
 
   @override

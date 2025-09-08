@@ -8,11 +8,11 @@ class CountryModel extends Country {
     required super.titleAr,
     required super.shortcut,
     required super.code,
-    required super.status,
+    super.status,
     super.createdAt,
     super.updatedAt,
-    required super.currency,
-    required super.currencyAr,
+    super.currency,
+    super.currencyAr,
   });
 
   factory CountryModel.fromJson(Map<String, dynamic> json) {
@@ -26,7 +26,7 @@ class CountryModel extends Country {
       status: json['status'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
-      currency: json['currency'],
+      currency: json['currency_en'],
       currencyAr: json['currency_ar'],
     );
   }
