@@ -13,13 +13,13 @@ class CategoryCard extends StatelessWidget {
   final bool hasOpacity;
 
   const CategoryCard({
-    Key? key,
+    super.key,
     required this.category,
     this.onTap,
     this.width = 170,
     this.height = 170,
     this.hasOpacity = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +77,7 @@ class CategoryCard extends StatelessWidget {
           Positioned(
             top: 5,
             left: 5,
-            child: Container(
+            child: SizedBox(
               width: 24,
               height: 24,
               child: SvgPicture.asset(AppAssets.pinIcon),

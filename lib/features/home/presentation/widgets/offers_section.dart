@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:test/features/home/presentation/widgets/offers_slider.dart';
 
 class OffersSection extends StatelessWidget {
-  const OffersSection({Key? key}) : super(key: key);
+  const OffersSection({super.key});
 
   @override
   Widget build(BuildContext context) {

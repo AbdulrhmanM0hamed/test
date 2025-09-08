@@ -10,8 +10,7 @@ class StoreCard extends StatelessWidget {
   final Store store;
   final double width;
 
-  const StoreCard({Key? key, required this.store, required this.width})
-    : super(key: key);
+  const StoreCard({super.key, required this.store, required this.width});
 
   @override
   Widget build(BuildContext context) {

@@ -8,8 +8,7 @@ import 'package:test/features/home/presentation/widgets/flash_sale/flash_sale_pr
 class FlashSaleProductCard extends StatefulWidget {
   final FlashSaleProduct product;
 
-  const FlashSaleProductCard({Key? key, required this.product})
-    : super(key: key);
+  const FlashSaleProductCard({super.key, required this.product});
 
   @override
   State<FlashSaleProductCard> createState() => _FlashSaleProductCardState();

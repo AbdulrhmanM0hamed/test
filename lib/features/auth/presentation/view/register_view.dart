@@ -12,7 +12,7 @@ import 'package:test/generated/l10n.dart';
 class RegisterView extends StatefulWidget {
   static const String routeName = '/register';
 
-  const RegisterView({Key? key}) : super(key: key);
+  const RegisterView({super.key});
 
   @override
   State<RegisterView> createState() => _RegisterViewState();

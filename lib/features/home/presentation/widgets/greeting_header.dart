@@ -12,11 +12,11 @@ class GreetingHeader extends StatelessWidget {
   final int notificationCount;
 
   const GreetingHeader({
-    Key? key,
+    super.key,
     required this.username,
     required this.location,
     required this.notificationCount,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

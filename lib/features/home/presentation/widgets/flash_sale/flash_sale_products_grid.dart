@@ -8,10 +8,10 @@ class FlashSaleProductsGrid extends StatelessWidget {
   final AnimationController animationController;
 
   const FlashSaleProductsGrid({
-    Key? key,
+    super.key,
     required this.products,
     required this.animationController,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

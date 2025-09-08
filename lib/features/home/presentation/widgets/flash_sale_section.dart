@@ -9,7 +9,7 @@ import 'package:test/features/home/presentation/widgets/flash_sale/flash_sale_pr
 
 /// قسم الفلاش سيل الرئيسي في الصفحة الرئيسية
 class FlashSaleSection extends StatefulWidget {
-  const FlashSaleSection({Key? key}) : super(key: key);
+  const FlashSaleSection({super.key});
 
   @override
   State<FlashSaleSection> createState() => _FlashSaleSectionState();

@@ -10,11 +10,11 @@ class CountdownTimer extends StatelessWidget {
   final int seconds;
 
   const CountdownTimer({
-    Key? key,
+    super.key,
     required this.hours,
     required this.minutes,
     required this.seconds,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

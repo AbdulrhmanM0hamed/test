@@ -3,7 +3,7 @@ import 'package:test/core/utils/constant/app_assets.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 
 class OffersSlider extends StatefulWidget {
-  const OffersSlider({Key? key}) : super(key: key);
+  const OffersSlider({super.key});
 
   @override
   State<OffersSlider> createState() => _OffersSliderState();

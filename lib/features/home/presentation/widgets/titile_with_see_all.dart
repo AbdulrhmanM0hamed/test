@@ -10,11 +10,11 @@ class TitileWithSeeAll extends StatelessWidget {
   final bool showSeeAll;
 
   const TitileWithSeeAll({
-    Key? key,
+    super.key,
     required this.title,
     required this.onPressed,
     this.showSeeAll = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

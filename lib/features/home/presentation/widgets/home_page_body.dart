@@ -11,7 +11,7 @@ import 'package:test/features/home/presentation/widgets/flash_sale_section.dart'
 import 'package:test/features/home/presentation/widgets/stores/stores_showcase.dart';
 
 class HomePageBody extends StatelessWidget {
-  const HomePageBody({Key? key}) : super(key: key);
+  const HomePageBody({super.key});
 
   @override
   Widget build(BuildContext context) {

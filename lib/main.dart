@@ -1,6 +1,5 @@
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/utils/theme/app_theme.dart';
-import 'package:test/features/onboarding/presentation/view/onboarding_view.dart';
 import 'package:test/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

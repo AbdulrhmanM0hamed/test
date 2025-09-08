@@ -32,7 +32,6 @@ class AppTheme {
       primary: AppColors.primary,
       secondary: AppColors.secondary,
       surface: Colors.white,
-      background: Colors.white,
       error: AppColors.error,
     ),
     cardColor: Colors.white,
@@ -60,8 +59,7 @@ class AppTheme {
     colorScheme: const ColorScheme.dark(
       primary: AppColors.primary,
       secondary: AppColors.secondary,
-      surface: const Color(0xFF2A2A2A),
-      background: const Color(0xFF1A1A1A),
+      surface: Color(0xFF2A2A2A),
       error: AppColors.error,
     ),
     cardColor: const Color(0xFF2A2A2A),

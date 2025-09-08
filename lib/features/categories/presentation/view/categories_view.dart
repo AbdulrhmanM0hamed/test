@@ -11,7 +11,7 @@ import 'package:test/features/home/presentation/widgets/for_you/models/product.d
 
 /// صفحة عرض الفئات والمنتجات
 class CategoriesView extends StatefulWidget {
-  const CategoriesView({Key? key}) : super(key: key);
+  const CategoriesView({super.key});
 
   @override
   State<CategoriesView> createState() => _CategoriesViewState();

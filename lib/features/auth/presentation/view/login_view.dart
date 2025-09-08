@@ -20,7 +20,7 @@ import 'package:test/core/services/app_state_service.dart';
 class LoginView extends StatefulWidget {
   static const String routeName = '/login';
 
-  const LoginView({Key? key}) : super(key: key);
+  const LoginView({super.key});
 
   @override
   State<LoginView> createState() => _LoginViewState();

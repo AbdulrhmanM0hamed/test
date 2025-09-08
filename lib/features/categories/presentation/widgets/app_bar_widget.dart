@@ -8,7 +8,7 @@ import 'package:test/core/utils/theme/app_colors.dart';
 
 /// ويدجت شريط التطبيق المخصص لصفحة الفئات
 class CategoryAppBar extends StatelessWidget {
-  const CategoryAppBar({Key? key}) : super(key: key);
+  const CategoryAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {

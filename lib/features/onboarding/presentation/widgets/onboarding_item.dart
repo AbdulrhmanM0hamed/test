@@ -9,8 +9,7 @@ class OnboardingItem extends StatelessWidget {
   final OnboardingModel model;
   final int index; // Add index parameter to know which background to use
 
-  const OnboardingItem({Key? key, required this.model, required this.index})
-    : super(key: key);
+  const OnboardingItem({super.key, required this.model, required this.index});
 
   @override
   Widget build(BuildContext context) {

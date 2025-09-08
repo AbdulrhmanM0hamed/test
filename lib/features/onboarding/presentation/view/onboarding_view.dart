@@ -15,7 +15,7 @@ import '../../../../core/services/app_state_service.dart';
 class OnboardingView extends StatefulWidget {
   static const String routeName = '/onboarding';
 
-  const OnboardingView({Key? key}) : super(key: key);
+  const OnboardingView({super.key});
 
   @override
   State<OnboardingView> createState() => _OnboardingViewState();

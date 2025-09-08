@@ -11,12 +11,12 @@ class FlashSaleFilter extends StatelessWidget {
   final AnimationController animationController;
 
   const FlashSaleFilter({
-    Key? key,
+    super.key,
     required this.filters,
     required this.selectedIndex,
     required this.onFilterSelected,
     required this.animationController,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -12,10 +12,10 @@ class SearchBarWidget extends StatelessWidget {
   final VoidCallback onFilterPressed;
 
   const SearchBarWidget({
-    Key? key,
+    super.key,
     required this.controller,
     required this.onFilterPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

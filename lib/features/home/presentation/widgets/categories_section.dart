@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:test/core/utils/constant/app_assets.dart';
 
 class CategoriesSection extends StatelessWidget {
-  const CategoriesSection({Key? key}) : super(key: key);
+  const CategoriesSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class CategoriesSection extends StatelessWidget {
 }
 
 class ShoppingCategories extends StatefulWidget {
-  const ShoppingCategories({Key? key}) : super(key: key);
+  const ShoppingCategories({super.key});
 
   @override
   State<ShoppingCategories> createState() => _ShoppingCategoriesState();

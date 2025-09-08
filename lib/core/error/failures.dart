@@ -4,33 +4,33 @@ abstract class Failure {
 }
 
 class ServerFailure extends Failure {
-  const ServerFailure({required String message}) : super(message: message);
+  const ServerFailure({required super.message});
 }
 
 class AuthFailure extends Failure {
-  const AuthFailure({required String message}) : super(message: message);
+  const AuthFailure({required super.message});
 }
 
 class CacheFailure extends Failure {
-  const CacheFailure({required String message}) : super(message: message);
+  const CacheFailure({required super.message});
 }
 
 class NetworkFailure extends Failure {
-  const NetworkFailure({required String message}) : super(message: message);
+  const NetworkFailure({required super.message});
 }
 
 class ValidationFailure extends Failure {
   final dynamic validationErrors;
 
   const  ValidationFailure({
-    required String message,
+    required super.message,
     this.validationErrors,
-  }) : super(message:  message);
+  });
 
   @override
   List<Object?> get props => [message, validationErrors];
 }
 
 class UnauthorizedFailure extends Failure {
-  UnauthorizedFailure({required String message}) : super(message: message);
+  UnauthorizedFailure({required super.message});
 }

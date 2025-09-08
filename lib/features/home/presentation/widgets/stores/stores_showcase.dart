@@ -6,7 +6,7 @@ import 'store_model.dart';
 import 'stores_data.dart';
 
 class StoresShowcaseSection extends StatelessWidget {
-  const StoresShowcaseSection({Key? key}) : super(key: key);
+  const StoresShowcaseSection({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -11,11 +11,11 @@ class CategoryTabs extends StatelessWidget {
   final Function(CategoryModel) onCategorySelected;
 
   const CategoryTabs({
-    Key? key,
+    super.key,
     required this.categories,
     required this.selectedCategory,
     required this.onCategorySelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

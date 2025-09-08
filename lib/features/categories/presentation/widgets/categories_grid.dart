@@ -6,8 +6,7 @@ class CategoriesGrid extends StatelessWidget {
   final List<CategoryModel> categories;
   final Function(CategoryModel)? onCategoryTap;
 
-  const CategoriesGrid({Key? key, required this.categories, this.onCategoryTap})
-    : super(key: key);
+  const CategoriesGrid({super.key, required this.categories, this.onCategoryTap});
 
   @override
   Widget build(BuildContext context) {

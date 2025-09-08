@@ -9,9 +9,9 @@ class TAppBarTheme {
     scrolledUnderElevation: 0,
     backgroundColor: Colors.transparent,
     surfaceTintColor: Colors.transparent,
-    iconTheme: const IconThemeData(size: 24),
-    actionsIconTheme: const IconThemeData(size: 24),
-    titleTextStyle: const TextStyle(
+    iconTheme: IconThemeData(size: 24),
+    actionsIconTheme: IconThemeData(size: 24),
+    titleTextStyle: TextStyle(
       fontSize: 18.0,
       fontWeight: FontWeight.w600,
       fontFamily: 'Cairo',
@@ -24,9 +24,9 @@ class TAppBarTheme {
     scrolledUnderElevation: 0,
     backgroundColor: Colors.transparent,
     surfaceTintColor: Colors.transparent,
-    iconTheme: const IconThemeData(color: Colors.white, size: 24),
-    actionsIconTheme: const IconThemeData(color: Colors.white, size: 24),
-    titleTextStyle: const TextStyle(
+    iconTheme: IconThemeData(color: Colors.white, size: 24),
+    actionsIconTheme: IconThemeData(color: Colors.white, size: 24),
+    titleTextStyle: TextStyle(
       fontSize: 18.0,
       fontWeight: FontWeight.w600,
       color: Colors.white,

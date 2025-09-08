@@ -7,10 +7,10 @@ class NextButton extends StatelessWidget {
   final bool isLastPage;
 
   const NextButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.isLastPage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

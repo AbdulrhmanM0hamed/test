@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class CategoryCard extends StatefulWidget {
   final CategoryItem category;
 
-  const CategoryCard({Key? key, required this.category}) : super(key: key);
+  const CategoryCard({super.key, required this.category});
 
   @override
   State<CategoryCard> createState() => _CategoryCardState();

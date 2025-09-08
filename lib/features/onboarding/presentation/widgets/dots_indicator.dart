@@ -5,10 +5,10 @@ class CustomDotsIndicator extends StatelessWidget {
   final int position;
 
   const CustomDotsIndicator({
-    Key? key,
+    super.key,
     required this.dotsCount,
     required this.position,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

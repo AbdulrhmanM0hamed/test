@@ -11,11 +11,11 @@ class FlashSaleHeader extends StatelessWidget {
   final int seconds;
 
   const FlashSaleHeader({
-    Key? key,
+    super.key,
     required this.hours,
     required this.minutes,
     required this.seconds,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

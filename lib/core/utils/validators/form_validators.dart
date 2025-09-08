@@ -68,6 +68,7 @@ class FormValidators {
     if (value == null || value.isEmpty) {
       return 'كلمة المرور مطلوبة';
     }
+    return null;
   }
 
   static String? validatePhone(String? value) {

@@ -15,7 +15,7 @@ import 'package:test/features/home/presentation/widgets/login_prompt_widget.dart
 class BottomNavBar extends StatefulWidget {
   static const String routeName = '/home';
 
-  const BottomNavBar({Key? key}) : super(key: key);
+  const BottomNavBar({super.key});
 
   @override
   State<BottomNavBar> createState() => _HomeViewState();
