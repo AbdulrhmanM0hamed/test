@@ -1,0 +1,68 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test/core/services/token_storage_service.dart';
+import 'package:test/core/utils/error/error_handler.dart';
+import 'package:test/features/auth/domain/entities/login_request.dart';
+import 'package:test/features/auth/domain/usecases/login_usecase.dart';
+import 'package:test/features/auth/domain/usecases/logout_usecase.dart';
+import 'package:test/features/auth/presentation/cubit/auth_state.dart';
+
+class AuthCubit extends Cubit<AuthState> {
+  final LoginUseCase loginUseCase;
+  final LogoutUseCase logoutUseCase;
+  final TokenStorageService tokenStorageService;
+
+  AuthCubit({
+    required this.loginUseCase,
+    required this.logoutUseCase,
+    required this.tokenStorageService,
+  }) : super(AuthInitial());
+
+  Future<void> login({required String email, required String password}) async {
+    try {
+      emit(AuthLoading());
+
+      final loginRequest = LoginRequest(email: email, password: password);
+
+      final user = await loginUseCase(loginRequest);
+
+      // Store token and user data
+      await tokenStorageService.saveTokens(
+        accessToken: user.token,
+        refreshToken: user.token,
+        sessionToken: user.token,
+      );
+      await tokenStorageService.saveUserData(
+        userId: user.id,
+        userUuid: user.id.toString(),
+        userEmail: user.email,
+        userStatus: user.status,
+      );
+
+      emit(AuthSuccess(user));
+    } catch (e) {
+      final errorMessage = ErrorHandler.extractErrorMessage(e);
+      emit(AuthError(errorMessage));
+    }
+  }
+
+  Future<void> logout() async {
+    try {
+      emit(AuthLoading());
+
+      // Call logout API
+      await logoutUseCase();
+
+      // Clear stored tokens
+      await tokenStorageService.clearAll();
+
+      emit(AuthLoggedOut());
+    } catch (e) {
+      final errorMessage = ErrorHandler.extractErrorMessage(e);
+      emit(AuthError(errorMessage));
+    }
+  }
+
+  void resetState() {
+    emit(AuthInitial());
+  }
+}
