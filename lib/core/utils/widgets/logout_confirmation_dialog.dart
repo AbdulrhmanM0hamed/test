@@ -31,7 +31,7 @@ class LogoutConfirmationDialog extends StatelessWidget {
             Navigator.of(context).pop(); // Close dialog
             CustomSnackbar.showSuccess(
               context: context,
-              message: 'تم تسجيل الخروج بنجاح',
+              message: state.message,
             );
             // Navigate to login screen
             Navigator.of(
