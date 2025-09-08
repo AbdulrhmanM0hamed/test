@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
+import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:test/features/auth/presentation/cubit/auth_state.dart';
 
@@ -44,8 +45,9 @@ class LogoutConfirmationDialog extends StatelessWidget {
         child: BlocBuilder<AuthCubit, AuthState>(
           builder: (context, state) {
             final isLoading = state is AuthLoading;
-
-            return AlertDialog(
+            return Stack(
+              children: [
+                AlertDialog(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -167,11 +169,9 @@ class LogoutConfirmationDialog extends StatelessWidget {
                               const SizedBox(width: 12),
                               Expanded(
                                 child: ElevatedButton(
-                                  onPressed: isLoading
-                                      ? null
-                                      : () {
-                                          context.read<AuthCubit>().logout();
-                                        },
+                                      onPressed: () {
+                                        context.read<AuthCubit>().logout();
+                                      },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.red.shade500,
                                     foregroundColor: Colors.white,
@@ -183,25 +183,13 @@ class LogoutConfirmationDialog extends StatelessWidget {
                                     ),
                                     elevation: 2,
                                   ),
-                                  child: isLoading
-                                      ? const SizedBox(
-                                          width: 20,
-                                          height: 20,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2,
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                  Colors.white,
-                                                ),
-                                          ),
-                                        )
-                                      : const Text(
-                                          'تسجيل الخروج',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                      child: const Text(
+                                        'تسجيل الخروج',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
                                         ),
+                                      ),
                                 ),
                               ),
                             ],
@@ -212,6 +200,19 @@ class LogoutConfirmationDialog extends StatelessWidget {
                   ],
                 ),
               ),
+                  // Loading overlay
+                ),
+                if (isLoading)
+                  Positioned.fill(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.3),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Center(child: CustomProgressIndicator()),
+                    ),
+                  ),
+              ],
             );
           },
         ),

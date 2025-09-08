@@ -232,8 +232,7 @@ class _LoginViewState extends State<LoginView> {
                           // Login Button
                           CustomButton(
                             text: s.login,
-                            isLoading: state is AuthLoading,
-                            onPressed: state is AuthLoading ? null : () => _login(context),
+                                onPressed: () => _login(context),
                           ),
 
                           const SizedBox(height: 24),
