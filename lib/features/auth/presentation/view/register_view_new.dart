@@ -123,6 +123,22 @@ class _RegisterViewState extends State<RegisterView> {
         return;
       }
 
+      if (_selectedCity == null) {
+        CustomSnackbar.showError(
+          context: context,
+          message: 'يرجى اختيار المدينة',
+        );
+        return;
+      }
+
+      if (_selectedRegion == null) {
+        CustomSnackbar.showError(
+          context: context,
+          message: 'يرجى اختيار المنطقة',
+        );
+        return;
+      }
+
       context.read<RegistrationCubit>().register(
         name: _nameController.text.trim(),
         email: _emailController.text.trim(),
@@ -159,7 +175,7 @@ class _RegisterViewState extends State<RegisterView> {
               if (state is RegistrationSuccess) {
                 CustomSnackbar.showSuccess(
                   context: context,
-                  message: 'تم إنشاء الحساب بنجاح',
+                  message: state.message ?? 'تم إنشاء الحساب بنجاح',
                 );
                 Navigator.pushReplacementNamed(context, '/login');
               } else if (state is RegistrationError) {

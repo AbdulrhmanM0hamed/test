@@ -1,3 +1,4 @@
+import 'package:test/core/models/api_response.dart';
 import 'package:test/features/auth/domain/entities/signup_request.dart';
 import 'package:test/features/auth/domain/entities/user.dart';
 import 'package:test/features/auth/domain/repositories/registration_repository.dart';
@@ -7,7 +8,7 @@ class SignupUseCase {
 
   SignupUseCase({required this.repository});
 
-  Future<User> call(SignupRequest signupRequest) async {
+  Future<ApiResponse<User>> call(SignupRequest signupRequest) async {
     return await repository.signup(signupRequest);
   }
 }

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:test/core/models/api_response.dart';
 import 'package:test/core/services/token_storage_service.dart';
 import 'package:test/core/utils/constant/api_endpoints.dart';
 
@@ -149,42 +150,195 @@ class DioService {
     }
   }
 
-  // Handle API errors and extract meaningful messages
-  static Map<String, dynamic> handleError(DioException error) {
-    String messageEn = 'Something went wrong';
-    String messageAr = 'حدث خطأ ما';
+  /// Handle server response and create structured ApiResponse
+  static ApiResponse<T> handleResponse<T>(
+    Response response, {
+    T Function(dynamic)? dataParser,
+  }) {
+    try {
+      if (response.data is Map<String, dynamic>) {
+        final responseData = response.data as Map<String, dynamic>;
+
+        // Check if response indicates success
+        final bool isSuccess =
+            response.statusCode == 200 || response.statusCode == 201;
+
+        if (isSuccess) {
+          T? parsedData;
+          if (responseData['data'] != null && dataParser != null) {
+            // Handle empty array case for successful operations
+            if (responseData['data'] is List &&
+                (responseData['data'] as List).isEmpty) {
+              // For empty data array, still try to parse with dataParser
+              parsedData = dataParser(responseData['data']);
+            } else if (responseData['data'] is Map ||
+                responseData['data'] is List) {
+              parsedData = dataParser(responseData['data']);
+            }
+          }
+
+          return ApiResponse.success(
+            message:
+                responseData['message'] ?? 'Operation completed successfully',
+            data: parsedData,
+            statusCode: response.statusCode,
+          );
+        } else {
+          return ApiResponse.error(
+            message: responseData['message'] ?? 'Operation failed',
+            errors: responseData['errors'] as Map<String, dynamic>?,
+            statusCode: response.statusCode,
+          );
+        }
+      } else {
+        // Handle non-JSON responses
+        return ApiResponse.success(
+          message: 'Operation completed successfully',
+          statusCode: response.statusCode,
+        );
+      }
+    } catch (e) {
+      return ApiResponse.error(
+        message: 'Failed to parse server response',
+        statusCode: response.statusCode,
+      );
+    }
+  }
+
+  /// Handle DioException and create structured ApiException
+  static ApiException handleDioException(DioException error) {
+    String message = 'حدث خطأ غير متوقع';
+    Map<String, dynamic>? errors;
+    int? statusCode = error.response?.statusCode;
 
     if (error.response?.data != null && error.response!.data is Map) {
-      final data = error.response!.data as Map<String, dynamic>;
-      messageEn = data['message_en'] ?? messageEn;
-      messageAr = data['message_ar'] ?? messageAr;
+      final responseData = error.response!.data as Map<String, dynamic>;
+      message = responseData['message'] ?? message;
+      errors = responseData['errors'] as Map<String, dynamic>?;
     } else {
+      // Handle network and other errors
       switch (error.type) {
         case DioExceptionType.connectionTimeout:
         case DioExceptionType.sendTimeout:
         case DioExceptionType.receiveTimeout:
-          messageEn = 'Connection timeout. Please try again.';
-          messageAr = 'انتهت مهلة الاتصال. يرجى المحاولة مرة أخرى.';
+          message = 'انتهت مهلة الاتصال. يرجى المحاولة مرة أخرى.';
           break;
         case DioExceptionType.badResponse:
-          if (error.response?.statusCode == 404) {
-            messageEn = 'Service not found';
-            messageAr = 'الخدمة غير موجودة';
-          } else if (error.response?.statusCode == 500) {
-            messageEn = 'Server error. Please try again later.';
-            messageAr = 'خطأ في الخادم. يرجى المحاولة لاحقاً.';
+          switch (statusCode) {
+            case 404:
+              message = 'الخدمة غير موجودة';
+              break;
+            case 422:
+              message = 'البيانات المدخلة غير صحيحة';
+              break;
+            case 500:
+              message = 'خطأ في الخادم. يرجى المحاولة لاحقاً.';
+              break;
+            default:
+              message = 'حدث خطأ في الخادم';
           }
           break;
         case DioExceptionType.connectionError:
-          messageEn = 'No internet connection';
-          messageAr = 'لا يوجد اتصال بالإنترنت';
+          message = 'لا يوجد اتصال بالإنترنت';
+          break;
+        case DioExceptionType.cancel:
+          message = 'تم إلغاء العملية';
           break;
         default:
-          messageEn = 'Something went wrong';
-          messageAr = 'حدث خطأ ما';
+          message = 'حدث خطأ غير متوقع';
       }
     }
 
-    return {'success': false, 'message_en': messageEn, 'message_ar': messageAr};
+    return ApiException(
+      message: message,
+      errors: errors,
+      statusCode: statusCode,
+    );
+  }
+
+  /// Enhanced POST method with structured response handling
+  Future<ApiResponse<T>> postWithResponse<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    T Function(dynamic)? dataParser,
+  }) async {
+    try {
+      final response = await post(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+      );
+
+      return handleResponse<T>(response, dataParser: dataParser);
+    } on DioException catch (e) {
+      throw handleDioException(e);
+    }
+  }
+
+  /// Enhanced GET method with structured response handling
+  Future<ApiResponse<T>> getWithResponse<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    T Function(dynamic)? dataParser,
+  }) async {
+    try {
+      final response = await get(
+        path,
+        queryParameters: queryParameters,
+        options: options,
+      );
+
+      return handleResponse<T>(response, dataParser: dataParser);
+    } on DioException catch (e) {
+      throw handleDioException(e);
+    }
+  }
+
+  /// Enhanced PUT method with structured response handling
+  Future<ApiResponse<T>> putWithResponse<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    T Function(dynamic)? dataParser,
+  }) async {
+    try {
+      final response = await put(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+      );
+
+      return handleResponse<T>(response, dataParser: dataParser);
+    } on DioException catch (e) {
+      throw handleDioException(e);
+    }
+  }
+
+  /// Enhanced DELETE method with structured response handling
+  Future<ApiResponse<T>> deleteWithResponse<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    T Function(dynamic)? dataParser,
+  }) async {
+    try {
+      final response = await delete(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+      );
+
+      return handleResponse<T>(response, dataParser: dataParser);
+    } on DioException catch (e) {
+      throw handleDioException(e);
+    }
   }
 }

@@ -11,7 +11,8 @@ class RegistrationLoading extends RegistrationState {}
 
 class RegistrationSuccess extends RegistrationState {
   final User user;
-  RegistrationSuccess({required this.user});
+  final String? message;
+  RegistrationSuccess({required this.user, this.message});
 }
 
 class RegistrationError extends RegistrationState {

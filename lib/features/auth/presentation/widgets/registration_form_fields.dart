@@ -4,7 +4,7 @@ import 'package:test/core/utils/common/password_field.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
-import 'package:test/core/utils/validators/form_validators.dart';
+import 'package:test/core/utils/validators/form_validators_clean.dart';
 import 'package:test/generated/l10n.dart';
 
 class RegistrationFormFields extends StatelessWidget {
@@ -43,7 +43,8 @@ class RegistrationFormFields extends StatelessWidget {
           child: CustomTextField(
             controller: nameController,
             hint: 'أدخل الاسم الكامل',
-            validator: FormValidators.validateName,
+            validator: (value) =>
+                FormValidators.validateFullName(value, context),
           ),
         ),
         const SizedBox(height: 16),
@@ -55,7 +56,7 @@ class RegistrationFormFields extends StatelessWidget {
             controller: emailController,
             hint: s.writeEmail,
             keyboardType: TextInputType.emailAddress,
-            validator: FormValidators.validateEmail,
+            validator: (value) => FormValidators.validateEmail(value, context),
           ),
         ),
         const SizedBox(height: 16),
@@ -67,7 +68,8 @@ class RegistrationFormFields extends StatelessWidget {
             controller: phoneController,
             hint: 'أدخل رقم الهاتف',
             keyboardType: TextInputType.phone,
-            validator: FormValidators.validatePhone,
+            validator: (value) =>
+                FormValidators.validatePhoneNumber(value, context),
           ),
         ),
         const SizedBox(height: 16),
@@ -79,7 +81,8 @@ class RegistrationFormFields extends StatelessWidget {
             controller: passwordController,
             hintText: s.writePassword,
 
-            validator: FormValidators.validatePassword,
+            validator: (value) =>
+                FormValidators.validatePassword(value, context),
           ),
         ),
         const SizedBox(height: 16),
@@ -87,13 +90,14 @@ class RegistrationFormFields extends StatelessWidget {
         // Confirm Password Field
         _buildFieldWithLabel(
           label: 'تأكيد كلمة المرور',
-          child: CustomTextField(
+          child: PasswordField(
             controller: confirmPasswordController,
-            hint: 'أدخل كلمة المرور مرة أخرى',
+            hintText: 'أدخل كلمة المرور مرة أخرى',
 
-            validator: (value) => FormValidators.validateConfirmPassword(
+            validator: (value) => FormValidators.validatePasswordConfirmation(
               value,
               passwordController.text,
+              context,
             ),
           ),
         ),

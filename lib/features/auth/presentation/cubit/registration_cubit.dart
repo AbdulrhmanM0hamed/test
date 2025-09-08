@@ -1,3 +1,4 @@
+import 'package:test/core/models/api_response.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/features/auth/domain/entities/signup_request.dart';
 import 'package:test/features/auth/domain/usecases/get_cities_usecase.dart';
@@ -5,8 +6,8 @@ import 'package:test/features/auth/domain/usecases/get_countries_usecase.dart';
 import 'package:test/features/auth/domain/usecases/get_regions_usecase.dart';
 import 'package:test/features/auth/domain/usecases/signup_usecase.dart';
 import 'package:test/features/auth/presentation/cubit/registration_state.dart';
-import 'package:test/features/profile/domain/entities/country.dart';
 import 'package:test/features/profile/domain/entities/city.dart';
+import 'package:test/features/profile/domain/entities/country.dart';
 import 'package:test/features/profile/domain/entities/region.dart';
 
 class RegistrationCubit extends Cubit<RegistrationState> {
@@ -94,7 +95,8 @@ class RegistrationCubit extends Cubit<RegistrationState> {
         name: name,
         email: email,
         phone: phone,
-        birthDate: '${birthDate.year}-${birthDate.month.toString().padLeft(2, '0')}-${birthDate.day.toString().padLeft(2, '0')}',
+        birthDate:
+            '${birthDate.year}/${birthDate.month.toString().padLeft(2, '0')}/${birthDate.day.toString().padLeft(2, '0')}',
         gender: gender,
         signFrom: 'mobile',
         password: password,
@@ -104,10 +106,26 @@ class RegistrationCubit extends Cubit<RegistrationState> {
         regionId: region?.id ?? city?.id ?? country.id, // Use city or country id as fallback
       );
 
-      final user = await signupUseCase(signupRequest);
-      emit(RegistrationSuccess(user: user));
+      final response = await signupUseCase(signupRequest);
+      
+      if (response.success && response.data != null) {
+        emit(RegistrationSuccess(
+          user: response.data!,
+          message: response.message,
+        ));
+      } else {
+        // Handle API response errors
+        String errorMessage = response.getFirstErrorMessage() ?? response.message;
+        emit(RegistrationError(message: errorMessage));
+      }
     } catch (e) {
-      emit(RegistrationError(message: e.toString()));
+      // Handle ApiException and other errors
+      if (e is ApiException) {
+        String errorMessage = e.getFirstErrorMessage();
+        emit(RegistrationError(message: errorMessage));
+      } else {
+        emit(RegistrationError(message: 'حدث خطأ غير متوقع'));
+      }
     }
   }
 

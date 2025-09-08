@@ -41,11 +41,20 @@ class FormValidators {
       return 'Password is too long';
     }
 
-    // Check password strength
-    final strength = _calculatePasswordStrength(cleanValue);
-    if (strength < _ValidationConstants.minPasswordStrength) {
-      return 'Password is too weak';
+    // Check password requirements (backend requires all 4 components)
+    if (!cleanValue.contains(RegExp(r'[A-Z]'))) {
+      return 'Password must contain at least one uppercase letter';
     }
+    
+    if (!cleanValue.contains(RegExp(r'[a-z]'))) {
+      return 'Password must contain at least one lowercase letter';
+    }
+
+    if (!cleanValue.contains(RegExp(r'[0-9]'))) {
+      return 'Password must contain at least one number';
+    }
+    
+  
     
     return null;
   }
