@@ -149,18 +149,13 @@ class _HomeProductCardState extends State<HomeProductCard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              if (widget.product.hasDiscount) _buildDiscountBadge(),
-              if (widget.product.isBest) ...[
-                const SizedBox(height: 4),
-                _buildBestSellerBadge(),
-              ],
-              if (widget.product.isFeatured) ...[
-                const SizedBox(height: 4),
-                _buildFeaturedBadge(),
-              ],
-            ],
+              if (widget.product.isBest) _buildBestSellerBadge()],
           ),
         ),
+
+        // Discount badge - Bottom left
+        if (widget.product.hasDiscount)
+          Positioned(bottom: 8, left: 8, child: _buildDiscountBadge()),
 
         // Favorite button - Fixed position on top left
         Positioned(top: 8, left: 8, child: _buildFavoriteButton()),
@@ -237,23 +232,6 @@ class _HomeProductCardState extends State<HomeProductCard>
     );
   }
 
-  Widget _buildFeaturedBadge() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: AppColors.primary.withValues(alpha: 0.9),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        'مميز',
-        style: getBoldStyle(
-          fontSize: FontSize.size10,
-          fontFamily: FontConstant.cairo,
-          color: Colors.white,
-        ),
-      ),
-    );
-  }
 
   Widget _buildFavoriteButton() {
     return GestureDetector(
