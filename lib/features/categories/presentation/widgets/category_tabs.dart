@@ -21,8 +21,8 @@ class CategoryTabs extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomAnimations.slideFromLeft(
       child: Container(
-        height: 80,
-        margin: const EdgeInsets.only(top: 8),
+        height: 100,
+        margin: const EdgeInsets.only(top: 8, bottom: 8),
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: categories.length,
@@ -33,46 +33,111 @@ class CategoryTabs extends StatelessWidget {
 
             return GestureDetector(
               onTap: () => onCategorySelected(category),
-              child: Container(
-                width: 80,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: 85,
                 margin: const EdgeInsets.only(left: 12),
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppColors.primary
-                      : Colors.grey.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: isSelected
-                      ? [
-                          BoxShadow(
-                            color: AppColors.primary.withOpacity(0.3),
-                            blurRadius: 8,
-                            offset: const Offset(0, 3),
-                          ),
-                        ]
-                      : [],
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.asset(
-                        category.imageUrl,
-                        width: 32,
-                        height: 32,
-                        fit: BoxFit.cover,
-                      ),
+                  color: isSelected ? AppColors.primary : Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: isSelected 
+                          ? AppColors.primary.withValues(alpha: 0.4)
+                          : Colors.black.withValues(alpha: 0.08),
+                      blurRadius: isSelected ? 12 : 8,
+                      spreadRadius: isSelected ? 2 : 0,
+                      offset: Offset(0, isSelected ? 4 : 2),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      category.name,
-                      style: getMediumStyle(
-                        fontSize: FontSize.size12,
-                        fontFamily: FontConstant.cairo,
-                        color: isSelected ? Colors.white : Colors.grey,
+                    if (!isSelected)
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.04),
+                        blurRadius: 4,
+                        spreadRadius: 0,
+                        offset: const Offset(0, 1),
                       ),
-                    ),
                   ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Container للصورة مع خلفية دائرية
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: isSelected
+                              ? Colors.white.withValues(alpha: 0.2)
+                              : Colors.grey.withValues(alpha: 0.1),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.network(
+                            category.imageUrl,
+                            width: 28,
+                            height: 28,
+                            fit: BoxFit.cover,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Container(
+                                width: 28,
+                                height: 28,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.withValues(alpha: 0.2),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Center(
+                                  child: SizedBox(
+                                    width: 14,
+                                    height: 14,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 1.5,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                width: 28,
+                                height: 28,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.withValues(alpha: 0.2),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.category,
+                                  size: 16,
+                                  color: isSelected
+                                      ? Colors.white
+                                      : Colors.grey,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      // النص
+                      Flexible(
+                        child: Text(
+                          category.name,
+                          style: getMediumStyle(
+                            fontSize: FontSize.size10,
+                            fontFamily: FontConstant.cairo,
+                            color: isSelected ? Colors.white : Colors.grey[700],
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );

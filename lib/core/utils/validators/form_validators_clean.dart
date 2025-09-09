@@ -131,23 +131,22 @@ class FormValidators {
     return RegExp(r'^[+]?[0-9]{10,15}$').hasMatch(phone);
   }
 
-  static int _calculatePasswordStrength(String password) {
-    int strength = 0;
+  // static int _calculatePasswordStrength(String password) {
+  //   int strength = 0;
     
-    if (password.contains(RegExp(r'[A-Z]'))) strength++;
-    if (password.contains(RegExp(r'[a-z]'))) strength++;
-    if (password.contains(RegExp(r'[0-9]'))) strength++;
-    if (password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) strength++;
+  //   if (password.contains(RegExp(r'[A-Z]'))) strength++;
+  //   if (password.contains(RegExp(r'[a-z]'))) strength++;
+  //   if (password.contains(RegExp(r'[0-9]'))) strength++;
+  //   if (password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) strength++;
     
-    return strength;
-  }
+  //   return strength;
+  // }
 }
 
 /// Constants for validation rules
 class _ValidationConstants {
   static const int minPasswordLength = 8;
   static const int maxPasswordLength = 50;
-  static const int minPasswordStrength = 2;
   static const int maxEmailLength = 125;
   static const int minNameLength = 2;
   static const int maxNameLength = 50;

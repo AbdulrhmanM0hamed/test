@@ -27,6 +27,12 @@ import 'package:test/features/auth/domain/usecases/get_regions_usecase.dart';
 import 'package:test/features/auth/domain/usecases/signup_usecase.dart';
 import 'package:test/features/auth/presentation/cubit/registration_cubit.dart';
 import 'package:test/features/auth/presentation/cubit/location_cubit.dart';
+// Categories feature imports
+import 'package:test/features/categories/data/datasources/department_remote_data_source.dart';
+import 'package:test/features/categories/data/repositories/department_repository_impl.dart';
+import 'package:test/features/categories/domain/repositories/department_repository.dart';
+import 'package:test/features/categories/domain/usecases/get_departments_usecase.dart';
+import 'package:test/features/categories/presentation/cubit/department_cubit.dart';
 
 class DependencyInjection {
   static final GetIt getIt = GetIt.instance;
@@ -51,6 +57,11 @@ class DependencyInjection {
   static GetCitiesUseCase? _getCitiesUseCase;
   static GetRegionsUseCase? _getRegionsUseCase;
   static SignupUseCase? _signupUseCase;
+
+  // Categories feature
+  static DepartmentRemoteDataSource? _departmentRemoteDataSource;
+  static DepartmentRepository? _departmentRepository;
+  static GetDepartmentsUseCase? _getDepartmentsUseCase;
 
   static Future<void> init() async {
     final sharedPreferences = await SharedPreferences.getInstance();
@@ -90,6 +101,11 @@ class DependencyInjection {
     _getRegionsUseCase = GetRegionsUseCase(repository: _locationRepository!);
     _signupUseCase = SignupUseCase(repository: _registrationRepository!);
 
+    // Initialize Categories dependencies
+    _departmentRemoteDataSource = DepartmentRemoteDataSourceImpl(dioService: _dioService!);
+    _departmentRepository = DepartmentRepositoryImpl(remoteDataSource: _departmentRemoteDataSource!);
+    _getDepartmentsUseCase = GetDepartmentsUseCase(_departmentRepository!);
+
     // Register with GetIt
     getIt.registerSingleton<TokenStorageService>(_tokenStorageService!);
     getIt.registerSingleton<AppStateService>(_appStateService!);
@@ -106,6 +122,9 @@ class DependencyInjection {
     getIt.registerSingleton<GetCitiesUseCase>(_getCitiesUseCase!);
     getIt.registerSingleton<GetRegionsUseCase>(_getRegionsUseCase!);
     getIt.registerSingleton<SignupUseCase>(_signupUseCase!);
+    // Categories singletons
+    getIt.registerSingleton<DepartmentRepository>(_departmentRepository!);
+    getIt.registerSingleton<GetDepartmentsUseCase>(_getDepartmentsUseCase!);
 
     // Register Cubits as factories
     getIt.registerFactory<AuthCubit>(
@@ -131,6 +150,13 @@ class DependencyInjection {
         getCitiesUseCase: getIt<GetCitiesUseCase>(),
         getRegionsUseCase: getIt<GetRegionsUseCase>(),
         signupUseCase: getIt<SignupUseCase>(),
+      ),
+    );
+
+    // Department Cubit
+    getIt.registerFactory<DepartmentCubit>(
+      () => DepartmentCubit(
+        getDepartmentsUseCase: getIt<GetDepartmentsUseCase>(),
       ),
     );
   }

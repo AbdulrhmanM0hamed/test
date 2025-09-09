@@ -81,7 +81,7 @@ class RegistrationPersonalInfo extends StatelessWidget {
                         width: selectedGender == 'male' ? 2 : 1,
                       ),
                       color: selectedGender == 'male'
-                          ? AppColors.primary.withOpacity(0.05)
+                          ? AppColors.primary.withValues(alpha: 0.05)
                           : Colors.white,
                     ),
                     child: Row(
@@ -124,7 +124,7 @@ class RegistrationPersonalInfo extends StatelessWidget {
                         width: selectedGender == 'female' ? 2 : 1,
                       ),
                       color: selectedGender == 'female'
-                          ? AppColors.primary.withOpacity(0.05)
+                          ? AppColors.primary.withValues(alpha: 0.05)
                           : Colors.white,
                     ),
                     child: Row(

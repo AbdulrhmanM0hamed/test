@@ -1,8 +1,10 @@
-import 'package:test/features/categories/data/models/category_model.dart';
 import 'package:flutter/material.dart';
-
-import 'package:test/features/categories/data/models/categories_data.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test/core/di/dependency_injection.dart';
+import 'package:test/features/categories/data/models/category_model.dart';
 import 'package:test/features/categories/data/models/dummy_products.dart';
+import 'package:test/features/categories/presentation/cubit/department_cubit.dart';
+import 'package:test/features/categories/presentation/cubit/department_state.dart';
 import 'package:test/features/categories/presentation/widgets/app_bar_widget.dart';
 import 'package:test/features/categories/presentation/widgets/category_tabs.dart';
 import 'package:test/features/categories/presentation/widgets/products_grid_widget.dart';
@@ -18,11 +20,8 @@ class CategoriesView extends StatefulWidget {
 }
 
 class _CategoriesViewState extends State<CategoriesView> {
-  /// قائمة جميع الفئات
-  late List<CategoryModel> allCategories;
-
   /// الفئة المحددة حاليًا
-  late CategoryModel selectedCategory;
+  CategoryModel? selectedCategory;
 
   /// متحكم حقل البحث
   final TextEditingController searchController = TextEditingController();
@@ -33,10 +32,6 @@ class _CategoriesViewState extends State<CategoriesView> {
   @override
   void initState() {
     super.initState();
-    // تهيئة الفئات
-    allCategories = getDummyCategories();
-    // تعيين الفئة الافتراضية
-    selectedCategory = allCategories.first;
     // تهيئة المنتجات الوهمية
     categoryProducts = DummyProducts.getCategoryProducts();
   }
@@ -49,38 +44,73 @@ class _CategoriesViewState extends State<CategoriesView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            // شريط التطبيق
-            const CategoryAppBar(),
+    return BlocProvider(
+      create: (context) =>
+          DependencyInjection.getIt.get<DepartmentCubit>()..getDepartments(),
+      child: Scaffold(
+        body: SafeArea(
+          child: Column(
+            children: [
+              // شريط التطبيق
+              const CategoryAppBar(),
 
-            // شريط البحث
-            SearchBarWidget(
-              controller: searchController,
-              onFilterPressed: () {},
-            ),
+              // شريط البحث
+              SearchBarWidget(
+                controller: searchController,
+                onFilterPressed: () {},
+              ),
 
-            // علامات تبويب الفئات
-            CategoryTabs(
-              categories: allCategories,
-              selectedCategory: selectedCategory,
-              onCategorySelected: (category) {
-                setState(() {
-                  selectedCategory = category;
-                });
-              },
-            ),
+              // علامات تبويب الفئات
+              BlocBuilder<DepartmentCubit, DepartmentState>(
+                builder: (context, state) {
+                  if (state is DepartmentLoaded) {
+                    // تحويل الأقسام إلى فئات
+                    final categories = state.departments
+                        .expand((dept) => dept.categories)
+                        .map(
+                          (cat) => CategoryModel(
+                            id: cat.id.toString(),
+                            name: cat.name,
+                            imageUrl: cat.image,
+                            itemsCount: 0,
+                          ),
+                        )
+                        .toList();
 
-            // شبكة المنتجات
-            ProductsGridWidget(
-              products: categoryProducts[int.parse(selectedCategory.id)] ?? [],
-              onProductTap: (product) {
-                // التنقل إلى صفحة تفاصيل المنتج
-              },
-            ),
-          ],
+                    if (categories.isNotEmpty && selectedCategory == null) {
+                      selectedCategory = categories.first;
+                    }
+
+                    return categories.isNotEmpty
+                        ? CategoryTabs(
+                            categories: categories,
+                            selectedCategory:
+                                selectedCategory ?? categories.first,
+                            onCategorySelected: (category) {
+                              setState(() {
+                                selectedCategory = category;
+                              });
+                            },
+                          )
+                        : const SizedBox.shrink();
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+
+              // شبكة المنتجات
+              ProductsGridWidget(
+                products: selectedCategory != null
+                    ? categoryProducts[int.tryParse(selectedCategory!.id) ??
+                              1] ??
+                          []
+                    : [],
+                onProductTap: (product) {
+                  // التنقل إلى صفحة تفاصيل المنتج
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

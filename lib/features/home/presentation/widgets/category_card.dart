@@ -59,7 +59,19 @@ class _CategoryCardState extends State<CategoryCard> {
                   ),
                 ],
               ),
-              child: Image.asset(widget.category.image, fit: BoxFit.contain),
+              child: widget.category.image.startsWith('http')
+                  ? Image.network(
+                      widget.category.image,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(Icons.category, size: 30);
+                      },
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return const CircularProgressIndicator(strokeWidth: 2);
+                      },
+                    )
+                  : Image.asset(widget.category.image, fit: BoxFit.contain),
             ),
             const SizedBox(height: 8),
             // العنوان

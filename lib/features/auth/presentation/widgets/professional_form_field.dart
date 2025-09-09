@@ -112,7 +112,7 @@ class _ProfessionalFormFieldState extends State<ProfessionalFormField>
                 boxShadow: _isFocused
                     ? [
                         BoxShadow(
-                          color: AppColors.primary.withOpacity(0.1),
+                          color: AppColors.primary.withValues(alpha: 0.1),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),

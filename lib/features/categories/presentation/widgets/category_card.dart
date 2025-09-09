@@ -33,7 +33,7 @@ class CategoryCard extends StatelessWidget {
             height: height,
             decoration: BoxDecoration(
               color: hasOpacity
-                  ? const Color(0xFF3D5B96).withOpacity(0.7)
+                  ? const Color(0xFF3D5B96).withValues(alpha: 0.7)
                   : const Color(0xFF3D5B96),
               borderRadius: BorderRadius.circular(12),
             ),
@@ -43,11 +43,43 @@ class CategoryCard extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: Center(
-                    child: Image.asset(
+                    child: Image.network(
                       category.imageUrl,
                       width: width * 0.5, // تصغير الصورة أكثر
                       height: height * 0.5,
                       fit: BoxFit.contain,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Container(
+                          width: width * 0.5,
+                          height: height * 0.5,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          ),
+                        );
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          width: width * 0.5,
+                          height: height * 0.5,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(
+                            Icons.category,
+                            size: 40,
+                            color: Colors.white,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
