@@ -6,10 +6,10 @@ import 'package:test/features/home/presentation/widgets/custom_search_bar.dart';
 import 'package:test/features/home/presentation/widgets/offers_section.dart';
 import 'package:test/features/home/presentation/widgets/categories_section.dart';
 import 'package:test/features/home/presentation/widgets/stores/stores_showcase.dart';
-import 'package:test/features/home/presentation/widgets/special_offers_section.dart';
-import 'package:test/features/home/presentation/widgets/featured_products_section.dart';
-import 'package:test/features/home/presentation/widgets/best_seller_products_section.dart';
-import 'package:test/features/home/presentation/widgets/latest_products_section.dart';
+import 'package:test/features/home/presentation/widgets/home%20sections/special_offers_section.dart';
+import 'package:test/features/home/presentation/widgets/home%20sections/featured_products_section.dart';
+import 'package:test/features/home/presentation/widgets/home%20sections/best_seller_products_section.dart';
+import 'package:test/features/home/presentation/widgets/home%20sections/latest_products_section.dart';
 import '../cubits/featured_products/featured_products_cubit.dart';
 import '../cubits/best_seller_products/best_seller_products_cubit.dart';
 import '../cubits/latest_products/latest_products_cubit.dart';
@@ -47,105 +47,111 @@ class HomePageBody extends StatelessWidget {
                 ..getSpecialOfferProducts(),
         ),
       ],
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Greeting and Notification Header
-            GreetingHeader(
-              username: username,
-              location:
-                  'Dubai, UAE', // This would come from user location state
-              notificationCount: 6,
+      child: Column(
+        children: [
+          // Greeting and Notification Header
+          GreetingHeader(
+            username: username,
+            location: 'Dubai, UAE', // This would come from user location state
+            notificationCount: 6,
+          ),
+
+          // Scrollable Content
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Custom Search Bar
+                  //  CustomSearchBar(),
+                  const SizedBox(height: 20),
+                  // Offers Section with Slider
+                  const OffersSection(),
+
+                  // Categories Section
+                  const SizedBox(height: 20),
+                  const CategoriesSection(),
+
+                  // Special Offers Section
+                  const SizedBox(height: 24),
+                  SpecialOffersSection(
+                    onProductTap: (product) {
+                      // TODO: Navigate to product details
+                      print('Product tapped: ${product.name}');
+                    },
+                    onFavoritePressed: (product) {
+                      // TODO: Toggle favorite
+                      print('Favorite pressed: ${product.name}');
+                    },
+                    onSeeAll: () {
+                      // TODO: Navigate to special offers page
+                      print('See all special offers');
+                    },
+                  ),
+
+                  // Featured Products Section
+                  const SizedBox(height: 24),
+                  FeaturedProductsSection(
+                    onProductTap: (product) {
+                      // TODO: Navigate to product details
+                      print('Product tapped: ${product.name}');
+                    },
+                    onFavoritePressed: (product) {
+                      // TODO: Toggle favorite
+                      print('Favorite pressed: ${product.name}');
+                    },
+                    onSeeAll: () {
+                      // TODO: Navigate to featured products page
+                      print('See all featured products');
+                    },
+                  ),
+
+                  // Best Seller Products Section
+                  const SizedBox(height: 24),
+                  BestSellerProductsSection(
+                    onProductTap: (product) {
+                      // TODO: Navigate to product details
+                      print('Product tapped: ${product.name}');
+                    },
+                    onFavoritePressed: (product) {
+                      // TODO: Toggle favorite
+                      print('Favorite pressed: ${product.name}');
+                    },
+                    onSeeAll: () {
+                      // TODO: Navigate to best seller products page
+                      print('See all best seller products');
+                    },
+                  ),
+
+                  // Latest Products Section
+                  const SizedBox(height: 24),
+                  LatestProductsSection(
+                    onProductTap: (product) {
+                      // TODO: Navigate to product details
+                      print('Product tapped: ${product.name}');
+                    },
+                    onFavoritePressed: (product) {
+                      // TODO: Toggle favorite
+                      print('Favorite pressed: ${product.name}');
+                    },
+                    onSeeAll: () {
+                      // TODO: Navigate to latest products page
+                      print('See all latest products');
+                    },
+                  ),
+
+                  // Stores Showcase Section
+                  const SizedBox(height: 24),
+                  const StoresShowcaseSection(),
+
+                  // Footer space
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
-
-            // Custom Search Bar
-            CustomSearchBar(),
-
-            // Offers Section with Slider
-            const OffersSection(),
-
-            // Categories Section
-            const SizedBox(height: 20),
-            const CategoriesSection(),
-
-            // Special Offers Section
-            const SizedBox(height: 24),
-            SpecialOffersSection(
-              onProductTap: (product) {
-                // TODO: Navigate to product details
-                print('Product tapped: ${product.name}');
-              },
-              onFavoritePressed: (product) {
-                // TODO: Toggle favorite
-                print('Favorite pressed: ${product.name}');
-              },
-              onSeeAll: () {
-                // TODO: Navigate to special offers page
-                print('See all special offers');
-              },
-            ),
-
-            // Featured Products Section
-            const SizedBox(height: 24),
-            FeaturedProductsSection(
-              onProductTap: (product) {
-                // TODO: Navigate to product details
-                print('Product tapped: ${product.name}');
-              },
-              onFavoritePressed: (product) {
-                // TODO: Toggle favorite
-                print('Favorite pressed: ${product.name}');
-              },
-              onSeeAll: () {
-                // TODO: Navigate to featured products page
-                print('See all featured products');
-              },
-            ),
-
-            // Best Seller Products Section
-            const SizedBox(height: 24),
-            BestSellerProductsSection(
-              onProductTap: (product) {
-                // TODO: Navigate to product details
-                print('Product tapped: ${product.name}');
-              },
-              onFavoritePressed: (product) {
-                // TODO: Toggle favorite
-                print('Favorite pressed: ${product.name}');
-              },
-              onSeeAll: () {
-                // TODO: Navigate to best seller products page
-                print('See all best seller products');
-              },
-            ),
-
-            // Latest Products Section
-            const SizedBox(height: 24),
-            LatestProductsSection(
-              onProductTap: (product) {
-                // TODO: Navigate to product details
-                print('Product tapped: ${product.name}');
-              },
-              onFavoritePressed: (product) {
-                // TODO: Toggle favorite
-                print('Favorite pressed: ${product.name}');
-              },
-              onSeeAll: () {
-                // TODO: Navigate to latest products page
-                print('See all latest products');
-              },
-            ),
-
-            // Stores Showcase Section
-            const SizedBox(height: 24),
-            const StoresShowcaseSection(),
-
-            // Footer space
-            const SizedBox(height: 20),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

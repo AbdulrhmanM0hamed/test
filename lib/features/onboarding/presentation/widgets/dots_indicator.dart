@@ -23,7 +23,12 @@ class CustomDotsIndicator extends StatelessWidget {
           width: position == index ? 24 : 8,
           decoration: BoxDecoration(
             color: position == index
-                ? const Color(0xFF0F3C77) // Dark blue for active dot
+                ? const Color.fromARGB(
+                    255,
+                    240,
+                    219,
+                    36,
+                  ) // Dark blue for active dot
                 : const Color(0xFFD8D8D8), // Light gray for inactive dots
             borderRadius: BorderRadius.circular(4),
           ),

@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/utils/constant/font_manger.dart';
-import '../../../../core/utils/constant/styles_manger.dart';
-import '../../../../core/utils/theme/app_colors.dart';
-import '../../../../core/utils/animations/custom_progress_indcator.dart';
-import '../../domain/entities/home_product.dart';
-import '../cubits/best_seller_products/best_seller_products_cubit.dart';
-import '../cubits/best_seller_products/best_seller_products_state.dart';
-import 'home_product_card.dart';
+import '../../../../../core/utils/constant/font_manger.dart';
+import '../../../../../core/utils/constant/styles_manger.dart';
+import '../../../../../core/utils/theme/app_colors.dart';
+import '../../../../../core/utils/animations/custom_progress_indcator.dart';
+import '../../../domain/entities/home_product.dart';
+import '../../cubits/special_offer_products/special_offer_products_cubit.dart';
+import '../../cubits/special_offer_products/special_offer_products_state.dart';
+import '../home_product_card.dart';
 
-class BestSellerProductsSection extends StatelessWidget {
+class SpecialOffersSection extends StatelessWidget {
   final Function(HomeProduct)? onProductTap;
   final Function(HomeProduct)? onFavoritePressed;
   final VoidCallback? onSeeAll;
 
-  const BestSellerProductsSection({
+  const SpecialOffersSection({
     super.key,
     this.onProductTap,
     this.onFavoritePressed,
@@ -44,18 +44,14 @@ class BestSellerProductsSection extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.secondary.withOpacity(0.1),
+                  color: Colors.red.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(
-                  Icons.trending_up,
-                  color: AppColors.secondary,
-                  size: 20,
-                ),
+                child: Icon(Icons.local_offer, color: Colors.red, size: 20),
               ),
               const SizedBox(width: 12),
               Text(
-                'الأكثر مبيعاً',
+                'عروض خاصة',
                 style: getBoldStyle(
                   fontSize: FontSize.size18,
                   fontFamily: FontConstant.cairo,
@@ -103,17 +99,17 @@ class BestSellerProductsSection extends StatelessWidget {
   }
 
   Widget _buildProductsGrid() {
-    return BlocBuilder<BestSellerProductsCubit, BestSellerProductsState>(
+    return BlocBuilder<SpecialOfferProductsCubit, SpecialOfferProductsState>(
       builder: (context, state) {
-        if (state is BestSellerProductsLoading) {
+        if (state is SpecialOfferProductsLoading) {
           return _buildLoadingGrid();
         }
 
-        if (state is BestSellerProductsError) {
+        if (state is SpecialOfferProductsError) {
           return _buildErrorState(state.message);
         }
 
-        if (state is BestSellerProductsLoaded) {
+        if (state is SpecialOfferProductsLoaded) {
           final products = state.products;
 
           if (products.isEmpty) {
@@ -154,7 +150,7 @@ class BestSellerProductsSection extends StatelessWidget {
 
   Widget _buildLoadingGrid() {
     return Container(
-      height: 270,
+      height: 280,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -190,12 +186,22 @@ class BestSellerProductsSection extends StatelessWidget {
             Icon(Icons.error_outline, size: 48, color: Colors.red[400]),
             const SizedBox(height: 12),
             Text(
-              'حدث خطأ في تحميل المنتجات الأكثر مبيعاً',
+              'حدث خطأ في تحميل العروض الخاصة',
               style: getMediumStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
                 color: Colors.red[700],
               ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              message,
+              style: getRegularStyle(
+                fontSize: FontSize.size12,
+                fontFamily: FontConstant.cairo,
+                color: Colors.red[600],
+              ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
@@ -216,10 +222,10 @@ class BestSellerProductsSection extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.trending_up_outlined, size: 48, color: Colors.grey[400]),
+            Icon(Icons.local_offer_outlined, size: 48, color: Colors.grey[400]),
             const SizedBox(height: 12),
             Text(
-              'لا توجد منتجات الأكثر مبيعاً متاحة',
+              'لا توجد عروض خاصة متاحة',
               style: getMediumStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,

@@ -44,6 +44,7 @@ class AppAssets {
   // flags
   static const String egypt = '$_imagesPath/egypt.svg';
   static const String saudi = '$_imagesPath/saudi.svg';
+  static const String england = '$_imagesPath/england.svg';
 
   // Bottom Navigation Icons
   static const String homeIcon = '$_iconsPath/bottom_icon_bold/home-2.svg';

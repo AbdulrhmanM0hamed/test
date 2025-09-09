@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/utils/constant/font_manger.dart';
-import '../../../../core/utils/constant/styles_manger.dart';
-import '../../../../core/utils/theme/app_colors.dart';
-import '../../../../core/utils/animations/custom_progress_indcator.dart';
-import '../../domain/entities/home_product.dart';
-import '../cubits/featured_products/featured_products_cubit.dart';
-import '../cubits/featured_products/featured_products_state.dart';
-import 'home_product_card.dart';
+import '../../../../../core/utils/constant/font_manger.dart';
+import '../../../../../core/utils/constant/styles_manger.dart';
+import '../../../../../core/utils/theme/app_colors.dart';
+import '../../../../../core/utils/animations/custom_progress_indcator.dart';
+import '../../../domain/entities/home_product.dart';
+import '../../cubits/featured_products/featured_products_cubit.dart';
+import '../../cubits/featured_products/featured_products_state.dart';
+import '../home_product_card.dart';
 
 class FeaturedProductsSection extends StatelessWidget {
   final Function(HomeProduct)? onProductTap;
@@ -47,11 +47,7 @@ class FeaturedProductsSection extends StatelessWidget {
                   color: AppColors.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(
-                  Icons.star,
-                  color: AppColors.primary,
-                  size: 20,
-                ),
+                child: Icon(Icons.star, color: AppColors.primary, size: 20),
               ),
               const SizedBox(width: 12),
               Text(
@@ -131,7 +127,10 @@ class FeaturedProductsSection extends StatelessWidget {
                 return Container(
                   width: 170,
                   margin: EdgeInsets.only(
-                    left: index == (products.length > 4 ? 3 : products.length - 1) ? 0 : 12,
+                    left:
+                        index == (products.length > 4 ? 3 : products.length - 1)
+                        ? 0
+                        : 12,
                   ),
                   child: HomeProductCard(
                     product: product,

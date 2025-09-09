@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/utils/constant/font_manger.dart';
-import '../../../../core/utils/constant/styles_manger.dart';
-import '../../../../core/utils/theme/app_colors.dart';
-import '../../../../core/utils/animations/custom_progress_indcator.dart';
-import '../../domain/entities/home_product.dart';
-import '../cubits/latest_products/latest_products_cubit.dart';
-import '../cubits/latest_products/latest_products_state.dart';
-import 'home_product_card.dart';
+import '../../../../../core/utils/constant/font_manger.dart';
+import '../../../../../core/utils/constant/styles_manger.dart';
+import '../../../../../core/utils/theme/app_colors.dart';
+import '../../../../../core/utils/animations/custom_progress_indcator.dart';
+import '../../../domain/entities/home_product.dart';
+import '../../cubits/latest_products/latest_products_cubit.dart';
+import '../../cubits/latest_products/latest_products_state.dart';
+import '../home_product_card.dart';
 
 class LatestProductsSection extends StatelessWidget {
   final Function(HomeProduct)? onProductTap;
@@ -44,14 +44,10 @@ class LatestProductsSection extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.1),
+                  color: Colors.green.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(
-                  Icons.new_releases,
-                  color: Colors.green,
-                  size: 20,
-                ),
+                child: Icon(Icons.new_releases, color: Colors.green, size: 20),
               ),
               const SizedBox(width: 12),
               Text(
@@ -73,7 +69,7 @@ class LatestProductsSection extends StatelessWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
+                  color: AppColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
@@ -131,7 +127,10 @@ class LatestProductsSection extends StatelessWidget {
                 return Container(
                   width: 170,
                   margin: EdgeInsets.only(
-                    left: index == (products.length > 4 ? 3 : products.length - 1) ? 0 : 12,
+                    left:
+                        index == (products.length > 4 ? 3 : products.length - 1)
+                        ? 0
+                        : 12,
                   ),
                   child: HomeProductCard(
                     product: product,
@@ -176,9 +175,9 @@ class LatestProductsSection extends StatelessWidget {
       height: 200,
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.red.withOpacity(0.1),
+        color: Colors.red.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.red.withOpacity(0.3)),
+        border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
       ),
       child: Center(
         child: Column(
@@ -205,15 +204,19 @@ class LatestProductsSection extends StatelessWidget {
       height: 200,
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.1),
+        color: Colors.grey.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.withOpacity(0.3)),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
       ),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.new_releases_outlined, size: 48, color: Colors.grey[400]),
+            Icon(
+              Icons.new_releases_outlined,
+              size: 48,
+              color: Colors.grey[400],
+            ),
             const SizedBox(height: 12),
             Text(
               'لا توجد منتجات جديدة متاحة',

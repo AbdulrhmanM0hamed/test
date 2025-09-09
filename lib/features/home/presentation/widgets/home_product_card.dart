@@ -269,15 +269,15 @@ class _HomeProductCardState extends State<HomeProductCard>
   String _limitProductName(String name) {
     // Limit product name to maximum 3 words
     final words = name.split(' ');
-    if (words.length <= 3) {
+    if (words.length <= 2) {
       return name;
     }
-    return words.take(3).join(' ') + '...';
+    return words.take(2).join(' ') + '...';
   }
 
   Widget _buildProductDetails() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 12, 8),
+      padding: const EdgeInsets.fromLTRB(16, 12, 12, 2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
