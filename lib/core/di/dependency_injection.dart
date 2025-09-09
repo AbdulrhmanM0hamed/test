@@ -1,10 +1,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test/core/services/data_refresh_service.dart';
 import 'package:test/core/services/network/dio_service.dart';
 import 'package:test/core/services/token_storage_service.dart';
 import 'package:test/core/services/app_state_service.dart';
 import 'package:test/core/services/language_service.dart';
-import 'package:test/core/services/data_refresh_service.dart';
 import 'package:test/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:test/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:test/features/auth/domain/repositories/auth_repository.dart';
