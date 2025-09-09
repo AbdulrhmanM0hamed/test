@@ -33,6 +33,12 @@ import 'package:test/features/categories/data/repositories/department_repository
 import 'package:test/features/categories/domain/repositories/department_repository.dart';
 import 'package:test/features/categories/domain/usecases/get_departments_usecase.dart';
 import 'package:test/features/categories/presentation/cubit/department_cubit.dart';
+// Products feature imports
+import 'package:test/features/categories/data/datasources/products_remote_data_source.dart';
+import 'package:test/features/categories/data/repositories/products_repository_impl.dart';
+import 'package:test/features/categories/domain/repositories/products_repository.dart';
+import 'package:test/features/categories/domain/usecases/get_products_by_department_usecase.dart';
+import 'package:test/features/categories/presentation/cubit/products_cubit.dart';
 
 class DependencyInjection {
   static final GetIt getIt = GetIt.instance;
@@ -62,6 +68,11 @@ class DependencyInjection {
   static DepartmentRemoteDataSource? _departmentRemoteDataSource;
   static DepartmentRepository? _departmentRepository;
   static GetDepartmentsUseCase? _getDepartmentsUseCase;
+
+  // Products feature
+  static ProductsRemoteDataSource? _productsRemoteDataSource;
+  static ProductsRepository? _productsRepository;
+  static GetProductsByDepartmentUseCase? _getProductsByDepartmentUseCase;
 
   static Future<void> init() async {
     final sharedPreferences = await SharedPreferences.getInstance();
@@ -106,6 +117,11 @@ class DependencyInjection {
     _departmentRepository = DepartmentRepositoryImpl(remoteDataSource: _departmentRemoteDataSource!);
     _getDepartmentsUseCase = GetDepartmentsUseCase(_departmentRepository!);
 
+    // Initialize Products dependencies
+    _productsRemoteDataSource = ProductsRemoteDataSourceImpl(dioService: _dioService!);
+    _productsRepository = ProductsRepositoryImpl(remoteDataSource: _productsRemoteDataSource!);
+    _getProductsByDepartmentUseCase = GetProductsByDepartmentUseCase(_productsRepository!);
+
     // Register with GetIt
     getIt.registerSingleton<TokenStorageService>(_tokenStorageService!);
     getIt.registerSingleton<AppStateService>(_appStateService!);
@@ -125,6 +141,9 @@ class DependencyInjection {
     // Categories singletons
     getIt.registerSingleton<DepartmentRepository>(_departmentRepository!);
     getIt.registerSingleton<GetDepartmentsUseCase>(_getDepartmentsUseCase!);
+    // Products singletons
+    getIt.registerSingleton<ProductsRepository>(_productsRepository!);
+    getIt.registerSingleton<GetProductsByDepartmentUseCase>(_getProductsByDepartmentUseCase!);
 
     // Register Cubits as factories
     getIt.registerFactory<AuthCubit>(
@@ -157,6 +176,13 @@ class DependencyInjection {
     getIt.registerFactory<DepartmentCubit>(
       () => DepartmentCubit(
         getDepartmentsUseCase: getIt<GetDepartmentsUseCase>(),
+      ),
+    );
+
+    // Products Cubit
+    getIt.registerFactory<ProductsCubit>(
+      () => ProductsCubit(
+        getProductsByDepartmentUseCase: getIt<GetProductsByDepartmentUseCase>(),
       ),
     );
   }

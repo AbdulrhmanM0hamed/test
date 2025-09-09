@@ -21,12 +21,13 @@ class CategoryTabs extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomAnimations.slideFromLeft(
       child: Container(
-        height: 100,
+        height: 130,
         margin: const EdgeInsets.only(top: 8, bottom: 8),
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: categories.length,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+          clipBehavior: Clip.none,
           itemBuilder: (context, index) {
             final category = categories[index];
             final isSelected = category.id == selectedCategory.id;
@@ -43,18 +44,18 @@ class CategoryTabs extends StatelessWidget {
                   boxShadow: [
                     BoxShadow(
                       color: isSelected 
-                          ? AppColors.primary.withValues(alpha: 0.4)
-                          : Colors.black.withValues(alpha: 0.08),
-                      blurRadius: isSelected ? 12 : 8,
-                      spreadRadius: isSelected ? 2 : 0,
-                      offset: Offset(0, isSelected ? 4 : 2),
+                          ? AppColors.primary.withValues(alpha: 0.3)
+                          : Colors.black.withValues(alpha: 0.06),
+                      blurRadius: isSelected ? 8 : 6,
+                      spreadRadius: isSelected ? 1 : 0,
+                      offset: Offset(0, isSelected ? 2 : 1),
                     ),
                     if (!isSelected)
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.04),
-                        blurRadius: 4,
+                        color: Colors.black.withValues(alpha: 0.03),
+                        blurRadius: 3,
                         spreadRadius: 0,
-                        offset: const Offset(0, 1),
+                        offset: const Offset(0, 0.5),
                       ),
                   ],
                 ),
@@ -65,8 +66,8 @@ class CategoryTabs extends StatelessWidget {
                     children: [
                       // Container للصورة مع خلفية دائرية
                       Container(
-                        width: 40,
-                        height: 40,
+                        width: 45,
+                        height: 45,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: isSelected
@@ -126,8 +127,8 @@ class CategoryTabs extends StatelessWidget {
                       Flexible(
                         child: Text(
                           category.name,
-                          style: getMediumStyle(
-                            fontSize: FontSize.size10,
+                          style: getSemiBoldStyle(
+                            fontSize: FontSize.size12,
                             fontFamily: FontConstant.cairo,
                             color: isSelected ? Colors.white : Colors.grey[700],
                           ),

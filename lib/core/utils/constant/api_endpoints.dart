@@ -7,6 +7,8 @@ class ApiEndpoints {
   static String get logout => '$baseUrl/logout';
   static String get myAccount => '$baseUrl/my-account';
   static String get categories => '$baseUrl/departments';
+  static String productsByDepartment(String departmentName) =>
+      '$baseUrl/products-by-department/$departmentName';
 
   
   // Location endpoints

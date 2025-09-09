@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
+import 'package:test/core/utils/animations/custom_progress_indcator.dart';
+
 import 'package:test/features/categories/data/models/category_model.dart';
-import 'package:test/features/categories/data/models/dummy_products.dart';
 import 'package:test/features/categories/presentation/cubit/department_cubit.dart';
 import 'package:test/features/categories/presentation/cubit/department_state.dart';
+import 'package:test/features/categories/presentation/cubit/products_cubit.dart';
+import 'package:test/features/categories/presentation/cubit/products_state.dart';
 import 'package:test/features/categories/presentation/widgets/app_bar_widget.dart';
 import 'package:test/features/categories/presentation/widgets/category_tabs.dart';
 import 'package:test/features/categories/presentation/widgets/products_grid_widget.dart';
 import 'package:test/features/categories/presentation/widgets/search_bar_widget.dart';
-import 'package:test/features/home/presentation/widgets/for_you/models/product.dart';
 
 /// صفحة عرض الفئات والمنتجات
 class CategoriesView extends StatefulWidget {
@@ -22,18 +24,16 @@ class CategoriesView extends StatefulWidget {
 class _CategoriesViewState extends State<CategoriesView> {
   /// الفئة المحددة حاليًا
   CategoryModel? selectedCategory;
+  
+  /// القسم المحدد حاليًا
+  String? selectedDepartmentName;
 
   /// متحكم حقل البحث
   final TextEditingController searchController = TextEditingController();
 
-  /// منتجات مصنفة حسب الفئة
-  late Map<int, List<Product>> categoryProducts;
-
   @override
   void initState() {
     super.initState();
-    // تهيئة المنتجات الوهمية
-    categoryProducts = DummyProducts.getCategoryProducts();
   }
 
   @override
@@ -44,9 +44,17 @@ class _CategoriesViewState extends State<CategoriesView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          DependencyInjection.getIt.get<DepartmentCubit>()..getDepartments(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              DependencyInjection.getIt.get<DepartmentCubit>()
+                ..getDepartments(),
+        ),
+        BlocProvider(
+          create: (context) => DependencyInjection.getIt.get<ProductsCubit>(),
+        ),
+      ],
       child: Scaffold(
         body: SafeArea(
           child: Column(
@@ -64,32 +72,47 @@ class _CategoriesViewState extends State<CategoriesView> {
               BlocBuilder<DepartmentCubit, DepartmentState>(
                 builder: (context, state) {
                   if (state is DepartmentLoaded) {
-                    // تحويل الأقسام إلى فئات
-                    final categories = state.departments
-                        .expand((dept) => dept.categories)
+                    // استخدام الأقسام مباشرة بدلاً من الفئات
+                    final departments = state.departments;
+
+                    if (departments.isNotEmpty &&
+                        selectedDepartmentName == null) {
+                      selectedDepartmentName = departments.first.name;
+                      // تحميل المنتجات للقسم الأول
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        context.read<ProductsCubit>().getProductsByDepartment(
+                          selectedDepartmentName!,
+                        );
+                      });
+                    }
+
+                    // تحويل الأقسام إلى CategoryModel للعرض
+                    final categories = departments
                         .map(
-                          (cat) => CategoryModel(
-                            id: cat.id.toString(),
-                            name: cat.name,
-                            imageUrl: cat.image,
-                            itemsCount: 0,
+                          (dept) => CategoryModel(
+                            id: dept.id.toString(),
+                            name: dept.name,
+                            imageUrl: dept.image,
+                            itemsCount: dept.countOfProduct,
                           ),
                         )
                         .toList();
 
-                    if (categories.isNotEmpty && selectedCategory == null) {
-                      selectedCategory = categories.first;
-                    }
-
                     return categories.isNotEmpty
                         ? CategoryTabs(
                             categories: categories,
-                            selectedCategory:
-                                selectedCategory ?? categories.first,
+                            selectedCategory: categories.firstWhere(
+                              (cat) => cat.name == selectedDepartmentName,
+                              orElse: () => categories.first,
+                            ),
                             onCategorySelected: (category) {
                               setState(() {
-                                selectedCategory = category;
+                                selectedDepartmentName = category.name;
                               });
+                              // تحميل المنتجات للقسم المحدد
+                              context
+                                  .read<ProductsCubit>()
+                                  .getProductsByDepartment(category.name);
                             },
                           )
                         : const SizedBox.shrink();
@@ -99,15 +122,62 @@ class _CategoriesViewState extends State<CategoriesView> {
               ),
 
               // شبكة المنتجات
-              ProductsGridWidget(
-                products: selectedCategory != null
-                    ? categoryProducts[int.tryParse(selectedCategory!.id) ??
-                              1] ??
-                          []
-                    : [],
-                onProductTap: (product) {
-                  // التنقل إلى صفحة تفاصيل المنتج
-                },
+              Expanded(
+                child: BlocBuilder<ProductsCubit, ProductsState>(
+                  builder: (context, state) {
+                    if (state is ProductsLoading) {
+                      return const CustomProgressIndicator();
+                    } else if (state is ProductsLoaded) {
+                      return ProductsGridWidget(
+                        products: state.products,
+                        onProductTap: (product) {
+                          // التنقل إلى صفحة تفاصيل المنتج
+                        },
+                      );
+                    } else if (state is ProductsError) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.error_outline,
+                              size: 64,
+                              color: Colors.grey[400],
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              state.message,
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: 16,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 16),
+                            ElevatedButton(
+                              onPressed: () {
+                                if (selectedDepartmentName != null) {
+                                  context
+                                      .read<ProductsCubit>()
+                                      .getProductsByDepartment(
+                                        selectedDepartmentName!,
+                                      );
+                                }
+                              },
+                              child: const Text('إعادة المحاولة'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    return const Center(
+                      child: Text(
+                        'اختر قسماً لعرض المنتجات',
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                    );
+                  },
+                ),
               ),
             ],
           ),
