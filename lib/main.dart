@@ -7,6 +7,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/utils/helper/on_genrated_routes.dart';
 import 'package:test/core/services/app_state_service.dart';
 import 'package:test/core/services/network/dio_service.dart';
+import 'package:test/core/services/language_service.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,27 +35,34 @@ class MyApp extends StatelessWidget {
     final appStateService = DependencyInjection.getIt.get<AppStateService>();
     final initialRoute = appStateService.getInitialRoute();
 
-    return MaterialApp(
-      title: 'دكاكين',
-      debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.system,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      locale: Locale('en'),
-      localizationsDelegates: [
-        S.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: S.delegate.supportedLocales,
-      onGenerateRoute: onGenratedRoutes,
-      initialRoute: initialRoute,
-      builder: (context, child) {
-        // Set DioService context for proper language header handling
-        DioService.instance.setContext(context);
-        return child!;
-      },
+    return ChangeNotifierProvider<LanguageService>(
+      create: (context) => DependencyInjection.getIt.get<LanguageService>(),
+      child: Consumer<LanguageService>(
+        builder: (context, languageService, child) {
+          return MaterialApp(
+            title: 'دكاكين',
+            debugShowCheckedModeBanner: false,
+            themeMode: ThemeMode.system,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            locale: languageService.currentLocale,
+            localizationsDelegates: [
+              S.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: S.delegate.supportedLocales,
+            onGenerateRoute: onGenratedRoutes,
+            initialRoute: initialRoute,
+            builder: (context, child) {
+              // Set DioService context for proper language header handling
+              DioService.instance.setContext(context);
+              return child!;
+            },
+          );
+        },
+      ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/core/services/network/dio_service.dart';
 import 'package:test/core/services/token_storage_service.dart';
 import 'package:test/core/services/app_state_service.dart';
+import 'package:test/core/services/language_service.dart';
 import 'package:test/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:test/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:test/features/auth/domain/repositories/auth_repository.dart';
@@ -57,6 +58,7 @@ class DependencyInjection {
 
   static TokenStorageService? _tokenStorageService;
   static AppStateService? _appStateService;
+  static LanguageService? _languageService;
   static DioService? _dioService;
   static AuthRemoteDataSource? _authRemoteDataSource;
   static AuthRepository? _authRepository;
@@ -100,6 +102,7 @@ class DependencyInjection {
     // Initialize services
     _tokenStorageService = TokenStorageService(sharedPreferences);
     _appStateService = AppStateService(sharedPreferences);
+    _languageService = LanguageService();
 
     // Initialize dio service
     _dioService = DioService.instance;
@@ -153,6 +156,7 @@ class DependencyInjection {
     // Register with GetIt
     getIt.registerSingleton<TokenStorageService>(_tokenStorageService!);
     getIt.registerSingleton<AppStateService>(_appStateService!);
+    getIt.registerSingleton<LanguageService>(_languageService!);
     getIt.registerSingleton<DioService>(_dioService!);
     getIt.registerSingleton<AuthRepository>(_authRepository!);
     getIt.registerSingleton<LoginUseCase>(_loginUseCase!);

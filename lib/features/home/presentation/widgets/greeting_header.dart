@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:test/core/services/language_service.dart';
 import 'package:test/core/utils/constant/app_assets.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
@@ -23,7 +25,6 @@ class GreetingHeader extends StatefulWidget {
 }
 
 class _GreetingHeaderState extends State<GreetingHeader> {
-  bool _isArabic = true;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,6 @@ class _GreetingHeaderState extends State<GreetingHeader> {
 
                 const SizedBox(width: 16),
 
-                // Greeting Section
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,87 +164,92 @@ class _GreetingHeaderState extends State<GreetingHeader> {
   }
 
   Widget _buildLanguageSwitch() {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _isArabic = !_isArabic;
-        });
-        // TODO: Implement language switching logic
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.2),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: Colors.white.withValues(alpha: 0.3),
-            width: 1,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Arabic Flag
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: _isArabic
-                    ? Colors.white.withValues(alpha: 0.9)
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: _isArabic
-                    ? [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ]
-                    : null,
-              ),
-              child: AnimatedRotation(
-                turns: _isArabic ? 0 : -0.5,
-                duration: const Duration(milliseconds: 400),
-                child: SvgPicture.asset(AppAssets.egypt, width: 18, height: 18),
+    return Consumer<LanguageService>(
+      builder: (context, languageService, child) {
+        return GestureDetector(
+          onTap: () {
+            languageService.toggleLanguage();
+          },
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.3),
+                width: 1,
               ),
             ),
-
-            const SizedBox(width: 4),
-
-            // English Flag
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: !_isArabic
-                    ? Colors.white.withValues(alpha: 0.9)
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: !_isArabic
-                    ? [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ]
-                    : null,
-              ),
-              child: AnimatedRotation(
-                turns: !_isArabic ? 0 : -0.5,
-                duration: const Duration(milliseconds: 400),
-                child: SvgPicture.asset(
-                  AppAssets.england,
-                  width: 18,
-                  height: 18,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Arabic Flag
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: languageService.isArabic
+                        ? Colors.white.withValues(alpha: 0.9)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: languageService.isArabic
+                        ? [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.1),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ]
+                        : null,
+                  ),
+                  child: AnimatedRotation(
+                    turns: languageService.isArabic ? 0 : 0.5,
+                    duration: const Duration(milliseconds: 400),
+                    child: SvgPicture.asset(
+                      AppAssets.egypt,
+                      width: 18,
+                      height: 18,
+                    ),
+                  ),
                 ),
-              ),
+
+                const SizedBox(width: 4),
+
+                // English Flag
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: !languageService.isArabic
+                        ? Colors.white.withValues(alpha: 0.9)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: !languageService.isArabic
+                        ? [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.1),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ]
+                        : null,
+                  ),
+                  child: AnimatedRotation(
+                    turns: !languageService.isArabic ? 0 : -0.5,
+                    duration: const Duration(milliseconds: 400),
+                    child: SvgPicture.asset(
+                      AppAssets.england,
+                      width: 18,
+                      height: 18,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
