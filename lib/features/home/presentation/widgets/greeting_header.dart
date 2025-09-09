@@ -208,8 +208,8 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                     duration: const Duration(milliseconds: 400),
                     child: SvgPicture.asset(
                       AppAssets.egypt,
-                      width: 18,
-                      height: 18,
+                      width: 22,
+                      height: 22,
                     ),
                   ),
                 ),
@@ -240,8 +240,8 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                     duration: const Duration(milliseconds: 400),
                     child: SvgPicture.asset(
                       AppAssets.england,
-                      width: 18,
-                      height: 18,
+                      width: 22,
+                      height: 22,
                     ),
                   ),
                 ),

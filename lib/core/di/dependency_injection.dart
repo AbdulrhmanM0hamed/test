@@ -4,6 +4,7 @@ import 'package:test/core/services/network/dio_service.dart';
 import 'package:test/core/services/token_storage_service.dart';
 import 'package:test/core/services/app_state_service.dart';
 import 'package:test/core/services/language_service.dart';
+import 'package:test/core/services/data_refresh_service.dart';
 import 'package:test/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:test/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:test/features/auth/domain/repositories/auth_repository.dart';
@@ -59,6 +60,7 @@ class DependencyInjection {
   static TokenStorageService? _tokenStorageService;
   static AppStateService? _appStateService;
   static LanguageService? _languageService;
+  static DataRefreshService? _dataRefreshService;
   static DioService? _dioService;
   static AuthRemoteDataSource? _authRemoteDataSource;
   static AuthRepository? _authRepository;
@@ -103,6 +105,7 @@ class DependencyInjection {
     _tokenStorageService = TokenStorageService(sharedPreferences);
     _appStateService = AppStateService(sharedPreferences);
     _languageService = LanguageService();
+    _dataRefreshService = DataRefreshService(_languageService!);
 
     // Initialize dio service
     _dioService = DioService.instance;
@@ -157,6 +160,7 @@ class DependencyInjection {
     getIt.registerSingleton<TokenStorageService>(_tokenStorageService!);
     getIt.registerSingleton<AppStateService>(_appStateService!);
     getIt.registerSingleton<LanguageService>(_languageService!);
+    getIt.registerSingleton<DataRefreshService>(_dataRefreshService!);
     getIt.registerSingleton<DioService>(_dioService!);
     getIt.registerSingleton<AuthRepository>(_authRepository!);
     getIt.registerSingleton<LoginUseCase>(_loginUseCase!);
@@ -197,6 +201,7 @@ class DependencyInjection {
       () => ProfileCubit(
         getProfileUseCase: getIt<GetProfileUseCase>(),
         profileRepository: getIt<ProfileRepository>(),
+        dataRefreshService: getIt<DataRefreshService>(),
       ),
     );
 
@@ -214,6 +219,7 @@ class DependencyInjection {
     getIt.registerFactory<DepartmentCubit>(
       () => DepartmentCubit(
         getDepartmentsUseCase: getIt<GetDepartmentsUseCase>(),
+        dataRefreshService: getIt<DataRefreshService>(),
       ),
     );
 
@@ -221,6 +227,7 @@ class DependencyInjection {
     getIt.registerFactory<ProductsCubit>(
       () => ProductsCubit(
         getProductsByDepartmentUseCase: getIt<GetProductsByDepartmentUseCase>(),
+        dataRefreshService: getIt<DataRefreshService>(),
       ),
     );
 
@@ -228,24 +235,28 @@ class DependencyInjection {
     getIt.registerFactory<FeaturedProductsCubit>(
       () => FeaturedProductsCubit(
         getFeaturedProductsUseCase: getIt<GetFeaturedProductsUseCase>(),
+        dataRefreshService: getIt<DataRefreshService>(),
       ),
     );
 
     getIt.registerFactory<BestSellerProductsCubit>(
       () => BestSellerProductsCubit(
         getBestSellerProductsUseCase: getIt<GetBestSellerProductsUseCase>(),
+        dataRefreshService: getIt<DataRefreshService>(),
       ),
     );
 
     getIt.registerFactory<LatestProductsCubit>(
       () => LatestProductsCubit(
         getLatestProductsUseCase: getIt<GetLatestProductsUseCase>(),
+        dataRefreshService: getIt<DataRefreshService>(),
       ),
     );
 
     getIt.registerFactory<SpecialOfferProductsCubit>(
       () => SpecialOfferProductsCubit(
         getSpecialOfferProductsUseCase: getIt<GetSpecialOfferProductsUseCase>(),
+        dataRefreshService: getIt<DataRefreshService>(),
       ),
     );
   }
