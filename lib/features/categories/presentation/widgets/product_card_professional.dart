@@ -19,7 +19,7 @@ class ProductCardProfessional extends StatelessWidget {
 
   /// تقليم اسم المنتج لتجنب overflow
   String _truncateProductName(String name) {
-    const int maxWords = 3;
+    const int maxWords = 2;
     final words = name.split(' ');
     if (words.length <= maxWords) {
       return name;

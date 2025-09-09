@@ -67,12 +67,7 @@ class _HomeViewState extends State<BottomNavBar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildNavItem(
-            0,
-            AppAssets.homeIcon,
-            AppAssets.homeIconOutline,
-            S.of(context).home,
-          ),
+        
           _buildNavItem(
             1,
             AppAssets.categoryIcon,
@@ -84,6 +79,12 @@ class _HomeViewState extends State<BottomNavBar> {
             AppAssets.favoriteIcon,
             AppAssets.favoriteIconOutline,
             S.of(context).favorite,
+          ),
+          _buildNavItem(
+            0,
+            AppAssets.homeIcon,
+            AppAssets.homeIconOutline,
+            S.of(context).home,
           ),
           _buildNavItem(
             3,
@@ -109,6 +110,7 @@ class _HomeViewState extends State<BottomNavBar> {
     String label,
   ) {
     final isSelected = _selectedIndex == index;
+    final isHomeIcon = index == 0; // Home is at index 0
 
     return GestureDetector(
       onTap: () => setState(() => _selectedIndex = index),
@@ -116,27 +118,72 @@ class _HomeViewState extends State<BottomNavBar> {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            height: 46,
-            width: 46,
-            decoration: BoxDecoration(
-              color: isSelected ? AppColors.white : Colors.transparent,
-              borderRadius: BorderRadius.circular(32),
+          // Special design for home icon
+          if (isHomeIcon) ...[
+            Container(
+              height: 56,
+              width: 56,
+              decoration: BoxDecoration(
+                gradient: isSelected
+                    ? LinearGradient(
+                        colors: [
+                          AppColors.primary,
+                          AppColors.primary.withOpacity(0.8),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      )
+                    : null,
+                color: isSelected ? null : AppColors.white,
+                borderRadius: BorderRadius.circular(28),
+                boxShadow: isSelected
+                    ? [
+                        BoxShadow(
+                          color: AppColors.primary.withOpacity(0.3),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ]
+                    : [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+              ),
+              padding: const EdgeInsets.all(14),
+              child: SvgPicture.asset(
+                isSelected ? activeIcon : inactiveIcon,
+                color: isSelected ? Colors.white : AppColors.primary,
+              ),
             ),
-            padding: const EdgeInsets.all(10),
-            child: SvgPicture.asset(
-              isSelected ? activeIcon : inactiveIcon,
-              color: isSelected ? AppColors.primary : Colors.grey,
+          ] else ...[
+            // Regular design for other icons
+            Container(
+              height: 46,
+              width: 46,
+              decoration: BoxDecoration(
+                color: isSelected ? AppColors.white : Colors.transparent,
+                borderRadius: BorderRadius.circular(32),
+              ),
+              padding: const EdgeInsets.all(10),
+              child: SvgPicture.asset(
+                isSelected ? activeIcon : inactiveIcon,
+                color: isSelected ? AppColors.primary : Colors.grey,
+              ),
             ),
-          ),
+          ],
           const SizedBox(height: 2),
           Text(
             label,
             style: getSemiBoldStyle(
               fontFamily: FontConstant.cairo,
-              fontSize: FontSize.size10,
+              fontSize: isHomeIcon ? FontSize.size11 : FontSize.size10,
               color: isSelected
-                  ? Theme.of(context).textTheme.bodyMedium?.color
+                  ? (isHomeIcon
+                        ? AppColors.primary
+                        : Theme.of(context).textTheme.bodyMedium?.color)
                   : Colors.grey,
             ),
           ),

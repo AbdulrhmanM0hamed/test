@@ -1,14 +1,19 @@
-import 'package:test/features/home/presentation/widgets/for_you/data.dart';
-import 'package:test/features/home/presentation/widgets/for_you/for_you_section.dart';
-import 'package:test/generated/l10n.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/features/home/presentation/widgets/greeting_header.dart';
 import 'package:test/features/home/presentation/widgets/custom_search_bar.dart';
 import 'package:test/features/home/presentation/widgets/offers_section.dart';
 import 'package:test/features/home/presentation/widgets/categories_section.dart';
-import 'package:test/features/home/presentation/widgets/flash_sale_section.dart';
 import 'package:test/features/home/presentation/widgets/stores/stores_showcase.dart';
+import 'package:test/features/home/presentation/widgets/special_offers_section.dart';
+import 'package:test/features/home/presentation/widgets/featured_products_section.dart';
+import 'package:test/features/home/presentation/widgets/best_seller_products_section.dart';
+import 'package:test/features/home/presentation/widgets/latest_products_section.dart';
+import '../cubits/featured_products/featured_products_cubit.dart';
+import '../cubits/best_seller_products/best_seller_products_cubit.dart';
+import '../cubits/latest_products/latest_products_cubit.dart';
+import '../cubits/special_offer_products/special_offer_products_cubit.dart';
 
 class HomePageBody extends StatelessWidget {
   const HomePageBody({super.key});
@@ -19,46 +24,128 @@ class HomePageBody extends StatelessWidget {
     final String username =
         'User'; // Replace with actual username from user state
 
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Greeting and Notification Header
-          GreetingHeader(
-            username: username,
-            location: 'Dubai, UAE', // This would come from user location state
-            notificationCount: 6,
-          ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<FeaturedProductsCubit>(
+          create: (context) =>
+              DependencyInjection.getIt<FeaturedProductsCubit>()
+                ..getFeaturedProducts(),
+        ),
+        BlocProvider<BestSellerProductsCubit>(
+          create: (context) =>
+              DependencyInjection.getIt<BestSellerProductsCubit>()
+                ..getBestSellerProducts(),
+        ),
+        BlocProvider<LatestProductsCubit>(
+          create: (context) =>
+              DependencyInjection.getIt<LatestProductsCubit>()
+                ..getLatestProducts(),
+        ),
+        BlocProvider<SpecialOfferProductsCubit>(
+          create: (context) =>
+              DependencyInjection.getIt<SpecialOfferProductsCubit>()
+                ..getSpecialOfferProducts(),
+        ),
+      ],
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Greeting and Notification Header
+            GreetingHeader(
+              username: username,
+              location:
+                  'Dubai, UAE', // This would come from user location state
+              notificationCount: 6,
+            ),
 
-          // Custom Search Bar
-          CustomSearchBar(),
+            // Custom Search Bar
+            CustomSearchBar(),
 
-          // Offers Section with Slider
-          const OffersSection(),
+            // Offers Section with Slider
+            const OffersSection(),
 
-          // Categories Section
-          const SizedBox(height: 20),
-          const CategoriesSection(),
+            // Categories Section
+            const SizedBox(height: 20),
+            const CategoriesSection(),
 
-          // Flash Sale Section
-          const SizedBox(height: 20),
-          const FlashSaleSection(),
+            // Special Offers Section
+            const SizedBox(height: 24),
+            SpecialOffersSection(
+              onProductTap: (product) {
+                // TODO: Navigate to product details
+                print('Product tapped: ${product.name}');
+              },
+              onFavoritePressed: (product) {
+                // TODO: Toggle favorite
+                print('Favorite pressed: ${product.name}');
+              },
+              onSeeAll: () {
+                // TODO: Navigate to special offers page
+                print('See all special offers');
+              },
+            ),
 
-          // For You Section
-          const SizedBox(height: 20),
-          ForYouSectionWidget(
-            title: S.of(context).highQualityProducts,
-            products: recommendedProducts,
-          ),
+            // Featured Products Section
+            const SizedBox(height: 24),
+            FeaturedProductsSection(
+              onProductTap: (product) {
+                // TODO: Navigate to product details
+                print('Product tapped: ${product.name}');
+              },
+              onFavoritePressed: (product) {
+                // TODO: Toggle favorite
+                print('Favorite pressed: ${product.name}');
+              },
+              onSeeAll: () {
+                // TODO: Navigate to featured products page
+                print('See all featured products');
+              },
+            ),
 
-          // Stores Showcase Section
-          const SizedBox(height: 20),
-          const StoresShowcaseSection(),
+            // Best Seller Products Section
+            const SizedBox(height: 24),
+            BestSellerProductsSection(
+              onProductTap: (product) {
+                // TODO: Navigate to product details
+                print('Product tapped: ${product.name}');
+              },
+              onFavoritePressed: (product) {
+                // TODO: Toggle favorite
+                print('Favorite pressed: ${product.name}');
+              },
+              onSeeAll: () {
+                // TODO: Navigate to best seller products page
+                print('See all best seller products');
+              },
+            ),
 
-          // Footer space
-          const SizedBox(height: 20),
-        ],
+            // Latest Products Section
+            const SizedBox(height: 24),
+            LatestProductsSection(
+              onProductTap: (product) {
+                // TODO: Navigate to product details
+                print('Product tapped: ${product.name}');
+              },
+              onFavoritePressed: (product) {
+                // TODO: Toggle favorite
+                print('Favorite pressed: ${product.name}');
+              },
+              onSeeAll: () {
+                // TODO: Navigate to latest products page
+                print('See all latest products');
+              },
+            ),
+
+            // Stores Showcase Section
+            const SizedBox(height: 24),
+            const StoresShowcaseSection(),
+
+            // Footer space
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
