@@ -281,15 +281,44 @@ class _HomeProductCardState extends State<HomeProductCard>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Brand name
+          // Brand name with logo
           if (widget.product.brandName.isNotEmpty) ...[
-            Text(
-              widget.product.brandName,
-              style: getMediumStyle(
-                fontSize: FontSize.size11,
-                fontFamily: FontConstant.cairo,
-                color: Colors.grey[600],
-              ),
+            Row(
+              children: [
+                // Brand logo
+                if (widget.product.brandLogo != null &&
+                    widget.product.brandLogo!.isNotEmpty) ...[
+                  CachedNetworkImage(
+                    imageUrl: widget.product.brandLogo!,
+                    width: 16,
+                    height: 16,
+                    fit: BoxFit.contain,
+                    placeholder: (context, url) => Container(
+                      width: 16,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const SizedBox.shrink(),
+                  ),
+                  const SizedBox(width: 6),
+                ],
+                // Brand name
+                Flexible(
+                  child: Text(
+                    widget.product.brandName,
+                    style: getMediumStyle(
+                      fontSize: FontSize.size11,
+                      fontFamily: FontConstant.cairo,
+                      color: Colors.grey[600],
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 4),
           ],
@@ -384,9 +413,11 @@ class _HomeProductCardState extends State<HomeProductCard>
                     vertical: 2,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.1),
+                    color: Colors.green.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.green.withOpacity(0.3)),
+                    border: Border.all(
+                      color: Colors.green.withValues(alpha: 0.3),
+                    ),
                   ),
                   child: Text(
                     'متوفر ${widget.product.stock}',
