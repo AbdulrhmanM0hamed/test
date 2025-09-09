@@ -5,6 +5,7 @@ import 'package:test/core/utils/constant/app_assets.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:test/generated/l10n.dart';
 
 /// ويدجت شريط التطبيق المخصص لصفحة الفئات
 class CategoryAppBar extends StatelessWidget {
@@ -19,7 +20,7 @@ class CategoryAppBar extends StatelessWidget {
           children: [
             const SizedBox(width: 8),
             Text(
-              'المنتجات',
+              S.of(context).products,
               style: getBoldStyle(
                 fontSize: FontSize.size20,
                 fontFamily: FontConstant.cairo,

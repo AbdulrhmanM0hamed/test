@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
+import 'package:test/generated/l10n.dart';
 
 import 'package:test/features/categories/data/models/category_model.dart';
 import 'package:test/features/categories/presentation/cubit/department_cubit.dart';
@@ -164,16 +165,19 @@ class _CategoriesViewState extends State<CategoriesView> {
                                       );
                                 }
                               },
-                              child: const Text('إعادة المحاولة'),
+                              child: Text(S.of(context).retry),
                             ),
                           ],
                         ),
                       );
                     }
-                    return const Center(
+                    return Center(
                       child: Text(
-                        'اختر قسماً لعرض المنتجات',
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                        S.of(context).selectCategoryToView,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
+                        ),
                       ),
                     );
                   },

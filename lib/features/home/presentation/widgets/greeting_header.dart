@@ -7,6 +7,7 @@ import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/generated/l10n.dart';
+import 'header_search_bar.dart';
 
 class GreetingHeader extends StatefulWidget {
   final String username;
@@ -98,7 +99,7 @@ class _GreetingHeaderState extends State<GreetingHeader> {
             const SizedBox(height: 20),
 
             // Search Bar integrated in header
-            _buildSearchBar(),
+            const HeaderSearchBar(),
           ],
         ),
       ),
@@ -529,52 +530,5 @@ class _GreetingHeaderState extends State<GreetingHeader> {
     return '$greeting ${widget.username}';
   }
 
-  Widget _buildSearchBar() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.3),
-          width: 1,
-        ),
-      ),
-      child: TextField(
-        style: getMediumStyle(
-          fontFamily: FontConstant.cairo,
-          fontSize: FontSize.size14,
-          color: Colors.white,
-        ),
-        decoration: InputDecoration(
-          hintText: 'البحث عن المنتجات...',
-          hintStyle: getMediumStyle(
-            fontFamily: FontConstant.cairo,
-            fontSize: FontSize.size14,
-            color: Colors.white.withValues(alpha: 0.7),
-          ),
-          prefixIcon: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Icon(
-              Icons.search_rounded,
-              color: Colors.white.withValues(alpha: 0.8),
-              size: 20,
-            ),
-          ),
-          suffixIcon: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Icon(
-              Icons.tune_rounded,
-              color: Colors.white.withValues(alpha: 0.8),
-              size: 20,
-            ),
-          ),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 14,
-          ),
-        ),
-      ),
-    );
-  }
 }
+

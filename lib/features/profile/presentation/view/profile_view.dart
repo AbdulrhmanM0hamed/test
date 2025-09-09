@@ -10,6 +10,7 @@ import 'package:test/features/profile/presentation/widgets/profile_header.dart';
 import 'package:test/features/profile/presentation/widgets/profile_info_card.dart';
 import 'package:test/features/profile/presentation/widgets/profile_stats_card.dart';
 import 'package:test/features/profile/presentation/widgets/profile_action_button.dart';
+import 'package:test/generated/l10n.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -34,7 +35,10 @@ class _ProfileViewState extends State<ProfileView> {
           if (state is ProfileError) {
             CustomSnackbar.showError(context: context, message: state.message);
           } else if (state is ProfileUpdated) {
-            CustomSnackbar.showSuccess(context: context, message: 'تم تحديث البيانات بنجاح');
+            CustomSnackbar.showSuccess(
+              context: context,
+              message: S.current.dataUpdatedSuccessfully,
+            );
           }
         },
         builder: (context, state) {
@@ -80,22 +84,26 @@ class _ProfileViewState extends State<ProfileView> {
                             Row(
                               children: [
                                 ProfileStatsCard(
-                                  label: 'عضو منذ',
+                                  label: S.of(context).memberSince,
                                   value: _getJoinedYear(userProfile.createdAt),
                                   icon: Icons.calendar_today,
                                   color: Colors.blue,
                                 ),
                                 const SizedBox(width: 12),
                                 ProfileStatsCard(
-                                  label: 'الحالة',
-                                  value: userProfile.isActive ? 'نشط' : 'غير نشط',
+                                  label: S.of(context).status,
+                                  value: userProfile.isActive
+                                      ? S.of(context).active
+                                      : S.of(context).inactive,
                                   icon: Icons.check_circle,
                                   color: userProfile.isActive ? Colors.green : Colors.orange,
                                 ),
                                 const SizedBox(width: 12),
                                 ProfileStatsCard(
-                                  label: 'التوثيق',
-                                  value: userProfile.isEmailVerified ? 'موثق' : 'غير موثق',
+                                  label: S.of(context).verification,
+                                  value: userProfile.isEmailVerified
+                                      ? S.of(context).verified
+                                      : S.of(context).notVerified,
                                   icon: Icons.verified_user,
                                   color: userProfile.isEmailVerified ? Colors.green : Colors.red,
                                 ),
@@ -105,9 +113,9 @@ class _ProfileViewState extends State<ProfileView> {
                             const SizedBox(height: 24),
                             
                             // Personal Information Section
-                            const Text(
-                              'المعلومات الشخصية',
-                              style: TextStyle(
+                            Text(
+                              S.of(context).personalInformation,
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black87,
@@ -116,7 +124,7 @@ class _ProfileViewState extends State<ProfileView> {
                             const SizedBox(height: 16),
                             
                             ProfileInfoCard(
-                              title: 'الاسم الكامل',
+                              title: S.of(context).fullName,
                               value: userProfile.name,
                               icon: Icons.person,
                               isEditable: true,
@@ -124,14 +132,14 @@ class _ProfileViewState extends State<ProfileView> {
                             ),
                             
                             ProfileInfoCard(
-                              title: 'البريد الإلكتروني',
+                              title: S.of(context).email,
                               value: userProfile.email,
                               icon: Icons.email,
                               iconColor: Colors.blue,
                             ),
                             
                             ProfileInfoCard(
-                              title: 'رقم الهاتف',
+                              title: S.of(context).phoneNumber,
                               value: userProfile.phone,
                               icon: Icons.phone,
                               iconColor: Colors.green,
@@ -140,7 +148,7 @@ class _ProfileViewState extends State<ProfileView> {
                             ),
                             
                             ProfileInfoCard(
-                              title: 'تاريخ الميلاد',
+                              title: S.of(context).birthDate,
                               value: userProfile.birthDate ?? '',
                               icon: Icons.cake,
                               iconColor: Colors.pink,
@@ -149,8 +157,11 @@ class _ProfileViewState extends State<ProfileView> {
                             ),
                             
                             ProfileInfoCard(
-                              title: 'الجنس',
-                              value: _getGenderText(userProfile.gender),
+                              title: S.of(context).gender,
+                              value: _getGenderText(
+                                context,
+                                userProfile.gender,
+                              ),
                               icon: Icons.wc,
                               iconColor: Colors.purple,
                               isEditable: true,
@@ -158,7 +169,7 @@ class _ProfileViewState extends State<ProfileView> {
                             ),
                             
                             ProfileInfoCard(
-                              title: 'العنوان',
+                              title: S.of(context).address,
                               value: userProfile.address ?? '',
                               icon: Icons.location_on,
                               iconColor: Colors.red,
@@ -169,9 +180,9 @@ class _ProfileViewState extends State<ProfileView> {
                             const SizedBox(height: 24),
                             
                             // Location Information Section
-                            const Text(
-                              'معلومات الموقع',
-                              style: TextStyle(
+                            Text(
+                              S.of(context).locationInformation,
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black87,
@@ -180,21 +191,21 @@ class _ProfileViewState extends State<ProfileView> {
                             const SizedBox(height: 16),
                             
                             ProfileInfoCard(
-                              title: 'الدولة',
+                              title: S.of(context).country,
                               value: userProfile.country.titleAr,
                               icon: Icons.flag,
                               iconColor: Colors.orange,
                             ),
                             
                             ProfileInfoCard(
-                              title: 'المدينة',
+                              title: S.of(context).city,
                               value: userProfile.city.titleAr,
                               icon: Icons.location_city,
                               iconColor: Colors.teal,
                             ),
                             
                             ProfileInfoCard(
-                              title: 'المنطقة',
+                              title: S.of(context).region,
                               value: userProfile.region.titleAr,
                               icon: Icons.place,
                               iconColor: Colors.indigo,
@@ -203,9 +214,9 @@ class _ProfileViewState extends State<ProfileView> {
                             const SizedBox(height: 24),
                             
                             // Actions Section
-                            const Text(
-                              'الإعدادات',
-                              style: TextStyle(
+                            Text(
+                              S.of(context).settings,
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black87,
@@ -214,31 +225,31 @@ class _ProfileViewState extends State<ProfileView> {
                             const SizedBox(height: 16),
                             
                             ProfileActionButton(
-                              title: 'تعديل الملف الشخصي',
+                              title: S.of(context).editProfile,
                               icon: Icons.edit,
                               onTap: () => _showEditProfileSheet(context, userProfile),
                             ),
                             
                             ProfileActionButton(
-                              title: 'إعدادات الحساب',
+                              title: S.of(context).accountSettings,
                               icon: Icons.settings,
                               onTap: () => _showAccountSettings(context),
                             ),
                             
                             ProfileActionButton(
-                              title: 'الأمان والخصوصية',
+                              title: S.of(context).securityAndPrivacy,
                               icon: Icons.security,
                               onTap: () => _showSecuritySettings(context),
                             ),
                             
                             ProfileActionButton(
-                              title: 'المساعدة والدعم',
+                              title: S.of(context).helpAndSupport,
                               icon: Icons.help,
                               onTap: () => _showHelpCenter(context),
                             ),
                             
                             ProfileActionButton(
-                              title: 'تسجيل الخروج',
+                              title: S.of(context).logout,
                               icon: Icons.logout,
                               onTap: () => _showLogoutDialog(context),
                               isDestructive: true,
@@ -275,7 +286,7 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'حدث خطأ في تحميل البيانات',
+                    S.of(context).errorLoadingData,
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.grey[600],
@@ -293,7 +304,7 @@ class _ProfileViewState extends State<ProfileView> {
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () => context.read<ProfileCubit>().getProfile(),
-                    child: const Text('إعادة المحاولة'),
+                    child: Text(S.of(context).retry),
                   ),
                 ],
               ),
@@ -311,59 +322,83 @@ class _ProfileViewState extends State<ProfileView> {
       final date = DateTime.parse(createdAt);
       return date.year.toString();
     } catch (e) {
-      return 'غير محدد';
+      return S.current.notSpecified;
     }
   }
 
-  String _getGenderText(String gender) {
+  String _getGenderText(BuildContext context, String gender) {
     switch (gender.toLowerCase()) {
       case 'male':
-        return 'ذكر';
+        return S.of(context).male;
       case 'female':
-        return 'أنثى';
+        return S.of(context).female;
       default:
-        return 'غير محدد';
+        return S.of(context).notSpecified;
     }
   }
 
   void _showImagePicker(BuildContext context) {
     // TODO: Implement image picker
-    CustomSnackbar.showInfo(context: context, message: 'سيتم إضافة خاصية تغيير الصورة قريباً');
+    CustomSnackbar.showInfo(
+      context: context,
+      message: S.of(context).imageChangeFeatureComingSoon,
+    );
   }
 
   void _showEditDialog(BuildContext context, String field, String currentValue) {
     // TODO: Implement edit dialog
-    CustomSnackbar.showInfo(context: context, message: 'سيتم إضافة خاصية التعديل قريباً');
+    CustomSnackbar.showInfo(
+      context: context,
+      message: S.of(context).editFeatureComingSoon,
+    );
   }
 
   void _showDatePicker(BuildContext context, String? currentDate) {
     // TODO: Implement date picker
-    CustomSnackbar.showInfo(context: context, message: 'سيتم إضافة خاصية اختيار التاريخ قريباً');
+    CustomSnackbar.showInfo(
+      context: context,
+      message: S.of(context).datePickerFeatureComingSoon,
+    );
   }
 
   void _showGenderPicker(BuildContext context, String currentGender) {
     // TODO: Implement gender picker
-    CustomSnackbar.showInfo(context: context, message: 'سيتم إضافة خاصية اختيار الجنس قريباً');
+    CustomSnackbar.showInfo(
+      context: context,
+      message: S.of(context).genderPickerFeatureComingSoon,
+    );
   }
 
   void _showEditProfileSheet(BuildContext context, UserProfile userProfile) {
     // TODO: Implement edit profile sheet
-    CustomSnackbar.showInfo(context: context, message: 'سيتم إضافة خاصية تعديل الملف الشخصي قريباً');
+    CustomSnackbar.showInfo(
+      context: context,
+      message: S.of(context).editProfileFeatureComingSoon,
+    );
   }
 
   void _showAccountSettings(BuildContext context) {
     // TODO: Implement account settings
-    CustomSnackbar.showInfo(context: context, message: 'سيتم إضافة إعدادات الحساب قريباً');
+    CustomSnackbar.showInfo(
+      context: context,
+      message: S.of(context).accountSettingsComingSoon,
+    );
   }
 
   void _showSecuritySettings(BuildContext context) {
     // TODO: Implement security settings
-    CustomSnackbar.showInfo(context: context, message: 'سيتم إضافة إعدادات الأمان قريباً');
+    CustomSnackbar.showInfo(
+      context: context,
+      message: S.of(context).securitySettingsComingSoon,
+    );
   }
 
   void _showHelpCenter(BuildContext context) {
     // TODO: Implement help center
-    CustomSnackbar.showInfo(context: context, message: 'سيتم إضافة مركز المساعدة قريباً');
+    CustomSnackbar.showInfo(
+      context: context,
+      message: S.of(context).helpCenterComingSoon,
+    );
   }
 
   void _showLogoutDialog(BuildContext context) {

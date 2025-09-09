@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/utils/constant/font_manger.dart';
 import '../../../../../core/utils/constant/styles_manger.dart';
 import '../../../../../core/utils/theme/app_colors.dart';
+import '../../../../../generated/l10n.dart';
 import '../../../../../core/utils/animations/custom_progress_indcator.dart';
 import '../../../domain/entities/home_product.dart';
 import '../../cubits/best_seller_products/best_seller_products_cubit.dart';
@@ -55,7 +56,7 @@ class BestSellerProductsSection extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Text(
-                'الأكثر مبيعاً',
+                S.of(context).bestSellers,
                 style: getBoldStyle(
                   fontSize: FontSize.size18,
                   fontFamily: FontConstant.cairo,
@@ -80,7 +81,7 @@ class BestSellerProductsSection extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'عرض المزيد',
+                      S.of(context).showMore,
                       style: getSemiBoldStyle(
                         fontSize: FontSize.size12,
                         fontFamily: FontConstant.cairo,
@@ -190,7 +191,7 @@ class BestSellerProductsSection extends StatelessWidget {
             Icon(Icons.error_outline, size: 48, color: Colors.red[400]),
             const SizedBox(height: 12),
             Text(
-              'حدث خطأ في تحميل المنتجات الأكثر مبيعاً',
+              S.current.errorLoadingBestSellers,
               style: getMediumStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
@@ -219,7 +220,7 @@ class BestSellerProductsSection extends StatelessWidget {
             Icon(Icons.trending_up_outlined, size: 48, color: Colors.grey[400]),
             const SizedBox(height: 12),
             Text(
-              'لا توجد منتجات الأكثر مبيعاً متاحة',
+              S.current.noBestSellersAvailable,
               style: getMediumStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,

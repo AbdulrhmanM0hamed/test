@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/utils/constant/font_manger.dart';
 import '../../../../../core/utils/constant/styles_manger.dart';
 import '../../../../../core/utils/theme/app_colors.dart';
+import '../../../../../generated/l10n.dart';
 import '../../../../../core/utils/animations/custom_progress_indcator.dart';
 import '../../../domain/entities/home_product.dart';
 import '../../cubits/featured_products/featured_products_cubit.dart';
@@ -51,7 +52,7 @@ class FeaturedProductsSection extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Text(
-                'منتجات مميزة',
+                S.of(context).featuredProducts,
                 style: getBoldStyle(
                   fontSize: FontSize.size18,
                   fontFamily: FontConstant.cairo,
@@ -76,7 +77,7 @@ class FeaturedProductsSection extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'عرض المزيد',
+                      S.of(context).showMore,
                       style: getSemiBoldStyle(
                         fontSize: FontSize.size12,
                         fontFamily: FontConstant.cairo,
@@ -175,9 +176,9 @@ class FeaturedProductsSection extends StatelessWidget {
       height: 200,
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.red.withOpacity(0.1),
+        color: Colors.red.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.red.withOpacity(0.3)),
+        border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
       ),
       child: Center(
         child: Column(
@@ -186,7 +187,7 @@ class FeaturedProductsSection extends StatelessWidget {
             Icon(Icons.error_outline, size: 48, color: Colors.red[400]),
             const SizedBox(height: 12),
             Text(
-              'حدث خطأ في تحميل المنتجات المميزة',
+              S.current.errorLoadingFeatured,
               style: getMediumStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
@@ -204,9 +205,9 @@ class FeaturedProductsSection extends StatelessWidget {
       height: 200,
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.1),
+        color: Colors.grey.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.withOpacity(0.3)),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
       ),
       child: Center(
         child: Column(
@@ -215,7 +216,7 @@ class FeaturedProductsSection extends StatelessWidget {
             Icon(Icons.star_outline, size: 48, color: Colors.grey[400]),
             const SizedBox(height: 12),
             Text(
-              'لا توجد منتجات مميزة متاحة',
+              S.current.noFeaturedAvailable,
               style: getMediumStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,

@@ -429,6 +429,456 @@ class S {
       args: [],
     );
   }
+
+  /// `Best Sellers`
+  String get bestSellers {
+    return Intl.message(
+      'Best Sellers',
+      name: 'bestSellers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Featured Products`
+  String get featuredProducts {
+    return Intl.message(
+      'Featured Products',
+      name: 'featuredProducts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Latest Products`
+  String get latestProducts {
+    return Intl.message(
+      'Latest Products',
+      name: 'latestProducts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Special Offers`
+  String get specialOffers {
+    return Intl.message(
+      'Special Offers',
+      name: 'specialOffers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show More`
+  String get showMore {
+    return Intl.message('Show More', name: 'showMore', desc: '', args: []);
+  }
+
+  /// `Products`
+  String get products {
+    return Intl.message('Products', name: 'products', desc: '', args: []);
+  }
+
+  /// `Search for products...`
+  String get searchProducts {
+    return Intl.message(
+      'Search for products...',
+      name: 'searchProducts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No products in this category`
+  String get noProductsInCategory {
+    return Intl.message(
+      'No products in this category',
+      name: 'noProductsInCategory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select a category to view products`
+  String get selectCategoryToView {
+    return Intl.message(
+      'Select a category to view products',
+      name: 'selectCategoryToView',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Retry`
+  String get retry {
+    return Intl.message('Retry', name: 'retry', desc: '', args: []);
+  }
+
+  /// `Error loading best selling products`
+  String get errorLoadingBestSellers {
+    return Intl.message(
+      'Error loading best selling products',
+      name: 'errorLoadingBestSellers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error loading featured products`
+  String get errorLoadingFeatured {
+    return Intl.message(
+      'Error loading featured products',
+      name: 'errorLoadingFeatured',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error loading latest products`
+  String get errorLoadingLatest {
+    return Intl.message(
+      'Error loading latest products',
+      name: 'errorLoadingLatest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error loading special offers`
+  String get errorLoadingSpecialOffers {
+    return Intl.message(
+      'Error loading special offers',
+      name: 'errorLoadingSpecialOffers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No best selling products available`
+  String get noBestSellersAvailable {
+    return Intl.message(
+      'No best selling products available',
+      name: 'noBestSellersAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No featured products available`
+  String get noFeaturedAvailable {
+    return Intl.message(
+      'No featured products available',
+      name: 'noFeaturedAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No new products available`
+  String get noLatestAvailable {
+    return Intl.message(
+      'No new products available',
+      name: 'noLatestAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No special offers available`
+  String get noSpecialOffersAvailable {
+    return Intl.message(
+      'No special offers available',
+      name: 'noSpecialOffersAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Data updated successfully`
+  String get dataUpdatedSuccessfully {
+    return Intl.message(
+      'Data updated successfully',
+      name: 'dataUpdatedSuccessfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Member since`
+  String get memberSince {
+    return Intl.message(
+      'Member since',
+      name: 'memberSince',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Status`
+  String get status {
+    return Intl.message('Status', name: 'status', desc: '', args: []);
+  }
+
+  /// `Active`
+  String get active {
+    return Intl.message('Active', name: 'active', desc: '', args: []);
+  }
+
+  /// `Inactive`
+  String get inactive {
+    return Intl.message('Inactive', name: 'inactive', desc: '', args: []);
+  }
+
+  /// `Verification`
+  String get verification {
+    return Intl.message(
+      'Verification',
+      name: 'verification',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verified`
+  String get verified {
+    return Intl.message('Verified', name: 'verified', desc: '', args: []);
+  }
+
+  /// `Not verified`
+  String get notVerified {
+    return Intl.message(
+      'Not verified',
+      name: 'notVerified',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Personal Information`
+  String get personalInformation {
+    return Intl.message(
+      'Personal Information',
+      name: 'personalInformation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Full Name`
+  String get fullName {
+    return Intl.message('Full Name', name: 'fullName', desc: '', args: []);
+  }
+
+  /// `Phone Number`
+  String get phoneNumber {
+    return Intl.message(
+      'Phone Number',
+      name: 'phoneNumber',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Birth Date`
+  String get birthDate {
+    return Intl.message('Birth Date', name: 'birthDate', desc: '', args: []);
+  }
+
+  /// `Gender`
+  String get gender {
+    return Intl.message('Gender', name: 'gender', desc: '', args: []);
+  }
+
+  /// `Address`
+  String get address {
+    return Intl.message('Address', name: 'address', desc: '', args: []);
+  }
+
+  /// `Location Information`
+  String get locationInformation {
+    return Intl.message(
+      'Location Information',
+      name: 'locationInformation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Country`
+  String get country {
+    return Intl.message('Country', name: 'country', desc: '', args: []);
+  }
+
+  /// `City`
+  String get city {
+    return Intl.message('City', name: 'city', desc: '', args: []);
+  }
+
+  /// `Region`
+  String get region {
+    return Intl.message('Region', name: 'region', desc: '', args: []);
+  }
+
+  /// `Settings`
+  String get settings {
+    return Intl.message('Settings', name: 'settings', desc: '', args: []);
+  }
+
+  /// `Edit Profile`
+  String get editProfile {
+    return Intl.message(
+      'Edit Profile',
+      name: 'editProfile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account Settings`
+  String get accountSettings {
+    return Intl.message(
+      'Account Settings',
+      name: 'accountSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Security and Privacy`
+  String get securityAndPrivacy {
+    return Intl.message(
+      'Security and Privacy',
+      name: 'securityAndPrivacy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Help and Support`
+  String get helpAndSupport {
+    return Intl.message(
+      'Help and Support',
+      name: 'helpAndSupport',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Logout`
+  String get logout {
+    return Intl.message('Logout', name: 'logout', desc: '', args: []);
+  }
+
+  /// `Error loading data`
+  String get errorLoadingData {
+    return Intl.message(
+      'Error loading data',
+      name: 'errorLoadingData',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not specified`
+  String get notSpecified {
+    return Intl.message(
+      'Not specified',
+      name: 'notSpecified',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Male`
+  String get male {
+    return Intl.message('Male', name: 'male', desc: '', args: []);
+  }
+
+  /// `Female`
+  String get female {
+    return Intl.message('Female', name: 'female', desc: '', args: []);
+  }
+
+  /// `Image change feature coming soon`
+  String get imageChangeFeatureComingSoon {
+    return Intl.message(
+      'Image change feature coming soon',
+      name: 'imageChangeFeatureComingSoon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit feature coming soon`
+  String get editFeatureComingSoon {
+    return Intl.message(
+      'Edit feature coming soon',
+      name: 'editFeatureComingSoon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date picker feature coming soon`
+  String get datePickerFeatureComingSoon {
+    return Intl.message(
+      'Date picker feature coming soon',
+      name: 'datePickerFeatureComingSoon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gender picker feature coming soon`
+  String get genderPickerFeatureComingSoon {
+    return Intl.message(
+      'Gender picker feature coming soon',
+      name: 'genderPickerFeatureComingSoon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit profile feature coming soon`
+  String get editProfileFeatureComingSoon {
+    return Intl.message(
+      'Edit profile feature coming soon',
+      name: 'editProfileFeatureComingSoon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account settings coming soon`
+  String get accountSettingsComingSoon {
+    return Intl.message(
+      'Account settings coming soon',
+      name: 'accountSettingsComingSoon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Security settings coming soon`
+  String get securitySettingsComingSoon {
+    return Intl.message(
+      'Security settings coming soon',
+      name: 'securitySettingsComingSoon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Help center coming soon`
+  String get helpCenterComingSoon {
+    return Intl.message(
+      'Help center coming soon',
+      name: 'helpCenterComingSoon',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

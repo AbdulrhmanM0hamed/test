@@ -30,7 +30,7 @@ class CategoriesShimmer extends StatelessWidget {
                     color: Colors.grey[300],
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
+                        color: Colors.grey.withValues(alpha: 0.1),
                         blurRadius: 8,
                         spreadRadius: 0,
                       ),
@@ -86,10 +86,10 @@ class CategoryShimmerCard extends StatelessWidget {
             width: 65,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.grey.withOpacity(0.3),
+              color: AppColors.grey.withValues(alpha: 0.3),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.primary.withOpacity(0.05),
+                  color: AppColors.primary.withValues(alpha: 0.05),
                   blurRadius: 10,
                   spreadRadius: 2,
                 ),
@@ -99,7 +99,7 @@ class CategoryShimmerCard extends StatelessWidget {
               margin: const EdgeInsets.all(15),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.grey.withOpacity(0.2),
+                color: AppColors.grey.withValues(alpha: 0.2),
               ),
             ),
           ),
@@ -110,7 +110,7 @@ class CategoryShimmerCard extends StatelessWidget {
             height: 14,
             width: 55,
             decoration: BoxDecoration(
-              color: AppColors.grey.withOpacity(0.3),
+              color: AppColors.grey.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(7),
             ),
           ),
@@ -121,7 +121,7 @@ class CategoryShimmerCard extends StatelessWidget {
             height: 10,
             width: 35,
             decoration: BoxDecoration(
-              color: AppColors.grey.withOpacity(0.2),
+              color: AppColors.grey.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(5),
             ),
           ),

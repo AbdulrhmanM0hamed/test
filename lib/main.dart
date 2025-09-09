@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<LanguageService>(
         builder: (context, languageService, child) {
           return MaterialApp(
-            title: 'دكاكين',
+            title: 'e-RAMO Store',
             debugShowCheckedModeBanner: false,
             themeMode: ThemeMode.system,
             theme: AppTheme.lightTheme,

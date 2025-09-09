@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/features/home/presentation/widgets/greeting_header.dart';
-import 'package:test/features/home/presentation/widgets/custom_search_bar.dart';
 import 'package:test/features/home/presentation/widgets/offers_section.dart';
 import 'package:test/features/home/presentation/widgets/categories_section.dart';
 import 'package:test/features/home/presentation/widgets/stores/stores_showcase.dart';

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/utils/constant/font_manger.dart';
 import '../../../../../core/utils/constant/styles_manger.dart';
 import '../../../../../core/utils/theme/app_colors.dart';
+import '../../../../../generated/l10n.dart';
 import '../../../../../core/utils/animations/custom_progress_indcator.dart';
 import '../../../domain/entities/home_product.dart';
 import '../../cubits/latest_products/latest_products_cubit.dart';
@@ -51,7 +52,7 @@ class LatestProductsSection extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Text(
-                'أحدث المنتجات',
+                S.of(context).latestProducts,
                 style: getBoldStyle(
                   fontSize: FontSize.size18,
                   fontFamily: FontConstant.cairo,
@@ -76,7 +77,7 @@ class LatestProductsSection extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'عرض المزيد',
+                      S.of(context).showMore,
                       style: getSemiBoldStyle(
                         fontSize: FontSize.size12,
                         fontFamily: FontConstant.cairo,
@@ -186,7 +187,7 @@ class LatestProductsSection extends StatelessWidget {
             Icon(Icons.error_outline, size: 48, color: Colors.red[400]),
             const SizedBox(height: 12),
             Text(
-              'حدث خطأ في تحميل أحدث المنتجات',
+              S.current.errorLoadingLatest,
               style: getMediumStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
@@ -219,7 +220,7 @@ class LatestProductsSection extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              'لا توجد منتجات جديدة متاحة',
+              S.current.noLatestAvailable,
               style: getMediumStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,

@@ -4,6 +4,7 @@ import '../../../../../core/utils/constant/font_manger.dart';
 import '../../../../../core/utils/constant/styles_manger.dart';
 import '../../../../../core/utils/theme/app_colors.dart';
 import '../../../../../core/utils/animations/custom_progress_indcator.dart';
+import '../../../../../generated/l10n.dart';
 import '../../../domain/entities/home_product.dart';
 import '../../cubits/special_offer_products/special_offer_products_cubit.dart';
 import '../../cubits/special_offer_products/special_offer_products_state.dart';
@@ -44,14 +45,14 @@ class SpecialOffersSection extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.red.withOpacity(0.1),
+                  color: Colors.red.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(Icons.local_offer, color: Colors.red, size: 20),
               ),
               const SizedBox(width: 12),
               Text(
-                'عروض خاصة',
+                S.of(context).specialOffers,
                 style: getBoldStyle(
                   fontSize: FontSize.size18,
                   fontFamily: FontConstant.cairo,
@@ -69,14 +70,14 @@ class SpecialOffersSection extends StatelessWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
+                  color: AppColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'عرض المزيد',
+                      S.of(context).showMore,
                       style: getSemiBoldStyle(
                         fontSize: FontSize.size12,
                         fontFamily: FontConstant.cairo,
@@ -175,9 +176,9 @@ class SpecialOffersSection extends StatelessWidget {
       height: 200,
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.red.withOpacity(0.1),
+        color: Colors.red.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.red.withOpacity(0.3)),
+        border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
       ),
       child: Center(
         child: Column(
@@ -186,7 +187,7 @@ class SpecialOffersSection extends StatelessWidget {
             Icon(Icons.error_outline, size: 48, color: Colors.red[400]),
             const SizedBox(height: 12),
             Text(
-              'حدث خطأ في تحميل العروض الخاصة',
+              S.current.errorLoadingSpecialOffers,
               style: getMediumStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
@@ -214,9 +215,9 @@ class SpecialOffersSection extends StatelessWidget {
       height: 200,
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.1),
+        color: Colors.grey.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.withOpacity(0.3)),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
       ),
       child: Center(
         child: Column(
@@ -225,7 +226,7 @@ class SpecialOffersSection extends StatelessWidget {
             Icon(Icons.local_offer_outlined, size: 48, color: Colors.grey[400]),
             const SizedBox(height: 12),
             Text(
-              'لا توجد عروض خاصة متاحة',
+              S.current.noSpecialOffersAvailable,
               style: getMediumStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
