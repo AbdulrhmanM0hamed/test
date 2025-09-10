@@ -54,7 +54,7 @@ class ProductsGridWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 0.61,
+            childAspectRatio: 0.66,
             crossAxisSpacing: 12,
             mainAxisSpacing: 12,
           ),
@@ -65,9 +65,10 @@ class ProductsGridWidget extends StatelessWidget {
               child: ProductCardProfessional(
                 product: products[index],
                 onTap: () => onProductTap(products[index]),
-                onFavoriteToggle: () {
+                onFavoritePressed: () {
                   // TODO: إضافة وظيفة المفضلة
                 },
+                isFavorite: products[index].isFavorite,
               ),
             );
           },

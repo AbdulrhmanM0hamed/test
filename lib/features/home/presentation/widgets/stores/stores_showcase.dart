@@ -1,7 +1,5 @@
 import 'package:test/features/home/presentation/widgets/section_header.dart';
 import 'package:flutter/material.dart';
-import 'package:test/l10n/app_localizations.dart';
-
 import 'store_card.dart';
 import 'store_model.dart';
 import 'stores_data.dart';

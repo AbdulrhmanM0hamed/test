@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/features/home/presentation/widgets/section_header.dart';
 import '../../../../../core/utils/constant/font_manger.dart';
 import '../../../../../core/utils/constant/styles_manger.dart';
-import '../../../../../core/utils/theme/app_colors.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../domain/entities/home_product.dart';
 import '../../cubits/latest_products/latest_products_cubit.dart';

@@ -35,22 +35,18 @@ class RegistrationRepositoryImpl implements RegistrationRepository {
         name: response.data!.name,
         email: response.data!.email,
         phone: response.data!.phone,
-        gender: response.data!.gender ?? 'unknown',
-        status: response.data!.status ?? '1',
-        createdAt:
-            response.data!.createdAt.toString() ??
-            DateTime.now().toIso8601String(),
-        updatedAt:
-            response.data!.updatedAt.toString() ??
-            DateTime.now().toIso8601String(),
-        countryId: response.data!.countryId ?? 0,
-        cityId: response.data!.cityId ?? 0,
-        regionId: response.data!.regionId ?? 0,
-        token: response.data!.token ?? '',
-        expiresIn: response.data!.expiresIn ?? 0,
-        countryName: response.data!.countryName ?? '',
-        cityName: response.data!.cityName ?? '',
-        regionName: response.data!.regionName ?? '',
+        gender: response.data!.gender,
+        status: response.data!.status,
+        createdAt: response.data!.createdAt.toString(),
+        updatedAt: response.data!.updatedAt.toString(),
+        countryId: response.data!.countryId,
+        cityId: response.data!.cityId,
+        regionId: response.data!.regionId,
+        token: response.data!.token,
+        expiresIn: response.data!.expiresIn,
+        countryName: response.data!.countryName,
+        cityName: response.data!.cityName,
+        regionName: response.data!.regionName,
       );
 
       return ApiResponse.success(

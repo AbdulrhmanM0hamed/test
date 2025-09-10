@@ -16,10 +16,14 @@ class ApiEndpoints {
   static const String latestProducts = '/latest-products';
   static const String specialOfferProducts = '/special-offer-products';
 
-  static String get featuredProductsUrl => '$baseUrl$featuredProducts';
-  static String get bestSellerProductsUrl => '$baseUrl$bestSellerProducts';
-  static String get latestProductsUrl => '$baseUrl$latestProducts';
-  static String get specialOfferProductsUrl => '$baseUrl$specialOfferProducts';
+  static String featuredProductsUrl({int? countryId}) => 
+      '$baseUrl$featuredProducts${countryId != null ? '?country_id=$countryId' : ''}';
+  static String bestSellerProductsUrl({int? countryId}) => 
+      '$baseUrl$bestSellerProducts${countryId != null ? '?country_id=$countryId' : ''}';
+  static String latestProductsUrl({int? countryId}) => 
+      '$baseUrl$latestProducts${countryId != null ? '?country_id=$countryId' : ''}';
+  static String specialOfferProductsUrl({int? countryId}) => 
+      '$baseUrl$specialOfferProducts${countryId != null ? '?country_id=$countryId' : ''}';
 
   // Location endpoints
   static String get countries => '$baseUrl/countries';

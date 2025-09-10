@@ -1,349 +1,426 @@
 import 'package:flutter/material.dart';
-import 'package:test/core/utils/animations/custom_progress_indcator.dart';
-import 'package:test/core/utils/constant/font_manger.dart';
-import 'package:test/core/utils/constant/styles_manger.dart';
-import 'package:test/core/utils/theme/app_colors.dart';
-import 'package:test/features/categories/domain/entities/product.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import '../../../../core/utils/constant/app_assets.dart';
+import '../../../../core/utils/constant/font_manger.dart';
+import '../../../../core/utils/constant/styles_manger.dart';
+import '../../../../core/utils/theme/app_colors.dart';
+import '../../../../core/utils/animations/custom_progress_indcator.dart';
+import '../../domain/entities/product.dart';
 
-class ProductCardProfessional extends StatelessWidget {
+class ProductCardProfessional extends StatefulWidget {
   final Product product;
-  final VoidCallback onTap;
-  final VoidCallback? onFavoriteToggle;
+  final VoidCallback? onTap;
+  final VoidCallback? onFavoritePressed;
+  final bool isFavorite;
 
   const ProductCardProfessional({
     super.key,
     required this.product,
-    required this.onTap,
-    this.onFavoriteToggle,
+    this.onTap,
+    this.onFavoritePressed,
+    this.isFavorite = false,
   });
 
-  /// تقليم اسم المنتج لتجنب overflow
-  String _truncateProductName(String name) {
-    const int maxWords = 2;
+  @override
+  State<ProductCardProfessional> createState() =>
+      _ProductCardProfessionalState();
+}
+
+class _ProductCardProfessionalState extends State<ProductCardProfessional>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<Offset> _slideAnimation;
+  late Animation<double> _fadeAnimation;
+  bool _isPressed = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _handleTap() {
+    setState(() => _isPressed = true);
+    Future.delayed(const Duration(milliseconds: 120), () {
+      if (mounted) {
+        setState(() => _isPressed = false);
+        widget.onTap?.call();
+      }
+    });
+  }
+
+  String _limitProductName(String name) {
+    // Limit product name to maximum 2 words
     final words = name.split(' ');
-    if (words.length <= maxWords) {
+    if (words.length <= 2) {
       return name;
     }
-    return '${words.take(maxWords).join(' ')}...';
+    return '${words.take(2).join(' ')}...';
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 12,
-              spreadRadius: 0,
-              offset: const Offset(0, 4),
-            ),
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 6,
-              spreadRadius: 0,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // صورة المنتج مع العناصر العلوية
-            Expanded(
-              flex: 3,
-              child: Stack(
-                children: [
-                  // الصورة الرئيسية
-                  Container(
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(16),
-                        topRight: Radius.circular(16),
-                      ),
+      onTap: _handleTap,
+      child: SlideTransition(
+        position: _slideAnimation,
+        child: FadeTransition(
+          opacity: _fadeAnimation,
+          child: AnimatedScale(
+            scale: _isPressed ? 0.95 : 1.0,
+            duration: const Duration(milliseconds: 120),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 1.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: Theme.of(context).cardColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.3),
+                      blurRadius: 2,
+                      spreadRadius: 0,
+                      offset: const Offset(0, 2),
                     ),
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(16),
-                        topRight: Radius.circular(16),
-                      ),
-                      child: Image.network(
-                        product.image,
-                        fit: BoxFit.contain,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Container(
-                            color: Colors.grey.withValues(alpha: 0.1),
-                            child: const CustomProgressIndicator(size: 30),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: Colors.grey.withValues(alpha: 0.1),
-                            child: const Center(
-                              child: Icon(
-                                Icons.image_not_supported,
-                                size: 40,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-
-                  // شارة الخصم
-                  if (product.hasDiscount)
-                    Positioned(
-                      top: 8,
-                      left: 8,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        child: Text(
-                          '-${product.discountPercentage.toStringAsFixed(0)}%',
-                          style: getBoldStyle(
-                            fontSize: FontSize.size12,
-                            fontFamily: FontConstant.cairo,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-
-                  // أيقونة المفضلة
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: GestureDetector(
-                      onTap: onFavoriteToggle,
-                      child: Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.9),
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.1),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Icon(
-                          product.isFavorite
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          size: 18,
-                          color: product.isFavorite
-                              ? Colors.red
-                              : Colors.grey[600],
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // شارة "الأفضل"
-                  if (product.isBest)
-                    Positioned(
-                      bottom: 8,
-                      left: 8,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 3,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          'الأفضل',
-                          style: getBoldStyle(
-                            fontSize: FontSize.size9,
-                            fontFamily: FontConstant.cairo,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-
-            // معلومات المنتج
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
+                  ],
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // البراند مع اللوجو
-                    Row(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(3),
-                          child: Image.network(
-                            product.brandLogo,
-                            width: 14,
-                            height: 14,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                width: 14,
-                                height: 14,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(3),
-                                ),
-                                child: const Icon(
-                                  Icons.store,
-                                  size: 8,
-                                  color: Colors.grey,
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 3),
-                        Expanded(
-                          child: Text(
-                            product.brandName,
-                            style: getSemiBoldStyle(
-                              fontSize: FontSize.size10,
-                              fontFamily: FontConstant.cairo,
-                              color: Colors.grey[600]!,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-
-                    // اسم المنتج
-                    Text(
-                      _truncateProductName(product.name),
-                      style: getSemiBoldStyle(
-                        fontSize: FontSize.size13,
-                        fontFamily: FontConstant.cairo,
-                        color: Colors.black,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-
-                    // التقييم (مبسط)
-                    if (product.rating >= 0)
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.star,
-                            size: 10,
-                            color: AppColors.starActive,
-                          ),
-                          const SizedBox(width: 2),
-                          Text(
-                            '${product.rating.toStringAsFixed(1)} (${product.reviewsCount})',
-                            style: getRegularStyle(
-                              fontSize: FontSize.size12,
-                              fontFamily: FontConstant.cairo,
-                              color: Colors.grey[600]!,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                    const Spacer(),
-
-                    // السعر
-                    if (product.hasDiscount) ...[
-                      Row(
-                        children: [
-                          Text(
-                            '${product.finalPrice.toStringAsFixed(0)} ${product.currency}',
-                            style: getBoldStyle(
-                              fontSize: FontSize.size13,
-                              fontFamily: FontConstant.cairo,
-                              color: AppColors.primary,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            product.originalPrice.toStringAsFixed(0),
-                            style: getMediumStyle(
-                              fontSize: FontSize.size12,
-                              fontFamily: FontConstant.cairo,
-                              color: Colors.grey,
-                            ).copyWith(decoration: TextDecoration.lineThrough),
-                          ),
-                        ],
-                      ),
-                    ] else ...[
-                      Text(
-                        '${product.finalPrice.toStringAsFixed(0)} ${product.currency}',
-                        style: getBoldStyle(
-                          fontSize: FontSize.size13,
-                          fontFamily: FontConstant.cairo,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                    ],
-                    const SizedBox(height: 2),
-
-                    // حالة التوفر والمخزون
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          width: 5,
-                          height: 5,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: product.isAvailable
-                                ? Colors.green
-                                : Colors.red,
-                          ),
-                        ),
-                        const SizedBox(width: 3),
-                        Text(
-                          product.isAvailable
-                              ? 'متوفر (${product.stock})'
-                              : 'غير متوفر',
-                          style: getSemiBoldStyle(
-                            fontSize: FontSize.size11,
-                            fontFamily: FontConstant.cairo,
-                            color: product.isAvailable
-                                ? Colors.green
-                                : Colors.red,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
+                    _buildProductImage(),
+                    Flexible(child: _buildProductDetails()),
                   ],
                 ),
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProductImage() {
+    return Stack(
+      children: [
+        Hero(
+          tag: 'product_${widget.product.id}',
+          child: ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+            child: Container(
+              height: 130,
+              width: double.infinity,
+              color: const Color.fromARGB(255, 240, 233, 211),
+              child: CachedNetworkImage(
+                imageUrl: widget.product.image,
+                fit: BoxFit.contain,
+                placeholder: (context, url) =>
+                    const Center(child: CustomProgressIndicator()),
+                errorWidget: (context, url, error) => Container(
+                  color: Colors.grey[200],
+                  child: Icon(
+                    Icons.image_not_supported_outlined,
+                    color: Colors.grey[400],
+                    size: 40,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        // Product badges
+        Positioned(
+          top: 8,
+          right: 8,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [if (widget.product.isBest) _buildBestSellerBadge()],
+          ),
+        ),
+
+        // Discount badge - Bottom left
+        if (widget.product.hasDiscount)
+          Positioned(bottom: 8, left: 8, child: _buildDiscountBadge()),
+
+        // Favorite button - Fixed position on top left
+        Positioned(top: 8, left: 8, child: _buildFavoriteButton()),
+
+        // Stock indicator
+        if (!widget.product.isAvailable)
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
+                color: Colors.black.withValues(alpha: 0.6),
+              ),
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    'غير متوفر',
+                    style: getBoldStyle(
+                      fontSize: FontSize.size12,
+                      fontFamily: FontConstant.cairo,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildDiscountBadge() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.red,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        '${widget.product.discountPercentage.toStringAsFixed(0)}%',
+        style: getBoldStyle(
+          fontSize: FontSize.size11,
+          fontFamily: FontConstant.cairo,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBestSellerBadge() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: AppColors.secondary,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        'الأكثر مبيعاً',
+        style: getBoldStyle(
+          fontSize: FontSize.size10,
+          fontFamily: FontConstant.cairo,
+          color: AppColors.black,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFavoriteButton() {
+    return GestureDetector(
+      onTap: widget.onFavoritePressed,
+      child: Container(
+        padding: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.9),
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
           ],
         ),
+        child: Icon(
+          widget.isFavorite ? Icons.favorite : Icons.favorite_border,
+          color: widget.isFavorite ? Colors.red : Colors.grey[600],
+          size: 18,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProductDetails() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 12, 12, 2),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Brand name with logo
+          if (widget.product.brandName.isNotEmpty) ...[
+            Row(
+              children: [
+                // Brand logo
+                if (widget.product.brandLogo.isNotEmpty) ...[
+                  CachedNetworkImage(
+                    imageUrl: widget.product.brandLogo,
+                    width: 16,
+                    height: 16,
+                    fit: BoxFit.contain,
+                    placeholder: (context, url) => Container(
+                      width: 16,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const SizedBox.shrink(),
+                  ),
+                  const SizedBox(width: 6),
+                ],
+                // Brand name
+                Flexible(
+                  child: Text(
+                    widget.product.brandName,
+                    style: getMediumStyle(
+                      fontSize: FontSize.size11,
+                      fontFamily: FontConstant.cairo,
+                      color: Colors.grey[600],
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+          ],
+
+          // Product name
+          Text(
+            _limitProductName(widget.product.name),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: getSemiBoldStyle(
+              fontSize: FontSize.size13,
+              fontFamily: FontConstant.cairo,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
+            ),
+          ),
+
+          const SizedBox(height: 8),
+
+          // Rating
+          if (widget.product.rating >= 0)
+            Row(
+              children: [
+                SvgPicture.asset(AppAssets.starIcon, width: 14, height: 14),
+                const SizedBox(width: 4),
+                Text(
+                  '${widget.product.rating}',
+                  style: getSemiBoldStyle(
+                    fontSize: FontSize.size12,
+                    fontFamily: FontConstant.cairo,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  '(${widget.product.reviewsCount})',
+                  style: getMediumStyle(
+                    fontSize: FontSize.size11,
+                    fontFamily: FontConstant.cairo,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+
+          const SizedBox(height: 8),
+
+          // Price section
+          Row(
+            children: [
+              Text(
+                '${widget.product.finalPrice.toStringAsFixed(0)} ${widget.product.currency}',
+                style: getBoldStyle(
+                  fontFamily: FontConstant.cairo,
+                  fontSize: FontSize.size14,
+                  color: AppColors.primary,
+                ),
+              ),
+              if (widget.product.hasDiscount) ...[
+                const SizedBox(width: 8),
+                Text(
+                  '${widget.product.originalPrice.toStringAsFixed(0)} ${widget.product.currency}',
+                  style: TextStyle(
+                    fontSize: FontSize.size12,
+                    fontFamily: FontConstant.cairo,
+                    color: Colors.grey[500],
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+              ],
+            ],
+          ),
+
+          const SizedBox(height: 6),
+
+          // Stock status and quantity
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Stock status
+              Text(
+                widget.product.isAvailable ? 'متوفر' : 'غير متوفر',
+                style: getMediumStyle(
+                  fontSize: FontSize.size11,
+                  fontFamily: FontConstant.cairo,
+                  color: widget.product.isAvailable ? Colors.green : Colors.red,
+                ),
+              ),
+              // Stock quantity
+              if (widget.product.stock > 0)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.green.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: Colors.green.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  child: Text(
+                    'متوفر ${widget.product.stock}',
+                    style: getMediumStyle(
+                      fontSize: FontSize.size10,
+                      fontFamily: FontConstant.cairo,
+                      color: Colors.green[700],
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
       ),
     );
   }

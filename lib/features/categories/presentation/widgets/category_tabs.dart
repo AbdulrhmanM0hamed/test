@@ -26,7 +26,7 @@ class CategoryTabs extends StatelessWidget {
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: categories.length,
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+          padding: const EdgeInsets.fromLTRB(12, 8, 16, 12),
           clipBehavior: Clip.none,
           itemBuilder: (context, index) {
             final category = categories[index];

@@ -23,7 +23,6 @@ class BottomNavBar extends StatefulWidget {
 
 class _HomeViewState extends State<BottomNavBar> {
   int _selectedIndex = 0;
-
   late final List<Widget> _screens;
 
   @override
@@ -45,10 +44,16 @@ class _HomeViewState extends State<BottomNavBar> {
     ];
   }
 
+  void _onNavItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex],
+      body: IndexedStack(index: _selectedIndex, children: _screens),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
         child: _buildCustomBottomNavBar(),
@@ -113,7 +118,7 @@ class _HomeViewState extends State<BottomNavBar> {
     final isHomeIcon = index == 0; // Home is at index 0
 
     return GestureDetector(
-      onTap: () => setState(() => _selectedIndex = index),
+      onTap: () => _onNavItemTapped(index),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -128,7 +133,7 @@ class _HomeViewState extends State<BottomNavBar> {
                     ? LinearGradient(
                         colors: [
                           AppColors.primary,
-                          AppColors.primary.withOpacity(0.8),
+                          AppColors.primary.withValues(alpha: 0.8),
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -139,14 +144,14 @@ class _HomeViewState extends State<BottomNavBar> {
                 boxShadow: isSelected
                     ? [
                         BoxShadow(
-                          color: AppColors.primary.withOpacity(0.3),
+                          color: AppColors.primary.withValues(alpha: 0.3),
                           blurRadius: 12,
                           offset: const Offset(0, 4),
                         ),
                       ]
                     : [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha: 0.1),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),

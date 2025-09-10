@@ -171,14 +171,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                         ),
                       );
                     }
-                    return Center(
-                      child: Text(
-                        AppLocalizations.of(context)!.selectCategoryToView,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                      ),
+                    return const Center(child: CustomProgressIndicator(),
                     );
                   },
                 ),

@@ -52,8 +52,8 @@ class _CategoryCardState extends State<CategoryCard> {
                 boxShadow: [
                   BoxShadow(
                     color: _isPressed
-                        ? AppColors.secondary.withOpacity(0.3)
-                        : Colors.grey.withOpacity(0.05),
+                        ? AppColors.secondary.withValues(alpha: 0.3)
+                        : Colors.grey.withValues(alpha: 0.05),
                     blurRadius: _isPressed ? 12 : 8,
                     spreadRadius: _isPressed ? 1 : 0,
                   ),

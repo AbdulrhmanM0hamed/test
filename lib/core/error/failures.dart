@@ -22,12 +22,11 @@ class NetworkFailure extends Failure {
 class ValidationFailure extends Failure {
   final dynamic validationErrors;
 
-  const  ValidationFailure({
+  const ValidationFailure({
     required super.message,
     this.validationErrors,
   });
 
-  @override
   List<Object?> get props => [message, validationErrors];
 }
 

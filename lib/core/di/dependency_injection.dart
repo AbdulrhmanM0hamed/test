@@ -1,11 +1,11 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/core/services/data_refresh_service.dart';
-import 'package:test/core/services/fcm_service.dart';
 import 'package:test/core/services/network/dio_service.dart';
 import 'package:test/core/services/token_storage_service.dart';
 import 'package:test/core/services/app_state_service.dart';
 import 'package:test/core/services/language_service.dart';
+import 'package:test/core/services/country_service.dart';
 import 'package:test/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:test/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:test/features/auth/domain/repositories/auth_repository.dart';
@@ -62,6 +62,7 @@ class DependencyInjection {
   static AppStateService? _appStateService;
   static LanguageService? _languageService;
   static DataRefreshService? _dataRefreshService;
+  static CountryService? _countryService;
   static DioService? _dioService;
   static AuthRemoteDataSource? _authRemoteDataSource;
   static AuthRepository? _authRepository;
@@ -107,6 +108,7 @@ class DependencyInjection {
     _appStateService = AppStateService(sharedPreferences);
     _languageService = LanguageService();
     _dataRefreshService = DataRefreshService(_languageService!);
+    _countryService = CountryService.instance;
 
     // Initialize dio service
     _dioService = DioService.instance;
@@ -194,6 +196,7 @@ class DependencyInjection {
     getIt.registerSingleton<AppStateService>(_appStateService!);
     getIt.registerSingleton<LanguageService>(_languageService!);
     getIt.registerSingleton<DataRefreshService>(_dataRefreshService!);
+    getIt.registerSingleton<CountryService>(_countryService!);
     getIt.registerSingleton<DioService>(_dioService!);
     getIt.registerSingleton<AuthRepository>(_authRepository!);
     getIt.registerSingleton<LoginUseCase>(_loginUseCase!);
@@ -241,6 +244,11 @@ class DependencyInjection {
         tokenStorageService: getIt<TokenStorageService>(),
         appStateService: getIt<AppStateService>(),
       ),
+    );
+
+    // Location Cubit
+    getIt.registerFactory<LocationCubit>(
+      () => LocationCubit(locationRemoteDataSource: _locationRemoteDataSource!),
     );
 
     getIt.registerFactory<ProfileCubit>(

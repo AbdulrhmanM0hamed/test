@@ -1,6 +1,8 @@
 import '../../../../core/services/network/dio_service.dart';
 import '../../../../core/utils/constant/api_endpoints.dart';
+import '../../../../core/services/country_service.dart';
 import '../models/home_product_model.dart';
+import 'package:get_it/get_it.dart';
 
 abstract class HomeProductsRemoteDataSource {
   Future<List<HomeProductModel>> getFeaturedProducts();
@@ -17,7 +19,11 @@ class HomeProductsRemoteDataSourceImpl implements HomeProductsRemoteDataSource {
   @override
   Future<List<HomeProductModel>> getFeaturedProducts() async {
     try {
-      final response = await dioService.get(ApiEndpoints.featuredProductsUrl);
+      final countryService = GetIt.instance<CountryService>();
+      final countryId = countryService.getSelectedCountryId();
+      final response = await dioService.get(
+        ApiEndpoints.featuredProductsUrl(countryId: countryId),
+      );
       final Map<String, dynamic> responseData =
           response.data as Map<String, dynamic>;
       final Map<String, dynamic>? dataSection =
@@ -41,7 +47,11 @@ class HomeProductsRemoteDataSourceImpl implements HomeProductsRemoteDataSource {
   @override
   Future<List<HomeProductModel>> getBestSellerProducts() async {
     try {
-      final response = await dioService.get(ApiEndpoints.bestSellerProductsUrl);
+      final countryService = GetIt.instance<CountryService>();
+      final countryId = countryService.getSelectedCountryId();
+      final response = await dioService.get(
+        ApiEndpoints.bestSellerProductsUrl(countryId: countryId),
+      );
       final Map<String, dynamic> responseData =
           response.data as Map<String, dynamic>;
       final Map<String, dynamic>? dataSection =
@@ -65,7 +75,11 @@ class HomeProductsRemoteDataSourceImpl implements HomeProductsRemoteDataSource {
   @override
   Future<List<HomeProductModel>> getLatestProducts() async {
     try {
-      final response = await dioService.get(ApiEndpoints.latestProductsUrl);
+      final countryService = GetIt.instance<CountryService>();
+      final countryId = countryService.getSelectedCountryId();
+      final response = await dioService.get(
+        ApiEndpoints.latestProductsUrl(countryId: countryId),
+      );
       final Map<String, dynamic> responseData =
           response.data as Map<String, dynamic>;
       final Map<String, dynamic>? dataSection =
@@ -89,8 +103,10 @@ class HomeProductsRemoteDataSourceImpl implements HomeProductsRemoteDataSource {
   @override
   Future<List<HomeProductModel>> getSpecialOfferProducts() async {
     try {
+      final countryService = GetIt.instance<CountryService>();
+      final countryId = countryService.getSelectedCountryId();
       final response = await dioService.get(
-        ApiEndpoints.specialOfferProductsUrl,
+        ApiEndpoints.specialOfferProductsUrl(countryId: countryId),
       );
 
       print('Special Offer Response type: ${response.runtimeType}');

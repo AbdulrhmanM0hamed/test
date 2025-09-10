@@ -8,6 +8,7 @@ import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/l10n/app_localizations.dart';
 import 'header_search_bar.dart';
+import 'country_selector_header.dart';
 
 class GreetingHeader extends StatefulWidget {
   final String username;
@@ -78,7 +79,7 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      _buildLocationRow(),
+                      const CountrySelectorHeader(),
                     ],
                   ),
                 ),
@@ -124,45 +125,6 @@ class _GreetingHeaderState extends State<GreetingHeader> {
     );
   }
 
-  Widget _buildLocationRow() {
-    return GestureDetector(
-      onTap: () {
-        // Handle location change
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.15),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.location_on_rounded,
-              size: 14,
-              color: Colors.white.withValues(alpha: 0.9),
-            ),
-            const SizedBox(width: 4),
-            Text(
-              widget.location,
-              style: getMediumStyle(
-                fontFamily: FontConstant.cairo,
-                fontSize: FontSize.size12,
-                color: Colors.white.withValues(alpha: 0.9),
-              ),
-            ),
-            const SizedBox(width: 4),
-            Icon(
-              Icons.keyboard_arrow_down_rounded,
-              size: 16,
-              color: Colors.white.withValues(alpha: 0.7),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _buildLanguageSwitch() {
     return Consumer<LanguageService>(
