@@ -117,7 +117,7 @@ class FeaturedProductsSection extends StatelessWidget {
             return _buildEmptyState();
           }
 
-          return Container(
+          return SizedBox(
             height: 270,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -150,7 +150,7 @@ class FeaturedProductsSection extends StatelessWidget {
   }
 
   Widget _buildLoadingGrid() {
-    return Container(
+    return SizedBox(
       height: 280,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,

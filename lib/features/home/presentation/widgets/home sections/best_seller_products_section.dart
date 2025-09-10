@@ -45,7 +45,7 @@ class BestSellerProductsSection extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.secondary.withOpacity(0.1),
+                  color: AppColors.secondary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -74,7 +74,7 @@ class BestSellerProductsSection extends StatelessWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
+                  color: AppColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
@@ -121,7 +121,7 @@ class BestSellerProductsSection extends StatelessWidget {
             return _buildEmptyState();
           }
 
-          return Container(
+          return SizedBox(
             height: 270,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -154,7 +154,7 @@ class BestSellerProductsSection extends StatelessWidget {
   }
 
   Widget _buildLoadingGrid() {
-    return Container(
+    return SizedBox(
       height: 270,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -180,9 +180,9 @@ class BestSellerProductsSection extends StatelessWidget {
       height: 200,
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.red.withOpacity(0.1),
+        color: Colors.red.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.red.withOpacity(0.3)),
+        border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
       ),
       child: Center(
         child: Column(
@@ -209,9 +209,9 @@ class BestSellerProductsSection extends StatelessWidget {
       height: 200,
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.1),
+        color: Colors.grey.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.withOpacity(0.3)),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
       ),
       child: Center(
         child: Column(

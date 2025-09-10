@@ -272,7 +272,7 @@ class _HomeProductCardState extends State<HomeProductCard>
     if (words.length <= 2) {
       return name;
     }
-    return words.take(2).join(' ') + '...';
+    return '${words.take(2).join(' ')}...';
   }
 
   Widget _buildProductDetails() {
