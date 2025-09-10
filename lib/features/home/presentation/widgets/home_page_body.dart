@@ -105,8 +105,11 @@ class HomePageBody extends StatelessWidget {
                             const SizedBox(height: 24),
                             SpecialOffersSection(
                               onProductTap: (product) {
-                                // TODO: Navigate to product details
-                                print('Product tapped: ${product.name}');
+                                Navigator.pushNamed(
+                                  context,
+                                  '/product-details',
+                                  arguments: product.id,
+                                );
                               },
                               onFavoritePressed: (product) {
                                 // TODO: Toggle favorite
@@ -122,8 +125,11 @@ class HomePageBody extends StatelessWidget {
                             const SizedBox(height: 24),
                             FeaturedProductsSection(
                               onProductTap: (product) {
-                                // TODO: Navigate to product details
-                                print('Product tapped: ${product.name}');
+                                Navigator.pushNamed(
+                                  context,
+                                  '/product-details',
+                                  arguments: product.id,
+                                );
                               },
                               onFavoritePressed: (product) {
                                 // TODO: Toggle favorite
@@ -139,8 +145,11 @@ class HomePageBody extends StatelessWidget {
                             const SizedBox(height: 24),
                             BestSellerProductsSection(
                               onProductTap: (product) {
-                                // TODO: Navigate to product details
-                                print('Product tapped: ${product.name}');
+                                Navigator.pushNamed(
+                                  context,
+                                  '/product-details',
+                                  arguments: product.id,
+                                );
                               },
                               onFavoritePressed: (product) {
                                 // TODO: Toggle favorite
@@ -156,8 +165,11 @@ class HomePageBody extends StatelessWidget {
                             const SizedBox(height: 24),
                             LatestProductsSection(
                               onProductTap: (product) {
-                                // TODO: Navigate to product details
-                                print('Product tapped: ${product.name}');
+                                Navigator.pushNamed(
+                                  context,
+                                  '/product-details',
+                                  arguments: product.id,
+                                );
                               },
                               onFavoritePressed: (product) {
                                 // TODO: Toggle favorite

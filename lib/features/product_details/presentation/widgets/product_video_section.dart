@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test/l10n/app_localizations.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 import '../../../../core/utils/constant/font_manger.dart';
@@ -104,7 +105,7 @@ class _ProductVideoSectionState extends State<ProductVideoSection> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'فيديو المنتج',
+                        AppLocalizations.of(context)!.productVideo,
                         style: getMediumStyle(
                           color: Colors.black,
                           fontSize: FontSize.size16,
@@ -113,7 +114,7 @@ class _ProductVideoSectionState extends State<ProductVideoSection> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'شاهد عرض توضيحي للمنتج',
+                        AppLocalizations.of(context)!.productVideoDescription,
                         style: getRegularStyle(
                           color: Colors.grey[600]!,
                           fontSize: FontSize.size12,

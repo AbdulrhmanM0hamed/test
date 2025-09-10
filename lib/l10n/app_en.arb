@@ -99,6 +99,7 @@
   "errorLoadingLatest": "Error loading latest products",
   "errorLoadingSpecialOffers": "Error loading special offers",
   "noBestSellersAvailable": "No best selling products available",
+  "productVideoDescription": "Watch a product preview video",
   "noFeaturedAvailable": "No featured products available",
   "noLatestAvailable": "No new products available",
   "noSpecialOffersAvailable": "No special offers available",

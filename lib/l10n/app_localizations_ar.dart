@@ -297,6 +297,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noBestSellersAvailable => 'لا توجد منتجات الأكثر مبيعاً متاحة';
 
   @override
+  String get productVideoDescription => 'شاهد عرض توضيحي للمنتج';
+
+  @override
   String get noFeaturedAvailable => 'لا توجد منتجات مميزة متاحة';
 
   @override

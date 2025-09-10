@@ -67,12 +67,7 @@ class _HomeProductCardState extends State<HomeProductCard>
       if (mounted) {
         setState(() => _isPressed = false);
         print('🔍 Home: Product tapped: ${widget.product.name}');
-        // Navigate to product details
-        Navigator.pushNamed(
-          context,
-          '/product-details',
-          arguments: widget.product.id,
-        );
+        // Let parent handle navigation
         widget.onTap?.call();
       }
     });

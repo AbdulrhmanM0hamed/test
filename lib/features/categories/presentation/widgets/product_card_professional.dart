@@ -68,12 +68,7 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
       if (mounted) {
         setState(() => _isPressed = false);
         print('🔍 Categories Card: Product tapped: ${widget.product.name}');
-        // Navigate to product details
-        Navigator.pushNamed(
-          context,
-          '/product-details',
-          arguments: widget.product.id,
-        );
+        // Let parent handle navigation
         widget.onTap?.call();
       }
     });

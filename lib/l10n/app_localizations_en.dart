@@ -297,6 +297,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noBestSellersAvailable => 'No best selling products available';
 
   @override
+  String get productVideoDescription => 'Watch a product preview video';
+
+  @override
   String get noFeaturedAvailable => 'No featured products available';
 
   @override

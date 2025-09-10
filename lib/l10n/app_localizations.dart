@@ -671,6 +671,12 @@ abstract class AppLocalizations {
   /// **'No best selling products available'**
   String get noBestSellersAvailable;
 
+  /// No description provided for @productVideoDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch a product preview video'**
+  String get productVideoDescription;
+
   /// No description provided for @noFeaturedAvailable.
   ///
   /// In en, this message translates to:
