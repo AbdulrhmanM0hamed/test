@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/utils/constant/font_manger.dart';
 import '../../../../../core/utils/constant/styles_manger.dart';
 import '../../../../../core/utils/theme/app_colors.dart';
-import '../../../../../core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../domain/entities/home_product.dart';
 import '../../cubits/special_offer_products/special_offer_products_cubit.dart';
 import '../../cubits/special_offer_products/special_offer_products_state.dart';
 import '../home_product_card.dart';
+import '../home_product_card_shimmer.dart';
 
 class SpecialOffersSection extends StatelessWidget {
   final Function(HomeProduct)? onProductTap;
@@ -151,20 +151,15 @@ class SpecialOffersSection extends StatelessWidget {
 
   Widget _buildLoadingGrid() {
     return SizedBox(
-      height: 280,
+      height: 270,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: 4,
         itemBuilder: (context, index) {
           return Container(
-            width: 170,
-            margin: EdgeInsets.only(left: index == 3 ? 0 : 12),
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: const Center(child: CustomProgressIndicator()),
+            margin: EdgeInsetsDirectional.only(end: index == 3 ? 0 : 12),
+            child: const HomeProductCardShimmer(),
           );
         },
       ),
