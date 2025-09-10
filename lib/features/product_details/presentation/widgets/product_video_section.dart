@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
-import '../../../../core/utils/theme/app_colors.dart';
-import '../../../../l10n/app_localizations.dart';
 
-class ProductVideoSection extends StatelessWidget {
+class ProductVideoSection extends StatefulWidget {
   final String? videoLink;
 
   const ProductVideoSection({
@@ -14,199 +13,169 @@ class ProductVideoSection extends StatelessWidget {
   });
 
   @override
+  State<ProductVideoSection> createState() => _ProductVideoSectionState();
+}
+
+class _ProductVideoSectionState extends State<ProductVideoSection> {
+  YoutubePlayerController? _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeController();
+  }
+
+  void _initializeController() {
+    if (widget.videoLink == null || widget.videoLink!.isEmpty) return;
+
+    final videoId = _extractYouTubeVideoId(widget.videoLink!);
+    if (videoId == null) return;
+
+    _controller = YoutubePlayerController.fromVideoId(
+      videoId: videoId,
+      autoPlay: false,
+      params: const YoutubePlayerParams(
+        showControls: true,
+        mute: false,
+        showFullscreenButton: true,
+        loop: false,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller?.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (videoLink == null || videoLink!.isEmpty) {
+    if (widget.videoLink == null || widget.videoLink!.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final videoId = _extractYouTubeVideoId(widget.videoLink!);
+    if (videoId == null) {
+      return const SizedBox.shrink();
+    }
+
+    if (_controller == null) {
       return const SizedBox.shrink();
     }
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 15,
-            offset: const Offset(0, 3),
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 8,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(
-                Icons.play_circle_outline,
-                color: AppColors.primary,
-                size: 24,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                AppLocalizations.of(context)!.productVideo,
-                style: getBoldStyle(
-                  fontSize: FontSize.size18,
-                  fontFamily: FontConstant.cairo,
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          
-          // Video thumbnail with play button
-          GestureDetector(
-            onTap: () => _launchVideo(context),
-            child: Container(
-              width: double.infinity,
-              height: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black.withValues(alpha: 0.3),
-                    Colors.black.withValues(alpha: 0.7),
-                  ],
-                ),
-                image: DecorationImage(
-                  image: NetworkImage(_getYoutubeThumbnail()),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: Center(
-                child: Container(
-                  width: 80,
-                  height: 80,
+          // Header
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.red.withValues(alpha: 0.9),
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.3),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
+                    color: Colors.red.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(
+                    Icons.play_circle_filled,
+                    color: Colors.red,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'فيديو المنتج',
+                        style: getMediumStyle(
+                          color: Colors.black,
+                          fontSize: FontSize.size16,
+                          fontFamily: FontConstant.cairo,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'شاهد عرض توضيحي للمنتج',
+                        style: getRegularStyle(
+                          color: Colors.grey[600]!,
+                          fontSize: FontSize.size12,
+                          fontFamily: FontConstant.cairo,
+                        ),
                       ),
                     ],
                   ),
-                  child: const Icon(
-                    Icons.play_arrow,
-                    color: Colors.white,
-                    size: 40,
+                ),
+              ],
+            ),
+          ),
+          
+          // YouTube Video Player
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey[100],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: YoutubePlayer(
+                    controller: _controller!,
+                    aspectRatio: 16 / 9,
                   ),
                 ),
               ),
             ),
           ),
           
-          const SizedBox(height: 12),
-          
-          // Watch video button
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: () => _launchVideo(context),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.primary,
-                side: BorderSide(color: AppColors.primary, width: 1.5),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 12),
-              ),
-              icon: const Icon(Icons.play_arrow, size: 20),
-              label: Text(
-                AppLocalizations.of(context)!.watchVideo,
-                style: getSemiBoldStyle(
-                  fontSize: FontSize.size14,
-                  fontFamily: FontConstant.cairo,
-                  color: AppColors.primary,
-                ),
-              ),
-            ),
-          ),
+          const SizedBox(height: 16),
         ],
       ),
     );
   }
 
-  String _getYoutubeThumbnail() {
-    if (videoLink == null) return '';
-    
-    // Extract YouTube video ID
-    final uri = Uri.parse(videoLink!);
-    String? videoId;
-    
-    if (uri.host.contains('youtube.com')) {
-      videoId = uri.queryParameters['v'];
-    } else if (uri.host.contains('youtu.be')) {
-      videoId = uri.pathSegments.isNotEmpty ? uri.pathSegments.first : null;
-    }
-    
-    if (videoId != null) {
-      return 'https://img.youtube.com/vi/$videoId/maxresdefault.jpg';
-    }
-    
-    // Fallback thumbnail
-    return 'https://via.placeholder.com/400x200/f0f0f0/666666?text=Video';
-  }
 
-  Future<void> _launchVideo(BuildContext context) async {
-    if (videoLink == null) return;
-    
+  String? _extractYouTubeVideoId(String url) {
     try {
-      final uri = Uri.parse(videoLink!);
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(
-          uri,
-          mode: LaunchMode.externalApplication,
-        );
-      } else {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                AppLocalizations.of(context)!.cannotOpenVideo,
-                style: getMediumStyle(
-                  fontSize: FontSize.size14,
-                  fontFamily: FontConstant.cairo,
-                  color: Colors.white,
-                ),
-              ),
-              backgroundColor: Colors.red,
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              margin: const EdgeInsets.all(16),
-            ),
-          );
-        }
+      final uri = Uri.parse(url);
+
+      // Handle different YouTube URL formats
+      if (uri.host.contains('youtube.com')) {
+        // Standard YouTube URL: https://www.youtube.com/watch?v=VIDEO_ID
+        return uri.queryParameters['v'];
+      } else if (uri.host.contains('youtu.be')) {
+        // Short YouTube URL: https://youtu.be/VIDEO_ID
+        return uri.pathSegments.isNotEmpty ? uri.pathSegments.first : null;
+      } else if (uri.host.contains('m.youtube.com')) {
+        // Mobile YouTube URL
+        return uri.queryParameters['v'];
       }
+
+      return null;
     } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(context)!.errorOpeningVideo,
-              style: getMediumStyle(
-                fontSize: FontSize.size14,
-                fontFamily: FontConstant.cairo,
-                color: Colors.white,
-              ),
-            ),
-            backgroundColor: Colors.red,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            margin: const EdgeInsets.all(16),
-          ),
-        );
-      }
+      print('Error extracting YouTube video ID: $e');
+      return null;
     }
   }
 }

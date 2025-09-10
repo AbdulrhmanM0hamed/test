@@ -53,6 +53,7 @@ class ProductReviewsSection extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           ListView.separated(
+            padding: EdgeInsets.zero,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: reviews.length > 3 ? 3 : reviews.length,

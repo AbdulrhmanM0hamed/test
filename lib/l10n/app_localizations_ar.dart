@@ -309,7 +309,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get productVideo => 'فيديو المنتج';
 
   @override
-  String get errorOpeningVideo => 'حدث خطأ في فتح الفيديو';
+  String get errorOpeningVideo => 'خطأ في فتح الفيديو';
+
+  @override
+  String get videoLinkCopied => 'تم نسخ رابط الفيديو';
+
+  @override
+  String get openInYouTubeApp => 'الصق في تطبيق يوتيوب أو المتصفح للمشاهدة';
+
+  @override
+  String get openYouTube => 'فتح يوتيوب';
+
+  @override
+  String get linkInClipboard => 'الرابط الآن في الحافظة';
 
   @override
   String get cannotOpenVideo => 'لا يمكن فتح الفيديو';

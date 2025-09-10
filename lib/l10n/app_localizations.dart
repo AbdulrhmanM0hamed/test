@@ -701,6 +701,30 @@ abstract class AppLocalizations {
   /// **'Error opening video'**
   String get errorOpeningVideo;
 
+  /// No description provided for @videoLinkCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Video link copied to clipboard'**
+  String get videoLinkCopied;
+
+  /// No description provided for @openInYouTubeApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste in YouTube app or browser to watch'**
+  String get openInYouTubeApp;
+
+  /// No description provided for @openYouTube.
+  ///
+  /// In en, this message translates to:
+  /// **'Open YouTube'**
+  String get openYouTube;
+
+  /// No description provided for @linkInClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Link is now in your clipboard'**
+  String get linkInClipboard;
+
   /// No description provided for @cannotOpenVideo.
   ///
   /// In en, this message translates to:

@@ -312,6 +312,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorOpeningVideo => 'Error opening video';
 
   @override
+  String get videoLinkCopied => 'Video link copied to clipboard';
+
+  @override
+  String get openInYouTubeApp => 'Paste in YouTube app or browser to watch';
+
+  @override
+  String get openYouTube => 'Open YouTube';
+
+  @override
+  String get linkInClipboard => 'Link is now in your clipboard';
+
+  @override
   String get cannotOpenVideo => 'Cannot open video';
 
   @override

@@ -83,6 +83,7 @@ class _AddReviewSectionState extends State<AddReviewSection> {
           
           Row(
             children: List.generate(5, (index) {
+
               return GestureDetector(
                 onTap: () {
                   setState(() {
