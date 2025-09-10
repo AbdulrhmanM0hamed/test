@@ -49,8 +49,9 @@ class _LoginViewState extends State<LoginView> {
   void _loadSavedCredentials() async {
     final appStateService = DependencyInjection.getIt.get<AppStateService>();
     final savedCredentials = appStateService.getSavedCredentials();
-    
-    if (savedCredentials['email'] != null && savedCredentials['password'] != null) {
+
+    if (savedCredentials['email'] != null &&
+        savedCredentials['password'] != null) {
       setState(() {
         _emailController.text = savedCredentials['email']!;
         _passwordController.text = savedCredentials['password']!;
@@ -79,280 +80,288 @@ class _LoginViewState extends State<LoginView> {
         builder: (context) => Scaffold(
           backgroundColor: Colors.white,
           body: BlocConsumer<AuthCubit, AuthState>(
-        listener: (context, state) {
-          if (state is AuthSuccess) {
-            CustomSnackbar.showSuccess(
-              context: context,
-              message: state.message,
-            );
-            Navigator.pushReplacementNamed(context, BottomNavBar.routeName);
-          } else if (state is AuthError) {
-            CustomSnackbar.showError(context: context, message: state.message);
-          }
-        },
-        builder: (context, state) {
-          return Stack(
-            children: [
-              SafeArea(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // App Logo
-                          SizedBox(height: size.height * 0.03),
-                          Center(
-                            child: Image.asset(AppAssets.logo, height: 120),
-                          ),
-                          SizedBox(height: size.height * 0.03),
+            listener: (context, state) {
+              if (state is AuthSuccess) {
+                CustomSnackbar.showSuccess(
+                  context: context,
+                  message: state.message,
+                );
+                Navigator.pushReplacementNamed(context, BottomNavBar.routeName);
+              } else if (state is AuthError) {
+                CustomSnackbar.showError(
+                  context: context,
+                  message: state.message,
+                );
+              }
+            },
+            builder: (context, state) {
+              return Stack(
+                children: [
+                  SafeArea(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              // App Logo
+                              SizedBox(height: size.height * 0.03),
+                              Center(
+                                child: Image.asset(AppAssets.logo, height: 120),
+                              ),
+                              SizedBox(height: size.height * 0.03),
 
-                          // Login Text
-                          Text(
+                              // Login Text
+                              Text(
                                 AppLocalizations.of(context)!.login,
-                            style: getBoldStyle(
-                              fontFamily: FontConstant.cairo,
-                              fontSize: FontSize.size24,
-                              color: AppColors.primary,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
+                                style: getBoldStyle(
+                                  fontFamily: FontConstant.cairo,
+                                  fontSize: FontSize.size24,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
 
-                          // Welcome Text
-                          Text(
+                              // Welcome Text
+                              Text(
                                 AppLocalizations.of(context)!.welcomeBackDesc,
-                            style: getRegularStyle(
-                              fontFamily: FontConstant.cairo,
-                              fontSize: FontSize.size16,
-                              color: AppColors.textSecondary,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 32),
-
-                          // Email/Username Field
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                    AppLocalizations.of(context)!.email,
-                                style: getMediumStyle(
+                                style: getRegularStyle(
                                   fontFamily: FontConstant.cairo,
-                                  fontSize: FontSize.size14,
-                                  color: AppColors.textPrimary,
+                                  fontSize: FontSize.size16,
+                                  color: AppColors.textSecondary,
                                 ),
+                                textAlign: TextAlign.center,
                               ),
-                              const SizedBox(height: 8),
-                              CustomTextField(
-                                controller: _emailController,
-                                    hint: AppLocalizations.of(
-                                      context,
-                                    )!.writeEmail,
-                                keyboardType: TextInputType.emailAddress,
-                                validator: FormValidators.validateEmail,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
+                              const SizedBox(height: 32),
 
-                          // Password Field
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                    AppLocalizations.of(context)!.password,
-                                style: getMediumStyle(
-                                  fontFamily: FontConstant.cairo,
-                                  fontSize: FontSize.size14,
-                                  color: AppColors.textPrimary,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              CustomTextField(
-                                controller: _passwordController,
-                                    hint: AppLocalizations.of(
-                                      context,
-                                    )!.writePassword,
-                                obscureText: true,
-                                validator: FormValidators.validatePasswordLogin,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-
-                          // Remember Me and Forgot Password Row
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              // Remember Me Checkbox
-                              Row(
+                              // Email/Username Field
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Checkbox(
-                                    value: _rememberMe,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _rememberMe = value ?? false;
-                                      });
-                                    },
-                                    activeColor: AppColors.primary,
-                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                  ),
-                                  const SizedBox(width: 4),
                                   Text(
-                                    'تذكرني',
-                                    style: getRegularStyle(
+                                    AppLocalizations.of(context)!.email,
+                                    style: getMediumStyle(
                                       fontFamily: FontConstant.cairo,
                                       fontSize: FontSize.size14,
                                       color: AppColors.textPrimary,
                                     ),
                                   ),
+                                  const SizedBox(height: 8),
+                                  CustomTextField(
+                                    controller: _emailController,
+                                    hint: AppLocalizations.of(
+                                      context,
+                                    )!.writeEmail,
+                                    keyboardType: TextInputType.emailAddress,
+                                    validator: FormValidators.validateEmail,
+                                  ),
                                 ],
                               ),
-                              
-                              // Forgot Password
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    '/forgot-password',
-                                  );
-                                },
-                                child: Text(
+                              const SizedBox(height: 16),
+
+                              // Password Field
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)!.password,
+                                    style: getMediumStyle(
+                                      fontFamily: FontConstant.cairo,
+                                      fontSize: FontSize.size14,
+                                      color: AppColors.textPrimary,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  CustomTextField(
+                                    controller: _passwordController,
+                                    hint: AppLocalizations.of(
+                                      context,
+                                    )!.writePassword,
+                                    obscureText: true,
+                                    validator:
+                                        FormValidators.validatePasswordLogin,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+
+                              // Remember Me and Forgot Password Row
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // Remember Me Checkbox
+                                  Row(
+                                    children: [
+                                      Checkbox(
+                                        value: _rememberMe,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _rememberMe = value ?? false;
+                                          });
+                                        },
+                                        activeColor: AppColors.primary,
+                                        materialTapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.rememberMe,
+                                        style: getRegularStyle(
+                                          fontFamily: FontConstant.cairo,
+                                          fontSize: FontSize.size14,
+                                          color: AppColors.textPrimary,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  // Forgot Password
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        '/forgot-password',
+                                      );
+                                    },
+                                    child: Text(
                                       AppLocalizations.of(
                                         context,
                                       )!.forgotPassword,
-                                  style: getRegularStyle(
-                                    fontFamily: FontConstant.cairo,
-                                    fontSize: FontSize.size14,
-                                    color: AppColors.textSecondary,
+                                      style: getRegularStyle(
+                                        fontFamily: FontConstant.cairo,
+                                        fontSize: FontSize.size14,
+                                        color: AppColors.textSecondary,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
 
-                          const SizedBox(height: 24),
+                              const SizedBox(height: 24),
 
-                          // Login Button
-                          CustomButton(
+                              // Login Button
+                              CustomButton(
                                 text: AppLocalizations.of(context)!.login,
                                 onPressed: () => _login(context),
-                          ),
-
-                          const SizedBox(height: 24),
-
-                          // OR Divider
-                          Row(
-                            children: [
-                              const Expanded(
-                                child: Divider(
-                                  color: AppColors.border,
-                                  thickness: 1,
-                                ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
-                                child: Text(
-                                      AppLocalizations.of(context)!.or,
-                                  style: getRegularStyle(
-                                    fontFamily: FontConstant.cairo,
-                                    fontSize: FontSize.size14,
-                                    color: AppColors.textSecondary,
+
+                              const SizedBox(height: 24),
+
+                              // OR Divider
+                              Row(
+                                children: [
+                                  const Expanded(
+                                    child: Divider(
+                                      color: AppColors.border,
+                                      thickness: 1,
+                                    ),
                                   ),
-                                ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                    child: Text(
+                                      AppLocalizations.of(context)!.or,
+                                      style: getRegularStyle(
+                                        fontFamily: FontConstant.cairo,
+                                        fontSize: FontSize.size14,
+                                        color: AppColors.textSecondary,
+                                      ),
+                                    ),
+                                  ),
+                                  const Expanded(
+                                    child: Divider(
+                                      color: AppColors.border,
+                                      thickness: 1,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const Expanded(
-                                child: Divider(
-                                  color: AppColors.border,
-                                  thickness: 1,
-                                ),
-                              ),
-                            ],
-                          ),
 
-                          const SizedBox(height: 24),
+                              const SizedBox(height: 24),
 
-                          // Social Logins
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SocialAuthButton(
-                                iconPath: AppAssets.applIcon,
-                                onPressed: () {
-                                  // Implement Apple login
-                                },
+                              // Social Logins
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SocialAuthButton(
+                                    iconPath: AppAssets.applIcon,
+                                    onPressed: () {
+                                      // Implement Apple login
+                                    },
+                                  ),
+                                  const SizedBox(width: 16),
+                                  SocialAuthButton(
+                                    iconPath: AppAssets.facebookIcon,
+                                    onPressed: () {
+                                      // Implement Facebook login
+                                    },
+                                  ),
+                                  const SizedBox(width: 16),
+                                  SocialAuthButton(
+                                    iconPath: AppAssets.googleIcon,
+                                    onPressed: () {
+                                      // Implement Google login
+                                    },
+                                  ),
+                                ],
                               ),
-                              const SizedBox(width: 16),
-                              SocialAuthButton(
-                                iconPath: AppAssets.facebookIcon,
-                                onPressed: () {
-                                  // Implement Facebook login
-                                },
-                              ),
-                              const SizedBox(width: 16),
-                              SocialAuthButton(
-                                iconPath: AppAssets.googleIcon,
-                                onPressed: () {
-                                  // Implement Google login
-                                },
-                              ),
-                            ],
-                          ),
 
-                          const SizedBox(height: 32),
+                              const SizedBox(height: 16),
 
-                          // Register Link
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
+                              // Register Link
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
                                     AppLocalizations.of(
                                       context,
                                     )!.dontHaveAccount,
-                                style: getRegularStyle(
-                                  fontFamily: FontConstant.cairo,
-                                  fontSize: FontSize.size14,
-                                  color: AppColors.textSecondary,
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
+                                    style: getRegularStyle(
+                                      fontFamily: FontConstant.cairo,
+                                      fontSize: FontSize.size14,
+                                      color: AppColors.textSecondary,
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
                                       Navigator.pushNamed(
                                         context,
                                         RegisterView.routeName,
                                       );
-                                },
-                                child: Text(
+                                    },
+                                    child: Text(
                                       AppLocalizations.of(context)!.signup,
-                                  style: getBoldStyle(
-                                    fontFamily: FontConstant.cairo,
-                                    fontSize: FontSize.size14,
-                                    color: AppColors.primary,
+                                      style: getBoldStyle(
+                                        fontFamily: FontConstant.cairo,
+                                        fontSize: FontSize.size14,
+                                        color: AppColors.primary,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-              // Loading overlay
-              if (state is AuthLoading)
-                Container(
-                  color: Colors.black.withValues(alpha: 0.3),
-                  child: const CustomProgressIndicator(),
-                ),
-            ],
-          );
-        },
-        ),
+                  // Loading overlay
+                  if (state is AuthLoading)
+                    Container(
+                      color: Colors.black.withValues(alpha: 0.3),
+                      child: const CustomProgressIndicator(),
+                    ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

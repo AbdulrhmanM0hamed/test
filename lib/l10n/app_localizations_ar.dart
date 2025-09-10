@@ -243,6 +243,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get specialOffers => 'عروض خاصة';
 
   @override
+  String get rememberMe => 'تذكرني';
+
+  @override
   String get showMore => 'عرض المزيد';
 
   @override

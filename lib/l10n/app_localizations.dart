@@ -563,6 +563,12 @@ abstract class AppLocalizations {
   /// **'Special Offers'**
   String get specialOffers;
 
+  /// No description provided for @rememberMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Remember Me'**
+  String get rememberMe;
+
   /// No description provided for @showMore.
   ///
   /// In en, this message translates to:

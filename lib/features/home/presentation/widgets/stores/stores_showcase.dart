@@ -1,5 +1,6 @@
-import 'package:test/features/home/presentation/widgets/titile_with_see_all.dart';
+import 'package:test/features/home/presentation/widgets/section_header.dart';
 import 'package:flutter/material.dart';
+import 'package:test/l10n/app_localizations.dart';
 
 import 'store_card.dart';
 import 'store_model.dart';
@@ -29,7 +30,13 @@ class StoresShowcaseSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            TitileWithSeeAll(title: "متاجرنا المميزة ", onPressed: () {}),
+            SectionHeader(
+              onSeeAll: () {},
+              title: 'متاجر',
+              icon: Icons.store,
+              iconColor: Colors.blue,
+              backgroundColor: Colors.blue.withValues(alpha: 0.1),
+            ),
             const SizedBox(height: 8),
             Expanded(
               child: ListView.builder(

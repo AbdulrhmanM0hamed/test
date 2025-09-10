@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test/features/home/presentation/widgets/section_header.dart';
 import '../../../../../core/utils/constant/font_manger.dart';
 import '../../../../../core/utils/constant/styles_manger.dart';
 import '../../../../../core/utils/theme/app_colors.dart';
@@ -27,77 +28,21 @@ class FeaturedProductsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionHeader(context),
+        // featured_products_section.dart
+SectionHeader(
+  onSeeAll: onSeeAll,
+  title: AppLocalizations.of(context)!.featuredProducts,
+  icon: Icons.star,
+  iconColor: Colors.orange,
+  backgroundColor: Colors.orange.withValues(alpha: 0.1),
+),
         const SizedBox(height: 16),
         _buildProductsGrid(),
       ],
     );
   }
 
-  Widget _buildSectionHeader(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(Icons.star, color: AppColors.primary, size: 20),
-              ),
-              const SizedBox(width: 12),
-              Text(
-                AppLocalizations.of(context)!.featuredProducts,
-                style: getBoldStyle(
-                  fontSize: FontSize.size18,
-                  fontFamily: FontConstant.cairo,
-                  color: Theme.of(context).textTheme.headlineMedium?.color,
-                ),
-              ),
-            ],
-          ),
-          if (onSeeAll != null)
-            GestureDetector(
-              onTap: onSeeAll,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.showMore,
-                      style: getSemiBoldStyle(
-                        fontSize: FontSize.size12,
-                        fontFamily: FontConstant.cairo,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      color: AppColors.primary,
-                      size: 12,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
+
 
   Widget _buildProductsGrid() {
     return BlocBuilder<FeaturedProductsCubit, FeaturedProductsState>(

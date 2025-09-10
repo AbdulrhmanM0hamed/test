@@ -243,6 +243,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get specialOffers => 'Special Offers';
 
   @override
+  String get rememberMe => 'Remember Me';
+
+  @override
   String get showMore => 'Show More';
 
   @override

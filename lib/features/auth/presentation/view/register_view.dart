@@ -366,7 +366,7 @@ class _RegisterViewState extends State<RegisterView> {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 32),
+                              const SizedBox(height: 16),
 
                               // Login Link
                               Row(

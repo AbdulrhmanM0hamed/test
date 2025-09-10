@@ -4,7 +4,7 @@ import 'package:test/features/categories/presentation/cubit/department_cubit.dar
 import 'package:test/features/categories/presentation/cubit/department_state.dart';
 import 'package:test/features/categories/presentation/widgets/categories_shimmer.dart';
 import 'package:test/features/home/presentation/widgets/category_card.dart';
-import 'package:test/features/home/presentation/widgets/titile_with_see_all.dart';
+import 'package:test/features/home/presentation/widgets/section_header.dart';
 import 'package:test/l10n/app_localizations.dart';
 
 class CategoriesSection extends StatelessWidget {
@@ -16,12 +16,12 @@ class CategoriesSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // العنوان مع زر المشاهدة
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: TitileWithSeeAll(
-            title: AppLocalizations.of(context)!.categories,
-            onPressed: () {},
-          ),
+        SectionHeader(
+          onSeeAll: () {},
+          title: AppLocalizations.of(context)!.categories,
+          icon: Icons.category,
+          iconColor: Colors.blue,
+          backgroundColor: Colors.blue.withValues(alpha: 0.1),
         ),
 
         // الفئات
