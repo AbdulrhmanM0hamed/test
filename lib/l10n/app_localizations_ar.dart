@@ -81,6 +81,24 @@ class AppLocalizationsAr extends AppLocalizations {
   String get name => 'الاسم';
 
   @override
+  String get quantity => 'الكمية';
+
+  @override
+  String get addToCart => 'إضافة إلى السلة';
+
+  @override
+  String get outOfStock => 'غير متوفر';
+
+  @override
+  String get buyNow => 'اشتري الآن';
+
+  @override
+  String get notAvailable => 'غير متوفر';
+
+  @override
+  String get discount => 'خصم';
+
+  @override
   String get rewritePassword => 'اكتب كلمة المرور مرة أخرى';
 
   @override
@@ -286,4 +304,100 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noSpecialOffersAvailable => 'لا توجد عروض خاصة متاحة';
+
+  @override
+  String get productDetails => 'تفاصيل المنتج';
+
+  @override
+  String get description => 'الوصف';
+
+  @override
+  String get features => 'المميزات';
+
+  @override
+  String get specifications => 'المواصفات';
+
+  @override
+  String get shipping => 'الشحن';
+
+  @override
+  String get material => 'المادة';
+
+  @override
+  String get stock => 'المخزون';
+
+  @override
+  String get available => 'المتاح';
+
+  @override
+  String get salesCount => 'عدد المبيعات';
+
+  @override
+  String get viewsCount => 'عدد المشاهدات';
+
+  @override
+  String get orderLimit => 'الحد الأقصى للطلب';
+
+  @override
+  String get piece => 'قطعة';
+
+  @override
+  String get pieces => 'قطعة';
+
+  @override
+  String get shippingAvailableTo => 'الشحن متاح إلى';
+
+  @override
+  String get addedToCart => 'تم إضافة';
+
+  @override
+  String get toCart => 'إلى السلة';
+
+  @override
+  String get goingToCheckout => 'الانتقال إلى صفحة الدفع...';
+
+  @override
+  String get shoppingCart => 'سلة التسوق';
+
+  @override
+  String get total => 'المجموع';
+
+  @override
+  String get completeOrder => 'إتمام الطلب';
+
+  @override
+  String get smartPhonePro => 'هاتف ذكي رائع برو إكس';
+
+  @override
+  String get red => 'أحمر';
+
+  @override
+  String get customerReviews => 'تقييمات العملاء';
+
+  @override
+  String get review => 'تقييم';
+
+  @override
+  String get reviews => 'تقييم';
+
+  @override
+  String get viewAllReviews => 'عرض جميع التقييمات';
+
+  @override
+  String get noReviewsYet => 'لا توجد تقييمات بعد';
+
+  @override
+  String get beFirstToReview => 'كن أول من يقيم هذا المنتج';
+
+  @override
+  String get sales => 'المبيعات';
+
+  @override
+  String get views => 'المشاهدات';
+
+  @override
+  String get colors => ' الألوان المتاحة ';
+
+  @override
+  String get egp => 'ج.م';
 }

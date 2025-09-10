@@ -81,6 +81,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get name => 'Name';
 
   @override
+  String get quantity => 'Quantity';
+
+  @override
+  String get addToCart => 'Add to Cart';
+
+  @override
+  String get outOfStock => 'Out of Stock';
+
+  @override
+  String get buyNow => 'Buy Now';
+
+  @override
+  String get notAvailable => 'Not Available';
+
+  @override
+  String get discount => 'Discount';
+
+  @override
   String get rewritePassword => 'Re-enter password';
 
   @override
@@ -286,4 +304,100 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noSpecialOffersAvailable => 'No special offers available';
+
+  @override
+  String get productDetails => 'Product Details';
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String get features => 'Features';
+
+  @override
+  String get specifications => 'Specifications';
+
+  @override
+  String get shipping => 'Shipping';
+
+  @override
+  String get material => 'Material';
+
+  @override
+  String get stock => 'Stock';
+
+  @override
+  String get available => 'Available';
+
+  @override
+  String get salesCount => 'Sales Count';
+
+  @override
+  String get viewsCount => 'Views Count';
+
+  @override
+  String get orderLimit => 'Order Limit';
+
+  @override
+  String get piece => 'piece';
+
+  @override
+  String get pieces => 'pieces';
+
+  @override
+  String get shippingAvailableTo => 'Shipping available to';
+
+  @override
+  String get addedToCart => 'Added';
+
+  @override
+  String get toCart => 'to cart';
+
+  @override
+  String get goingToCheckout => 'Going to checkout...';
+
+  @override
+  String get shoppingCart => 'Shopping Cart';
+
+  @override
+  String get total => 'Total';
+
+  @override
+  String get completeOrder => 'Complete Order';
+
+  @override
+  String get smartPhonePro => 'Smart Phone Pro X';
+
+  @override
+  String get red => 'Red';
+
+  @override
+  String get customerReviews => 'Customer Reviews';
+
+  @override
+  String get review => 'review';
+
+  @override
+  String get reviews => 'reviews';
+
+  @override
+  String get viewAllReviews => 'View All Reviews';
+
+  @override
+  String get noReviewsYet => 'No reviews yet';
+
+  @override
+  String get beFirstToReview => 'Be the first to review this product';
+
+  @override
+  String get sales => 'Sales';
+
+  @override
+  String get views => 'Views';
+
+  @override
+  String get colors => 'Available colors';
+
+  @override
+  String get egp => 'EGP';
 }

@@ -54,6 +54,12 @@ import 'package:test/features/home/presentation/cubits/featured_products/feature
 import 'package:test/features/home/presentation/cubits/best_seller_products/best_seller_products_cubit.dart';
 import 'package:test/features/home/presentation/cubits/latest_products/latest_products_cubit.dart';
 import 'package:test/features/home/presentation/cubits/special_offer_products/special_offer_products_cubit.dart';
+// Product details feature imports
+import 'package:test/features/product_details/data/datasources/product_details_remote_data_source.dart';
+import 'package:test/features/product_details/data/repositories/product_details_repository_impl.dart';
+import 'package:test/features/product_details/domain/repositories/product_details_repository.dart';
+import 'package:test/features/product_details/domain/usecases/get_product_details_usecase.dart';
+import 'package:test/features/product_details/presentation/cubit/product_details_cubit.dart';
 
 class DependencyInjection {
   static final GetIt getIt = GetIt.instance;
@@ -99,6 +105,11 @@ class DependencyInjection {
   static GetBestSellerProductsUseCase? _getBestSellerProductsUseCase;
   static GetLatestProductsUseCase? _getLatestProductsUseCase;
   static GetSpecialOfferProductsUseCase? _getSpecialOfferProductsUseCase;
+
+  // Product details feature
+  static ProductDetailsRemoteDataSource? _productDetailsRemoteDataSource;
+  static ProductDetailsRepository? _productDetailsRepository;
+  static GetProductDetailsUseCase? _getProductDetailsUseCase;
 
   static Future<void> init() async {
     final sharedPreferences = await SharedPreferences.getInstance();
@@ -191,6 +202,17 @@ class DependencyInjection {
       repository: _homeProductsRepository!,
     );
 
+    // Initialize Product Details dependencies
+    _productDetailsRemoteDataSource = ProductDetailsRemoteDataSourceImpl(
+      _dioService!,
+    );
+    _productDetailsRepository = ProductDetailsRepositoryImpl(
+      _productDetailsRemoteDataSource!,
+    );
+    _getProductDetailsUseCase = GetProductDetailsUseCase(
+      _productDetailsRepository!,
+    );
+
     // Register with GetIt
     getIt.registerSingleton<TokenStorageService>(_tokenStorageService!);
     getIt.registerSingleton<AppStateService>(_appStateService!);
@@ -232,6 +254,9 @@ class DependencyInjection {
     getIt.registerSingleton<GetSpecialOfferProductsUseCase>(
       _getSpecialOfferProductsUseCase!,
     );
+    // Product Details singletons
+    getIt.registerSingleton<ProductDetailsRepository>(_productDetailsRepository!);
+    getIt.registerSingleton<GetProductDetailsUseCase>(_getProductDetailsUseCase!);
 
     // Register FCM Service
     // getIt.registerSingleton<FCMService>(FCMService());
@@ -311,6 +336,13 @@ class DependencyInjection {
       () => SpecialOfferProductsCubit(
         getSpecialOfferProductsUseCase: getIt<GetSpecialOfferProductsUseCase>(),
         dataRefreshService: getIt<DataRefreshService>(),
+      ),
+    );
+
+    // Product Details Cubit
+    getIt.registerFactory<ProductDetailsCubit>(
+      () => ProductDetailsCubit(
+        getIt<GetProductDetailsUseCase>(),
       ),
     );
   }

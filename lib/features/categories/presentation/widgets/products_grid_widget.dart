@@ -19,10 +19,9 @@ class ProductsGridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: CustomAnimations.fadeIn(
-        child: products.isEmpty ? _buildEmptyState() : _buildProductsGrid(),
-      ),
+    print('🔍 ProductsGridWidget: Building with ${products.length} products');
+    return CustomAnimations.fadeIn(
+      child: products.isEmpty ? _buildEmptyState() : _buildProductsGrid(),
     );
   }
 

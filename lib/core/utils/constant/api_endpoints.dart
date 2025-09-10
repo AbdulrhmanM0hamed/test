@@ -25,6 +25,9 @@ class ApiEndpoints {
   static String specialOfferProductsUrl({int? countryId}) => 
       '$baseUrl$specialOfferProducts${countryId != null ? '?country_id=$countryId' : ''}';
 
+  // Product details endpoint
+  static String productDetails(int productId) => '$baseUrl/spacific-product/$productId';
+
   // Location endpoints
   static String get countries => '$baseUrl/countries';
   static String cities(int countryId) => '$baseUrl/cities/$countryId';

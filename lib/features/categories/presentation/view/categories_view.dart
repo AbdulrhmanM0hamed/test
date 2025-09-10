@@ -132,7 +132,12 @@ class _CategoriesViewState extends State<CategoriesView> {
                       return ProductsGridWidget(
                         products: state.products,
                         onProductTap: (product) {
-                          // التنقل إلى صفحة تفاصيل المنتج
+                          print('🔍 Categories: Product tapped: ${product.name}');
+                          Navigator.pushNamed(
+                            context,
+                            '/product-details',
+                            arguments: product.id,
+                          );
                         },
                       );
                     } else if (state is ProductsError) {

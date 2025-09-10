@@ -67,6 +67,13 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
     Future.delayed(const Duration(milliseconds: 120), () {
       if (mounted) {
         setState(() => _isPressed = false);
+        print('🔍 Categories Card: Product tapped: ${widget.product.name}');
+        // Navigate to product details
+        Navigator.pushNamed(
+          context,
+          '/product-details',
+          arguments: widget.product.id,
+        );
         widget.onTap?.call();
       }
     });
@@ -127,7 +134,7 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
     return Stack(
       children: [
         Hero(
-          tag: 'product_${widget.product.id}',
+          tag: 'category_product_${widget.product.id}',
           child: ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
             child: Container(
