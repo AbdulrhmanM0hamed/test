@@ -120,7 +120,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
               style: getSemiBoldStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
-                color: Colors.white,
+               
               ),
             ),
           ),
@@ -183,7 +183,6 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
         icon: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.white,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
@@ -195,17 +194,19 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
           ),
           child: const Icon(
             Icons.arrow_back_ios_new,
-            color: Colors.black,
+          
             size: 20,
           ),
         ),
       ),
       title: Text(
         product.name,
-        style: getSemiBoldStyle(
+        style: getBoldStyle(
           fontSize: FontSize.size16,
           fontFamily: FontConstant.cairo,
-          color: Colors.black,
+          color: Theme.of(context).brightness == Brightness.light
+              ? Colors.black
+              : Colors.white,
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
@@ -219,7 +220,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
           icon: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.white,
+              
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
@@ -231,7 +232,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
             ),
             child: const Icon(
               Icons.favorite_border,
-              color: Colors.black,
+              
               size: 20,
             ),
           ),

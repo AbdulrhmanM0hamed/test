@@ -14,20 +14,8 @@ class ProductInfoSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 15,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -75,21 +63,20 @@ class ProductInfoSection extends StatelessWidget {
             ),
             const SizedBox(height: 12),
           ],
-
+      
           // Product name
           Text(
             product.name,
             style: getBoldStyle(
               fontSize: FontSize.size20,
               fontFamily: FontConstant.cairo,
-              color: Colors.black,
             ),
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
           ),
-
+      
           const SizedBox(height: 16),
-
+      
           // Rating and reviews
           Row(
             children: [
@@ -140,14 +127,14 @@ class ProductInfoSection extends StatelessWidget {
               ),
             ],
           ),
-
+      
           const SizedBox(height: 20),
-
+      
           // Price section
           _buildPriceSection(context),
-
+      
           const SizedBox(height: 20),
-
+      
           // Stock and sales info
           Row(
             children: [
@@ -173,15 +160,15 @@ class ProductInfoSection extends StatelessWidget {
               ),
             ],
           ),
-
+      
           const SizedBox(height: 24),
-
+      
           // Color/Size selection
           if (product.productSizeColor.isNotEmpty) ...[
             _buildVariantsSection(context),
             const SizedBox(height: 24),
           ],
-
+      
           // Add to cart section
           AddToCartSection(product: product),
         ],

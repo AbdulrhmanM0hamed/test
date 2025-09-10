@@ -39,154 +39,152 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 400,
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          // Main image viewer
-          Expanded(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(20),
-              ),
-              child: Stack(
-                children: [
-                  PageView.builder(
-                    controller: _pageController,
-                    onPageChanged: (index) {
-                      setState(() => _currentIndex = index);
-                    },
-                    itemCount: _allImages.length,
-                    itemBuilder: (context, index) {
-                      return Hero(
-                        tag: 'product_image_$index',
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Container(
+        height: 400,
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+      
+          borderRadius: BorderRadius.circular(20),
+       
+        ),
+        child: Column(
+          children: [
+            // Main image viewer
+            Expanded(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
+                child: Stack(
+                  children: [
+                    PageView.builder(
+                      controller: _pageController,
+                      onPageChanged: (index) {
+                        setState(() => _currentIndex = index);
+                      },
+                      itemCount: _allImages.length,
+                      itemBuilder: (context, index) {
+                        return Hero(
+                          tag: 'product_image_$index',
+                          child: Container(
+                            width: double.infinity,
+                            color: const Color.fromARGB(255, 240, 233, 211),
+                            child: CachedNetworkImage(
+                              imageUrl: _allImages[index],
+                              fit: BoxFit.contain,
+                              placeholder: (context, url) => const Center(
+                                child: CustomProgressIndicator(),
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                color: Colors.grey[100],
+                                child: Icon(
+                                  Icons.image_not_supported_outlined,
+                                  color: Colors.grey[400],
+                                  size: 64,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+
+                    // Page indicator
+                    if (_allImages.length > 1)
+                      Positioned(
+                        top: 16,
+                        right: 16,
                         child: Container(
-                          width: double.infinity,
-                          color: const Color.fromARGB(255, 240, 233, 211),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.7),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            '${_currentIndex + 1} / ${_allImages.length}',
+                            style: getSemiBoldStyle(
+                              fontSize: FontSize.size12,
+                              fontFamily: FontConstant.cairo,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Thumbnail navigation
+            if (_allImages.length > 1)
+              Container(
+                height: 80,
+                padding: const EdgeInsets.all(12),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _allImages.length,
+                  itemBuilder: (context, index) {
+                    final isSelected = index == _currentIndex;
+                    return GestureDetector(
+                      onTap: () {
+                        _pageController.animateToPage(
+                          index,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      },
+                      child: Container(
+                        width: 60,
+                        height: 60,
+                        margin: const EdgeInsets.only(right: 8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: isSelected
+                                ? AppColors.primary
+                                : Colors.grey[300]!,
+                            width: isSelected ? 2 : 1,
+                          ),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(11),
                           child: CachedNetworkImage(
                             imageUrl: _allImages[index],
-                            fit: BoxFit.contain,
-                            placeholder: (context, url) =>
-                                const Center(child: CustomProgressIndicator()),
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Container(
+                              color: Colors.grey[100],
+                              child: const Center(
+                                child: SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                              ),
+                            ),
                             errorWidget: (context, url, error) => Container(
                               color: Colors.grey[100],
                               child: Icon(
                                 Icons.image_not_supported_outlined,
                                 color: Colors.grey[400],
-                                size: 64,
+                                size: 24,
                               ),
                             ),
                           ),
                         ),
-                      );
-                    },
-                  ),
-
-                  // Page indicator
-                  if (_allImages.length > 1)
-                    Positioned(
-                      top: 16,
-                      right: 16,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.7),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          '${_currentIndex + 1} / ${_allImages.length}',
-                          style: getSemiBoldStyle(
-                            fontSize: FontSize.size12,
-                            fontFamily: FontConstant.cairo,
-                            color: Colors.white,
-                          ),
-                        ),
                       ),
-                    ),
-                ],
+                    );
+                  },
+                ),
               ),
-            ),
-          ),
-
-          // Thumbnail navigation
-          if (_allImages.length > 1)
-            Container(
-              height: 80,
-              padding: const EdgeInsets.all(12),
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: _allImages.length,
-                itemBuilder: (context, index) {
-                  final isSelected = index == _currentIndex;
-                  return GestureDetector(
-                    onTap: () {
-                      _pageController.animateToPage(
-                        index,
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    child: Container(
-                      width: 60,
-                      height: 60,
-                      margin: const EdgeInsets.only(right: 8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: isSelected
-                              ? AppColors.primary
-                              : Colors.grey[300]!,
-                          width: isSelected ? 2 : 1,
-                        ),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(11),
-                        child: CachedNetworkImage(
-                          imageUrl: _allImages[index],
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Container(
-                            color: Colors.grey[100],
-                            child: const Center(
-                              child: SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              ),
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => Container(
-                            color: Colors.grey[100],
-                            child: Icon(
-                              Icons.image_not_supported_outlined,
-                              color: Colors.grey[400],
-                              size: 24,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
