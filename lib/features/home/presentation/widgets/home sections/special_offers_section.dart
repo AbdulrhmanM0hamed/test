@@ -127,19 +127,16 @@ class SpecialOffersSection extends StatelessWidget {
                 final product = products[index];
                 return Container(
                   width: 170,
-                  margin: EdgeInsets.only(
-                    left:
+                  margin: EdgeInsetsDirectional.only(
+                    end:
                         index == (products.length > 4 ? 3 : products.length - 1)
                         ? 0
                         : 12,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: HomeProductCard(
-                      product: product,
-                      onTap: () => onProductTap?.call(product),
-                      onFavoritePressed: () => onFavoritePressed?.call(product),
-                    ),
+                  child: HomeProductCard(
+                    product: product,
+                    onTap: () => onProductTap?.call(product),
+                    onFavoritePressed: () => onFavoritePressed?.call(product),
                   ),
                 );
               },

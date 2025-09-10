@@ -131,9 +131,8 @@ class BestSellerProductsSection extends StatelessWidget {
                 final product = products[index];
                 return Container(
                   width: 170,
-                  margin: EdgeInsets.only(
-                    left:
-                        index == (products.length > 4 ? 3 : products.length - 1)
+                  margin: EdgeInsetsDirectional.only(
+                    end: index == (products.length > 4 ? 3 : products.length - 1)
                         ? 0
                         : 12,
                   ),
