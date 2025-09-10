@@ -1,9 +1,8 @@
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/utils/theme/app_theme.dart';
-import 'package:test/generated/l10n.dart';
+import 'package:test/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/utils/helper/on_genrated_routes.dart';
 import 'package:test/core/services/app_state_service.dart';
 import 'package:test/core/services/network/dio_service.dart';
@@ -46,13 +45,8 @@ class MyApp extends StatelessWidget {
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             locale: languageService.currentLocale,
-            localizationsDelegates: [
-              S.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: S.delegate.supportedLocales,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             onGenerateRoute: onGenratedRoutes,
             initialRoute: initialRoute,
             builder: (context, child) {

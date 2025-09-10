@@ -5,7 +5,7 @@ import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/core/utils/validators/form_validators_clean.dart';
-import 'package:test/generated/l10n.dart';
+import 'package:test/l10n/app_localizations.dart';
 
 class RegistrationFormFields extends StatelessWidget {
   final TextEditingController nameController;
@@ -33,7 +33,7 @@ class RegistrationFormFields extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final S s = S.of(context);
+    final s = AppLocalizations.of(context);
 
     return Column(
       children: [
@@ -51,10 +51,10 @@ class RegistrationFormFields extends StatelessWidget {
 
         // Email Field
         _buildFieldWithLabel(
-          label: s.email,
+          label: s!.email,
           child: CustomTextField(
             controller: emailController,
-            hint: s.writeEmail,
+            hint: s!.writeEmail,
             keyboardType: TextInputType.emailAddress,
             validator: (value) => FormValidators.validateEmail(value, context),
           ),
@@ -76,10 +76,10 @@ class RegistrationFormFields extends StatelessWidget {
 
         // Password Field
         _buildFieldWithLabel(
-          label: s.password,
+          label: s!.password,
           child: PasswordField(
             controller: passwordController,
-            hintText: s.writePassword,
+            hintText: s!.writePassword,
 
             validator: (value) =>
                 FormValidators.validatePassword(value, context),

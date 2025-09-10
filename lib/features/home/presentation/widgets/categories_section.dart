@@ -6,7 +6,7 @@ import 'package:test/features/categories/presentation/cubit/department_state.dar
 import 'package:test/features/categories/presentation/widgets/categories_shimmer.dart';
 import 'package:test/features/home/presentation/widgets/category_card.dart';
 import 'package:test/features/home/presentation/widgets/titile_with_see_all.dart';
-import 'package:test/generated/l10n.dart';
+import 'package:test/l10n/app_localizations.dart';
 
 class CategoriesSection extends StatelessWidget {
   const CategoriesSection({super.key});
@@ -20,7 +20,7 @@ class CategoriesSection extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: TitileWithSeeAll(
-            title: S.of(context).categories,
+            title: AppLocalizations.of(context)!.categories,
             onPressed: () {},
           ),
         ),

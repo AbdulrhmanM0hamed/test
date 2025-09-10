@@ -1,5 +1,5 @@
 import 'package:test/features/profile/presentation/view/profile_wrapper.dart';
-import 'package:test/generated/l10n.dart';
+import 'package:test/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test/core/utils/constant/app_assets.dart';
@@ -72,31 +72,31 @@ class _HomeViewState extends State<BottomNavBar> {
             1,
             AppAssets.categoryIcon,
             AppAssets.categoryIconOutline,
-            S.of(context).categories,
+            AppLocalizations.of(context)!.categories,
           ),
           _buildNavItem(
             2,
             AppAssets.favoriteIcon,
             AppAssets.favoriteIconOutline,
-            S.of(context).favorite,
+            AppLocalizations.of(context)!.favorite,
           ),
           _buildNavItem(
             0,
             AppAssets.homeIcon,
             AppAssets.homeIconOutline,
-            S.of(context).home,
+            AppLocalizations.of(context)!.home,
           ),
           _buildNavItem(
             3,
             AppAssets.cartIcon,
             AppAssets.cartIconOutline,
-            S.of(context).cart,
+            AppLocalizations.of(context)!.cart,
           ),
           _buildNavItem(
             4,
             AppAssets.profileIcon,
             AppAssets.profileIconOutline,
-            S.of(context).profile,
+            AppLocalizations.of(context)!.profile,
           ),
         ],
       ),

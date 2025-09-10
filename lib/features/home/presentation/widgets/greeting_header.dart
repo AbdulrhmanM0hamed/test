@@ -6,7 +6,7 @@ import 'package:test/core/utils/constant/app_assets.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
-import 'package:test/generated/l10n.dart';
+import 'package:test/l10n/app_localizations.dart';
 import 'header_search_bar.dart';
 
 class GreetingHeader extends StatefulWidget {
@@ -520,11 +520,11 @@ class _GreetingHeaderState extends State<GreetingHeader> {
     String greeting;
 
     if (hour < 12) {
-      greeting = S.of(context).goodMorning;
+      greeting = AppLocalizations.of(context)!.goodMorning;
     } else if (hour < 17) {
-      greeting = S.of(context).goodAfternoon;
+      greeting = AppLocalizations.of(context)!.goodAfternoon;
     } else {
-      greeting = S.of(context).goodEvening;
+      greeting = AppLocalizations.of(context)!.goodEvening;
     }
 
     return '$greeting ${widget.username}';

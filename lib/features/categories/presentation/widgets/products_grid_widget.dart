@@ -4,7 +4,7 @@ import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/features/categories/domain/entities/product.dart';
 import 'package:test/features/categories/presentation/widgets/product_card_professional.dart';
-import 'package:test/generated/l10n.dart';
+import 'package:test/l10n/app_localizations.dart';
 
 /// ويدجت عرض شبكة المنتجات
 class ProductsGridWidget extends StatelessWidget {
@@ -32,7 +32,7 @@ class ProductsGridWidget extends StatelessWidget {
       builder: (context) {
         return Center(
           child: Text(
-            S.of(context).noProductsInCategory,
+            AppLocalizations.of(context)!.noProductsInCategory,
             style: getMediumStyle(
               fontSize: FontSize.size16,
               fontFamily: FontConstant.cairo,

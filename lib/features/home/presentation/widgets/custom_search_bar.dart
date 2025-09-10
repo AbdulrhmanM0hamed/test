@@ -1,5 +1,5 @@
 import 'package:test/core/utils/constant/app_assets.dart';
-import 'package:test/generated/l10n.dart';
+import 'package:test/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../core/utils/constant/font_manger.dart';
@@ -49,7 +49,7 @@ class _ServicesSearchBarState extends State<CustomSearchBar> {
                 textAlignVertical: TextAlignVertical.center,
                 onChanged: (value) {},
                 decoration: InputDecoration(
-                  hintText: S.of(context).searchHint,
+                  hintText: AppLocalizations.of(context)!.searchHint,
                   hintStyle: getMediumStyle(
                     color: AppColors.grey,
                     fontSize: FontSize.size14,

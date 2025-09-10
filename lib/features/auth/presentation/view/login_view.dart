@@ -14,7 +14,7 @@ import 'package:test/features/auth/presentation/widgets/social_auth_button.dart'
 import 'package:test/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:test/features/auth/presentation/cubit/auth_state.dart';
 import 'package:test/features/home/presentation/view/bottom_nav_bar.dart';
-import 'package:test/generated/l10n.dart';
+import 'package:test/l10n/app_localizations.dart';
 import 'package:test/core/services/app_state_service.dart';
 
 class LoginView extends StatefulWidget {
@@ -71,7 +71,6 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final S s = S.of(context);
 
     return BlocProvider(
       create: (context) => DependencyInjection.createAuthCubit(),
@@ -111,7 +110,7 @@ class _LoginViewState extends State<LoginView> {
 
                           // Login Text
                           Text(
-                            s.login,
+                                AppLocalizations.of(context)!.login,
                             style: getBoldStyle(
                               fontFamily: FontConstant.cairo,
                               fontSize: FontSize.size24,
@@ -122,7 +121,7 @@ class _LoginViewState extends State<LoginView> {
 
                           // Welcome Text
                           Text(
-                            s.welcomeBackDesc,
+                                AppLocalizations.of(context)!.welcomeBackDesc,
                             style: getRegularStyle(
                               fontFamily: FontConstant.cairo,
                               fontSize: FontSize.size16,
@@ -137,7 +136,7 @@ class _LoginViewState extends State<LoginView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                s.email,
+                                    AppLocalizations.of(context)!.email,
                                 style: getMediumStyle(
                                   fontFamily: FontConstant.cairo,
                                   fontSize: FontSize.size14,
@@ -147,7 +146,9 @@ class _LoginViewState extends State<LoginView> {
                               const SizedBox(height: 8),
                               CustomTextField(
                                 controller: _emailController,
-                                hint: s.writeEmail,
+                                    hint: AppLocalizations.of(
+                                      context,
+                                    )!.writeEmail,
                                 keyboardType: TextInputType.emailAddress,
                                 validator: FormValidators.validateEmail,
                               ),
@@ -160,7 +161,7 @@ class _LoginViewState extends State<LoginView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                s.password,
+                                    AppLocalizations.of(context)!.password,
                                 style: getMediumStyle(
                                   fontFamily: FontConstant.cairo,
                                   fontSize: FontSize.size14,
@@ -170,7 +171,9 @@ class _LoginViewState extends State<LoginView> {
                               const SizedBox(height: 8),
                               CustomTextField(
                                 controller: _passwordController,
-                                hint: s.writePassword,
+                                    hint: AppLocalizations.of(
+                                      context,
+                                    )!.writePassword,
                                 obscureText: true,
                                 validator: FormValidators.validatePasswordLogin,
                               ),
@@ -216,7 +219,9 @@ class _LoginViewState extends State<LoginView> {
                                   );
                                 },
                                 child: Text(
-                                  s.forgotPassword,
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.forgotPassword,
                                   style: getRegularStyle(
                                     fontFamily: FontConstant.cairo,
                                     fontSize: FontSize.size14,
@@ -231,7 +236,7 @@ class _LoginViewState extends State<LoginView> {
 
                           // Login Button
                           CustomButton(
-                            text: s.login,
+                                text: AppLocalizations.of(context)!.login,
                                 onPressed: () => _login(context),
                           ),
 
@@ -251,7 +256,7 @@ class _LoginViewState extends State<LoginView> {
                                   horizontal: 16,
                                 ),
                                 child: Text(
-                                  s.or,
+                                      AppLocalizations.of(context)!.or,
                                   style: getRegularStyle(
                                     fontFamily: FontConstant.cairo,
                                     fontSize: FontSize.size14,
@@ -304,7 +309,9 @@ class _LoginViewState extends State<LoginView> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                s.dontHaveAccount,
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.dontHaveAccount,
                                 style: getRegularStyle(
                                   fontFamily: FontConstant.cairo,
                                   fontSize: FontSize.size14,
@@ -316,7 +323,7 @@ class _LoginViewState extends State<LoginView> {
                                   Navigator.pushNamed(context, '/register');
                                 },
                                 child: Text(
-                                  s.signup,
+                                      AppLocalizations.of(context)!.signup,
                                   style: getBoldStyle(
                                     fontFamily: FontConstant.cairo,
                                     fontSize: FontSize.size14,

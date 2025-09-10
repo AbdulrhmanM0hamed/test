@@ -18,7 +18,7 @@ import 'package:test/features/auth/presentation/widgets/social_auth_button.dart'
 import 'package:test/features/profile/domain/entities/country.dart';
 import 'package:test/features/profile/domain/entities/city.dart';
 import 'package:test/features/profile/domain/entities/region.dart';
-import 'package:test/generated/l10n.dart';
+import 'package:test/l10n/app_localizations.dart';
 
 class RegisterView extends StatefulWidget {
   static const String routeName = '/register';
@@ -156,7 +156,7 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final S s = S.of(context);
+    final s = AppLocalizations.of(context);
 
     return MultiBlocProvider(
       providers: [
@@ -206,7 +206,7 @@ class _RegisterViewState extends State<RegisterView> {
 
                               // Register Text
                               Text(
-                                s.signup,
+                                s!.signup,
                                 style: getBoldStyle(
                                   fontFamily: FontConstant.cairo,
                                   fontSize: FontSize.size24,

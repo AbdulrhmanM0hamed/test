@@ -10,7 +10,7 @@ import 'package:test/features/profile/presentation/widgets/profile_header.dart';
 import 'package:test/features/profile/presentation/widgets/profile_info_card.dart';
 import 'package:test/features/profile/presentation/widgets/profile_stats_card.dart';
 import 'package:test/features/profile/presentation/widgets/profile_action_button.dart';
-import 'package:test/generated/l10n.dart';
+import 'package:test/l10n/app_localizations.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -37,7 +37,7 @@ class _ProfileViewState extends State<ProfileView> {
           } else if (state is ProfileUpdated) {
             CustomSnackbar.showSuccess(
               context: context,
-              message: S.current.dataUpdatedSuccessfully,
+              message: AppLocalizations.of(context)!.dataUpdatedSuccessfully,
             );
           }
         },
@@ -84,26 +84,32 @@ class _ProfileViewState extends State<ProfileView> {
                             Row(
                               children: [
                                 ProfileStatsCard(
-                                  label: S.of(context).memberSince,
+                                  label: AppLocalizations.of(
+                                    context,
+                                  )!.memberSince,
                                   value: _getJoinedYear(userProfile.createdAt),
                                   icon: Icons.calendar_today,
                                   color: Colors.blue,
                                 ),
                                 const SizedBox(width: 12),
                                 ProfileStatsCard(
-                                  label: S.of(context).status,
+                                  label: AppLocalizations.of(context)!.status,
                                   value: userProfile.isActive
-                                      ? S.of(context).active
-                                      : S.of(context).inactive,
+                                      ? AppLocalizations.of(context)!.active
+                                      : AppLocalizations.of(context)!.inactive,
                                   icon: Icons.check_circle,
                                   color: userProfile.isActive ? Colors.green : Colors.orange,
                                 ),
                                 const SizedBox(width: 12),
                                 ProfileStatsCard(
-                                  label: S.of(context).verification,
+                                  label: AppLocalizations.of(
+                                    context,
+                                  )!.verification,
                                   value: userProfile.isEmailVerified
-                                      ? S.of(context).verified
-                                      : S.of(context).notVerified,
+                                      ? AppLocalizations.of(context)!.verified
+                                      : AppLocalizations.of(
+                                          context,
+                                        )!.notVerified,
                                   icon: Icons.verified_user,
                                   color: userProfile.isEmailVerified ? Colors.green : Colors.red,
                                 ),
@@ -114,7 +120,7 @@ class _ProfileViewState extends State<ProfileView> {
                             
                             // Personal Information Section
                             Text(
-                              S.of(context).personalInformation,
+                              AppLocalizations.of(context)!.personalInformation,
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -124,7 +130,7 @@ class _ProfileViewState extends State<ProfileView> {
                             const SizedBox(height: 16),
                             
                             ProfileInfoCard(
-                              title: S.of(context).fullName,
+                              title: AppLocalizations.of(context)!.fullName,
                               value: userProfile.name,
                               icon: Icons.person,
                               isEditable: true,
@@ -132,14 +138,14 @@ class _ProfileViewState extends State<ProfileView> {
                             ),
                             
                             ProfileInfoCard(
-                              title: S.of(context).email,
+                              title: AppLocalizations.of(context)!.email,
                               value: userProfile.email,
                               icon: Icons.email,
                               iconColor: Colors.blue,
                             ),
                             
                             ProfileInfoCard(
-                              title: S.of(context).phoneNumber,
+                              title: AppLocalizations.of(context)!.phoneNumber,
                               value: userProfile.phone,
                               icon: Icons.phone,
                               iconColor: Colors.green,
@@ -148,7 +154,7 @@ class _ProfileViewState extends State<ProfileView> {
                             ),
                             
                             ProfileInfoCard(
-                              title: S.of(context).birthDate,
+                              title: AppLocalizations.of(context)!.birthDate,
                               value: userProfile.birthDate ?? '',
                               icon: Icons.cake,
                               iconColor: Colors.pink,
@@ -157,7 +163,7 @@ class _ProfileViewState extends State<ProfileView> {
                             ),
                             
                             ProfileInfoCard(
-                              title: S.of(context).gender,
+                              title: AppLocalizations.of(context)!.gender,
                               value: _getGenderText(
                                 context,
                                 userProfile.gender,
@@ -169,7 +175,7 @@ class _ProfileViewState extends State<ProfileView> {
                             ),
                             
                             ProfileInfoCard(
-                              title: S.of(context).address,
+                              title: AppLocalizations.of(context)!.address,
                               value: userProfile.address ?? '',
                               icon: Icons.location_on,
                               iconColor: Colors.red,
@@ -181,7 +187,7 @@ class _ProfileViewState extends State<ProfileView> {
                             
                             // Location Information Section
                             Text(
-                              S.of(context).locationInformation,
+                              AppLocalizations.of(context)!.locationInformation,
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -191,21 +197,21 @@ class _ProfileViewState extends State<ProfileView> {
                             const SizedBox(height: 16),
                             
                             ProfileInfoCard(
-                              title: S.of(context).country,
+                              title: AppLocalizations.of(context)!.country,
                               value: userProfile.country.titleAr,
                               icon: Icons.flag,
                               iconColor: Colors.orange,
                             ),
                             
                             ProfileInfoCard(
-                              title: S.of(context).city,
+                              title: AppLocalizations.of(context)!.city,
                               value: userProfile.city.titleAr,
                               icon: Icons.location_city,
                               iconColor: Colors.teal,
                             ),
                             
                             ProfileInfoCard(
-                              title: S.of(context).region,
+                              title: AppLocalizations.of(context)!.region,
                               value: userProfile.region.titleAr,
                               icon: Icons.place,
                               iconColor: Colors.indigo,
@@ -215,7 +221,7 @@ class _ProfileViewState extends State<ProfileView> {
                             
                             // Actions Section
                             Text(
-                              S.of(context).settings,
+                              AppLocalizations.of(context)!.settings,
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -225,31 +231,37 @@ class _ProfileViewState extends State<ProfileView> {
                             const SizedBox(height: 16),
                             
                             ProfileActionButton(
-                              title: S.of(context).editProfile,
+                              title: AppLocalizations.of(context)!.editProfile,
                               icon: Icons.edit,
                               onTap: () => _showEditProfileSheet(context, userProfile),
                             ),
                             
                             ProfileActionButton(
-                              title: S.of(context).accountSettings,
+                              title: AppLocalizations.of(
+                                context,
+                              )!.accountSettings,
                               icon: Icons.settings,
                               onTap: () => _showAccountSettings(context),
                             ),
                             
                             ProfileActionButton(
-                              title: S.of(context).securityAndPrivacy,
+                              title: AppLocalizations.of(
+                                context,
+                              )!.securityAndPrivacy,
                               icon: Icons.security,
                               onTap: () => _showSecuritySettings(context),
                             ),
                             
                             ProfileActionButton(
-                              title: S.of(context).helpAndSupport,
+                              title: AppLocalizations.of(
+                                context,
+                              )!.helpAndSupport,
                               icon: Icons.help,
                               onTap: () => _showHelpCenter(context),
                             ),
                             
                             ProfileActionButton(
-                              title: S.of(context).logout,
+                              title: AppLocalizations.of(context)!.logout,
                               icon: Icons.logout,
                               onTap: () => _showLogoutDialog(context),
                               isDestructive: true,
@@ -286,7 +298,7 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    S.of(context).errorLoadingData,
+                    AppLocalizations.of(context)!.errorLoadingData,
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.grey[600],
@@ -304,7 +316,7 @@ class _ProfileViewState extends State<ProfileView> {
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () => context.read<ProfileCubit>().getProfile(),
-                    child: Text(S.of(context).retry),
+                    child: Text(AppLocalizations.of(context)!.retry),
                   ),
                 ],
               ),
@@ -322,18 +334,18 @@ class _ProfileViewState extends State<ProfileView> {
       final date = DateTime.parse(createdAt);
       return date.year.toString();
     } catch (e) {
-      return S.current.notSpecified;
+      return AppLocalizations.of(context)!.notSpecified;
     }
   }
 
   String _getGenderText(BuildContext context, String gender) {
     switch (gender.toLowerCase()) {
       case 'male':
-        return S.of(context).male;
+        return AppLocalizations.of(context)!.male;
       case 'female':
-        return S.of(context).female;
+        return AppLocalizations.of(context)!.female;
       default:
-        return S.of(context).notSpecified;
+        return AppLocalizations.of(context)!.notSpecified;
     }
   }
 
@@ -341,7 +353,7 @@ class _ProfileViewState extends State<ProfileView> {
     // TODO: Implement image picker
     CustomSnackbar.showInfo(
       context: context,
-      message: S.of(context).imageChangeFeatureComingSoon,
+      message: AppLocalizations.of(context)!.imageChangeFeatureComingSoon,
     );
   }
 
@@ -349,7 +361,7 @@ class _ProfileViewState extends State<ProfileView> {
     // TODO: Implement edit dialog
     CustomSnackbar.showInfo(
       context: context,
-      message: S.of(context).editFeatureComingSoon,
+      message: AppLocalizations.of(context)!.editFeatureComingSoon,
     );
   }
 
@@ -357,7 +369,7 @@ class _ProfileViewState extends State<ProfileView> {
     // TODO: Implement date picker
     CustomSnackbar.showInfo(
       context: context,
-      message: S.of(context).datePickerFeatureComingSoon,
+      message: AppLocalizations.of(context)!.datePickerFeatureComingSoon,
     );
   }
 
@@ -365,7 +377,7 @@ class _ProfileViewState extends State<ProfileView> {
     // TODO: Implement gender picker
     CustomSnackbar.showInfo(
       context: context,
-      message: S.of(context).genderPickerFeatureComingSoon,
+      message: AppLocalizations.of(context)!.genderPickerFeatureComingSoon,
     );
   }
 
@@ -373,7 +385,7 @@ class _ProfileViewState extends State<ProfileView> {
     // TODO: Implement edit profile sheet
     CustomSnackbar.showInfo(
       context: context,
-      message: S.of(context).editProfileFeatureComingSoon,
+      message: AppLocalizations.of(context)!.editProfileFeatureComingSoon,
     );
   }
 
@@ -381,7 +393,7 @@ class _ProfileViewState extends State<ProfileView> {
     // TODO: Implement account settings
     CustomSnackbar.showInfo(
       context: context,
-      message: S.of(context).accountSettingsComingSoon,
+      message: AppLocalizations.of(context)!.accountSettingsComingSoon,
     );
   }
 
@@ -389,7 +401,7 @@ class _ProfileViewState extends State<ProfileView> {
     // TODO: Implement security settings
     CustomSnackbar.showInfo(
       context: context,
-      message: S.of(context).securitySettingsComingSoon,
+      message: AppLocalizations.of(context)!.securitySettingsComingSoon,
     );
   }
 
@@ -397,7 +409,7 @@ class _ProfileViewState extends State<ProfileView> {
     // TODO: Implement help center
     CustomSnackbar.showInfo(
       context: context,
-      message: S.of(context).helpCenterComingSoon,
+      message: AppLocalizations.of(context)!.helpCenterComingSoon,
     );
   }
 

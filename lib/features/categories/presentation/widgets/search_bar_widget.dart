@@ -5,7 +5,7 @@ import 'package:test/core/utils/constant/app_assets.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
-import 'package:test/generated/l10n.dart';
+import 'package:test/l10n/app_localizations.dart';
 
 /// ويدجت شريط البحث المخصص لصفحة الفئات
 class SearchBarWidget extends StatelessWidget {
@@ -36,7 +36,7 @@ class SearchBarWidget extends StatelessWidget {
                   controller: controller,
                   textAlign: TextAlign.right,
                   decoration: InputDecoration(
-                    hintText: S.of(context).searchProducts,
+                    hintText: AppLocalizations.of(context)!.searchProducts,
                     hintStyle: getRegularStyle(
                       fontSize: FontSize.size14,
                       fontFamily: FontConstant.cairo,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
-import 'package:test/generated/l10n.dart';
+import 'package:test/l10n/app_localizations.dart';
 
 import 'package:test/features/categories/data/models/category_model.dart';
 import 'package:test/features/categories/presentation/cubit/department_cubit.dart';
@@ -165,7 +165,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                                       );
                                 }
                               },
-                              child: Text(S.of(context).retry),
+                              child: Text(AppLocalizations.of(context)!.retry),
                             ),
                           ],
                         ),
@@ -173,7 +173,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                     }
                     return Center(
                       child: Text(
-                        S.of(context).selectCategoryToView,
+                        AppLocalizations.of(context)!.selectCategoryToView,
                         style: const TextStyle(
                           fontSize: 16,
                           color: Colors.grey,

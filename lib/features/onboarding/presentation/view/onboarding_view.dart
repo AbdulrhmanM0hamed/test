@@ -7,7 +7,7 @@ import '../../data/models/onboarding_model.dart';
 import '../widgets/onboarding_item.dart';
 import '../widgets/dots_indicator.dart';
 import '../widgets/next_button.dart';
-import '../../../../generated/l10n.dart';
+import '../../../../../l10n/app_localizations.dart';
 import '../../../../features/auth/presentation/view/login_view.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/services/app_state_service.dart';
@@ -40,18 +40,18 @@ class _OnboardingViewState extends State<OnboardingView> {
     _onboardingData = [
       OnboardingModel(
         image: AppAssets.onboarding_1,
-        title: S.of(context).easyShoppingExperience,
-        description: S.of(context).easyShoppingExperienceDesc,
+        title: AppLocalizations.of(context)!.easyShoppingExperience,
+        description: AppLocalizations.of(context)!.easyShoppingExperienceDesc,
       ),
       OnboardingModel(
         image: AppAssets.onboarding_2,
-        title: S.of(context).highQualityProducts,
-        description: S.of(context).highQualityProductsDesc,
+        title: AppLocalizations.of(context)!.highQualityProducts,
+        description: AppLocalizations.of(context)!.highQualityProductsDesc,
       ),
       OnboardingModel(
         image: AppAssets.onboarding_3,
-        title: S.of(context).fastDelivery,
-        description: S.of(context).fastDeliveryDesc,
+        title: AppLocalizations.of(context)!.fastDelivery,
+        description: AppLocalizations.of(context)!.fastDeliveryDesc,
       ),
     ];
     setState(() {

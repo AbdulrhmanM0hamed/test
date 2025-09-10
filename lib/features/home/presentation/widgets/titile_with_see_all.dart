@@ -1,7 +1,7 @@
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
-import 'package:test/generated/l10n.dart';
+import 'package:test/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class TitileWithSeeAll extends StatelessWidget {
@@ -49,7 +49,7 @@ class TitileWithSeeAll extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  S.of(context).seeAll,
+                  AppLocalizations.of(context)!.seeAll,
                   style: getMediumStyle(
                     fontSize: 14,
                     fontFamily: FontConstant.cairo,

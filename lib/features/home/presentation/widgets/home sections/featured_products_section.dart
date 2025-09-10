@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/utils/constant/font_manger.dart';
 import '../../../../../core/utils/constant/styles_manger.dart';
 import '../../../../../core/utils/theme/app_colors.dart';
-import '../../../../../generated/l10n.dart';
+import 'package:test/l10n/app_localizations.dart';
 import '../../../../../core/utils/animations/custom_progress_indcator.dart';
 import '../../../domain/entities/home_product.dart';
 import '../../cubits/featured_products/featured_products_cubit.dart';
@@ -45,14 +45,14 @@ class FeaturedProductsSection extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
+                  color: AppColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(Icons.star, color: AppColors.primary, size: 20),
               ),
               const SizedBox(width: 12),
               Text(
-                S.of(context).featuredProducts,
+                AppLocalizations.of(context)!.featuredProducts,
                 style: getBoldStyle(
                   fontSize: FontSize.size18,
                   fontFamily: FontConstant.cairo,
@@ -77,7 +77,7 @@ class FeaturedProductsSection extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      S.of(context).showMore,
+                      AppLocalizations.of(context)!.showMore,
                       style: getSemiBoldStyle(
                         fontSize: FontSize.size12,
                         fontFamily: FontConstant.cairo,
@@ -107,14 +107,14 @@ class FeaturedProductsSection extends StatelessWidget {
         }
 
         if (state is FeaturedProductsError) {
-          return _buildErrorState(state.message);
+          return _buildErrorState(context, state.message);
         }
 
         if (state is FeaturedProductsLoaded) {
           final products = state.products;
 
           if (products.isEmpty) {
-            return _buildEmptyState();
+            return _buildEmptyState(context);
           }
 
           return SizedBox(
@@ -171,7 +171,7 @@ class FeaturedProductsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildErrorState(String message) {
+  Widget _buildErrorState(BuildContext context, String message) {
     return Container(
       height: 200,
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -187,7 +187,7 @@ class FeaturedProductsSection extends StatelessWidget {
             Icon(Icons.error_outline, size: 48, color: Colors.red[400]),
             const SizedBox(height: 12),
             Text(
-              S.current.errorLoadingFeatured,
+              AppLocalizations.of(context)!.errorLoadingFeatured,
               style: getMediumStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
@@ -200,7 +200,7 @@ class FeaturedProductsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(BuildContext context) {
     return Container(
       height: 200,
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -216,7 +216,7 @@ class FeaturedProductsSection extends StatelessWidget {
             Icon(Icons.star_outline, size: 48, color: Colors.grey[400]),
             const SizedBox(height: 12),
             Text(
-              S.current.noFeaturedAvailable,
+              AppLocalizations.of(context)!.noFeaturedAvailable,
               style: getMediumStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,

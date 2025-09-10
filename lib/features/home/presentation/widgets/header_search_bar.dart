@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test/core/utils/constant/app_assets.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
-import 'package:test/generated/l10n.dart';
+import 'package:test/l10n/app_localizations.dart';
 
 class HeaderSearchBar extends StatefulWidget {
   const HeaderSearchBar({super.key});
@@ -41,7 +41,7 @@ class _HeaderSearchBarState extends State<HeaderSearchBar> {
         ),
         cursorColor: Colors.white70,
         decoration: InputDecoration(
-          hintText: S.of(context).searchHint,
+          hintText: AppLocalizations.of(context)!.searchHint,
           hintStyle: getMediumStyle(
             fontFamily: FontConstant.cairo,
             fontSize: FontSize.size14,

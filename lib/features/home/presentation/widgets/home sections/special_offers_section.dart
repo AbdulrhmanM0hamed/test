@@ -4,7 +4,7 @@ import '../../../../../core/utils/constant/font_manger.dart';
 import '../../../../../core/utils/constant/styles_manger.dart';
 import '../../../../../core/utils/theme/app_colors.dart';
 import '../../../../../core/utils/animations/custom_progress_indcator.dart';
-import '../../../../../generated/l10n.dart';
+import 'package:test/l10n/app_localizations.dart';
 import '../../../domain/entities/home_product.dart';
 import '../../cubits/special_offer_products/special_offer_products_cubit.dart';
 import '../../cubits/special_offer_products/special_offer_products_state.dart';
@@ -52,7 +52,7 @@ class SpecialOffersSection extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Text(
-                S.of(context).specialOffers,
+                AppLocalizations.of(context)!.specialOffers,
                 style: getBoldStyle(
                   fontSize: FontSize.size18,
                   fontFamily: FontConstant.cairo,
@@ -77,7 +77,7 @@ class SpecialOffersSection extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      S.of(context).showMore,
+                      AppLocalizations.of(context)!.showMore,
                       style: getSemiBoldStyle(
                         fontSize: FontSize.size12,
                         fontFamily: FontConstant.cairo,
@@ -107,14 +107,14 @@ class SpecialOffersSection extends StatelessWidget {
         }
 
         if (state is SpecialOfferProductsError) {
-          return _buildErrorState(state.message);
+          return _buildErrorState(context, state.message);
         }
 
         if (state is SpecialOfferProductsLoaded) {
           final products = state.products;
 
           if (products.isEmpty) {
-            return _buildEmptyState();
+            return _buildEmptyState(context);
           }
 
           return SizedBox(
@@ -133,10 +133,13 @@ class SpecialOffersSection extends StatelessWidget {
                         ? 0
                         : 12,
                   ),
-                  child: HomeProductCard(
-                    product: product,
-                    onTap: () => onProductTap?.call(product),
-                    onFavoritePressed: () => onFavoritePressed?.call(product),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: HomeProductCard(
+                      product: product,
+                      onTap: () => onProductTap?.call(product),
+                      onFavoritePressed: () => onFavoritePressed?.call(product),
+                    ),
                   ),
                 );
               },
@@ -171,7 +174,7 @@ class SpecialOffersSection extends StatelessWidget {
     );
   }
 
-  Widget _buildErrorState(String message) {
+  Widget _buildErrorState(BuildContext context, String message) {
     return Container(
       height: 200,
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -187,7 +190,7 @@ class SpecialOffersSection extends StatelessWidget {
             Icon(Icons.error_outline, size: 48, color: Colors.red[400]),
             const SizedBox(height: 12),
             Text(
-              S.current.errorLoadingSpecialOffers,
+              AppLocalizations.of(context)!.errorLoadingSpecialOffers,
               style: getMediumStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
@@ -210,7 +213,7 @@ class SpecialOffersSection extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(BuildContext context) {
     return Container(
       height: 200,
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -226,7 +229,7 @@ class SpecialOffersSection extends StatelessWidget {
             Icon(Icons.local_offer_outlined, size: 48, color: Colors.grey[400]),
             const SizedBox(height: 12),
             Text(
-              S.current.noSpecialOffersAvailable,
+              AppLocalizations.of(context)!.noSpecialOffersAvailable,
               style: getMediumStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
