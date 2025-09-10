@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test/core/utils/common/custom_button.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
@@ -58,43 +59,19 @@ class _AddToCartSectionState extends State<AddToCartSection> {
           const SizedBox(height: 20),
 
           // Add to cart button
-          SizedBox(
-            width: double.infinity,
+          CustomButton(
+            text: isAvailable
+                ? AppLocalizations.of(context)!.addToCart
+                : AppLocalizations.of(context)!.outOfStock,
+            onPressed: isAvailable ? _addToCart : null,
+            backgroundColor: isAvailable ? AppColors.primary : Colors.grey,
             height: 56,
-            child: ElevatedButton(
-              onPressed: isAvailable ? _addToCart : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isAvailable
-                    ? AppColors.primary
-                    : Colors.grey[400],
-                foregroundColor: Colors.white,
-                elevation: isAvailable ? 8 : 0,
-                shadowColor: isAvailable
-                    ? AppColors.primary.withValues(alpha: 0.3)
-                    : null,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    isAvailable ? Icons.shopping_cart_outlined : Icons.block,
-                    size: 24,
-                  ),
-                  const SizedBox(width: 12),
-                  Text(
-                    isAvailable
-                        ? AppLocalizations.of(context)!.addToCart
-                        : AppLocalizations.of(context)!.notAvailable,
-                    style: TextStyle(
-                      fontSize: FontSize.size16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
+            prefix: Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: Icon(
+                isAvailable ? Icons.shopping_cart_outlined : Icons.block,
+                size: 24,
+                color: Colors.white,
               ),
             ),
           ),
@@ -103,17 +80,17 @@ class _AddToCartSectionState extends State<AddToCartSection> {
 
           // Buy now button
           if (isAvailable)
-            SizedBox(
+            Container(
               width: double.infinity,
               height: 56,
-              child: OutlinedButton(
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColors.primary, width: 2),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: MaterialButton(
                 onPressed: _buyNow,
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColors.primary,
-                  side: BorderSide(color: AppColors.primary, width: 2),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -126,9 +103,9 @@ class _AddToCartSectionState extends State<AddToCartSection> {
                     const SizedBox(width: 12),
                     Text(
                       AppLocalizations.of(context)!.buyNow,
-                      style: TextStyle(
+                      style: getBoldStyle(
                         fontSize: FontSize.size16,
-                        fontWeight: FontWeight.bold,
+                        fontFamily: FontConstant.cairo,
                         color: AppColors.primary,
                       ),
                     ),
@@ -209,7 +186,7 @@ class _AddToCartSectionState extends State<AddToCartSection> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          'تم إضافة $_quantity من ${widget.product.name} إلى السلة',
+          '${AppLocalizations.of(context)!.addedToCart} $_quantity ${AppLocalizations.of(context)!.toCart}',
           style: getMediumStyle(
             fontSize: FontSize.size14,
             fontFamily: FontConstant.cairo,

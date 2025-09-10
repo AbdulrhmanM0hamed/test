@@ -689,6 +689,114 @@ abstract class AppLocalizations {
   /// **'No special offers available'**
   String get noSpecialOffersAvailable;
 
+  /// No description provided for @productVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Product Video'**
+  String get productVideo;
+
+  /// No description provided for @errorOpeningVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Error opening video'**
+  String get errorOpeningVideo;
+
+  /// No description provided for @cannotOpenVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot open video'**
+  String get cannotOpenVideo;
+
+  /// No description provided for @watchVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch Video'**
+  String get watchVideo;
+
+  /// No description provided for @addReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Review'**
+  String get addReview;
+
+  /// No description provided for @rateProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate this product'**
+  String get rateProduct;
+
+  /// No description provided for @writeReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Write your review'**
+  String get writeReview;
+
+  /// No description provided for @reviewHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your experience with this product...'**
+  String get reviewHint;
+
+  /// No description provided for @submitReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Review'**
+  String get submitReview;
+
+  /// No description provided for @veryPoor.
+  ///
+  /// In en, this message translates to:
+  /// **'Very Poor'**
+  String get veryPoor;
+
+  /// No description provided for @poor.
+  ///
+  /// In en, this message translates to:
+  /// **'Poor'**
+  String get poor;
+
+  /// No description provided for @average.
+  ///
+  /// In en, this message translates to:
+  /// **'Average'**
+  String get average;
+
+  /// No description provided for @good.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get good;
+
+  /// No description provided for @excellent.
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent'**
+  String get excellent;
+
+  /// No description provided for @reviewSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Review submitted successfully!'**
+  String get reviewSubmitted;
+
+  /// No description provided for @reviewSubmissionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error submitting review. Please try again.'**
+  String get reviewSubmissionError;
+
+  /// No description provided for @addedToCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Added'**
+  String get addedToCart;
+
+  /// No description provided for @toCart.
+  ///
+  /// In en, this message translates to:
+  /// **'to cart'**
+  String get toCart;
+
   /// No description provided for @productDetails.
   ///
   /// In en, this message translates to:
@@ -772,18 +880,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Shipping available to'**
   String get shippingAvailableTo;
-
-  /// No description provided for @addedToCart.
-  ///
-  /// In en, this message translates to:
-  /// **'Added'**
-  String get addedToCart;
-
-  /// No description provided for @toCart.
-  ///
-  /// In en, this message translates to:
-  /// **'to cart'**
-  String get toCart;
 
   /// No description provided for @goingToCheckout.
   ///

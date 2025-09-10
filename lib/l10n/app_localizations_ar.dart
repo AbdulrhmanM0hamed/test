@@ -306,6 +306,60 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noSpecialOffersAvailable => 'لا توجد عروض خاصة متاحة';
 
   @override
+  String get productVideo => 'فيديو المنتج';
+
+  @override
+  String get errorOpeningVideo => 'حدث خطأ في فتح الفيديو';
+
+  @override
+  String get cannotOpenVideo => 'لا يمكن فتح الفيديو';
+
+  @override
+  String get watchVideo => 'شاهد الفيديو';
+
+  @override
+  String get addReview => 'إضافة تقييم';
+
+  @override
+  String get rateProduct => 'قيم هذا المنتج';
+
+  @override
+  String get writeReview => 'اكتب تقييمك';
+
+  @override
+  String get reviewHint => 'شارك تجربتك مع هذا المنتج...';
+
+  @override
+  String get submitReview => 'إرسال التقييم';
+
+  @override
+  String get veryPoor => 'سيء جداً';
+
+  @override
+  String get poor => 'سيء';
+
+  @override
+  String get average => 'متوسط';
+
+  @override
+  String get good => 'جيد';
+
+  @override
+  String get excellent => 'ممتاز';
+
+  @override
+  String get reviewSubmitted => 'تم إرسال التقييم بنجاح!';
+
+  @override
+  String get reviewSubmissionError => 'خطأ في إرسال التقييم. حاول مرة أخرى.';
+
+  @override
+  String get addedToCart => 'تم إضافة';
+
+  @override
+  String get toCart => 'قطع إلى السلة';
+
+  @override
   String get productDetails => 'تفاصيل المنتج';
 
   @override
@@ -346,12 +400,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get shippingAvailableTo => 'الشحن متاح إلى';
-
-  @override
-  String get addedToCart => 'تم إضافة';
-
-  @override
-  String get toCart => 'إلى السلة';
 
   @override
   String get goingToCheckout => 'الانتقال إلى صفحة الدفع...';

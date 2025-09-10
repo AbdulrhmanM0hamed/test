@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/utils/common/custom_button.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
@@ -167,29 +168,12 @@ class CartBottomSheet extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
+                CustomButton(
+                  text: AppLocalizations.of(context)!.completeOrder,
+                  onPressed: () {
+                    // TODO: Navigate to checkout
+                  },
                   height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // TODO: Navigate to checkout
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context)!.completeOrder,
-                      style: getBoldStyle(
-                        fontSize: FontSize.size16,
-                        fontFamily: FontConstant.cairo,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
                 ),
               ],
             ),

@@ -306,6 +306,60 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noSpecialOffersAvailable => 'No special offers available';
 
   @override
+  String get productVideo => 'Product Video';
+
+  @override
+  String get errorOpeningVideo => 'Error opening video';
+
+  @override
+  String get cannotOpenVideo => 'Cannot open video';
+
+  @override
+  String get watchVideo => 'Watch Video';
+
+  @override
+  String get addReview => 'Add Review';
+
+  @override
+  String get rateProduct => 'Rate this product';
+
+  @override
+  String get writeReview => 'Write your review';
+
+  @override
+  String get reviewHint => 'Share your experience with this product...';
+
+  @override
+  String get submitReview => 'Submit Review';
+
+  @override
+  String get veryPoor => 'Very Poor';
+
+  @override
+  String get poor => 'Poor';
+
+  @override
+  String get average => 'Average';
+
+  @override
+  String get good => 'Good';
+
+  @override
+  String get excellent => 'Excellent';
+
+  @override
+  String get reviewSubmitted => 'Review submitted successfully!';
+
+  @override
+  String get reviewSubmissionError => 'Error submitting review. Please try again.';
+
+  @override
+  String get addedToCart => 'Added';
+
+  @override
+  String get toCart => 'to cart';
+
+  @override
   String get productDetails => 'Product Details';
 
   @override
@@ -346,12 +400,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shippingAvailableTo => 'Shipping available to';
-
-  @override
-  String get addedToCart => 'Added';
-
-  @override
-  String get toCart => 'to cart';
 
   @override
   String get goingToCheckout => 'Going to checkout...';
