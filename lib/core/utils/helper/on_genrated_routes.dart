@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test/features/auth/presentation/view/register_view_new.dart';
+import 'package:test/features/auth/presentation/view/register_view.dart';
 import '../../../features/onboarding/presentation/view/onboarding_view.dart';
 import '../../../features/auth/presentation/view/login_view.dart';
 import '../../../features/home/presentation/view/bottom_nav_bar.dart';

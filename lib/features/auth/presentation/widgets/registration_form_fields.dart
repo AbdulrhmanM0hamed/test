@@ -54,7 +54,7 @@ class RegistrationFormFields extends StatelessWidget {
           label: s!.email,
           child: CustomTextField(
             controller: emailController,
-            hint: s!.writeEmail,
+            hint: s.writeEmail,
             keyboardType: TextInputType.emailAddress,
             validator: (value) => FormValidators.validateEmail(value, context),
           ),
@@ -76,10 +76,10 @@ class RegistrationFormFields extends StatelessWidget {
 
         // Password Field
         _buildFieldWithLabel(
-          label: s!.password,
+          label: s.password,
           child: PasswordField(
             controller: passwordController,
-            hintText: s!.writePassword,
+            hintText: s.writePassword,
 
             validator: (value) =>
                 FormValidators.validatePassword(value, context),

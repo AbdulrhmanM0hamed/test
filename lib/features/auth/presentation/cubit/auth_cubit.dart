@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/services/token_storage_service.dart';
 import 'package:test/core/services/app_state_service.dart';
+import 'package:test/core/services/fcm_service.dart';
 import 'package:test/core/utils/error/error_handler.dart';
 import 'package:test/features/auth/domain/entities/login_request.dart';
 import 'package:test/features/auth/domain/usecases/login_usecase.dart';
@@ -12,23 +13,32 @@ class AuthCubit extends Cubit<AuthState> {
   final LogoutUseCase logoutUseCase;
   final TokenStorageService tokenStorageService;
   final AppStateService appStateService;
+  // final FCMService fcmService;
 
   AuthCubit({
     required this.loginUseCase,
     required this.logoutUseCase,
     required this.tokenStorageService,
     required this.appStateService,
+    // required this.fcmService,
   }) : super(AuthInitial());
 
   Future<void> login({
-    required String email, 
+    required String email,
     required String password,
     bool rememberMe = false,
   }) async {
     try {
       emit(AuthLoading());
 
-      final loginRequest = LoginRequest(email: email, password: password);
+      // Get FCM token
+      // final fcmToken = await fcmService.getFCMToken();
+
+      final loginRequest = LoginRequest(
+        email: email,
+        password: password,
+        fcmToken: "",
+      );
 
       final response = await loginUseCase(loginRequest);
 
@@ -83,7 +93,8 @@ class AuthCubit extends Cubit<AuthState> {
       if (response.success) {
         emit(AuthLoggedOut(message: response.message));
       } else {
-        String errorMessage = response.getFirstErrorMessage() ?? response.message;
+        String errorMessage =
+            response.getFirstErrorMessage() ?? response.message;
         emit(AuthError(errorMessage));
       }
     } catch (e) {

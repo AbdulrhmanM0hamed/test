@@ -10,6 +10,7 @@ import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/core/utils/validators/form_validators.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
+import 'package:test/features/auth/presentation/view/register_view.dart';
 import 'package:test/features/auth/presentation/widgets/social_auth_button.dart';
 import 'package:test/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:test/features/auth/presentation/cubit/auth_state.dart';
@@ -320,7 +321,10 @@ class _LoginViewState extends State<LoginView> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(context, '/register');
+                                      Navigator.pushNamed(
+                                        context,
+                                        RegisterView.routeName,
+                                      );
                                 },
                                 child: Text(
                                       AppLocalizations.of(context)!.signup,

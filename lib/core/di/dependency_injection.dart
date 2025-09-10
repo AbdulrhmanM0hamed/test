@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/core/services/data_refresh_service.dart';
+import 'package:test/core/services/fcm_service.dart';
 import 'package:test/core/services/network/dio_service.dart';
 import 'package:test/core/services/token_storage_service.dart';
 import 'package:test/core/services/app_state_service.dart';
@@ -129,32 +130,64 @@ class DependencyInjection {
     _getProfileUseCase = GetProfileUseCase(_profileRepository!);
 
     // Initialize Registration dependencies
-    _locationRemoteDataSource = LocationRemoteDataSourceImpl(dioService: _dioService!);
-    _registrationRemoteDataSource = RegistrationRemoteDataSourceImpl(dioService: _dioService!);
-    _locationRepository = LocationRepositoryImpl(remoteDataSource: _locationRemoteDataSource!);
-    _registrationRepository = RegistrationRepositoryImpl(remoteDataSource: _registrationRemoteDataSource!);
-    _getCountriesUseCase = GetCountriesUseCase(repository: _locationRepository!);
+    _locationRemoteDataSource = LocationRemoteDataSourceImpl(
+      dioService: _dioService!,
+    );
+    _registrationRemoteDataSource = RegistrationRemoteDataSourceImpl(
+      dioService: _dioService!,
+    );
+    _locationRepository = LocationRepositoryImpl(
+      remoteDataSource: _locationRemoteDataSource!,
+    );
+    _registrationRepository = RegistrationRepositoryImpl(
+      remoteDataSource: _registrationRemoteDataSource!,
+    );
+    _getCountriesUseCase = GetCountriesUseCase(
+      repository: _locationRepository!,
+    );
     _getCitiesUseCase = GetCitiesUseCase(repository: _locationRepository!);
     _getRegionsUseCase = GetRegionsUseCase(repository: _locationRepository!);
     _signupUseCase = SignupUseCase(repository: _registrationRepository!);
 
     // Initialize Categories dependencies
-    _departmentRemoteDataSource = DepartmentRemoteDataSourceImpl(dioService: _dioService!);
-    _departmentRepository = DepartmentRepositoryImpl(remoteDataSource: _departmentRemoteDataSource!);
+    _departmentRemoteDataSource = DepartmentRemoteDataSourceImpl(
+      dioService: _dioService!,
+    );
+    _departmentRepository = DepartmentRepositoryImpl(
+      remoteDataSource: _departmentRemoteDataSource!,
+    );
     _getDepartmentsUseCase = GetDepartmentsUseCase(_departmentRepository!);
 
     // Initialize Products dependencies
-    _productsRemoteDataSource = ProductsRemoteDataSourceImpl(dioService: _dioService!);
-    _productsRepository = ProductsRepositoryImpl(remoteDataSource: _productsRemoteDataSource!);
-    _getProductsByDepartmentUseCase = GetProductsByDepartmentUseCase(_productsRepository!);
+    _productsRemoteDataSource = ProductsRemoteDataSourceImpl(
+      dioService: _dioService!,
+    );
+    _productsRepository = ProductsRepositoryImpl(
+      remoteDataSource: _productsRemoteDataSource!,
+    );
+    _getProductsByDepartmentUseCase = GetProductsByDepartmentUseCase(
+      _productsRepository!,
+    );
 
     // Initialize Home Products dependencies
-    _homeProductsRemoteDataSource = HomeProductsRemoteDataSourceImpl(dioService: _dioService!);
-    _homeProductsRepository = HomeProductsRepositoryImpl(remoteDataSource: _homeProductsRemoteDataSource!);
-    _getFeaturedProductsUseCase = GetFeaturedProductsUseCase(repository: _homeProductsRepository!);
-    _getBestSellerProductsUseCase = GetBestSellerProductsUseCase(repository: _homeProductsRepository!);
-    _getLatestProductsUseCase = GetLatestProductsUseCase(repository: _homeProductsRepository!);
-    _getSpecialOfferProductsUseCase = GetSpecialOfferProductsUseCase(repository: _homeProductsRepository!);
+    _homeProductsRemoteDataSource = HomeProductsRemoteDataSourceImpl(
+      dioService: _dioService!,
+    );
+    _homeProductsRepository = HomeProductsRepositoryImpl(
+      remoteDataSource: _homeProductsRemoteDataSource!,
+    );
+    _getFeaturedProductsUseCase = GetFeaturedProductsUseCase(
+      repository: _homeProductsRepository!,
+    );
+    _getBestSellerProductsUseCase = GetBestSellerProductsUseCase(
+      repository: _homeProductsRepository!,
+    );
+    _getLatestProductsUseCase = GetLatestProductsUseCase(
+      repository: _homeProductsRepository!,
+    );
+    _getSpecialOfferProductsUseCase = GetSpecialOfferProductsUseCase(
+      repository: _homeProductsRepository!,
+    );
 
     // Register with GetIt
     getIt.registerSingleton<TokenStorageService>(_tokenStorageService!);
@@ -179,17 +212,30 @@ class DependencyInjection {
     getIt.registerSingleton<GetDepartmentsUseCase>(_getDepartmentsUseCase!);
     // Products singletons
     getIt.registerSingleton<ProductsRepository>(_productsRepository!);
-    getIt.registerSingleton<GetProductsByDepartmentUseCase>(_getProductsByDepartmentUseCase!);
+    getIt.registerSingleton<GetProductsByDepartmentUseCase>(
+      _getProductsByDepartmentUseCase!,
+    );
     // Home Products singletons
     getIt.registerSingleton<HomeProductsRepository>(_homeProductsRepository!);
-    getIt.registerSingleton<GetFeaturedProductsUseCase>(_getFeaturedProductsUseCase!);
-    getIt.registerSingleton<GetBestSellerProductsUseCase>(_getBestSellerProductsUseCase!);
-    getIt.registerSingleton<GetLatestProductsUseCase>(_getLatestProductsUseCase!);
-    getIt.registerSingleton<GetSpecialOfferProductsUseCase>(_getSpecialOfferProductsUseCase!);
+    getIt.registerSingleton<GetFeaturedProductsUseCase>(
+      _getFeaturedProductsUseCase!,
+    );
+    getIt.registerSingleton<GetBestSellerProductsUseCase>(
+      _getBestSellerProductsUseCase!,
+    );
+    getIt.registerSingleton<GetLatestProductsUseCase>(
+      _getLatestProductsUseCase!,
+    );
+    getIt.registerSingleton<GetSpecialOfferProductsUseCase>(
+      _getSpecialOfferProductsUseCase!,
+    );
 
+    // Register FCM Service
+    // getIt.registerSingleton<FCMService>(FCMService());
     // Register Cubits as factories
     getIt.registerFactory<AuthCubit>(
       () => AuthCubit(
+        // fcmService: getIt<FCMService>(),
         loginUseCase: getIt<LoginUseCase>(),
         logoutUseCase: getIt<LogoutUseCase>(),
         tokenStorageService: getIt<TokenStorageService>(),
@@ -262,12 +308,15 @@ class DependencyInjection {
   }
 
   static AuthCubit createAuthCubit() {
-    if (_loginUseCase == null || _tokenStorageService == null || _appStateService == null) {
+    if (_loginUseCase == null ||
+        _tokenStorageService == null ||
+        _appStateService == null) {
       throw Exception(
         'DependencyInjection not initialized. Call DependencyInjection.init() first.',
       );
     }
     return AuthCubit(
+      // fcmService: getIt<FCMService>(),
       loginUseCase: _loginUseCase!,
       logoutUseCase: _logoutUseCase!,
       tokenStorageService: _tokenStorageService!,
@@ -295,9 +344,7 @@ class DependencyInjection {
         'DependencyInjection not initialized. Call DependencyInjection.init() first.',
       );
     }
-    return LocationCubit(
-      locationRemoteDataSource: _locationRemoteDataSource!,
-    );
+    return LocationCubit(locationRemoteDataSource: _locationRemoteDataSource!);
   }
 
   static TokenStorageService get tokenStorageService => _tokenStorageService!;

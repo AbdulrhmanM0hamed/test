@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/features/categories/presentation/cubit/department_cubit.dart';
 import 'package:test/features/categories/presentation/cubit/department_state.dart';
 import 'package:test/features/categories/presentation/widgets/categories_shimmer.dart';
@@ -26,12 +25,7 @@ class CategoriesSection extends StatelessWidget {
         ),
 
         // الفئات
-        BlocProvider(
-          create: (context) =>
-              DependencyInjection.getIt.get<DepartmentCubit>()
-                ..getDepartments(),
-          child: const ShoppingCategories(),
-        ),
+        const ShoppingCategories(),
       ],
     );
   }

@@ -4,6 +4,8 @@ import 'package:test/features/home/presentation/widgets/home_page_body.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  static const String routeName = '/home';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

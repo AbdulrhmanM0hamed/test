@@ -3,12 +3,12 @@ import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:test/features/home/presentation/view/bottom_nav_bar.dart';
 import '../../data/models/onboarding_model.dart';
 import '../widgets/onboarding_item.dart';
 import '../widgets/dots_indicator.dart';
 import '../widgets/next_button.dart';
 import '../../../../../l10n/app_localizations.dart';
-import '../../../../features/auth/presentation/view/login_view.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../../../core/services/app_state_service.dart';
 
@@ -83,7 +83,7 @@ class _OnboardingViewState extends State<OnboardingView> {
   void _completeOnboarding() async {
     final appStateService = DependencyInjection.getIt.get<AppStateService>();
     await appStateService.setOnboardingCompleted(true);
-    Navigator.pushReplacementNamed(context, LoginView.routeName);
+    Navigator.pushReplacementNamed(context, BottomNavBar.routeName);
   }
 
   @override
