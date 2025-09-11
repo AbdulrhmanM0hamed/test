@@ -166,5 +166,11 @@
   "orderLimit": "Order Limit",
   "shippingAvailableTo": "Shipping available to",
   "colors": "Available colors",
-  "egp": "EGP"
+  "egp": "EGP",
+  "advancedFilter": "Advanced Filter",
+  "selectDepartment": "Select Department",
+  "selectMainCategory": "Select Main Category",
+  "selectSubCategory": "Select Sub Category",
+  "clearFilters": "Clear Filters",
+  "applyFilters": "Apply Filters"
 }

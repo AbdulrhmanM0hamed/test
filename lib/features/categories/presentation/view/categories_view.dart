@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
-import 'package:test/l10n/app_localizations.dart';
-
-import 'package:test/features/categories/data/models/category_model.dart';
+import 'package:test/core/utils/constant/font_manger.dart';
+import 'package:test/core/utils/constant/styles_manger.dart';
+import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:test/features/categories/domain/entities/department.dart';
 import 'package:test/features/categories/presentation/cubit/department_cubit.dart';
 import 'package:test/features/categories/presentation/cubit/department_state.dart';
-import 'package:test/features/categories/presentation/cubit/products_cubit.dart';
-import 'package:test/features/categories/presentation/cubit/products_state.dart';
-import 'package:test/features/categories/presentation/widgets/app_bar_widget.dart';
-import 'package:test/features/categories/presentation/widgets/category_tabs.dart';
+import 'package:test/features/categories/presentation/cubits/products_filter_cubit.dart';
+import 'package:test/features/categories/presentation/cubits/products_filter_state.dart';
 import 'package:test/features/categories/presentation/widgets/products_grid_widget.dart';
 import 'package:test/features/categories/presentation/widgets/search_bar_widget.dart';
+import 'package:test/l10n/app_localizations.dart';
 
-/// صفحة عرض الفئات والمنتجات
+/// صفحة عرض الفئات والمنتجات مع نظام الفلترة المتقدم
 class CategoriesView extends StatefulWidget {
   const CategoriesView({super.key});
 
@@ -23,25 +23,7 @@ class CategoriesView extends StatefulWidget {
 }
 
 class _CategoriesViewState extends State<CategoriesView> {
-  /// الفئة المحددة حاليًا
-  CategoryModel? selectedCategory;
-  
-  /// القسم المحدد حاليًا
-  String? selectedDepartmentName;
-
-  /// متحكم حقل البحث
-  final TextEditingController searchController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    searchController.dispose();
-    super.dispose();
-  }
+  int? selectedDepartmentId;
 
   @override
   Widget build(BuildContext context) {
@@ -53,94 +35,86 @@ class _CategoriesViewState extends State<CategoriesView> {
                 ..getDepartments(),
         ),
         BlocProvider(
-          create: (context) => DependencyInjection.getIt.get<ProductsCubit>(),
+          create: (context) =>
+              DependencyInjection.getIt.get<ProductsFilterCubit>(),
         ),
       ],
       child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'الفئات',
+            style: getSemiBoldStyle(
+              fontSize: FontSize.size18,
+              fontFamily: FontConstant.cairo,
+              color: Colors.black,
+            ),
+          ),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: true,
+        ),
         body: SafeArea(
           child: Column(
             children: [
-              // شريط التطبيق
-              const CategoryAppBar(),
+              // شريط البحث مع الفلترة المتقدمة
+              const SearchBarWidget(),
 
-              // شريط البحث
-              SearchBarWidget(
-                controller: searchController,
-                onFilterPressed: () {},
-              ),
-
-              // علامات تبويب الفئات
+              // علامات تبويب الأقسام
               BlocBuilder<DepartmentCubit, DepartmentState>(
-                builder: (context, state) {
-                  if (state is DepartmentLoaded) {
-                    // استخدام الأقسام مباشرة بدلاً من الفئات
-                    final departments = state.departments;
+                builder: (context, departmentState) {
+                  if (departmentState is DepartmentLoading) {
+                    return const SizedBox(
+                      height: 60,
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                  
+                  if (departmentState is DepartmentLoaded) {
+                    final departments = departmentState.departments;
 
-                    if (departments.isNotEmpty &&
-                        selectedDepartmentName == null) {
-                      selectedDepartmentName = departments.first.name;
-                      // تحميل المنتجات للقسم الأول
+                    if (departments.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
+
+                    // تحديد القسم الأول افتراضياً
+                    if (selectedDepartmentId == null) {
+                      selectedDepartmentId = departments.first.id;
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        context.read<ProductsCubit>().getProductsByDepartment(
-                          selectedDepartmentName!,
+                        context.read<ProductsFilterCubit>().updateFilter(
+                          departmentId: selectedDepartmentId,
                         );
                       });
                     }
 
-                    // تحويل الأقسام إلى CategoryModel للعرض
-                    final categories = departments
-                        .map(
-                          (dept) => CategoryModel(
-                            id: dept.id.toString(),
-                            name: dept.name,
-                            imageUrl: dept.image,
-                            itemsCount: dept.countOfProduct,
-                          ),
-                        )
-                        .toList();
-
-                    return categories.isNotEmpty
-                        ? CategoryTabs(
-                            categories: categories,
-                            selectedCategory: categories.firstWhere(
-                              (cat) => cat.name == selectedDepartmentName,
-                              orElse: () => categories.first,
-                            ),
-                            onCategorySelected: (category) {
-                              setState(() {
-                                selectedDepartmentName = category.name;
-                              });
-                              // تحميل المنتجات للقسم المحدد
-                              context
-                                  .read<ProductsCubit>()
-                                  .getProductsByDepartment(category.name);
-                            },
-                          )
-                        : const SizedBox.shrink();
+                    return _buildDepartmentTabs(departments);
                   }
+                  
+                  if (departmentState is DepartmentError) {
+                    return Container(
+                      height: 60,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Center(
+                        child: Text(
+                          departmentState.message,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    );
+                  }
+                  
                   return const SizedBox.shrink();
                 },
               ),
 
-              // شبكة المنتجات
+              // شبكة المنتجات مع الفلترة
               Expanded(
-                child: BlocBuilder<ProductsCubit, ProductsState>(
+                child: BlocBuilder<ProductsFilterCubit, ProductsFilterState>(
                   builder: (context, state) {
-                    if (state is ProductsLoading) {
+                    if (state.isLoading && state.products.isEmpty) {
                       return const CustomProgressIndicator();
-                    } else if (state is ProductsLoaded) {
-                      return ProductsGridWidget(
-                        products: state.products,
-                        onProductTap: (product) {
-                          print('🔍 Categories: Product tapped: ${product.name}');
-                          Navigator.pushNamed(
-                            context,
-                            '/product-details',
-                            arguments: product.id,
-                          );
-                        },
-                      );
-                    } else if (state is ProductsError) {
+                    }
+
+                    if (state.error != null && state.products.isEmpty) {
                       return Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -152,7 +126,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              state.message,
+                              state.error!,
                               style: TextStyle(
                                 color: Colors.grey[600],
                                 fontSize: 16,
@@ -162,13 +136,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                             const SizedBox(height: 16),
                             ElevatedButton(
                               onPressed: () {
-                                if (selectedDepartmentName != null) {
-                                  context
-                                      .read<ProductsCubit>()
-                                      .getProductsByDepartment(
-                                        selectedDepartmentName!,
-                                      );
-                                }
+                                context.read<ProductsFilterCubit>().refresh();
                               },
                               child: Text(AppLocalizations.of(context)!.retry),
                             ),
@@ -176,7 +144,81 @@ class _CategoriesViewState extends State<CategoriesView> {
                         ),
                       );
                     }
-                    return const Center(child: CustomProgressIndicator(),
+
+                    if (state.products.isEmpty && !state.isLoading) {
+                      // Check if no filter is applied
+                      if (state.filter.departmentId == null &&
+                          state.filter.mainCategoryId == null &&
+                          state.filter.subCategoryId == null &&
+                          (state.filter.keyword == null ||
+                              state.filter.keyword!.isEmpty)) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.filter_list_outlined,
+                                size: 64,
+                                color: Colors.grey[400],
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                'اختر قسماً أو استخدم البحث لعرض المنتجات',
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: 16,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'يمكنك أيضاً استخدام الفلتر المتقدم للبحث الدقيق',
+                                style: TextStyle(
+                                  color: Colors.grey[500],
+                                  fontSize: 14,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.inventory_2_outlined,
+                                size: 64,
+                                color: Colors.grey[400],
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                AppLocalizations.of(
+                                  context,
+                                )!.noProductsInCategory,
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: 16,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    }
+
+                    return ProductsGridWidget(
+                      products: state.products,
+                      onProductTap: (product) {
+                        print('🔍 Categories: Product tapped: ${product.name}');
+                        Navigator.pushNamed(
+                          context,
+                          '/product-details',
+                          arguments: product.id,
+                        );
+                      },
                     );
                   },
                 ),
@@ -184,6 +226,115 @@ class _CategoriesViewState extends State<CategoriesView> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildDepartmentTabs(List<Department> departments) {
+    return Container(
+      height: 110,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: departments.length,
+        itemBuilder: (context, index) {
+          final department = departments[index];
+          final isSelected = selectedDepartmentId == department.id;
+
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                selectedDepartmentId = department.id;
+              });
+
+              context.read<ProductsFilterCubit>().updateFilter(
+                departmentId: selectedDepartmentId,
+              );
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              margin: const EdgeInsets.only(right: 12),
+              padding: const EdgeInsets.all(12),
+              width: 120,
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? AppColors.primary.withValues(alpha: 0.1)
+                    : Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isSelected
+                      ? AppColors.primary
+                      : Colors.grey.withValues(alpha: 0.2),
+                  width: isSelected ? 2 : 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: isSelected
+                        ? AppColors.primary.withValues(alpha: 0.2)
+                        : Colors.grey.withValues(alpha: 0.1),
+                    blurRadius: isSelected ? 8 : 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // صورة القسم
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? AppColors.primary.withValues(alpha: 0.2)
+                          : Colors.grey.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: department.image.isNotEmpty
+                          ? Image.network(
+                              department.image,
+                              width: 40,
+                              height: 40,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Icon(
+                                  Icons.category_outlined,
+                                  color: isSelected
+                                      ? AppColors.primary
+                                      : Colors.grey[600],
+                                  size: 20,
+                                );
+                              },
+                            )
+                          : Icon(
+                              Icons.category_outlined,
+                              color: isSelected
+                                  ? AppColors.primary
+                                  : Colors.grey[600],
+                              size: 20,
+                            ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // اسم القسم
+                  Text(
+                    department.name,
+                    style: getSemiBoldStyle(
+                      fontSize: FontSize.size12,
+                      fontFamily: FontConstant.cairo,
+                      color: isSelected ? AppColors.primary : Colors.grey[700]!,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }

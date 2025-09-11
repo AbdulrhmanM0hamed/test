@@ -133,6 +133,8 @@
   "viewAllReviews": "عرض جميع التقييمات",
   "noReviewsYet": "لا توجد تقييمات بعد",
   "beFirstToReview": "كن أول من يقيم هذا المنتج",
+
+  
   "sales": "المبيعات",
   "views": "المشاهدات",
   "productVideo": "فيديو المنتج",
@@ -164,5 +166,11 @@
   "orderLimit": "الحد الأقصى للطلب",
   "shippingAvailableTo": "الشحن متاح إلى",
   "colors": " الألوان المتاحة ",
-  "egp": "ج.م"
+  "egp": "ج.م",
+  "advancedFilter": "فلتر متقدم",
+  "selectDepartment": "اختر القسم",
+  "selectMainCategory": "اختر الفئة الرئيسية",
+  "selectSubCategory": "اختر الفئة الفرعية",
+  "clearFilters": "مسح الفلاتر",
+  "applyFilters": "تطبيق الفلاتر"
 }

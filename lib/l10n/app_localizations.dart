@@ -1006,6 +1006,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'EGP'**
   String get egp;
+
+  /// No description provided for @advancedFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced Filter'**
+  String get advancedFilter;
+
+  /// No description provided for @selectDepartment.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Department'**
+  String get selectDepartment;
+
+  /// No description provided for @selectMainCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Main Category'**
+  String get selectMainCategory;
+
+  /// No description provided for @selectSubCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Sub Category'**
+  String get selectSubCategory;
+
+  /// No description provided for @clearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Filters'**
+  String get clearFilters;
+
+  /// No description provided for @applyFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply Filters'**
+  String get applyFilters;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

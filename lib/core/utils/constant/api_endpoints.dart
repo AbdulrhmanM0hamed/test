@@ -28,6 +28,47 @@ class ApiEndpoints {
   // Product details endpoint
   static String productDetails(int productId) => '$baseUrl/spacific-product/$productId';
 
+  // Products filtering endpoint
+  static String getAllProducts({
+    int? mainCategoryId,
+    int? subCategoryId,
+    double? minPrice,
+    double? maxPrice,
+    int? rate,
+    String? departmentId,
+    int? brandId,
+    String? platform,
+    int? colorId,
+    int? sizeId,
+    String? keyword,
+    int? countryId,
+    String? tags,
+    int? page,
+  }) {
+    final params = <String, dynamic>{};
+    
+    if (mainCategoryId != null) params['main_category_id'] = mainCategoryId;
+    if (subCategoryId != null) params['sub_category_id'] = subCategoryId;
+    if (minPrice != null) params['min_price'] = minPrice;
+    if (maxPrice != null) params['max_price'] = maxPrice;
+    if (rate != null) params['rate'] = rate;
+    if (departmentId != null) params['department_id'] = departmentId;
+    if (brandId != null) params['brand_id'] = brandId;
+    if (platform != null) params['platform'] = platform;
+    if (colorId != null) params['color_id'] = colorId;
+    if (sizeId != null) params['size_id'] = sizeId;
+    if (keyword != null) params['keyword'] = keyword;
+    if (countryId != null) params['country_id'] = countryId;
+    if (tags != null) params['tags'] = tags;
+    if (page != null) params['page'] = page;
+    
+    final queryString = params.entries
+        .map((e) => '${e.key}=${e.value}')
+        .join('&');
+    
+    return '$baseUrl/get-all-products${queryString.isNotEmpty ? '?$queryString' : ''}';
+  }
+
   // Location endpoints
   static String get countries => '$baseUrl/countries';
   static String cities(int countryId) => '$baseUrl/cities/$countryId';

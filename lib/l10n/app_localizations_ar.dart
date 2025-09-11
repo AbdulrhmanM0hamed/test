@@ -463,4 +463,22 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get egp => 'ج.م';
+
+  @override
+  String get advancedFilter => 'فلتر متقدم';
+
+  @override
+  String get selectDepartment => 'اختر القسم';
+
+  @override
+  String get selectMainCategory => 'اختر الفئة الرئيسية';
+
+  @override
+  String get selectSubCategory => 'اختر الفئة الفرعية';
+
+  @override
+  String get clearFilters => 'مسح الفلاتر';
+
+  @override
+  String get applyFilters => 'تطبيق الفلاتر';
 }

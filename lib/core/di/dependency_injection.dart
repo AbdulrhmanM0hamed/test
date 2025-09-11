@@ -41,7 +41,9 @@ import 'package:test/features/categories/data/datasources/products_remote_data_s
 import 'package:test/features/categories/data/repositories/products_repository_impl.dart';
 import 'package:test/features/categories/domain/repositories/products_repository.dart';
 import 'package:test/features/categories/domain/usecases/get_products_by_department_usecase.dart';
+import 'package:test/features/categories/domain/usecases/get_all_products_usecase.dart';
 import 'package:test/features/categories/presentation/cubit/products_cubit.dart';
+import 'package:test/features/categories/presentation/cubits/products_filter_cubit.dart';
 // Home products feature imports
 import 'package:test/features/home/data/datasources/home_products_remote_data_source.dart';
 import 'package:test/features/home/data/repositories/home_products_repository_impl.dart';
@@ -97,6 +99,7 @@ class DependencyInjection {
   static ProductsRemoteDataSource? _productsRemoteDataSource;
   static ProductsRepository? _productsRepository;
   static GetProductsByDepartmentUseCase? _getProductsByDepartmentUseCase;
+  static GetAllProductsUseCase? _getAllProductsUseCase;
 
   // Home products feature
   static HomeProductsRemoteDataSource? _homeProductsRemoteDataSource;
@@ -181,6 +184,9 @@ class DependencyInjection {
     _getProductsByDepartmentUseCase = GetProductsByDepartmentUseCase(
       _productsRepository!,
     );
+    _getAllProductsUseCase = GetAllProductsUseCase(
+      repository: _productsRepository!,
+    );
 
     // Initialize Home Products dependencies
     _homeProductsRemoteDataSource = HomeProductsRemoteDataSourceImpl(
@@ -240,6 +246,7 @@ class DependencyInjection {
     getIt.registerSingleton<GetProductsByDepartmentUseCase>(
       _getProductsByDepartmentUseCase!,
     );
+    getIt.registerSingleton<GetAllProductsUseCase>(_getAllProductsUseCase!);
     // Home Products singletons
     getIt.registerSingleton<HomeProductsRepository>(_homeProductsRepository!);
     getIt.registerSingleton<GetFeaturedProductsUseCase>(
@@ -343,6 +350,13 @@ class DependencyInjection {
     getIt.registerFactory<ProductDetailsCubit>(
       () => ProductDetailsCubit(
         getIt<GetProductDetailsUseCase>(),
+      ),
+    );
+
+    // Products Filter Cubit
+    getIt.registerFactory<ProductsFilterCubit>(
+      () => ProductsFilterCubit(
+        getAllProductsUseCase: getIt<GetAllProductsUseCase>(),
       ),
     );
   }
