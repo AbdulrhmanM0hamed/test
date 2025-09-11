@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/utils/constant/app_assets.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
@@ -67,7 +68,6 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
     Future.delayed(const Duration(milliseconds: 120), () {
       if (mounted) {
         setState(() => _isPressed = false);
-        print('🔍 Categories Card: Product tapped: ${widget.product.name}');
         // Let parent handle navigation
         widget.onTap?.call();
       }
@@ -192,7 +192,7 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    'غير متوفر',
+                    AppLocalizations.of(context)!.notAvailable,
                     style: getBoldStyle(
                       fontSize: FontSize.size12,
                       fontFamily: FontConstant.cairo,
@@ -233,7 +233,7 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
-        'الأكثر مبيعاً',
+        AppLocalizations.of(context)!.bestSellers,
         style: getBoldStyle(
           fontSize: FontSize.size10,
           fontFamily: FontConstant.cairo,
@@ -374,7 +374,7 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
                   style: TextStyle(
                     fontSize: FontSize.size12,
                     fontFamily: FontConstant.cairo,
-                    color: Colors.grey[500],
+                    color: Colors.grey[600],
                     decoration: TextDecoration.lineThrough,
                   ),
                 ),
@@ -386,17 +386,10 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
 
           // Stock status and quantity
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              // Stock status
-              Text(
-                widget.product.isAvailable ? 'متوفر' : 'غير متوفر',
-                style: getMediumStyle(
-                  fontSize: FontSize.size11,
-                  fontFamily: FontConstant.cairo,
-                  color: widget.product.isAvailable ? Colors.green : Colors.red,
-                ),
-              ),
+         
+          
               // Stock quantity
               if (widget.product.stock > 0)
                 Container(
@@ -412,11 +405,15 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
                     ),
                   ),
                   child: Text(
-                    'متوفر ${widget.product.stock}',
+                    widget.product.isAvailable
+                        ? '${AppLocalizations.of(context)?.available}  ${widget.product.stock}'
+                        : '${AppLocalizations.of(context)?.notAvailable}',
                     style: getMediumStyle(
                       fontSize: FontSize.size10,
                       fontFamily: FontConstant.cairo,
-                      color: Colors.green[700],
+                      color: widget.product.isAvailable
+                          ? Colors.green
+                          : Colors.red,
                     ),
                   ),
                 ),

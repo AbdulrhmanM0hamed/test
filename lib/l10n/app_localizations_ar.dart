@@ -396,7 +396,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get stock => 'المخزون';
 
   @override
-  String get available => 'المتاح';
+  String get available => 'متوفر';
 
   @override
   String get salesCount => 'عدد المبيعات';
@@ -427,6 +427,27 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get completeOrder => 'إتمام الطلب';
+
+  @override
+  String get advancedFilter => 'فلتر متقدم';
+
+  @override
+  String get selectDepartment => 'اختر القسم';
+
+  @override
+  String get selectMainCategory => 'اختر الفئة الرئيسية';
+
+  @override
+  String get selectSubCategory => 'اختر الفئة الفرعية';
+
+  @override
+  String get productsCount => 'منتج';
+
+  @override
+  String get clearFilters => 'مسح الفلاتر';
+
+  @override
+  String get applyFilters => 'تطبيق الفلاتر';
 
   @override
   String get smartPhonePro => 'هاتف ذكي رائع برو إكس';
@@ -463,22 +484,4 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get egp => 'ج.م';
-
-  @override
-  String get advancedFilter => 'فلتر متقدم';
-
-  @override
-  String get selectDepartment => 'اختر القسم';
-
-  @override
-  String get selectMainCategory => 'اختر الفئة الرئيسية';
-
-  @override
-  String get selectSubCategory => 'اختر الفئة الفرعية';
-
-  @override
-  String get clearFilters => 'مسح الفلاتر';
-
-  @override
-  String get applyFilters => 'تطبيق الفلاتر';
 }

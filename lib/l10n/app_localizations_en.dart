@@ -429,6 +429,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get completeOrder => 'Complete Order';
 
   @override
+  String get advancedFilter => 'Advanced Filter';
+
+  @override
+  String get selectDepartment => 'Select Department';
+
+  @override
+  String get selectMainCategory => 'Select Main Category';
+
+  @override
+  String get selectSubCategory => 'Select Sub Category';
+
+  @override
+  String get productsCount => 'products';
+
+  @override
+  String get clearFilters => 'Clear Filters';
+
+  @override
+  String get applyFilters => 'Apply Filters';
+
+  @override
   String get smartPhonePro => 'Smart Phone Pro X';
 
   @override
@@ -463,22 +484,4 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get egp => 'EGP';
-
-  @override
-  String get advancedFilter => 'Advanced Filter';
-
-  @override
-  String get selectDepartment => 'Select Department';
-
-  @override
-  String get selectMainCategory => 'Select Main Category';
-
-  @override
-  String get selectSubCategory => 'Select Sub Category';
-
-  @override
-  String get clearFilters => 'Clear Filters';
-
-  @override
-  String get applyFilters => 'Apply Filters';
 }

@@ -7,6 +7,7 @@ import 'package:test/features/categories/domain/entities/department.dart';
 import 'package:test/features/categories/presentation/cubit/department_cubit.dart';
 import 'package:test/features/categories/presentation/cubit/department_state.dart';
 import 'package:test/features/categories/presentation/cubits/products_filter_cubit.dart';
+import 'package:test/l10n/app_localizations.dart';
 
 /// ويدجت الفلترة المتقدمة مع التسلسل الهرمي للأقسام والفئات
 class AdvancedFilterBottomSheet extends StatefulWidget {
@@ -173,7 +174,7 @@ class _AdvancedFilterBottomSheetState extends State<AdvancedFilterBottomSheet> {
         children: [
           Expanded(
             child: Text(
-              'فلتر متقدم', // Using Arabic directly since localization keys might not be generated
+              AppLocalizations.of(context)!.advancedFilter,
               style: getBoldStyle(
                 fontSize: FontSize.size18,
                 fontFamily: FontConstant.cairo,
@@ -197,14 +198,16 @@ class _AdvancedFilterBottomSheetState extends State<AdvancedFilterBottomSheet> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Department Selection
-          _buildSectionTitle('اختر القسم'),
+          _buildSectionTitle(AppLocalizations.of(context)!.selectDepartment),
           const SizedBox(height: 12),
           _buildDepartmentCards(departments),
 
           if (selectedDepartment != null) ...[
             const SizedBox(height: 24),
             // Main Category Selection
-            _buildSectionTitle('اختر الفئة الرئيسية'),
+            _buildSectionTitle(
+              AppLocalizations.of(context)!.selectMainCategory,
+            ),
             const SizedBox(height: 12),
             _buildCategoryCards(selectedDepartment!.categories),
           ],
@@ -213,7 +216,7 @@ class _AdvancedFilterBottomSheetState extends State<AdvancedFilterBottomSheet> {
               selectedMainCategory!.subCategories.isNotEmpty) ...[
             const SizedBox(height: 24),
             // Sub Category Selection
-            _buildSectionTitle('اختر الفئة الفرعية'),
+            _buildSectionTitle(AppLocalizations.of(context)!.selectSubCategory),
             const SizedBox(height: 12),
             _buildSubCategoryCards(selectedMainCategory!.subCategories),
           ],
@@ -337,7 +340,7 @@ class _AdvancedFilterBottomSheetState extends State<AdvancedFilterBottomSheet> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${department.countOfProduct} منتج',
+                    '${department.countOfProduct} ${AppLocalizations.of(context)!.productsCount}',
                     style: getRegularStyle(
                       fontSize: FontSize.size11,
                       fontFamily: FontConstant.cairo,
@@ -445,19 +448,7 @@ class _AdvancedFilterBottomSheetState extends State<AdvancedFilterBottomSheet> {
                               : AppColors.black,
                         ),
                       ),
-                      if (category.summary.isNotEmpty) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          category.summary,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: getRegularStyle(
-                            fontSize: FontSize.size12,
-                            fontFamily: FontConstant.cairo,
-                            color: Colors.grey[600]!,
-                          ),
-                        ),
-                      ],
+                     
                     ],
                   ),
                 ),
@@ -579,19 +570,7 @@ class _AdvancedFilterBottomSheetState extends State<AdvancedFilterBottomSheet> {
                               : AppColors.black,
                         ),
                       ),
-                      if (subCategory.summary.isNotEmpty) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          subCategory.summary,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: getRegularStyle(
-                            fontSize: FontSize.size12,
-                            fontFamily: FontConstant.cairo,
-                            color: Colors.grey[600]!,
-                          ),
-                        ),
-                      ],
+                    
                     ],
                   ),
                 ),
