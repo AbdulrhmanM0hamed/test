@@ -357,6 +357,7 @@ class DependencyInjection {
     getIt.registerFactory<ProductsFilterCubit>(
       () => ProductsFilterCubit(
         getAllProductsUseCase: getIt<GetAllProductsUseCase>(),
+        dataRefreshService: getIt<DataRefreshService>(),
       ),
     );
   }

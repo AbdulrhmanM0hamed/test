@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test/core/services/data_refresh_service.dart';
 import 'package:test/features/categories/domain/entities/product_filter.dart';
 import 'package:test/features/categories/domain/usecases/get_all_products_usecase.dart';
 import 'package:test/features/categories/presentation/cubits/products_filter_state.dart';
@@ -6,9 +7,14 @@ import 'package:test/features/categories/presentation/cubits/products_filter_sta
 /// Cubit إدارة فلترة المنتجات
 class ProductsFilterCubit extends Cubit<ProductsFilterState> {
   final GetAllProductsUseCase getAllProductsUseCase;
+  final DataRefreshService? dataRefreshService;
 
-  ProductsFilterCubit({required this.getAllProductsUseCase})
-    : super(const ProductsFilterState());
+  ProductsFilterCubit({
+    required this.getAllProductsUseCase,
+    this.dataRefreshService,
+  }) : super(const ProductsFilterState()) {
+    dataRefreshService?.registerRefreshCallback(_refreshData);
+  }
 
   /// تحديث الكلمة المفتاحية للبحث
   void updateKeyword(String keyword) {
@@ -190,5 +196,21 @@ class ProductsFilterCubit extends Cubit<ProductsFilterState> {
         ),
       );
     }
+  }
+
+  /// إعادة تحميل البيانات عند تغيير اللغة
+  void _refreshData() {
+    if (state.filter.departmentId != null ||
+        state.filter.mainCategoryId != null ||
+        state.filter.subCategoryId != null ||
+        (state.filter.keyword != null && state.filter.keyword!.isNotEmpty)) {
+      refresh();
+    }
+  }
+
+  @override
+  Future<void> close() {
+    dataRefreshService?.unregisterRefreshCallback(_refreshData);
+    return super.close();
   }
 }

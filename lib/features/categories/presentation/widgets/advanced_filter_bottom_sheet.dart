@@ -98,23 +98,24 @@ class _AdvancedFilterBottomSheetState extends State<AdvancedFilterBottomSheet> {
   void _clearFilters() {
     final departmentState = context.read<DepartmentCubit>().state;
     int? defaultDepartmentId;
-    
-    if (departmentState is DepartmentLoaded && departmentState.departments.isNotEmpty) {
+
+    if (departmentState is DepartmentLoaded &&
+        departmentState.departments.isNotEmpty) {
       defaultDepartmentId = departmentState.departments.first.id;
     }
-    
+
     selectedDepartment = null;
     selectedMainCategory = null;
     selectedSubCategory = null;
-    
+
     context.read<ProductsFilterCubit>().clearFilters(
       defaultDepartmentId: defaultDepartmentId,
     );
-    
+
     if (mounted) {
       setState(() {});
     }
-    
+
     Navigator.pop(context);
   }
 
@@ -448,7 +449,6 @@ class _AdvancedFilterBottomSheetState extends State<AdvancedFilterBottomSheet> {
                               : AppColors.black,
                         ),
                       ),
-                     
                     ],
                   ),
                 ),
@@ -570,7 +570,6 @@ class _AdvancedFilterBottomSheetState extends State<AdvancedFilterBottomSheet> {
                               : AppColors.black,
                         ),
                       ),
-                    
                     ],
                   ),
                 ),
@@ -623,7 +622,7 @@ class _AdvancedFilterBottomSheetState extends State<AdvancedFilterBottomSheet> {
                 ),
               ),
               child: Text(
-                'مسح الفلاتر',
+                AppLocalizations.of(context)!.clearFilters,
                 style: getRegularStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
@@ -646,7 +645,7 @@ class _AdvancedFilterBottomSheetState extends State<AdvancedFilterBottomSheet> {
                 elevation: 2,
               ),
               child: Text(
-                'تطبيق الفلاتر',
+                AppLocalizations.of(context)!.applyFilters,
                 style: getSemiBoldStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
