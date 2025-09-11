@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
-import '../../features/profile/domain/entities/country.dart';
-import '../../features/auth/presentation/cubit/location_cubit.dart';
-import '../../features/auth/presentation/cubit/location_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test/core/services/language_service.dart';
+import 'package:test/features/auth/presentation/cubit/location_cubit.dart';
+import 'package:test/features/auth/presentation/cubit/location_state.dart';
+import 'package:test/features/profile/domain/entities/country.dart';
 import 'data_refresh_service.dart';
 
 class CountryService extends ChangeNotifier {
@@ -15,6 +17,7 @@ class CountryService extends ChangeNotifier {
   List<Country> _countries = [];
   bool _isLoading = false;
   String? _error;
+  final LanguageService _languageService;
 
   Country? get selectedCountry => _selectedCountry;
   List<Country> get countries => _countries;
@@ -28,7 +31,38 @@ class CountryService extends ChangeNotifier {
     return _instance!;
   }
 
-  CountryService._internal();
+  CountryService._internal()
+    : _languageService = GetIt.instance<LanguageService>() {
+    // Listen to language changes to refresh country names
+    _languageService.addListener(_onLanguageChanged);
+  }
+
+  /// Handle language changes
+  void _onLanguageChanged() {
+    // Notify listeners to refresh UI with new localized names
+    notifyListeners();
+  }
+
+  /// Get localized title for a country
+  String getLocalizedCountryTitle(Country country) {
+    return country.getLocalizedTitle(_languageService.isArabic);
+  }
+
+  /// Get localized currency for a country
+  String? getLocalizedCountryCurrency(Country country) {
+    return country.getLocalizedCurrency(_languageService.isArabic);
+  }
+
+  /// Get localized title for selected country
+  String? get selectedCountryLocalizedTitle {
+    return _selectedCountry?.getLocalizedTitle(_languageService.isArabic);
+  }
+
+  @override
+  void dispose() {
+    _languageService.removeListener(_onLanguageChanged);
+    super.dispose();
+  }
 
   /// Initialize the service and load saved country
   Future<void> initialize() async {

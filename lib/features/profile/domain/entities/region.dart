@@ -19,6 +19,11 @@ class Region {
     this.updatedAt,
   });
 
+  /// Get localized title based on language
+  String getLocalizedTitle(bool isArabic) {
+    return isArabic ? titleAr : titleEn;
+  }
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;

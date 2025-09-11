@@ -19,6 +19,16 @@ class Country {
     required this.image,
   });
 
+  /// Get localized title based on language
+  String getLocalizedTitle(bool isArabic) {
+    return isArabic ? titleAr : titleEn;
+  }
+
+  /// Get localized currency based on language
+  String getLocalizedCurrency(bool isArabic) {
+    return isArabic ? currencyAr : currencyEn;
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

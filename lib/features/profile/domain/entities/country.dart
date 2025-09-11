@@ -25,6 +25,16 @@ class Country {
     this.currencyAr,
   });
 
+  /// Get localized title based on language
+  String getLocalizedTitle(bool isArabic) {
+    return isArabic ? titleAr : titleEn;
+  }
+
+  /// Get localized currency based on language
+  String? getLocalizedCurrency(bool isArabic) {
+    return isArabic ? currencyAr : currency;
+  }
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;

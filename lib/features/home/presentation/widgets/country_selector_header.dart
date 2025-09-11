@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/services/country_service.dart';
+import '../../../../core/services/language_service.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
@@ -36,16 +37,22 @@ class CountrySelectorHeader extends StatelessWidget {
                 const SizedBox(width: 4),
                 // Country name or default text - wrapped in Flexible to prevent overflow
                 Flexible(
-                  child: Text(
-                    countryService.selectedCountry?.titleAr ??
-                        AppLocalizations.of(context)!.selectCountry,
-                    style: getMediumStyle(
-                      fontFamily: FontConstant.cairo,
-                      fontSize: FontSize.size11,
-                      color: Colors.white.withValues(alpha: 0.9),
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                  child: Consumer<LanguageService>(
+                    builder: (context, languageService, child) {
+                      return Text(
+                        countryService.selectedCountry?.getLocalizedTitle(
+                              languageService.isArabic,
+                            ) ??
+                            AppLocalizations.of(context)!.selectCountry,
+                        style: getMediumStyle(
+                          fontFamily: FontConstant.cairo,
+                          fontSize: FontSize.size11,
+                          color: Colors.white.withValues(alpha: 0.9),
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(width: 2),
@@ -367,13 +374,19 @@ class _CountrySelectorBottomSheetState extends State<_CountrySelectorBottomSheet
             },
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             leading: _buildCountryFlagLarge(country),
-            title: Text(
-              country.titleAr,
-              style: getSemiBoldStyle(
-                fontFamily: FontConstant.cairo,
-                fontSize: FontSize.size16,
-                color: isSelected ? AppColors.primary : AppColors.textPrimary,
-              ),
+            title: Consumer<LanguageService>(
+              builder: (context, languageService, child) {
+                return Text(
+                  country.getLocalizedTitle(languageService.isArabic),
+                  style: getSemiBoldStyle(
+                    fontFamily: FontConstant.cairo,
+                    fontSize: FontSize.size16,
+                    color: isSelected
+                        ? AppColors.primary
+                        : AppColors.textPrimary,
+                  ),
+                );
+              },
             ),
             trailing: isSelected
                 ? Icon(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test/core/services/language_service.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
@@ -8,6 +9,7 @@ import 'package:test/features/auth/presentation/cubit/location_state.dart';
 import 'package:test/features/profile/domain/entities/city.dart';
 import 'package:test/features/profile/domain/entities/country.dart';
 import 'package:test/features/profile/domain/entities/region.dart';
+import 'package:provider/provider.dart';
 
 class RegistrationLocationSelector extends StatelessWidget {
   final Country? selectedCountry;
@@ -379,15 +381,21 @@ class RegistrationLocationSelector extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text(
-                    country.titleAr,
-                    style: getMediumStyle(
-                      fontFamily: FontConstant.cairo,
-                      fontSize: FontSize.size12,
-                      color: isSelected ? AppColors.primary : AppColors.textPrimary,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
+                  child: Consumer<LanguageService>(
+                    builder: (context, languageService, child) {
+                      return Text(
+                        country.getLocalizedTitle(languageService.isArabic),
+                        style: getMediumStyle(
+                          fontFamily: FontConstant.cairo,
+                          fontSize: FontSize.size12,
+                          color: isSelected
+                              ? AppColors.primary
+                              : AppColors.textPrimary,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                      );
+                    },
                   ),
                 ),
               ],
@@ -457,13 +465,17 @@ class RegistrationLocationSelector extends StatelessWidget {
         items: cities.map((city) {
           return DropdownMenuItem<City>(
             value: city,
-            child: Text(
-              city.titleAr,
-              style: getRegularStyle(
-                fontFamily: FontConstant.cairo,
-                fontSize: FontSize.size14,
-                color: AppColors.textPrimary,
-              ),
+            child: Consumer<LanguageService>(
+              builder: (context, languageService, child) {
+                return Text(
+                  city.getLocalizedTitle(languageService.isArabic),
+                  style: getRegularStyle(
+                    fontFamily: FontConstant.cairo,
+                    fontSize: FontSize.size14,
+                    color: AppColors.textPrimary,
+                  ),
+                );
+              },
             ),
           );
         }).toList(),
@@ -563,13 +575,17 @@ class RegistrationLocationSelector extends StatelessWidget {
         items: state.regions.map((region) {
           return DropdownMenuItem<Region>(
             value: region,
-            child: Text(
-              region.titleAr,
-              style: getRegularStyle(
-                fontFamily: FontConstant.cairo,
-                fontSize: FontSize.size14,
-                color: AppColors.textPrimary,
-              ),
+            child: Consumer<LanguageService>(
+              builder: (context, languageService, child) {
+                return Text(
+                  region.getLocalizedTitle(languageService.isArabic),
+                  style: getRegularStyle(
+                    fontFamily: FontConstant.cairo,
+                    fontSize: FontSize.size14,
+                    color: AppColors.textPrimary,
+                  ),
+                );
+              },
             ),
           );
         }).toList(),
