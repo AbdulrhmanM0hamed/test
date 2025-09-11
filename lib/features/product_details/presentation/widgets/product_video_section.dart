@@ -68,29 +68,29 @@ class _ProductVideoSectionState extends State<ProductVideoSection> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+       
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.grey.withOpacity(0.1),
+        //     spreadRadius: 1,
+        //     blurRadius: 8,
+        //     offset: const Offset(0, 2),
+        //   ),
+        // ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(vertical: 8),
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(8),
+                 
                   decoration: BoxDecoration(
-                    color: Colors.red.withOpacity(0.1),
+                    color: Colors.red.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Icon(
@@ -107,7 +107,6 @@ class _ProductVideoSectionState extends State<ProductVideoSection> {
                       Text(
                         AppLocalizations.of(context)!.productVideo,
                         style: getMediumStyle(
-                          color: Colors.black,
                           fontSize: FontSize.size16,
                           fontFamily: FontConstant.cairo,
                         ),
@@ -116,7 +115,7 @@ class _ProductVideoSectionState extends State<ProductVideoSection> {
                       Text(
                         AppLocalizations.of(context)!.productVideoDescription,
                         style: getRegularStyle(
-                          color: Colors.grey[600]!,
+                          color: Colors.grey[650],
                           fontSize: FontSize.size12,
                           fontFamily: FontConstant.cairo,
                         ),
@@ -129,22 +128,19 @@ class _ProductVideoSectionState extends State<ProductVideoSection> {
           ),
           
           // YouTube Video Player
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.grey[100],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: YoutubePlayer(
-                    controller: _controller!,
-                    aspectRatio: 16 / 9,
-                  ),
+          AspectRatio(
+            aspectRatio: 16 / 9,
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.grey[100],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: YoutubePlayer(
+                  controller: _controller!,
+                  aspectRatio: 16 / 9,
                 ),
               ),
             ),

@@ -3,6 +3,7 @@ import 'package:test/core/utils/animations/custom_animations.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:test/features/categories/data/models/category_model.dart';
 
 class CategoryTabs extends StatelessWidget {
@@ -39,7 +40,9 @@ class CategoryTabs extends StatelessWidget {
                 width: 85,
                 margin: const EdgeInsets.only(left: 12),
                 decoration: BoxDecoration(
-                  color: isSelected ? AppColors.primary : Colors.white,
+                  color: isSelected
+                      ? AppColors.primary
+                      : Theme.of(context).scaffoldBackgroundColor,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -76,49 +79,42 @@ class CategoryTabs extends StatelessWidget {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
-                          child: Image.network(
-                            category.imageUrl,
+                          child: CachedNetworkImage(
+                            imageUrl: category.imageUrl,
                             width: 28,
                             height: 28,
                             fit: BoxFit.cover,
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Container(
-                                width: 28,
-                                height: 28,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.withValues(alpha: 0.2),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Center(
-                                  child: SizedBox(
-                                    width: 14,
-                                    height: 14,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 1.5,
-                                      color: Colors.grey,
-                                    ),
+                            placeholder: (context, url) => Container(
+                              width: 28,
+                              height: 28,
+                              decoration: BoxDecoration(
+                                color: Colors.grey.withValues(alpha: 0.2),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Center(
+                                child: SizedBox(
+                                  width: 14,
+                                  height: 14,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 1.5,
+                                    color: Colors.grey,
                                   ),
                                 ),
-                              );
-                            },
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                width: 28,
-                                height: 28,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.withValues(alpha: 0.2),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  Icons.category,
-                                  size: 16,
-                                  color: isSelected
-                                      ? Colors.white
-                                      : Colors.grey,
-                                ),
-                              );
-                            },
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => Container(
+                              width: 28,
+                              height: 28,
+                              decoration: BoxDecoration(
+                                color: Colors.grey.withValues(alpha: 0.2),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.category,
+                                size: 16,
+                                color: isSelected ? Colors.white : Colors.grey,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -130,7 +126,7 @@ class CategoryTabs extends StatelessWidget {
                           style: getSemiBoldStyle(
                             fontSize: FontSize.size12,
                             fontFamily: FontConstant.cairo,
-                            color: isSelected ? Colors.white : Colors.grey[700],
+                            color: isSelected ? Colors.white : Colors.grey[650],
                           ),
                           textAlign: TextAlign.center,
                           maxLines: 2,

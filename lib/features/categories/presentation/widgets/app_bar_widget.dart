@@ -22,7 +22,7 @@ class CategoryAppBar extends StatelessWidget {
             Text(
               AppLocalizations.of(context)!.products,
               style: getBoldStyle(
-                fontSize: FontSize.size20,
+                fontSize: FontSize.size22,
                 fontFamily: FontConstant.cairo,
                 color: AppColors.primary,
               ),
@@ -30,7 +30,7 @@ class CategoryAppBar extends StatelessWidget {
             const Spacer(),
             Container(
               decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.1),
+                color: Colors.grey.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: IconButton(

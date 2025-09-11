@@ -274,10 +274,10 @@ class ProductInfoSection extends StatelessWidget {
       children: [
         Text(
           AppLocalizations.of(context)!.colors,
-          style: getSemiBoldStyle(
+          style: getBoldStyle(
             fontSize: FontSize.size16,
             fontFamily: FontConstant.cairo,
-            color: Colors.black,
+
           ),
         ),
         const SizedBox(height: 12),

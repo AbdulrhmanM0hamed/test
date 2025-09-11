@@ -315,7 +315,7 @@ class _HomeProductCardState extends State<HomeProductCard>
                     style: getMediumStyle(
                       fontSize: FontSize.size11,
                       fontFamily: FontConstant.cairo,
-                      color: Colors.grey[600],
+                      color: Colors.grey[650],
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),

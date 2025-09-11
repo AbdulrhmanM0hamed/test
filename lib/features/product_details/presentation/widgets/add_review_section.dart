@@ -33,18 +33,18 @@ class _AddReviewSectionState extends State<AddReviewSection> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+      
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 15,
-            offset: const Offset(0, 3),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.black.withValues(alpha: 0.05),
+        //     blurRadius: 15,
+        //     offset: const Offset(0, 3),
+        //   ),
+        // ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +63,7 @@ class _AddReviewSectionState extends State<AddReviewSection> {
                 style: getBoldStyle(
                   fontSize: FontSize.size18,
                   fontFamily: FontConstant.cairo,
-                  color: Colors.black,
+                 
                 ),
               ),
             ],
@@ -76,7 +76,6 @@ class _AddReviewSectionState extends State<AddReviewSection> {
             style: getSemiBoldStyle(
               fontSize: FontSize.size16,
               fontFamily: FontConstant.cairo,
-              color: Colors.black,
             ),
           ),
           const SizedBox(height: 12),
@@ -122,7 +121,7 @@ class _AddReviewSectionState extends State<AddReviewSection> {
             style: getSemiBoldStyle(
               fontSize: FontSize.size16,
               fontFamily: FontConstant.cairo,
-              color: Colors.black,
+            
             ),
           ),
           const SizedBox(height: 12),
@@ -140,7 +139,7 @@ class _AddReviewSectionState extends State<AddReviewSection> {
                 hintStyle: getMediumStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
-                  color: Colors.grey[500],
+                  color: Colors.grey[650],
                 ),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.all(16),
@@ -148,7 +147,7 @@ class _AddReviewSectionState extends State<AddReviewSection> {
               style: getMediumStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
-                color: Colors.black,
+                
               ),
             ),
           ),

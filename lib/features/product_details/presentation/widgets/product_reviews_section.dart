@@ -17,15 +17,15 @@ class ProductReviewsSection extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 15,
-            offset: const Offset(0, 3),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.black.withValues(alpha: 0.05),
+        //     blurRadius: 15,
+        //     offset: const Offset(0, 3),
+        //   ),
+        // ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,7 +37,7 @@ class ProductReviewsSection extends StatelessWidget {
                 style: getBoldStyle(
                   fontSize: FontSize.size18,
                   fontFamily: FontConstant.cairo,
-                  color: Colors.black,
+                 
                 ),
               ),
               const Spacer(),
@@ -46,7 +46,7 @@ class ProductReviewsSection extends StatelessWidget {
                 style: getMediumStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
-                  color: Colors.grey[600],
+                  color: Colors.grey[650],
                 ),
               ),
             ],
@@ -108,7 +108,7 @@ class ProductReviewsSection extends StatelessWidget {
               width: 50,
               height: 50,
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: Colors.grey[650],
                 borderRadius: BorderRadius.circular(25),
               ),
               child: Icon(Icons.person, color: Colors.grey[400], size: 30),
@@ -117,10 +117,10 @@ class ProductReviewsSection extends StatelessWidget {
               width: 50,
               height: 50,
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: Colors.grey[650],
                 borderRadius: BorderRadius.circular(25),
               ),
-              child: Icon(Icons.person, color: Colors.grey[400], size: 30),
+              child: Icon(Icons.person, color: Colors.grey[650], size: 30),
             ),
           ),
         ),
@@ -137,10 +137,10 @@ class ProductReviewsSection extends StatelessWidget {
                   Expanded(
                     child: Text(
                       review.userName,
-                      style: getSemiBoldStyle(
+                      style: getBoldStyle(
                         fontSize: FontSize.size14,
                         fontFamily: FontConstant.cairo,
-                        color: Colors.black,
+                       
                       ),
                     ),
                   ),
@@ -163,7 +163,7 @@ class ProductReviewsSection extends StatelessWidget {
                 style: getMediumStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
-                  color: Colors.grey[700],
+                  color: Colors.grey[650],
                 ),
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,

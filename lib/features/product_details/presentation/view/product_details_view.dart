@@ -246,22 +246,21 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.black.withValues(alpha: 0.05),
+        //     blurRadius: 2,
+        //     offset: const Offset(0, 2),
+        //   ),
+        // ],
       ),
       child: Column(
         children: [
           TabBar(
             controller: _tabController,
             labelColor: AppColors.primary,
-            unselectedLabelColor: Colors.grey[600],
+            unselectedLabelColor: Colors.grey[650],
             indicatorColor: AppColors.primary,
             indicatorWeight: 3,
             isScrollable: true,
@@ -315,7 +314,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
         style: getMediumStyle(
           fontSize: FontSize.size14,
           fontFamily: FontConstant.cairo,
-          color: Colors.grey[800],
+          color: Colors.grey[650],
         ),
       ),
     );
@@ -369,7 +368,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
               style: getSemiBoldStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
-                color: Colors.grey[700],
+                color: Colors.grey[650],
               ),
             ),
           ),
@@ -380,7 +379,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
               style: getMediumStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
-                color: Colors.grey[800],
+                color: Colors.grey[650],
               ),
             ),
           ),
@@ -409,7 +408,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
                   style: getSemiBoldStyle(
                     fontSize: FontSize.size16,
                     fontFamily: FontConstant.cairo,
-                    color: Colors.grey[800],
+                    color: Colors.grey[650],
                   ),
                 ),
               ),
@@ -421,7 +420,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
             style: getMediumStyle(
               fontSize: FontSize.size14,
               fontFamily: FontConstant.cairo,
-              color: Colors.grey[600],
+              color: Colors.grey[650],
             ),
           ),
         ],

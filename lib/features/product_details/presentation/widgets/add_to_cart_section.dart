@@ -34,7 +34,7 @@ class _AddToCartSectionState extends State<AddToCartSection> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.grey[50],
+       
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.grey[200]!, width: 1),
       ),
@@ -121,7 +121,7 @@ class _AddToCartSectionState extends State<AddToCartSection> {
   Widget _buildQuantitySelector() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+       
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey[300]!, width: 1),
       ),
@@ -141,7 +141,7 @@ class _AddToCartSectionState extends State<AddToCartSection> {
               style: getSemiBoldStyle(
                 fontSize: FontSize.size16,
                 fontFamily: FontConstant.cairo,
-                color: Colors.black,
+              
               ),
             ),
           ),
