@@ -13,17 +13,10 @@ class LocationCubit extends Cubit<LocationState> {
 
   Future<void> getCountries() async {
     try {
-      print('🔄 LocationCubit: Starting to fetch countries...');
       emit(LocationCountriesLoading());
       final countries = await locationRemoteDataSource.getCountries();
-      print(
-        '✅ LocationCubit: Received ${countries.length} countries from data source',
-      );
 
       final countryEntities = countries.map((model) {
-        print('🏳️ Processing country: ${model.titleAr} (ID: ${model.id})');
-        print('   Image: ${model.image}');
-        print('   Currency: ${model.currency}');
         return Country(
           id: model.id,
           image: model.image,
@@ -37,22 +30,14 @@ class LocationCubit extends Cubit<LocationState> {
         );
       }).toList();
 
-      print(
-        '✅ LocationCubit: Successfully created ${countryEntities.length} country entities',
-      );
       emit(LocationCountriesLoaded(countries: countryEntities));
     } catch (e) {
-      print('❌ LocationCubit: Error fetching countries: $e');
       emit(LocationError(message: e.toString()));
     }
   }
 
   Future<void> getCities(int countryId) async {
     try {
-      print(
-        '🔄 LocationCubit: Starting to fetch cities for country $countryId...',
-      );
-
       // Get current countries from state
       List<Country> currentCountries = [];
       if (state is LocationCountriesLoaded) {
@@ -67,15 +52,8 @@ class LocationCubit extends Cubit<LocationState> {
 
       emit(LocationCitiesLoading(countries: currentCountries));
       final cities = await locationRemoteDataSource.getCities(countryId);
-      print(
-        '✅ LocationCubit: Received ${cities.length} cities from data source',
-      );
 
       final cityEntities = cities.map((model) {
-        print('🏙️ Processing city: ${model.titleAr} (ID: ${model.id})');
-        print('   Image: ${model.image}');
-        print('   Code: ${model.code}');
-        print('   Status: ${model.status}');
         return City(
           id: model.id,
           image: model.image,
@@ -87,22 +65,16 @@ class LocationCubit extends Cubit<LocationState> {
         );
       }).toList();
 
-      print(
-        '✅ LocationCubit: Successfully created ${cityEntities.length} city entities',
-      );
       emit(
         LocationCitiesLoaded(countries: currentCountries, cities: cityEntities),
       );
     } catch (e) {
-      print('❌ LocationCubit: Error fetching cities: $e');
       emit(LocationError(message: e.toString()));
     }
   }
 
   Future<void> getRegions(int cityId) async {
     try {
-      print('🔄 LocationCubit: Starting to fetch regions for city $cityId...');
-
       // Get current countries and cities from state
       List<Country> currentCountries = [];
       List<City> currentCities = [];
@@ -124,14 +96,8 @@ class LocationCubit extends Cubit<LocationState> {
         ),
       );
       final regions = await locationRemoteDataSource.getRegions(cityId);
-      print(
-        '✅ LocationCubit: Received ${regions.length} regions from data source',
-      );
 
       final regionEntities = regions.map((model) {
-        print('🏘️ Processing region: ${model.titleAr} (ID: ${model.id})');
-        print('   Code: ${model.code}');
-        print('   Status: ${model.status}');
         return Region(
           id: model.id,
           titleEn: model.titleEn,
@@ -142,9 +108,6 @@ class LocationCubit extends Cubit<LocationState> {
         );
       }).toList();
 
-      print(
-        '✅ LocationCubit: Successfully created ${regionEntities.length} region entities',
-      );
       emit(
         LocationRegionsLoaded(
           countries: currentCountries,
@@ -153,7 +116,6 @@ class LocationCubit extends Cubit<LocationState> {
         ),
       );
     } catch (e) {
-      print('❌ LocationCubit: Error fetching regions: $e');
       emit(LocationError(message: e.toString()));
     }
   }

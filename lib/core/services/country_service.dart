@@ -32,54 +32,37 @@ class CountryService extends ChangeNotifier {
 
   /// Initialize the service and load saved country
   Future<void> initialize() async {
-    print('🌍 CountryService: Initializing service...');
     await _loadSavedCountry();
-    print(
-      '🌍 CountryService: Saved country loaded: ${_selectedCountry?.titleAr ?? "None"}',
-    );
+ 
     if (_countries.isEmpty) {
-      print('🌍 CountryService: Countries list is empty, loading from API...');
       await loadCountries();
     } else {
-      print(
-        '🌍 CountryService: Countries already loaded: ${_countries.length} countries',
-      );
+  
     }
   }
 
   /// Load countries from API
   Future<void> loadCountries() async {
     try {
-      print('🌍 CountryService: Starting to load countries...');
       _isLoading = true;
       _error = null;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         notifyListeners();
       });
 
-      print('🌍 CountryService: Getting LocationCubit instance...');
       final locationCubit = GetIt.instance<LocationCubit>();
-      print(
-        '🌍 CountryService: LocationCubit state before call: ${locationCubit.state.runtimeType}',
-      );
+   
 
-      print('🌍 CountryService: Calling getCountries()...');
       await locationCubit.getCountries();
-      print(
-        '🌍 CountryService: getCountries() completed. New state: ${locationCubit.state.runtimeType}',
-      );
+    
 
       // Listen to location cubit state
       if (locationCubit.state is LocationCountriesLoaded) {
         final state = locationCubit.state as LocationCountriesLoaded;
         _countries = state.countries;
-        print(
-          '🌍 CountryService: Successfully loaded ${_countries.length} countries',
-        );
+       
         for (int i = 0; i < _countries.length && i < 3; i++) {
-          print(
-            '🌍 CountryService: Country ${i + 1}: ${_countries[i].titleAr} (ID: ${_countries[i].id})',
-          );
+         
         }
         _isLoading = false;
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -88,15 +71,12 @@ class CountryService extends ChangeNotifier {
       } else if (locationCubit.state is LocationError) {
         final state = locationCubit.state as LocationError;
         _error = state.message;
-        print('❌ CountryService: LocationError occurred: ${state.message}');
         _isLoading = false;
         WidgetsBinding.instance.addPostFrameCallback((_) {
           notifyListeners();
         });
       } else {
-        print(
-          '⚠️ CountryService: Unexpected state type: ${locationCubit.state.runtimeType}',
-        );
+        
         _error = 'حالة غير متوقعة في تحميل الدول';
         _isLoading = false;
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -104,8 +84,7 @@ class CountryService extends ChangeNotifier {
         });
       }
     } catch (e, stackTrace) {
-      print('❌ CountryService: Exception occurred while loading countries: $e');
-      print('❌ CountryService: Stack trace: $stackTrace');
+   
       _error = 'حدث خطأ في تحميل الدول: $e';
       _isLoading = false;
       WidgetsBinding.instance.addPostFrameCallback((_) {

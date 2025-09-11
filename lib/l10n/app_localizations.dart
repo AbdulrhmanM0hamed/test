@@ -1048,6 +1048,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'EGP'**
   String get egp;
+
+  /// No description provided for @selectCountry.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Country'**
+  String get selectCountry;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

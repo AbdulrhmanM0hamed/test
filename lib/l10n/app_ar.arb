@@ -179,5 +179,6 @@
   "selectMainCategory": "اختر الفئة الرئيسية",
   "selectSubCategory": "اختر الفئة الفرعية",
   "clearFilters": "مسح الفلاتر",
-  "applyFilters": "تطبيق الفلاتر"
+  "applyFilters": "تطبيق الفلاتر",
+  "selectCountry": "اختر الدولة"
 }

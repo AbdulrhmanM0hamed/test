@@ -484,4 +484,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get egp => 'EGP';
+
+  @override
+  String get selectCountry => 'Select Country';
 }

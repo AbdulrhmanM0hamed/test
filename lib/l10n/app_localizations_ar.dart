@@ -484,4 +484,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get egp => 'ج.م';
+
+  @override
+  String get selectCountry => 'اختر الدولة';
 }

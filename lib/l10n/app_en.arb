@@ -179,5 +179,6 @@
   "selectMainCategory": "Select Main Category",
   "selectSubCategory": "Select Sub Category",
   "clearFilters": "Clear Filters",
-  "applyFilters": "Apply Filters"
+  "applyFilters": "Apply Filters",
+  "selectCountry": "Select Country"
 }

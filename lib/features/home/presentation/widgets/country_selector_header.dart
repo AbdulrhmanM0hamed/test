@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/services/country_service.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
@@ -36,7 +37,8 @@ class CountrySelectorHeader extends StatelessWidget {
                 // Country name or default text - wrapped in Flexible to prevent overflow
                 Flexible(
                   child: Text(
-                    countryService.selectedCountry?.titleAr ?? 'اختر الدولة',
+                    countryService.selectedCountry?.titleAr ??
+                        AppLocalizations.of(context)!.selectCountry,
                     style: getMediumStyle(
                       fontFamily: FontConstant.cairo,
                       fontSize: FontSize.size11,
@@ -179,7 +181,7 @@ class _CountrySelectorBottomSheetState extends State<_CountrySelectorBottomSheet
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'اختر الدولة',
+                    AppLocalizations.of(context)!.selectCountry,
                     style: getBoldStyle(
                       fontFamily: FontConstant.cairo,
                       fontSize: FontSize.size18,
