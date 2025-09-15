@@ -79,7 +79,6 @@ SectionHeader(
                   child: HomeProductCard(
                     product: product,
                     onTap: () => onProductTap?.call(product),
-                    onFavoritePressed: () => onFavoritePressed?.call(product),
                   ),
                 );
               },

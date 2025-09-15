@@ -63,6 +63,10 @@ import 'package:test/features/product_details/data/repositories/product_details_
 import 'package:test/features/product_details/domain/repositories/product_details_repository.dart';
 import 'package:test/features/product_details/domain/usecases/get_product_details_usecase.dart';
 import 'package:test/features/product_details/presentation/cubit/product_details_cubit.dart';
+// Wishlist feature imports
+import 'package:test/features/home/data/datasources/wishlist_remote_data_source.dart';
+import 'package:test/features/home/data/repositories/wishlist_repository.dart';
+import 'package:test/features/home/domain/usecases/wishlist_use_case.dart';
 
 class DependencyInjection {
   static final GetIt getIt = GetIt.instance;
@@ -235,10 +239,36 @@ class DependencyInjection {
     getIt.registerSingleton<DataRefreshService>(_dataRefreshService!);
     getIt.registerSingleton<CountryService>(_countryService!);
     getIt.registerSingleton<DioService>(_dioService!);
-    getIt.registerSingleton<AuthRepository>(_authRepository!);
-    getIt.registerSingleton<LoginUseCase>(_loginUseCase!);
-    getIt.registerSingleton<LogoutUseCase>(_logoutUseCase!);
-    getIt.registerSingleton<RefreshTokenUseCase>(_refreshTokenUseCase!);
+    getIt.registerLazySingleton<AuthRemoteDataSource>(
+      () => AuthRemoteDataSourceImpl(dioService: getIt()),
+    );
+    getIt.registerLazySingleton<AuthRepository>(
+      () => AuthRepositoryImpl(remoteDataSource: getIt()),
+    );
+    getIt.registerLazySingleton<LoginUseCase>(
+      () => LoginUseCase(getIt()),
+    );
+    getIt.registerLazySingleton<RefreshTokenUseCase>(
+      () => RefreshTokenUseCase(getIt()),
+    );
+
+    // Register Wishlist dependencies
+    getIt.registerLazySingleton<WishlistRemoteDataSource>(
+      () => WishlistRemoteDataSourceImpl(getIt()),
+    );
+    getIt.registerLazySingleton<WishlistRepository>(
+      () => WishlistRepositoryImpl(getIt()),
+    );
+    getIt.registerLazySingleton<AddToWishlistUseCase>(
+      () => AddToWishlistUseCase(getIt()),
+    );
+    getIt.registerLazySingleton<RemoveFromWishlistUseCase>(
+      () => RemoveFromWishlistUseCase(getIt()),
+    );
+    getIt.registerLazySingleton<GetWishlistUseCase>(
+      () => GetWishlistUseCase(getIt()),
+    );
+
     getIt.registerSingleton<ProfileRepository>(_profileRepository!);
     getIt.registerSingleton<GetProfileUseCase>(_getProfileUseCase!);
     // Registration singletons

@@ -16,18 +16,22 @@ class ApiEndpoints {
   static const String bestSellerProducts = '/best-seller-products';
   static const String latestProducts = '/latest-products';
   static const String specialOfferProducts = '/special-offer-products';
+  static const String addToWishlist = '/wishlist/add';
+  static const String removeFromWishlist = '/wishlist/remove';
+  static const String getWishlist = '/wishlist';
 
-  static String featuredProductsUrl({int? countryId}) => 
+  static String featuredProductsUrl({int? countryId}) =>
       '$baseUrl$featuredProducts${countryId != null ? '?country_id=$countryId' : ''}';
-  static String bestSellerProductsUrl({int? countryId}) => 
+  static String bestSellerProductsUrl({int? countryId}) =>
       '$baseUrl$bestSellerProducts${countryId != null ? '?country_id=$countryId' : ''}';
-  static String latestProductsUrl({int? countryId}) => 
+  static String latestProductsUrl({int? countryId}) =>
       '$baseUrl$latestProducts${countryId != null ? '?country_id=$countryId' : ''}';
-  static String specialOfferProductsUrl({int? countryId}) => 
+  static String specialOfferProductsUrl({int? countryId}) =>
       '$baseUrl$specialOfferProducts${countryId != null ? '?country_id=$countryId' : ''}';
 
   // Product details endpoint
-  static String productDetails(int productId) => '$baseUrl/spacific-product/$productId';
+  static String productDetails(int productId) =>
+      '$baseUrl/spacific-product/$productId';
 
   // Products filtering endpoint
   static String getAllProducts({
@@ -47,7 +51,7 @@ class ApiEndpoints {
     int? page,
   }) {
     final params = <String, dynamic>{};
-    
+
     if (mainCategoryId != null) params['main_category_id'] = mainCategoryId;
     if (subCategoryId != null) params['sub_category_id'] = subCategoryId;
     if (minPrice != null) params['min_price'] = minPrice;
@@ -62,11 +66,11 @@ class ApiEndpoints {
     if (countryId != null) params['country_id'] = countryId;
     if (tags != null) params['tags'] = tags;
     if (page != null) params['page'] = page;
-    
+
     final queryString = params.entries
         .map((e) => '${e.key}=${e.value}')
         .join('&');
-    
+
     return '$baseUrl/get-all-products${queryString.isNotEmpty ? '?$queryString' : ''}';
   }
 
@@ -74,5 +78,4 @@ class ApiEndpoints {
   static String get countries => '$baseUrl/countries';
   static String cities(int countryId) => '$baseUrl/cities/$countryId';
   static String regions(int cityId) => '$baseUrl/regions/$cityId';
-   
 }

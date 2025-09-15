@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/utils/constant/app_assets.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
 import '../../../../core/utils/animations/custom_progress_indcator.dart';
+import '../../../../core/di/dependency_injection.dart';
 import '../../domain/entities/home_product.dart';
+import '../../domain/usecases/wishlist_use_case.dart';
+import '../cubit/wishlist_cubit.dart';
 
 class HomeProductCard extends StatefulWidget {
   final HomeProduct product;
   final VoidCallback? onTap;
-  final VoidCallback? onFavoritePressed;
-  final bool isFavorite;
 
   const HomeProductCard({
     super.key,
     required this.product,
     this.onTap,
-    this.onFavoritePressed,
-    this.isFavorite = false,
   });
 
   @override
@@ -235,26 +235,53 @@ class _HomeProductCardState extends State<HomeProductCard>
   }
 
   Widget _buildFavoriteButton() {
-    return GestureDetector(
-      onTap: widget.onFavoritePressed,
-      child: Container(
-        padding: const EdgeInsets.all(6),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.9),
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
+    return BlocProvider(
+      create: (context) => WishlistCubit(
+        DependencyInjection.getIt.get<AddToWishlistUseCase>(),
+        DependencyInjection.getIt.get<RemoveFromWishlistUseCase>(),
+        DependencyInjection.getIt.get<GetWishlistUseCase>(),
+      ),
+      child: BlocBuilder<WishlistCubit, WishlistState>(
+        builder: (context, state) {
+          final wishlistCubit = context.read<WishlistCubit>();
+          final isInWishlist = wishlistCubit.isInWishlist(widget.product.id);
+          
+          return GestureDetector(
+            onTap: () {
+              wishlistCubit.toggleWishlist(widget.product.id);
+            },
+            child: Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.9),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: state is WishlistLoading
+                  ? SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.grey[600]!,
+                        ),
+                      ),
+                    )
+                  : Icon(
+                      isInWishlist ? Icons.favorite : Icons.favorite_border,
+                      color: isInWishlist ? Colors.red : Colors.grey[600],
+                      size: 18,
+                    ),
             ),
-          ],
-        ),
-        child: Icon(
-          widget.isFavorite ? Icons.favorite : Icons.favorite_border,
-          color: widget.isFavorite ? Colors.red : Colors.grey[600],
-          size: 18,
-        ),
+          );
+        },
       ),
     );
   }

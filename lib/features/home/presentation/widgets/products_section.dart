@@ -111,9 +111,7 @@ class ProductsSection extends StatelessWidget {
             ),
             child: HomeProductCard(
               product: product,
-              isFavorite: favoriteProductIds.contains(product.id),
               onTap: () => onProductTap?.call(product),
-              onFavoritePressed: () => onFavoritePressed?.call(product),
             ),
           );
         },

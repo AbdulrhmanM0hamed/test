@@ -78,7 +78,6 @@ class LatestProductsSection extends StatelessWidget {
                   child: HomeProductCard(
                     product: product,
                     onTap: () => onProductTap?.call(product),
-                    onFavoritePressed: () => onFavoritePressed?.call(product),
                   ),
                 );
               },
