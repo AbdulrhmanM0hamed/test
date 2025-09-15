@@ -164,7 +164,8 @@ class _RegisterViewState extends State<RegisterView> {
           create: (context) => DependencyInjection.createRegistrationCubit(),
         ),
         BlocProvider(
-          create: (context) => DependencyInjection.createLocationCubit()..getCountries(),
+          create: (context) =>
+              DependencyInjection.createLocationCubit()..getCountries(),
         ),
       ],
       child: Builder(
@@ -200,9 +201,9 @@ class _RegisterViewState extends State<RegisterView> {
                               // App Logo
                               SizedBox(height: size.height * 0.02),
                               Center(
-                                child: Image.asset(AppAssets.logo, height: 100),
+                                child: Image.asset(AppAssets.logo, height: 165),
                               ),
-                              SizedBox(height: size.height * 0.02),
+                              SizedBox(height: size.height * 0.01),
 
                               // Register Text
                               Text(

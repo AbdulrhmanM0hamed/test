@@ -108,9 +108,9 @@ class _LoginViewState extends State<LoginView> {
                               // App Logo
                               SizedBox(height: size.height * 0.03),
                               Center(
-                                child: Image.asset(AppAssets.logo, height: 120),
+                                child: Image.asset(AppAssets.logo, height: 165),
                               ),
-                              SizedBox(height: size.height * 0.03),
+                              SizedBox(height: size.height * 0.01),
 
                               // Login Text
                               Text(
