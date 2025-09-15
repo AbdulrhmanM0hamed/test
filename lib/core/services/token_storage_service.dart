@@ -5,6 +5,7 @@ class TokenStorageService {
   static const String _accessTokenKey = 'access_token';
   static const String _refreshTokenKey = 'refresh_token';
   static const String _sessionTokenKey = 'session_token';
+  static const String _tokenExpirationKey = 'token_expiration';
   static const String _userIdKey = 'user_id';
   static const String _userUuidKey = 'user_uuid';
   static const String _userEmailKey = 'user_email';
@@ -18,16 +19,23 @@ class TokenStorageService {
 
   TokenStorageService(this._prefs);
 
-  // Save tokens
+  // Save tokens with expiration
   Future<void> saveTokens({
     required String accessToken,
     required String refreshToken,
     required String sessionToken,
+    int? expiresIn,
   }) async {
+    final expirationTime = expiresIn != null 
+        ? DateTime.now().add(Duration(seconds: expiresIn))
+        : null;
+    
     await Future.wait([
       _prefs.setString(_accessTokenKey, accessToken),
       _prefs.setString(_refreshTokenKey, refreshToken),
       _prefs.setString(_sessionTokenKey, sessionToken),
+      if (expirationTime != null)
+        _prefs.setInt(_tokenExpirationKey, expirationTime.millisecondsSinceEpoch),
     ]);
   }
 
@@ -50,6 +58,12 @@ class TokenStorageService {
   String? get accessToken => _prefs.getString(_accessTokenKey);
   String? get refreshToken => _prefs.getString(_refreshTokenKey);
   String? get sessionToken => _prefs.getString(_sessionTokenKey);
+  
+  // Get token expiration
+  DateTime? get tokenExpiration {
+    final timestamp = _prefs.getInt(_tokenExpirationKey);
+    return timestamp != null ? DateTime.fromMillisecondsSinceEpoch(timestamp) : null;
+  }
 
   // Get user data
   int? get userId => _prefs.getInt(_userIdKey);
@@ -59,6 +73,20 @@ class TokenStorageService {
 
   // Check if user is logged in
   bool get isLoggedIn => accessToken != null && accessToken!.isNotEmpty;
+  
+  // Check if token is expired or about to expire (within 5 minutes)
+  bool get isTokenExpired {
+    final expiration = tokenExpiration;
+    if (expiration == null) return false;
+    return DateTime.now().add(const Duration(minutes: 5)).isAfter(expiration);
+  }
+  
+  // Check if token needs refresh (within 30 minutes of expiration)
+  bool get shouldRefreshToken {
+    final expiration = tokenExpiration;
+    if (expiration == null) return false;
+    return DateTime.now().add(const Duration(minutes: 30)).isAfter(expiration);
+  }
 
   // Mark onboarding as completed
   Future<void> setOnboardingCompleted({bool completed = true}) async {
@@ -106,6 +134,7 @@ class TokenStorageService {
       _prefs.remove(_accessTokenKey),
       _prefs.remove(_refreshTokenKey),
       _prefs.remove(_sessionTokenKey),
+      _prefs.remove(_tokenExpirationKey),
       _prefs.remove(_userIdKey),
       _prefs.remove(_userUuidKey),
       _prefs.remove(_userEmailKey),
@@ -116,7 +145,15 @@ class TokenStorageService {
   }
 
   // Update access token (for refresh token flow)
-  Future<void> updateAccessToken(String newAccessToken) async {
-    await _prefs.setString(_accessTokenKey, newAccessToken);
+  Future<void> updateAccessToken(String newAccessToken, {int? expiresIn}) async {
+    final expirationTime = expiresIn != null 
+        ? DateTime.now().add(Duration(seconds: expiresIn))
+        : null;
+    
+    await Future.wait([
+      _prefs.setString(_accessTokenKey, newAccessToken),
+      if (expirationTime != null)
+        _prefs.setInt(_tokenExpirationKey, expirationTime.millisecondsSinceEpoch),
+    ]);
   }
 }

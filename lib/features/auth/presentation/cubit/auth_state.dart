@@ -26,3 +26,9 @@ class AuthLoggedOut extends AuthState {
 
   const AuthLoggedOut({this.message = 'تم تسجيل الخروج بنجاح'});
 }
+
+class AuthTokenRefreshed extends AuthState {
+  final String message;
+
+  const AuthTokenRefreshed({this.message = 'تم تحديث الرمز المميز بنجاح'});
+}

@@ -78,7 +78,6 @@ class _LoginViewState extends State<LoginView> {
       create: (context) => DependencyInjection.createAuthCubit(),
       child: Builder(
         builder: (context) => Scaffold(
-          backgroundColor: Colors.white,
           body: BlocConsumer<AuthCubit, AuthState>(
             listener: (context, state) {
               if (state is AuthSuccess) {

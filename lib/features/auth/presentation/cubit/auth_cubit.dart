@@ -5,11 +5,13 @@ import 'package:test/core/utils/error/error_handler.dart';
 import 'package:test/features/auth/domain/entities/login_request.dart';
 import 'package:test/features/auth/domain/usecases/login_usecase.dart';
 import 'package:test/features/auth/domain/usecases/logout_usecase.dart';
+import 'package:test/features/auth/domain/usecases/refresh_token_usecase.dart';
 import 'package:test/features/auth/presentation/cubit/auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final LoginUseCase loginUseCase;
   final LogoutUseCase logoutUseCase;
+  final RefreshTokenUseCase refreshTokenUseCase;
   final TokenStorageService tokenStorageService;
   final AppStateService appStateService;
   // final FCMService fcmService;
@@ -17,6 +19,7 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit({
     required this.loginUseCase,
     required this.logoutUseCase,
+    required this.refreshTokenUseCase,
     required this.tokenStorageService,
     required this.appStateService,
     // required this.fcmService,
@@ -36,7 +39,7 @@ class AuthCubit extends Cubit<AuthState> {
       final loginRequest = LoginRequest(
         email: email,
         password: password,
-        fcmToken: "",
+     //   fcmToken: "akfkl",
       );
 
       final response = await loginUseCase(loginRequest);
@@ -44,11 +47,12 @@ class AuthCubit extends Cubit<AuthState> {
       if (response.success && response.data != null) {
         final user = response.data!;
 
-        // Store token and user data
+        // Store token and user data with expiration
         await tokenStorageService.saveTokens(
           accessToken: user.token,
           refreshToken: user.token,
           sessionToken: user.token,
+          expiresIn: user.expiresIn,
         );
         await tokenStorageService.saveUserData(
           userId: user.id,
@@ -96,6 +100,24 @@ class AuthCubit extends Cubit<AuthState> {
             response.getFirstErrorMessage() ?? response.message;
         emit(AuthError(errorMessage));
       }
+    } catch (e) {
+      final errorMessage = ErrorHandler.extractErrorMessage(e);
+      emit(AuthError(errorMessage));
+    }
+  }
+
+  Future<void> refreshToken() async {
+    try {
+      emit(AuthLoading());
+
+      final refreshData = await refreshTokenUseCase();
+      final newToken = refreshData['access_token'] as String;
+      final expiresIn = refreshData['expires_in'] as int?;
+
+      // Update token in storage
+      await tokenStorageService.updateAccessToken(newToken, expiresIn: expiresIn);
+
+      emit(AuthTokenRefreshed(message: 'Token refreshed successfully'));
     } catch (e) {
       final errorMessage = ErrorHandler.extractErrorMessage(e);
       emit(AuthError(errorMessage));

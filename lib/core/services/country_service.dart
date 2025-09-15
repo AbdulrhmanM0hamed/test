@@ -117,7 +117,7 @@ class CountryService extends ChangeNotifier {
           notifyListeners();
         });
       }
-    } catch (e, stackTrace) {
+    } catch (e) {
    
       _error = 'حدث خطأ في تحميل الدول: $e';
       _isLoading = false;

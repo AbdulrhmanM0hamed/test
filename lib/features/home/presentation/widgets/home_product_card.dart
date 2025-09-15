@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/utils/constant/app_assets.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
@@ -150,8 +151,7 @@ class _HomeProductCardState extends State<HomeProductCard>
           right: 8,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              if (widget.product.isBest) _buildBestSellerBadge()],
+            children: [if (widget.product.isBest) _buildBestSellerBadge()],
           ),
         ),
 
@@ -224,16 +224,15 @@ class _HomeProductCardState extends State<HomeProductCard>
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
-        'الأكثر مبيعاً',
+        AppLocalizations.of(context)!.bestSellers,
         style: getBoldStyle(
           fontSize: FontSize.size10,
           fontFamily: FontConstant.cairo,
-          color: AppColors.black,
+          color: AppColors.white,
         ),
       ),
     );
   }
-
 
   Widget _buildFavoriteButton() {
     return GestureDetector(

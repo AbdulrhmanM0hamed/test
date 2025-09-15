@@ -50,4 +50,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> resetPassword(String email) async {
     return await remoteDataSource.resetPassword(email);
   }
+
+  @override
+  Future<Map<String, dynamic>> refreshToken() async {
+    return await remoteDataSource.refreshToken();
+  }
 }

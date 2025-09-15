@@ -11,6 +11,7 @@ import 'package:test/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:test/features/auth/domain/repositories/auth_repository.dart';
 import 'package:test/features/auth/domain/usecases/login_usecase.dart';
 import 'package:test/features/auth/domain/usecases/logout_usecase.dart';
+import 'package:test/features/auth/domain/usecases/refresh_token_usecase.dart';
 import 'package:test/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:test/features/profile/data/datasources/profile_remote_data_source.dart';
 import 'package:test/features/profile/data/repositories/profile_repository_impl.dart';
@@ -76,6 +77,7 @@ class DependencyInjection {
   static AuthRepository? _authRepository;
   static LoginUseCase? _loginUseCase;
   static LogoutUseCase? _logoutUseCase;
+  static RefreshTokenUseCase? _refreshTokenUseCase;
   static ProfileRemoteDataSource? _profileRemoteDataSource;
   static ProfileRepository? _profileRepository;
   static GetProfileUseCase? _getProfileUseCase;
@@ -117,10 +119,14 @@ class DependencyInjection {
   static Future<void> init() async {
     final sharedPreferences = await SharedPreferences.getInstance();
 
-    // Initialize services
+    // Initialize services in correct order
     _tokenStorageService = TokenStorageService(sharedPreferences);
     _appStateService = AppStateService(sharedPreferences);
     _languageService = LanguageService();
+    
+    // Register LanguageService first before CountryService needs it
+    getIt.registerSingleton<LanguageService>(_languageService!);
+    
     _dataRefreshService = DataRefreshService(_languageService!);
     _countryService = CountryService.instance;
 
@@ -136,9 +142,13 @@ class DependencyInjection {
       remoteDataSource: _authRemoteDataSource!,
     );
 
+    // Set auth repository in dio service after it's created
+    _dioService!.setAuthRepository(_authRepository!);
+
     // Initialize use cases
     _loginUseCase = LoginUseCase(_authRepository!);
     _logoutUseCase = LogoutUseCase(_authRepository!);
+    _refreshTokenUseCase = RefreshTokenUseCase(_authRepository!);
 
     // Initialize Profile dependencies
     _profileRemoteDataSource = ProfileRemoteDataSourceImpl(_dioService!);
@@ -219,16 +229,16 @@ class DependencyInjection {
       _productDetailsRepository!,
     );
 
-    // Register with GetIt
+    // Register with GetIt (LanguageService already registered above)
     getIt.registerSingleton<TokenStorageService>(_tokenStorageService!);
     getIt.registerSingleton<AppStateService>(_appStateService!);
-    getIt.registerSingleton<LanguageService>(_languageService!);
     getIt.registerSingleton<DataRefreshService>(_dataRefreshService!);
     getIt.registerSingleton<CountryService>(_countryService!);
     getIt.registerSingleton<DioService>(_dioService!);
     getIt.registerSingleton<AuthRepository>(_authRepository!);
     getIt.registerSingleton<LoginUseCase>(_loginUseCase!);
     getIt.registerSingleton<LogoutUseCase>(_logoutUseCase!);
+    getIt.registerSingleton<RefreshTokenUseCase>(_refreshTokenUseCase!);
     getIt.registerSingleton<ProfileRepository>(_profileRepository!);
     getIt.registerSingleton<GetProfileUseCase>(_getProfileUseCase!);
     // Registration singletons
@@ -273,6 +283,7 @@ class DependencyInjection {
         // fcmService: getIt<FCMService>(),
         loginUseCase: getIt<LoginUseCase>(),
         logoutUseCase: getIt<LogoutUseCase>(),
+        refreshTokenUseCase: getIt<RefreshTokenUseCase>(),
         tokenStorageService: getIt<TokenStorageService>(),
         appStateService: getIt<AppStateService>(),
       ),
@@ -374,6 +385,7 @@ class DependencyInjection {
       // fcmService: getIt<FCMService>(),
       loginUseCase: _loginUseCase!,
       logoutUseCase: _logoutUseCase!,
+      refreshTokenUseCase: _refreshTokenUseCase!,
       tokenStorageService: _tokenStorageService!,
       appStateService: _appStateService!,
     );

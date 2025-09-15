@@ -18,8 +18,8 @@ class ProfileActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buttonColor = isDestructive 
-        ? Colors.red 
+    final buttonColor = isDestructive
+        ? Colors.red
         : color ?? Theme.of(context).primaryColor;
 
     return Container(
@@ -29,7 +29,7 @@ class ProfileActionButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -48,14 +48,10 @@ class ProfileActionButton extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: buttonColor.withOpacity(0.1),
+                    color: buttonColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(
-                    icon,
-                    color: buttonColor,
-                    size: 24,
-                  ),
+                  child: Icon(icon, color: buttonColor, size: 24),
                 ),
                 const SizedBox(width: 16),
                 Expanded(

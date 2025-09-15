@@ -6,6 +6,7 @@ class AppAssets {
 
   // Logo
   static const String logo = '$_imagesPath/splash_image.png';
+  static const String splashLogo = '$_imagesPath/appl_icon.svg';
   static const String logoWhite = '$_imagesPath/logo_white.png';
   static const String logoWithoutName = '$_imagesPath/logoWithoutName.png';
 
@@ -89,6 +90,9 @@ class AppAssets {
   static const String calendarIconBottom = '$_iconsPath/Calendar.svg';
   static const String profileIconBottom = '$_iconsPath/Profile.svg';
   static const String subtractIcon = '$_iconsPath/subtract.svg';
+
+  // Loading GIF
+  static const String loadingGif = '$_imagesPath/loading.gif';
 
   // Lottie Animations
   static const String loadingAnimation = '$_lottiePath/loading.json';

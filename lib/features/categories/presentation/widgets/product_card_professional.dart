@@ -237,7 +237,7 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
         style: getBoldStyle(
           fontSize: FontSize.size10,
           fontFamily: FontConstant.cairo,
-          color: AppColors.black,
+          color: AppColors.white,
         ),
       ),
     );
@@ -388,8 +388,6 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-         
-          
               // Stock quantity
               if (widget.product.stock > 0)
                 Container(

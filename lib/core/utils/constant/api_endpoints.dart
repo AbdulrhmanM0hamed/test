@@ -5,6 +5,7 @@ class ApiEndpoints {
   static String get login => '$baseUrl/signin';
   static String get register => '$baseUrl/signup';
   static String get logout => '$baseUrl/logout';
+  static String get refreshToken => '$baseUrl/refresh-token';
   static String get myAccount => '$baseUrl/my-account';
   static String get categories => '$baseUrl/departments';
   static String productsByDepartment(String departmentName) =>

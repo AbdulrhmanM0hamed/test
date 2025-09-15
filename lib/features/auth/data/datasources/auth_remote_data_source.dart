@@ -20,6 +20,7 @@ abstract class AuthRemoteDataSource {
   });
   Future<ApiResponse<void>> logout();
   Future<void> resetPassword(String email);
+  Future<Map<String, dynamic>> refreshToken();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -93,5 +94,26 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       data: {'email': email},
     );
     return response;
+  }
+
+  @override
+  Future<Map<String, dynamic>> refreshToken() async {
+    try {
+      final response = await dioService.post(
+        ApiEndpoints.refreshToken,
+      );
+
+      if (response.statusCode == 200 && response.data['status'] == 200) {
+        return response.data['data'] as Map<String, dynamic>;
+      } else {
+        throw DioException(
+          requestOptions: response.requestOptions,
+          response: response,
+          message: response.data['message'] ?? 'Token refresh failed',
+        );
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 }

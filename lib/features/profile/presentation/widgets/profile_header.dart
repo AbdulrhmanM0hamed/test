@@ -5,11 +5,7 @@ class ProfileHeader extends StatelessWidget {
   final UserProfile userProfile;
   final VoidCallback? onEditImage;
 
-  const ProfileHeader({
-    super.key,
-    required this.userProfile,
-    this.onEditImage,
-  });
+  const ProfileHeader({super.key, required this.userProfile, this.onEditImage});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +17,7 @@ class ProfileHeader extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: [
             Theme.of(context).primaryColor,
-            Theme.of(context).primaryColor.withOpacity(0.8),
+            Theme.of(context).primaryColor.withValues(alpha: 0.8),
           ],
         ),
         borderRadius: const BorderRadius.only(
@@ -39,13 +35,10 @@ class ProfileHeader extends StatelessWidget {
                 height: 120,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 4,
-                  ),
+                  border: Border.all(color: Colors.white, width: 4),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color: Colors.black.withValues(alpha: 0.2),
                       blurRadius: 20,
                       offset: const Offset(0, 10),
                     ),
@@ -76,7 +69,7 @@ class ProfileHeader extends StatelessWidget {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withValues(alpha: 0.2),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -106,7 +99,7 @@ class ProfileHeader extends StatelessWidget {
             userProfile.email,
             style: TextStyle(
               fontSize: 16,
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withValues(alpha: 0.9),
             ),
           ),
           const SizedBox(height: 8),
@@ -115,7 +108,7 @@ class ProfileHeader extends StatelessWidget {
             children: [
               Icon(
                 Icons.location_on,
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha: 0.9),
                 size: 16,
               ),
               const SizedBox(width: 4),
@@ -124,7 +117,7 @@ class ProfileHeader extends StatelessWidget {
                   userProfile.fullLocation,
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha: 0.9),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -136,18 +129,14 @@ class ProfileHeader extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.green.withOpacity(0.2),
+                color: Colors.green.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.green.withOpacity(0.5)),
+                border: Border.all(color: Colors.green.withValues(alpha: 0.5)),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    Icons.verified,
-                    color: Colors.green[300],
-                    size: 16,
-                  ),
+                  Icon(Icons.verified, color: Colors.green[300], size: 16),
                   const SizedBox(width: 4),
                   Text(
                     'حساب موثق',
@@ -172,10 +161,7 @@ class ProfileHeader extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Colors.blue[400]!,
-            Colors.purple[400]!,
-          ],
+          colors: [Colors.blue[400]!, Colors.purple[400]!],
         ),
       ),
       child: Center(
