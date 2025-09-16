@@ -24,7 +24,7 @@ class SignupRequestModel extends SignupRequest {
       'gender': gender,
       'sign_from': signFrom,
       'password': password,
-      'confirm_password': confirmPassword,
+      'password_confirmation': confirmPassword,
       'country_id': countryId.toString(),
       'city_id': cityId.toString(),
       'region_id': regionId.toString(),

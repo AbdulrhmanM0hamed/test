@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/utils/common/custom_text_field.dart';
 import 'package:test/core/utils/common/custom_button.dart';
+import 'package:test/core/utils/common/password_field.dart';
 import 'package:test/core/utils/constant/app_assets.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
@@ -348,12 +349,11 @@ class _LoginViewState extends State<LoginView> {
                                     ),
                                   ),
                                   const SizedBox(height: 8),
-                                  CustomTextField(
+                                  PasswordField(
                                     controller: _passwordController,
-                                    hint: AppLocalizations.of(
+                                    hintText: AppLocalizations.of(
                                       context,
                                     )!.writePassword,
-                                    obscureText: true,
                                     validator:
                                         FormValidators.validatePasswordLogin,
                                   ),

@@ -1,6 +1,5 @@
 class ApiEndpoints {
-  static String get baseUrl =>
-      'https://eramostore.com/eramostore2025_backend/public/api';
+  static String get baseUrl => 'https://sobiehcoffee.com/sobieh/public/api';
 
   static String get login => '$baseUrl/signin';
   static String get register => '$baseUrl/signup';
@@ -9,7 +8,8 @@ class ApiEndpoints {
   static String get resendVerifyEmail => '$baseUrl/resend-verify-email';
   static String get forgetPassword => '$baseUrl/forget-password';
   static String get checkOtp => '$baseUrl/forget-password/check-otp';
-  static String get changePassword => '$baseUrl/forget-password/change-password';
+  static String get changePassword =>
+      '$baseUrl/forget-password/change-password';
   static String get myAccount => '$baseUrl/my-account';
   static String get categories => '$baseUrl/departments';
   static String productsByDepartment(String departmentName) =>
@@ -22,7 +22,7 @@ class ApiEndpoints {
   static const String specialOfferProducts = '/special-offer-products';
   static const String addToWishlist = '/wishlist/add';
   static const String removeFromWishlist = '/wishlist/remove';
-  
+
   static const String getWishlist = '/wishlist';
 
   static String featuredProductsUrl({int? countryId}) =>

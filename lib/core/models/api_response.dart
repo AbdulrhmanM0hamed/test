@@ -54,7 +54,7 @@ class ApiResponse<T> {
       if (json['data'] != null && dataParser != null) {
         parsedData = dataParser(json['data']);
       }
-      
+
       return ApiResponse.success(
         message: message,
         data: parsedData,
@@ -72,7 +72,7 @@ class ApiResponse<T> {
   /// Get the first error message from errors map
   String? getFirstErrorMessage() {
     if (errors == null || errors!.isEmpty) return null;
-    
+
     for (final fieldErrors in errors!.values) {
       if (fieldErrors is List && fieldErrors.isNotEmpty) {
         return fieldErrors.first.toString();
@@ -84,7 +84,7 @@ class ApiResponse<T> {
   /// Get error message for a specific field
   String? getFieldError(String fieldName) {
     if (errors == null || !errors!.containsKey(fieldName)) return null;
-    
+
     final fieldErrors = errors![fieldName];
     if (fieldErrors is List && fieldErrors.isNotEmpty) {
       return fieldErrors.first.toString();
@@ -95,14 +95,14 @@ class ApiResponse<T> {
   /// Get all error messages as a single string
   String getAllErrorMessages() {
     if (errors == null || errors!.isEmpty) return message;
-    
+
     final List<String> allErrors = [];
     for (final fieldErrors in errors!.values) {
       if (fieldErrors is List) {
         allErrors.addAll(fieldErrors.map((e) => e.toString()));
       }
     }
-    
+
     return allErrors.isNotEmpty ? allErrors.join('\n') : message;
   }
 }
@@ -113,13 +113,12 @@ class ApiException implements Exception {
   final Map<String, dynamic>? errors;
   final int? statusCode;
 
-  const ApiException({
-    required this.message,
-    this.errors,
-    this.statusCode,
-  });
+  const ApiException({required this.message, this.errors, this.statusCode});
 
-  factory ApiException.fromResponse(Map<String, dynamic> responseData, int? statusCode) {
+  factory ApiException.fromResponse(
+    Map<String, dynamic> responseData,
+    int? statusCode,
+  ) {
     return ApiException(
       message: responseData['message'] ?? 'Unknown error occurred',
       errors: responseData['errors'] as Map<String, dynamic>?,
@@ -130,7 +129,7 @@ class ApiException implements Exception {
   /// Get the first error message
   String getFirstErrorMessage() {
     if (errors == null || errors!.isEmpty) return message;
-    
+
     for (final fieldErrors in errors!.values) {
       if (fieldErrors is List && fieldErrors.isNotEmpty) {
         return fieldErrors.first.toString();

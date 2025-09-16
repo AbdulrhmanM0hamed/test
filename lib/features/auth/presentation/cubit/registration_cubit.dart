@@ -49,7 +49,7 @@ class RegistrationCubit extends Cubit<RegistrationState> {
     selectedRegion = null;
     cities.clear();
     regions.clear();
-    
+
     try {
       emit(LocationLoading());
       cities = await getCitiesUseCase(country.id);
@@ -63,7 +63,7 @@ class RegistrationCubit extends Cubit<RegistrationState> {
     selectedCity = city;
     selectedRegion = null;
     regions.clear();
-    
+
     try {
       emit(LocationLoading());
       regions = await getRegionsUseCase(city.id);
@@ -84,13 +84,14 @@ class RegistrationCubit extends Cubit<RegistrationState> {
     required DateTime birthDate,
     required String gender,
     required String password,
+    required String confirmPassword,
     required Country country,
     City? city,
     Region? region,
   }) async {
     try {
       emit(RegistrationLoading());
-      
+
       final signupRequest = SignupRequest(
         name: name,
         email: email,
@@ -100,22 +101,25 @@ class RegistrationCubit extends Cubit<RegistrationState> {
         gender: gender,
         signFrom: 'mobile',
         password: password,
-        confirmPassword: password, // Use same password for confirmation
+        confirmPassword: confirmPassword,
         countryId: country.id,
         cityId: city?.id ?? country.id, // Use country id as fallback
-        regionId: region?.id ?? city?.id ?? country.id, // Use city or country id as fallback
+        regionId:
+            region?.id ??
+            city?.id ??
+            country.id, // Use city or country id as fallback
       );
 
       final response = await signupUseCase(signupRequest);
-      
+
       if (response.success && response.data != null) {
-        emit(RegistrationSuccess(
-          user: response.data!,
-          message: response.message,
-        ));
+        emit(
+          RegistrationSuccess(user: response.data!, message: response.message),
+        );
       } else {
         // Handle API response errors
-        String errorMessage = response.getFirstErrorMessage() ?? response.message;
+        String errorMessage =
+            response.getFirstErrorMessage() ?? response.message;
         emit(RegistrationError(message: errorMessage));
       }
     } catch (e) {

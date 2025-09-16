@@ -59,7 +59,7 @@ class DioService {
           if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';
           }
-          
+
           // Add language header based on app locale
           String language = 'ar'; // Default to Arabic
           if (_context != null) {
@@ -67,7 +67,7 @@ class DioService {
             language = locale.languageCode == 'en' ? 'en' : 'ar';
           }
           options.headers['lang'] = language;
-          
+
           if (kDebugMode) {
             print('🚀 REQUEST: ${options.method} ${options.uri}');
             print('📤 DATA: ${options.data}');
@@ -95,32 +95,35 @@ class DioService {
           }
 
           // Handle token refresh for 401 errors
-          if (error.response?.statusCode == 401 && 
-              !_isRefreshing && 
-              _tokenStorageService != null && 
+          if (error.response?.statusCode == 401 &&
+              !_isRefreshing &&
+              _tokenStorageService != null &&
               _authRepository != null &&
               error.requestOptions.path != ApiEndpoints.refreshToken) {
-            
             _isRefreshing = true;
-            
+
             try {
               // Check if token should be refreshed
-              if (_tokenStorageService!.shouldRefreshToken || _tokenStorageService!.isTokenExpired) {
+              if (_tokenStorageService!.shouldRefreshToken ||
+                  _tokenStorageService!.isTokenExpired) {
                 print('🔄 Attempting to refresh token...');
-                
+
                 final refreshData = await _authRepository!.refreshToken();
                 final newToken = refreshData['access_token'] as String;
                 final expiresIn = refreshData['expires_in'] as int?;
-                
+
                 // Update token in storage
-                await _tokenStorageService!.updateAccessToken(newToken, expiresIn: expiresIn);
-                
+                await _tokenStorageService!.updateAccessToken(
+                  newToken,
+                  expiresIn: expiresIn,
+                );
+
                 print('✅ Token refreshed successfully');
-                
+
                 // Retry the original request with new token
                 final options = error.requestOptions;
                 options.headers['Authorization'] = 'Bearer $newToken';
-                
+
                 final response = await _dio.fetch(options);
                 _isRefreshing = false;
                 handler.resolve(response);
@@ -129,17 +132,17 @@ class DioService {
             } catch (refreshError) {
               print('❌ Token refresh failed: $refreshError');
               _isRefreshing = false;
-              
+
               // Clear tokens and redirect to login
               await _tokenStorageService!.clearAll();
-              
+
               // You might want to navigate to login screen here
               // This would require additional context handling
             }
-            
+
             _isRefreshing = false;
           }
-          
+
           handler.next(error);
         },
       ),
@@ -155,15 +158,14 @@ class DioService {
     Options? options,
   }) async {
     // Check if token needs refresh before making request
-    if (_tokenStorageService != null && 
-        _authRepository != null && 
+    if (_tokenStorageService != null &&
+        _authRepository != null &&
         !_isRefreshing &&
         endpoint != ApiEndpoints.refreshToken &&
         _tokenStorageService!.shouldRefreshToken) {
-      
       await _refreshTokenIfNeeded();
     }
-    
+
     try {
       switch (method.toUpperCase()) {
         case 'GET':
@@ -462,22 +464,27 @@ class DioService {
 
   // Helper method to refresh token if needed
   Future<void> _refreshTokenIfNeeded() async {
-    if (_isRefreshing || _tokenStorageService == null || _authRepository == null) {
+    if (_isRefreshing ||
+        _tokenStorageService == null ||
+        _authRepository == null) {
       return;
     }
 
     _isRefreshing = true;
-    
+
     try {
       print('🔄 Proactively refreshing token...');
-      
+
       final refreshData = await _authRepository!.refreshToken();
       final newToken = refreshData['access_token'] as String;
       final expiresIn = refreshData['expires_in'] as int?;
-      
+
       // Update token in storage
-      await _tokenStorageService!.updateAccessToken(newToken, expiresIn: expiresIn);
-      
+      await _tokenStorageService!.updateAccessToken(
+        newToken,
+        expiresIn: expiresIn,
+      );
+
       print('✅ Token refreshed proactively');
     } catch (e) {
       print('❌ Proactive token refresh failed: $e');
