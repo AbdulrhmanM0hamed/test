@@ -4,6 +4,9 @@ import 'package:test/core/services/network/dio_service.dart';
 import 'package:test/core/utils/constant/api_endpoints.dart';
 import 'package:test/features/auth/data/models/user_model.dart';
 import 'package:test/features/auth/data/models/login_request_model.dart';
+import 'package:test/features/auth/data/models/forget_password_request_model.dart';
+import 'package:test/features/auth/data/models/check_otp_request_model.dart';
+import 'package:test/features/auth/data/models/change_password_request_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<ApiResponse<UserModel>> login(LoginRequestModel loginRequest);
@@ -22,6 +25,9 @@ abstract class AuthRemoteDataSource {
   Future<void> resetPassword(String email);
   Future<Map<String, dynamic>> refreshToken();
   Future<Map<String, dynamic>> resendVerificationEmail(String email);
+  Future<ApiResponse<void>> forgetPassword(ForgetPasswordRequestModel request);
+  Future<ApiResponse<void>> checkOtp(CheckOtpRequestModel request);
+  Future<ApiResponse<void>> changePassword(ChangePasswordRequestModel request);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -129,5 +135,29 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } catch (e) {
       rethrow;
     }
+  }
+
+  @override
+  Future<ApiResponse<void>> forgetPassword(ForgetPasswordRequestModel request) async {
+    return await dioService.postWithResponse<void>(
+      ApiEndpoints.forgetPassword,
+      data: request.toJson(),
+    );
+  }
+
+  @override
+  Future<ApiResponse<void>> checkOtp(CheckOtpRequestModel request) async {
+    return await dioService.postWithResponse<void>(
+      ApiEndpoints.checkOtp,
+      data: request.toJson(),
+    );
+  }
+
+  @override
+  Future<ApiResponse<void>> changePassword(ChangePasswordRequestModel request) async {
+    return await dioService.postWithResponse<void>(
+      ApiEndpoints.changePassword,
+      data: request.toJson(),
+    );
   }
 }

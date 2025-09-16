@@ -1102,6 +1102,180 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select Country'**
   String get selectCountry;
+
+  /// No description provided for @forgetPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot Password'**
+  String get forgetPassword;
+
+  /// No description provided for @forgetPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Password'**
+  String get forgetPasswordTitle;
+
+  /// No description provided for @forgetPasswordDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email address to send verification code'**
+  String get forgetPasswordDesc;
+
+  /// No description provided for @sendVerificationCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Verification Code'**
+  String get sendVerificationCode;
+
+  /// No description provided for @verificationCodeSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification code sent'**
+  String get verificationCodeSent;
+
+  /// No description provided for @checkEmailForCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your email for verification code'**
+  String get checkEmailForCode;
+
+  /// No description provided for @enterVerificationCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter verification code'**
+  String get enterVerificationCode;
+
+  /// No description provided for @verificationCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification Code'**
+  String get verificationCode;
+
+  /// No description provided for @verifyCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Code'**
+  String get verifyCode;
+
+  /// No description provided for @codeVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Code verified successfully'**
+  String get codeVerified;
+
+  /// No description provided for @enterNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter new password'**
+  String get enterNewPassword;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get newPassword;
+
+  /// No description provided for @confirmNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm New Password'**
+  String get confirmNewPassword;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get changePassword;
+
+  /// No description provided for @passwordChangedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Password changed successfully'**
+  String get passwordChangedSuccessfully;
+
+  /// No description provided for @backToLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Login'**
+  String get backToLogin;
+
+  /// No description provided for @step.
+  ///
+  /// In en, this message translates to:
+  /// **'Step'**
+  String get step;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @previous.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get previous;
+
+  /// No description provided for @finish.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish'**
+  String get finish;
+
+  /// No description provided for @resendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend Code'**
+  String get resendCode;
+
+  /// No description provided for @codeExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Code expired'**
+  String get codeExpired;
+
+  /// No description provided for @invalidCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid code'**
+  String get invalidCode;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @passwordTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is too short'**
+  String get passwordTooShort;
+
+  /// No description provided for @enterValidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email'**
+  String get enterValidEmail;
+
+  /// No description provided for @enterCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter code'**
+  String get enterCode;
+
+  /// No description provided for @enterPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter password'**
+  String get enterPassword;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm password'**
+  String get confirmPassword;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

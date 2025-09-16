@@ -40,6 +40,8 @@ class ProfileStatsCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(icon, color: color, size: 24),
+          
+          
             ),
             const SizedBox(height: 12),
             Text(

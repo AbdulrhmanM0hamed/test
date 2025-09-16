@@ -1,9 +1,15 @@
 import 'package:test/core/models/api_response.dart';
 import 'package:test/features/auth/domain/entities/user.dart';
 import 'package:test/features/auth/domain/entities/login_request.dart';
+import 'package:test/features/auth/domain/entities/forget_password_request.dart';
+import 'package:test/features/auth/domain/entities/check_otp_request.dart';
+import 'package:test/features/auth/domain/entities/change_password_request.dart';
 import 'package:test/features/auth/domain/repositories/auth_repository.dart';
 import 'package:test/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:test/features/auth/data/models/login_request_model.dart';
+import 'package:test/features/auth/data/models/forget_password_request_model.dart';
+import 'package:test/features/auth/data/models/check_otp_request_model.dart';
+import 'package:test/features/auth/data/models/change_password_request_model.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource remoteDataSource;
@@ -59,5 +65,23 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Map<String, dynamic>> resendVerificationEmail(String email) async {
     return await remoteDataSource.resendVerificationEmail(email);
+  }
+
+  @override
+  Future<ApiResponse<void>> forgetPassword(ForgetPasswordRequest request) async {
+    final requestModel = ForgetPasswordRequestModel.fromEntity(request);
+    return await remoteDataSource.forgetPassword(requestModel);
+  }
+
+  @override
+  Future<ApiResponse<void>> checkOtp(CheckOtpRequest request) async {
+    final requestModel = CheckOtpRequestModel.fromEntity(request);
+    return await remoteDataSource.checkOtp(requestModel);
+  }
+
+  @override
+  Future<ApiResponse<void>> changePassword(ChangePasswordRequest request) async {
+    final requestModel = ChangePasswordRequestModel.fromEntity(request);
+    return await remoteDataSource.changePassword(requestModel);
   }
 }

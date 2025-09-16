@@ -13,7 +13,11 @@ import 'package:test/features/auth/domain/usecases/login_usecase.dart';
 import 'package:test/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:test/features/auth/domain/usecases/refresh_token_usecase.dart';
 import 'package:test/features/auth/domain/usecases/resend_verification_email_usecase.dart';
+import 'package:test/features/auth/domain/usecases/forget_password_usecase.dart';
+import 'package:test/features/auth/domain/usecases/check_otp_usecase.dart';
+import 'package:test/features/auth/domain/usecases/change_password_usecase.dart';
 import 'package:test/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:test/features/auth/presentation/cubit/forget_password_cubit.dart';
 import 'package:test/features/profile/data/datasources/profile_remote_data_source.dart';
 import 'package:test/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:test/features/profile/domain/repositories/profile_repository.dart';
@@ -83,6 +87,9 @@ class DependencyInjection {
   static LoginUseCase? _loginUseCase;
   static LogoutUseCase? _logoutUseCase;
   static RefreshTokenUseCase? _refreshTokenUseCase;
+  static ForgetPasswordUseCase? _forgetPasswordUseCase;
+  static CheckOtpUseCase? _checkOtpUseCase;
+  static ChangePasswordUseCase? _changePasswordUseCase;
   static ProfileRemoteDataSource? _profileRemoteDataSource;
   static ProfileRepository? _profileRepository;
   static GetProfileUseCase? _getProfileUseCase;
@@ -154,6 +161,9 @@ class DependencyInjection {
     _loginUseCase = LoginUseCase(_authRepository!);
     _logoutUseCase = LogoutUseCase(_authRepository!);
     _refreshTokenUseCase = RefreshTokenUseCase(_authRepository!);
+    _forgetPasswordUseCase = ForgetPasswordUseCase(repository: _authRepository!);
+    _checkOtpUseCase = CheckOtpUseCase(repository: _authRepository!);
+    _changePasswordUseCase = ChangePasswordUseCase(repository: _authRepository!);
 
     // Initialize Profile dependencies
     _profileRemoteDataSource = ProfileRemoteDataSourceImpl(_dioService!);
@@ -253,6 +263,15 @@ class DependencyInjection {
     );
     getIt.registerLazySingleton<ResendVerificationEmailUseCase>(
       () => ResendVerificationEmailUseCase(getIt()),
+    );
+    getIt.registerLazySingleton<ForgetPasswordUseCase>(
+      () => ForgetPasswordUseCase(repository: getIt()),
+    );
+    getIt.registerLazySingleton<CheckOtpUseCase>(
+      () => CheckOtpUseCase(repository: getIt()),
+    );
+    getIt.registerLazySingleton<ChangePasswordUseCase>(
+      () => ChangePasswordUseCase(repository: getIt()),
     );
 
     // Register Wishlist dependencies
@@ -405,6 +424,15 @@ class DependencyInjection {
       () => ProductsFilterCubit(
         getAllProductsUseCase: getIt<GetAllProductsUseCase>(),
         dataRefreshService: getIt<DataRefreshService>(),
+      ),
+    );
+
+    // Forget Password Cubit
+    getIt.registerFactory<ForgetPasswordCubit>(
+      () => ForgetPasswordCubit(
+        forgetPasswordUseCase: getIt<ForgetPasswordUseCase>(),
+        checkOtpUseCase: getIt<CheckOtpUseCase>(),
+        changePasswordUseCase: getIt<ChangePasswordUseCase>(),
       ),
     );
   }

@@ -511,4 +511,91 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get selectCountry => 'اختر الدولة';
+
+  @override
+  String get forgetPassword => 'نسيت كلمة المرور';
+
+  @override
+  String get forgetPasswordTitle => 'استعادة كلمة المرور';
+
+  @override
+  String get forgetPasswordDesc => 'أدخل بريدك الإلكتروني لإرسال رمز التحقق';
+
+  @override
+  String get sendVerificationCode => 'إرسال رمز التحقق';
+
+  @override
+  String get verificationCodeSent => 'تم إرسال رمز التحقق';
+
+  @override
+  String get checkEmailForCode => 'تحقق من بريدك الإلكتروني لرمز التحقق';
+
+  @override
+  String get enterVerificationCode => 'أدخل رمز التحقق';
+
+  @override
+  String get verificationCode => 'رمز التحقق';
+
+  @override
+  String get verifyCode => 'تحقق من الرمز';
+
+  @override
+  String get codeVerified => 'تم التحقق من الرمز بنجاح';
+
+  @override
+  String get enterNewPassword => 'أدخل كلمة المرور الجديدة';
+
+  @override
+  String get newPassword => 'كلمة المرور الجديدة';
+
+  @override
+  String get confirmNewPassword => 'تأكيد كلمة المرور الجديدة';
+
+  @override
+  String get changePassword => 'تغيير كلمة المرور';
+
+  @override
+  String get passwordChangedSuccessfully => 'تم تغيير كلمة المرور بنجاح';
+
+  @override
+  String get backToLogin => 'العودة لتسجيل الدخول';
+
+  @override
+  String get step => 'الخطوة';
+
+  @override
+  String get next => 'التالي';
+
+  @override
+  String get previous => 'السابق';
+
+  @override
+  String get finish => 'إنهاء';
+
+  @override
+  String get resendCode => 'إعادة إرسال الرمز';
+
+  @override
+  String get codeExpired => 'انتهت صلاحية الرمز';
+
+  @override
+  String get invalidCode => 'رمز غير صحيح';
+
+  @override
+  String get passwordsDoNotMatch => 'كلمات المرور غير متطابقة';
+
+  @override
+  String get passwordTooShort => 'كلمة المرور قصيرة جداً';
+
+  @override
+  String get enterValidEmail => 'أدخل بريد إلكتروني صحيح';
+
+  @override
+  String get enterCode => 'أدخل الرمز';
+
+  @override
+  String get enterPassword => 'أدخل كلمة المرور';
+
+  @override
+  String get confirmPassword => 'تأكيد كلمة المرور';
 }

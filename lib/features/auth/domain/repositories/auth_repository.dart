@@ -1,6 +1,9 @@
 import 'package:test/core/models/api_response.dart';
 import 'package:test/features/auth/domain/entities/user.dart';
 import 'package:test/features/auth/domain/entities/login_request.dart';
+import 'package:test/features/auth/domain/entities/forget_password_request.dart';
+import 'package:test/features/auth/domain/entities/check_otp_request.dart';
+import 'package:test/features/auth/domain/entities/change_password_request.dart';
 
 abstract class AuthRepository {
   Future<ApiResponse<User>> login(LoginRequest loginRequest);
@@ -19,4 +22,7 @@ abstract class AuthRepository {
   Future<void> resetPassword(String email);
   Future<Map<String, dynamic>> refreshToken();
   Future<Map<String, dynamic>> resendVerificationEmail(String email);
+  Future<ApiResponse<void>> forgetPassword(ForgetPasswordRequest request);
+  Future<ApiResponse<void>> checkOtp(CheckOtpRequest request);
+  Future<ApiResponse<void>> changePassword(ChangePasswordRequest request);
 }

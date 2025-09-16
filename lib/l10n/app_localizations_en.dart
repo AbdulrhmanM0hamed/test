@@ -511,4 +511,91 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectCountry => 'Select Country';
+
+  @override
+  String get forgetPassword => 'Forgot Password';
+
+  @override
+  String get forgetPasswordTitle => 'Reset Password';
+
+  @override
+  String get forgetPasswordDesc => 'Enter your email address to send verification code';
+
+  @override
+  String get sendVerificationCode => 'Send Verification Code';
+
+  @override
+  String get verificationCodeSent => 'Verification code sent';
+
+  @override
+  String get checkEmailForCode => 'Check your email for verification code';
+
+  @override
+  String get enterVerificationCode => 'Enter verification code';
+
+  @override
+  String get verificationCode => 'Verification Code';
+
+  @override
+  String get verifyCode => 'Verify Code';
+
+  @override
+  String get codeVerified => 'Code verified successfully';
+
+  @override
+  String get enterNewPassword => 'Enter new password';
+
+  @override
+  String get newPassword => 'New Password';
+
+  @override
+  String get confirmNewPassword => 'Confirm New Password';
+
+  @override
+  String get changePassword => 'Change Password';
+
+  @override
+  String get passwordChangedSuccessfully => 'Password changed successfully';
+
+  @override
+  String get backToLogin => 'Back to Login';
+
+  @override
+  String get step => 'Step';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get previous => 'Previous';
+
+  @override
+  String get finish => 'Finish';
+
+  @override
+  String get resendCode => 'Resend Code';
+
+  @override
+  String get codeExpired => 'Code expired';
+
+  @override
+  String get invalidCode => 'Invalid code';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get passwordTooShort => 'Password is too short';
+
+  @override
+  String get enterValidEmail => 'Enter a valid email';
+
+  @override
+  String get enterCode => 'Enter code';
+
+  @override
+  String get enterPassword => 'Enter password';
+
+  @override
+  String get confirmPassword => 'Confirm password';
 }

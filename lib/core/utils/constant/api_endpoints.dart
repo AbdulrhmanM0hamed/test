@@ -7,6 +7,9 @@ class ApiEndpoints {
   static String get logout => '$baseUrl/logout';
   static String get refreshToken => '$baseUrl/refresh-token';
   static String get resendVerifyEmail => '$baseUrl/resend-verify-email';
+  static String get forgetPassword => '$baseUrl/forget-password';
+  static String get checkOtp => '$baseUrl/forget-password/check-otp';
+  static String get changePassword => '$baseUrl/forget-password/change-password';
   static String get myAccount => '$baseUrl/my-account';
   static String get categories => '$baseUrl/departments';
   static String productsByDepartment(String departmentName) =>
