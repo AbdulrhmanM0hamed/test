@@ -6,6 +6,7 @@ class ApiEndpoints {
   static String get register => '$baseUrl/signup';
   static String get logout => '$baseUrl/logout';
   static String get refreshToken => '$baseUrl/refresh-token';
+  static String get resendVerifyEmail => '$baseUrl/resend-verify-email';
   static String get myAccount => '$baseUrl/my-account';
   static String get categories => '$baseUrl/departments';
   static String productsByDepartment(String departmentName) =>
@@ -18,6 +19,7 @@ class ApiEndpoints {
   static const String specialOfferProducts = '/special-offer-products';
   static const String addToWishlist = '/wishlist/add';
   static const String removeFromWishlist = '/wishlist/remove';
+  
   static const String getWishlist = '/wishlist';
 
   static String featuredProductsUrl({int? countryId}) =>

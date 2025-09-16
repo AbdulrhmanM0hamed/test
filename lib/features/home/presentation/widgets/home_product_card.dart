@@ -17,11 +17,7 @@ class HomeProductCard extends StatefulWidget {
   final HomeProduct product;
   final VoidCallback? onTap;
 
-  const HomeProductCard({
-    super.key,
-    required this.product,
-    this.onTap,
-  });
+  const HomeProductCard({super.key, required this.product, this.onTap});
 
   @override
   State<HomeProductCard> createState() => _HomeProductCardState();
@@ -244,8 +240,7 @@ class _HomeProductCardState extends State<HomeProductCard>
       child: BlocBuilder<WishlistCubit, WishlistState>(
         builder: (context, state) {
           final wishlistCubit = context.read<WishlistCubit>();
-          final isInWishlist = wishlistCubit.isInWishlist(widget.product.id);
-          
+
           return GestureDetector(
             onTap: () {
               wishlistCubit.toggleWishlist(widget.product.id);
@@ -275,8 +270,12 @@ class _HomeProductCardState extends State<HomeProductCard>
                       ),
                     )
                   : Icon(
-                      isInWishlist ? Icons.favorite : Icons.favorite_border,
-                      color: isInWishlist ? Colors.red : Colors.grey[600],
+                      widget.product.isFavorite
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      color: widget.product.isFavorite
+                          ? Colors.red
+                          : Colors.grey[600],
                       size: 18,
                     ),
             ),

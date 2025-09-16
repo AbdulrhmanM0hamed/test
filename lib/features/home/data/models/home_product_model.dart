@@ -17,6 +17,7 @@ class HomeProductModel extends HomeProduct {
     required super.isFeatured,
     required super.isLatest,
     required super.isSpecialOffer,
+    required super.isFavorite,
   });
 
   factory HomeProductModel.fromJson(Map<String, dynamic> json) {
@@ -45,6 +46,7 @@ class HomeProductModel extends HomeProduct {
       isFeatured: true, // من API featured products
       isLatest: true, // من API latest products
       isSpecialOffer: json['discount'] != null && json['discount'] > 0,
+      isFavorite: json['is_fav'] == "1",
     );
   }
 
@@ -85,6 +87,7 @@ class HomeProductModel extends HomeProduct {
       isFeatured: isFeatured,
       isLatest: isLatest,
       isSpecialOffer: isSpecialOffer,
+      isFavorite: isFavorite,
     );
   }
 }

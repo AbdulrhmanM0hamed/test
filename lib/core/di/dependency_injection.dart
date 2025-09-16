@@ -127,10 +127,10 @@ class DependencyInjection {
     _tokenStorageService = TokenStorageService(sharedPreferences);
     _appStateService = AppStateService(sharedPreferences);
     _languageService = LanguageService();
-    
+
     // Register LanguageService first before CountryService needs it
     getIt.registerSingleton<LanguageService>(_languageService!);
-    
+
     _dataRefreshService = DataRefreshService(_languageService!);
     _countryService = CountryService.instance;
 
@@ -245,9 +245,8 @@ class DependencyInjection {
     getIt.registerLazySingleton<AuthRepository>(
       () => AuthRepositoryImpl(remoteDataSource: getIt()),
     );
-    getIt.registerLazySingleton<LoginUseCase>(
-      () => LoginUseCase(getIt()),
-    );
+    getIt.registerLazySingleton<LoginUseCase>(() => LoginUseCase(getIt()));
+    getIt.registerLazySingleton<LogoutUseCase>(() => LogoutUseCase(getIt()));
     getIt.registerLazySingleton<RefreshTokenUseCase>(
       () => RefreshTokenUseCase(getIt()),
     );
@@ -302,8 +301,12 @@ class DependencyInjection {
       _getSpecialOfferProductsUseCase!,
     );
     // Product Details singletons
-    getIt.registerSingleton<ProductDetailsRepository>(_productDetailsRepository!);
-    getIt.registerSingleton<GetProductDetailsUseCase>(_getProductDetailsUseCase!);
+    getIt.registerSingleton<ProductDetailsRepository>(
+      _productDetailsRepository!,
+    );
+    getIt.registerSingleton<GetProductDetailsUseCase>(
+      _getProductDetailsUseCase!,
+    );
 
     // Register FCM Service
     // getIt.registerSingleton<FCMService>(FCMService());
@@ -389,9 +392,7 @@ class DependencyInjection {
 
     // Product Details Cubit
     getIt.registerFactory<ProductDetailsCubit>(
-      () => ProductDetailsCubit(
-        getIt<GetProductDetailsUseCase>(),
-      ),
+      () => ProductDetailsCubit(getIt<GetProductDetailsUseCase>()),
     );
 
     // Products Filter Cubit
