@@ -22,6 +22,7 @@ import 'package:test/features/profile/data/datasources/profile_remote_data_sourc
 import 'package:test/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:test/features/profile/domain/repositories/profile_repository.dart';
 import 'package:test/features/profile/domain/usecases/get_profile_usecase.dart';
+import 'package:test/features/profile/domain/usecases/update_profile_usecase.dart';
 import 'package:test/features/profile/presentation/cubit/profile_cubit.dart';
 // Registration feature imports
 import 'package:test/features/auth/data/datasources/location_remote_data_source.dart';
@@ -93,6 +94,7 @@ class DependencyInjection {
   static ProfileRemoteDataSource? _profileRemoteDataSource;
   static ProfileRepository? _profileRepository;
   static GetProfileUseCase? _getProfileUseCase;
+  static UpdateProfileUseCase? _updateProfileUseCase;
 
   // Registration feature
   static LocationRemoteDataSource? _locationRemoteDataSource;
@@ -169,6 +171,7 @@ class DependencyInjection {
     _profileRemoteDataSource = ProfileRemoteDataSourceImpl(_dioService!);
     _profileRepository = ProfileRepositoryImpl(_profileRemoteDataSource!);
     _getProfileUseCase = GetProfileUseCase(_profileRepository!);
+    _updateProfileUseCase = UpdateProfileUseCase(repository: _profileRepository!);
 
     // Initialize Registration dependencies
     _locationRemoteDataSource = LocationRemoteDataSourceImpl(
@@ -293,6 +296,7 @@ class DependencyInjection {
 
     getIt.registerSingleton<ProfileRepository>(_profileRepository!);
     getIt.registerSingleton<GetProfileUseCase>(_getProfileUseCase!);
+    getIt.registerSingleton<UpdateProfileUseCase>(_updateProfileUseCase!);
     // Registration singletons
     getIt.registerSingleton<LocationRepository>(_locationRepository!);
     getIt.registerSingleton<RegistrationRepository>(_registrationRepository!);
@@ -354,6 +358,7 @@ class DependencyInjection {
     getIt.registerFactory<ProfileCubit>(
       () => ProfileCubit(
         getProfileUseCase: getIt<GetProfileUseCase>(),
+        updateProfileUseCase: getIt<UpdateProfileUseCase>(),
         profileRepository: getIt<ProfileRepository>(),
         dataRefreshService: getIt<DataRefreshService>(),
       ),

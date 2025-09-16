@@ -594,7 +594,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordsDoNotMatch => 'Passwords do not match';
 
   @override
-  String get passwordTooShort => 'Password is too short';
+  String get passwordTooShort => 'Password must be at least 8 characters';
 
   @override
   String get enterValidEmail => 'Enter a valid email';
@@ -649,4 +649,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invalidPhoneNumber => 'Invalid phone number';
+
+  @override
+  String get updateProfile => 'Update Profile';
+
+  @override
+  String get basicInformation => 'Basic Information';
+
+  @override
+  String get tapToChangePhoto => 'Tap to change photo';
+
+  @override
+  String get currentPassword => 'Current Password';
+
+  @override
+  String get currentPasswordRequired => 'Current password is required';
+
+  @override
+  String get newPasswordRequired => 'New password is required';
+
+  @override
+  String get confirmPasswordRequired => 'Confirm password is required';
+
+  @override
+  String get nameRequired => 'Name is required';
+
+  @override
+  String get phoneRequired => 'Phone is required';
+
+  @override
+  String get noChangesToUpdate => 'No changes to update';
+
+  @override
+  String get profileUpdatedSuccessfully => 'Profile updated successfully';
 }

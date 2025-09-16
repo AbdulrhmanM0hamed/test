@@ -10,7 +10,13 @@ import 'package:test/features/profile/presentation/widgets/profile_header.dart';
 import 'package:test/features/profile/presentation/widgets/profile_info_card.dart';
 import 'package:test/features/profile/presentation/widgets/profile_stats_card.dart';
 import 'package:test/features/profile/presentation/widgets/profile_action_button.dart';
+import 'package:test/features/profile/presentation/view/edit_name_view.dart';
+import 'package:test/features/profile/presentation/view/edit_phone_view.dart';
+import 'package:test/features/profile/presentation/view/edit_birth_date_view.dart';
+import 'package:test/features/profile/presentation/view/edit_address_view.dart';
+import 'package:test/features/profile/presentation/view/security_privacy_view.dart';
 import 'package:test/l10n/app_localizations.dart';
+import 'package:test/core/di/dependency_injection.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -46,8 +52,8 @@ class _ProfileViewState extends State<ProfileView> {
             return const Center(child: CustomProgressIndicator());
           }
 
-          if (state is ProfileLoaded || 
-              state is ProfileUpdating || 
+          if (state is ProfileLoaded ||
+              state is ProfileUpdating ||
               state is ProfileImageUploading) {
             UserProfile userProfile;
             bool isUpdating = false;
@@ -98,7 +104,9 @@ class _ProfileViewState extends State<ProfileView> {
                                       ? AppLocalizations.of(context)!.active
                                       : AppLocalizations.of(context)!.inactive,
                                   icon: Icons.check_circle,
-                                  color: userProfile.isActive ? Colors.green : Colors.orange,
+                                  color: userProfile.isActive
+                                      ? Colors.green
+                                      : Colors.orange,
                                 ),
                                 const SizedBox(width: 12),
                                 ProfileStatsCard(
@@ -111,13 +119,15 @@ class _ProfileViewState extends State<ProfileView> {
                                           context,
                                         )!.notVerified,
                                   icon: Icons.verified_user,
-                                  color: userProfile.isEmailVerified ? Colors.green : Colors.red,
+                                  color: userProfile.isEmailVerified
+                                      ? Colors.green
+                                      : Colors.red,
                                 ),
                               ],
                             ),
-                            
+
                             const SizedBox(height: 24),
-                            
+
                             // Personal Information Section
                             Text(
                               AppLocalizations.of(context)!.personalInformation,
@@ -128,97 +138,219 @@ class _ProfileViewState extends State<ProfileView> {
                               ),
                             ),
                             const SizedBox(height: 16),
-                            
+
                             ProfileInfoCard(
                               title: AppLocalizations.of(context)!.fullName,
                               value: userProfile.name,
                               icon: Icons.person,
                               isEditable: true,
-                              onTap: () => _showEditDialog(context, 'name', userProfile.name),
-                            ),
-                            
-                            ProfileInfoCard(
-                              title: AppLocalizations.of(context)!.email,
-                              value: userProfile.email,
-                              icon: Icons.email,
-                              iconColor: Colors.blue,
-                            ),
-                            
-                            ProfileInfoCard(
-                              title: AppLocalizations.of(context)!.phoneNumber,
-                              value: userProfile.phone,
-                              icon: Icons.phone,
-                              iconColor: Colors.green,
-                              isEditable: true,
-                              onTap: () => _showEditDialog(context, 'phone', userProfile.phone),
-                            ),
-                            
-                            ProfileInfoCard(
-                              title: AppLocalizations.of(context)!.birthDate,
-                              value: userProfile.birthDate ?? '',
-                              icon: Icons.cake,
-                              iconColor: Colors.pink,
-                              isEditable: true,
-                              onTap: () => _showDatePicker(context, userProfile.birthDate),
-                            ),
-                            
-                            ProfileInfoCard(
-                              title: AppLocalizations.of(context)!.gender,
-                              value: _getGenderText(
+                              onTap: () => _showEditDialog(
                                 context,
-                                userProfile.gender,
-                              ),
-                              icon: Icons.wc,
-                              iconColor: Colors.purple,
-                              isEditable: true,
-                              onTap: () => _showGenderPicker(context, userProfile.gender),
-                            ),
-                            
-                            ProfileInfoCard(
-                              title: AppLocalizations.of(context)!.address,
-                              value: userProfile.address ?? '',
-                              icon: Icons.location_on,
-                              iconColor: Colors.red,
-                              isEditable: true,
-                              onTap: () => _showEditDialog(context, 'address', userProfile.address ?? ''),
-                            ),
-                            
-                            const SizedBox(height: 24),
-                            
-                            // Location Information Section
-                            Text(
-                              AppLocalizations.of(context)!.locationInformation,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
+                                'name',
+                                userProfile.name,
+                                userProfile,
                               ),
                             ),
+
+                            // Quick Edit Cards Section
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.1),
+                                    spreadRadius: 1,
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'معلومات الملف الشخصي',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  _buildQuickEditRow(
+                                    Icons.person,
+                                    'الاسم',
+                                    userProfile.name,
+                                    Colors.blue,
+                                    () => _showEditDialog(context, 'name', userProfile.name, userProfile),
+                                  ),
+                                  _buildQuickEditRow(
+                                    Icons.phone,
+                                    'رقم الهاتف',
+                                    userProfile.phone,
+                                    Colors.green,
+                                    () => _showEditDialog(context, 'phone', userProfile.phone, userProfile),
+                                  ),
+                                  _buildQuickEditRow(
+                                    Icons.cake,
+                                    'تاريخ الميلاد',
+                                    userProfile.birthDate?.isNotEmpty == true ? _formatBirthDate(userProfile.birthDate!) : 'غير محدد',
+                                    Colors.pink,
+                                    () => _showDatePicker(context, userProfile.birthDate, userProfile),
+                                  ),
+                                  _buildQuickEditRow(
+                                    Icons.location_on,
+                                    'العنوان',
+                                    userProfile.address?.isNotEmpty == true ? userProfile.address! : 'غير محدد',
+                                    Colors.red,
+                                    () => _showEditDialog(context, 'address', userProfile.address ?? '', userProfile),
+                                  ),
+                                ],
+                              ),
+                            ),
+
                             const SizedBox(height: 16),
-                            
-                            ProfileInfoCard(
-                              title: AppLocalizations.of(context)!.country,
-                              value: userProfile.country.titleAr,
-                              icon: Icons.flag,
-                              iconColor: Colors.orange,
+
+                            // Contact Information
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.1),
+                                    spreadRadius: 1,
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.email, color: Colors.blue[600]),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          'البريد الإلكتروني',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        Text(
+                                          userProfile.email,
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            
-                            ProfileInfoCard(
-                              title: AppLocalizations.of(context)!.city,
-                              value: userProfile.city.titleAr,
-                              icon: Icons.location_city,
-                              iconColor: Colors.teal,
+
+                            const SizedBox(height: 16),
+
+                            // Location Information (Simplified)
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.1),
+                                    spreadRadius: 1,
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.location_on, color: Colors.orange[600]),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          'الموقع',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        Text(
+                                          '${userProfile.city.titleAr}, ${userProfile.country.titleAr}',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            
-                            ProfileInfoCard(
-                              title: AppLocalizations.of(context)!.region,
-                              value: userProfile.region.titleAr,
-                              icon: Icons.place,
-                              iconColor: Colors.indigo,
+
+                            const SizedBox(height: 16),
+
+                            // Account Stats
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.1),
+                                    spreadRadius: 1,
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.calendar_today, color: Colors.purple[600]),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          'عضو منذ',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        Text(
+                                          _getJoinedYear(userProfile.createdAt),
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            
+
                             const SizedBox(height: 24),
-                            
+
                             // Actions Section
                             Text(
                               AppLocalizations.of(context)!.settings,
@@ -229,13 +361,14 @@ class _ProfileViewState extends State<ProfileView> {
                               ),
                             ),
                             const SizedBox(height: 16),
-                            
+
                             ProfileActionButton(
                               title: AppLocalizations.of(context)!.editProfile,
                               icon: Icons.edit,
-                              onTap: () => _showEditProfileSheet(context, userProfile),
+                              onTap: () =>
+                                  _showEditProfileSheet(context, userProfile),
                             ),
-                            
+
                             ProfileActionButton(
                               title: AppLocalizations.of(
                                 context,
@@ -243,15 +376,15 @@ class _ProfileViewState extends State<ProfileView> {
                               icon: Icons.settings,
                               onTap: () => _showAccountSettings(context),
                             ),
-                            
+
                             ProfileActionButton(
                               title: AppLocalizations.of(
                                 context,
                               )!.securityAndPrivacy,
                               icon: Icons.security,
-                              onTap: () => _showSecuritySettings(context),
+                              onTap: () => _showSecuritySettings(context, userProfile),
                             ),
-                            
+
                             ProfileActionButton(
                               title: AppLocalizations.of(
                                 context,
@@ -259,14 +392,14 @@ class _ProfileViewState extends State<ProfileView> {
                               icon: Icons.help,
                               onTap: () => _showHelpCenter(context),
                             ),
-                            
+
                             ProfileActionButton(
                               title: AppLocalizations.of(context)!.logout,
                               icon: Icons.logout,
                               onTap: () => _showLogoutDialog(context),
                               isDestructive: true,
                             ),
-                            
+
                             const SizedBox(height: 20),
                           ],
                         ),
@@ -274,13 +407,11 @@ class _ProfileViewState extends State<ProfileView> {
                     ),
                   ],
                 ),
-                
+
                 if (isUpdating)
                   Container(
                     color: Colors.black.withOpacity(0.3),
-                    child: const Center(
-                      child: CustomProgressIndicator(),
-                    ),
+                    child: const Center(child: CustomProgressIndicator()),
                   ),
               ],
             );
@@ -291,26 +422,16 @@ class _ProfileViewState extends State<ProfileView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.error_outline,
-                    size: 64,
-                    color: Colors.red[300],
-                  ),
+                  Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
                   const SizedBox(height: 16),
                   Text(
                     AppLocalizations.of(context)!.errorLoadingData,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 18, color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     state.message,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[500],
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey[500]),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 24),
@@ -338,16 +459,6 @@ class _ProfileViewState extends State<ProfileView> {
     }
   }
 
-  String _getGenderText(BuildContext context, String gender) {
-    switch (gender.toLowerCase()) {
-      case 'male':
-        return AppLocalizations.of(context)!.male;
-      case 'female':
-        return AppLocalizations.of(context)!.female;
-      default:
-        return AppLocalizations.of(context)!.notSpecified;
-    }
-  }
 
   void _showImagePicker(BuildContext context) {
     // TODO: Implement image picker
@@ -357,35 +468,42 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  void _showEditDialog(BuildContext context, String field, String currentValue) {
-    // TODO: Implement edit dialog
-    CustomSnackbar.showInfo(
-      context: context,
-      message: AppLocalizations.of(context)!.editFeatureComingSoon,
-    );
+  void _showEditDialog(
+    BuildContext context,
+    String field,
+    String currentValue,
+    UserProfile userProfile,
+  ) {
+    switch (field) {
+      case 'name':
+        _navigateToEditName(context, userProfile);
+        break;
+      case 'phone':
+        _navigateToEditPhone(context, userProfile);
+        break;
+      case 'address':
+        _navigateToEditAddress(context, userProfile);
+        break;
+      default:
+        _showEditProfileSheet(context, userProfile);
+    }
   }
 
-  void _showDatePicker(BuildContext context, String? currentDate) {
-    // TODO: Implement date picker
-    CustomSnackbar.showInfo(
-      context: context,
-      message: AppLocalizations.of(context)!.datePickerFeatureComingSoon,
-    );
+  void _showDatePicker(
+    BuildContext context,
+    String? currentDate,
+    UserProfile userProfile,
+  ) {
+    _navigateToEditBirthDate(context, userProfile);
   }
 
-  void _showGenderPicker(BuildContext context, String currentGender) {
-    // TODO: Implement gender picker
-    CustomSnackbar.showInfo(
-      context: context,
-      message: AppLocalizations.of(context)!.genderPickerFeatureComingSoon,
-    );
-  }
 
   void _showEditProfileSheet(BuildContext context, UserProfile userProfile) {
-    // TODO: Implement edit profile sheet
+    // This method is kept for backward compatibility but not used anymore
+    // Individual edit pages are used instead
     CustomSnackbar.showInfo(
       context: context,
-      message: AppLocalizations.of(context)!.editProfileFeatureComingSoon,
+      message: 'استخدم الصفحات المنفصلة لتعديل البيانات',
     );
   }
 
@@ -397,12 +515,8 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  void _showSecuritySettings(BuildContext context) {
-    // TODO: Implement security settings
-    CustomSnackbar.showInfo(
-      context: context,
-      message: AppLocalizations.of(context)!.securitySettingsComingSoon,
-    );
+  void _showSecuritySettings(BuildContext context, UserProfile userProfile) {
+    _navigateToSecurityPrivacy(context, userProfile);
   }
 
   void _showHelpCenter(BuildContext context) {
@@ -415,5 +529,122 @@ class _ProfileViewState extends State<ProfileView> {
 
   void _showLogoutDialog(BuildContext context) {
     LogoutConfirmationDialog.show(context);
+  }
+
+  Widget _buildQuickEditRow(
+    IconData icon,
+    String title,
+    String value,
+    Color iconColor,
+    VoidCallback onTap,
+  ) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          children: [
+            Icon(icon, color: iconColor, size: 20),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  Text(
+                    value.isNotEmpty ? value : 'غير محدد',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: Colors.grey[400],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _formatBirthDate(String dateString) {
+    try {
+      final date = DateTime.parse(dateString);
+      return '${date.day}/${date.month}/${date.year}';
+    } catch (e) {
+      return dateString;
+    }
+  }
+
+  void _navigateToEditName(BuildContext context, UserProfile userProfile) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocProvider<ProfileCubit>(
+          create: (context) => DependencyInjection.getIt<ProfileCubit>(),
+          child: EditNameView(userProfile: userProfile),
+        ),
+      ),
+    );
+  }
+
+  void _navigateToEditPhone(BuildContext context, UserProfile userProfile) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocProvider<ProfileCubit>(
+          create: (context) => DependencyInjection.getIt<ProfileCubit>(),
+          child: EditPhoneView(userProfile: userProfile),
+        ),
+      ),
+    );
+  }
+
+  void _navigateToEditBirthDate(BuildContext context, UserProfile userProfile) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocProvider<ProfileCubit>(
+          create: (context) => DependencyInjection.getIt<ProfileCubit>(),
+          child: EditBirthDateView(userProfile: userProfile),
+        ),
+      ),
+    );
+  }
+
+  void _navigateToEditAddress(BuildContext context, UserProfile userProfile) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocProvider<ProfileCubit>(
+          create: (context) => DependencyInjection.getIt<ProfileCubit>(),
+          child: EditAddressView(userProfile: userProfile),
+        ),
+      ),
+    );
+  }
+
+  void _navigateToSecurityPrivacy(BuildContext context, UserProfile userProfile) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocProvider<ProfileCubit>(
+          create: (context) => DependencyInjection.getIt<ProfileCubit>(),
+          child: SecurityPrivacyView(userProfile: userProfile),
+        ),
+      ),
+    );
   }
 }

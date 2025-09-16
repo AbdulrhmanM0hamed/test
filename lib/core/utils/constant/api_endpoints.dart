@@ -11,6 +11,7 @@ class ApiEndpoints {
   static String get changePassword =>
       '$baseUrl/forget-password/change-password';
   static String get myAccount => '$baseUrl/my-account';
+  static String get updateProfile => '$baseUrl/update-profile';
   static String get categories => '$baseUrl/departments';
   static String productsByDepartment(String departmentName) =>
       '$baseUrl/products-by-department/$departmentName';

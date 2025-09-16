@@ -236,5 +236,18 @@
   "nameTooLong": "Name is too long",
   "invalidNameFormat": "Invalid name format",
   "pleaseEnterPhoneNumber": "Please enter phone number",
-  "invalidPhoneNumber": "Invalid phone number"
+  "invalidPhoneNumber": "Invalid phone number",
+  "updateProfile": "Update Profile",
+  "basicInformation": "Basic Information",
+  "tapToChangePhoto": "Tap to change photo",
+  "currentPassword": "Current Password",
+  "currentPasswordRequired": "Current password is required",
+  "newPasswordRequired": "New password is required",
+  "confirmPasswordRequired": "Confirm password is required",
+  "nameRequired": "Name is required",
+  "phoneRequired": "Phone is required",
+  "noChangesToUpdate": "No changes to update",
+  "profileUpdatedSuccessfully": "Profile updated successfully",
+  "passwordsDoNotMatch": "Passwords do not match",
+  "passwordTooShort": "Password must be at least 8 characters"
 }

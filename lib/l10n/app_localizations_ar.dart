@@ -594,7 +594,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get passwordsDoNotMatch => 'كلمات المرور غير متطابقة';
 
   @override
-  String get passwordTooShort => 'كلمة المرور قصيرة جداً';
+  String get passwordTooShort => 'كلمة المرور يجب أن تكون 8 أحرف على الأقل';
 
   @override
   String get enterValidEmail => 'أدخل بريد إلكتروني صحيح';
@@ -649,4 +649,37 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get invalidPhoneNumber => 'رقم الهاتف غير صحيح';
+
+  @override
+  String get updateProfile => 'تحديث الملف الشخصي';
+
+  @override
+  String get basicInformation => 'المعلومات الأساسية';
+
+  @override
+  String get tapToChangePhoto => 'اضغط لتغيير الصورة';
+
+  @override
+  String get currentPassword => 'كلمة المرور الحالية';
+
+  @override
+  String get currentPasswordRequired => 'كلمة المرور الحالية مطلوبة';
+
+  @override
+  String get newPasswordRequired => 'كلمة المرور الجديدة مطلوبة';
+
+  @override
+  String get confirmPasswordRequired => 'تأكيد كلمة المرور مطلوب';
+
+  @override
+  String get nameRequired => 'الاسم مطلوب';
+
+  @override
+  String get phoneRequired => 'رقم الهاتف مطلوب';
+
+  @override
+  String get noChangesToUpdate => 'لا توجد تغييرات للتحديث';
+
+  @override
+  String get profileUpdatedSuccessfully => 'تم تحديث الملف الشخصي بنجاح';
 }

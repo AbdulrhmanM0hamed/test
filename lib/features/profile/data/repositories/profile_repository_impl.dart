@@ -1,4 +1,6 @@
+import 'package:test/core/models/api_response.dart';
 import 'package:test/features/profile/domain/entities/user_profile.dart';
+import 'package:test/features/profile/domain/entities/update_profile_request.dart';
 import 'package:test/features/profile/domain/repositories/profile_repository.dart';
 import 'package:test/features/profile/data/datasources/profile_remote_data_source.dart';
 
@@ -24,13 +26,16 @@ class ProfileRepositoryImpl implements ProfileRepository {
       name: name,
       phone: phone,
       birthDate: birthDate,
-      address: address,
-      gender: gender,
     );
   }
 
   @override
   Future<void> updateProfileImage(String imagePath) async {
     return await remoteDataSource.updateProfileImage(imagePath);
+  }
+
+  @override
+  Future<UserProfile> updateProfileFromRequest(UpdateProfileRequest request) async {
+    return await remoteDataSource.updateProfileFromRequest(request);
   }
 }

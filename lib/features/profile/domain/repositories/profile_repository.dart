@@ -1,4 +1,5 @@
 import 'package:test/features/profile/domain/entities/user_profile.dart';
+import 'package:test/features/profile/domain/entities/update_profile_request.dart';
 
 abstract class ProfileRepository {
   Future<UserProfile> getMyProfile();
@@ -9,5 +10,6 @@ abstract class ProfileRepository {
     String? address,
     String? gender,
   });
+  Future<UserProfile> updateProfileFromRequest(UpdateProfileRequest request);
   Future<void> updateProfileImage(String imagePath);
 }
