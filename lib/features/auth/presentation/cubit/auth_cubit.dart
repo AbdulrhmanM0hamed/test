@@ -172,16 +172,19 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> resendVerificationEmail(String email) async {
+    print('🔍 RESENDING VERIFICATION EMAIL TO: $email');
     emit(AuthLoading());
 
     try {
       final response = await resendVerificationEmailUseCase(email);
+      print('🔍 RESEND EMAIL RESPONSE: $response');
       emit(
         VerificationEmailSentSuccess(
           response['message'] ?? 'Verification email sent successfully',
         ),
       );
     } catch (e) {
+      print('🔍 RESEND EMAIL ERROR: $e');
       final errorMessage = ErrorHandler.extractErrorMessage(e);
       emit(AuthError(errorMessage));
     }

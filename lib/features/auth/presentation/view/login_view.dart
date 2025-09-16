@@ -99,6 +99,10 @@ class _LoginViewState extends State<LoginView> {
                 print(
                   '🔍 EmailNotVerified received: ${state.email} - ${state.message}',
                 );
+
+                // Automatically resend verification email
+                context.read<AuthCubit>().resendVerificationEmail(state.email);
+
                 showDialog(
                   context: context,
                   barrierDismissible: false,
