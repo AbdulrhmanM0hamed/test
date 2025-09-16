@@ -80,14 +80,183 @@ class _LoginViewState extends State<LoginView> {
         builder: (context) => Scaffold(
           body: BlocConsumer<AuthCubit, AuthState>(
             listener: (context, state) {
+              print('🔍 LOGIN VIEW STATE CHANGE: ${state.runtimeType}');
+
               if (state is AuthSuccess) {
+                print('🔍 AuthSuccess received');
                 CustomSnackbar.showSuccess(
                   context: context,
                   message: state.message,
                 );
                 Navigator.pushReplacementNamed(context, BottomNavBar.routeName);
               } else if (state is AuthError) {
+                print('🔍 AuthError received: ${state.message}');
                 CustomSnackbar.showError(
+                  context: context,
+                  message: state.message,
+                );
+              } else if (state is EmailNotVerified) {
+                print(
+                  '🔍 EmailNotVerified received: ${state.email} - ${state.message}',
+                );
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (dialogContext) => Dialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    elevation: 10,
+                    backgroundColor: Colors.white,
+                    child: Container(
+                      padding: const EdgeInsets.all(28),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.white,
+                            AppColors.primary.withValues(alpha: 0.02),
+                          ],
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Success checkmark icon with animation effect
+                          Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(
+                                colors: [
+                                  AppColors.success,
+                                  AppColors.success.withValues(alpha: 0.8),
+                                ],
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.success.withValues(
+                                    alpha: 0.3,
+                                  ),
+                                  blurRadius: 20,
+                                  offset: const Offset(0, 8),
+                                ),
+                              ],
+                            ),
+                            child: const Icon(
+                              Icons.check_circle_outline,
+                              size: 50,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+
+                          // Title
+                          Text(
+                            'تم إرسال بريد التفعيل',
+                            style: getBoldStyle(
+                              fontSize: FontSize.size20,
+                              fontFamily: FontConstant.cairo,
+                              color: AppColors.black,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 16),
+
+                          // Message
+                          Text(
+                            'تم إرسال رابط التفعيل إلى بريدك الإلكتروني\nيرجى التحقق من صندوق الوارد أو الرسائل المهملة',
+                            style: getRegularStyle(
+                              fontSize: FontSize.size15,
+                              fontFamily: FontConstant.cairo,
+                              color: AppColors.textSecondary,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 20),
+
+                          // Email display with professional styling
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.primary.withValues(alpha: 0.08),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: AppColors.primary.withValues(alpha: 0.2),
+                                width: 1,
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.email_outlined,
+                                  color: AppColors.primary,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Text(
+                                    state.email,
+                                    style: getMediumStyle(
+                                      fontSize: FontSize.size14,
+                                      fontFamily: FontConstant.cairo,
+                                      color: AppColors.primary,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 32),
+
+                          // Cancel button at bottom left
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              style: TextButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                  vertical: 12,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(
+                                    color: AppColors.grey.withValues(
+                                      alpha: 0.3,
+                                    ),
+                                    width: 1,
+                                  ),
+                                ),
+                                backgroundColor: Colors.grey.withValues(
+                                  alpha: 0.05,
+                                ),
+                              ),
+                              child: Text(
+                                AppLocalizations.of(context)!.cancel,
+                                style: getMediumStyle(
+                                  fontSize: FontSize.size14,
+                                  fontFamily: FontConstant.cairo,
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              } else if (state is VerificationEmailSentSuccess) {
+                print('🔍 VerificationEmailSentSuccess received');
+                CustomSnackbar.showSuccess(
                   context: context,
                   message: state.message,
                 );

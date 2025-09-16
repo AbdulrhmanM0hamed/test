@@ -26,6 +26,7 @@ class AppColors {
   static const Color border = Color.fromARGB(255, 202, 202, 202);
   static const Color divider = Color.fromARGB(34, 225, 225, 225);
   static const Color grey = Colors.grey;
+  static const Color lightGrey = Color(0xFFE0E0E0);
 
   // Rating Colors
   static const Color starActive = Color(0xFFFFBC57);

@@ -45,6 +45,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get home => 'Home';
 
   @override
+  String get confirmLogout => 'Confirm Logout';
+
+  @override
+  String get logoutMessage => 'Are you sure you want to logout?';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get logout => 'Logout';
+
+  @override
+  String get emailVerificationRequired => 'Email Verification Required';
+
+  @override
+  String get emailNotVerifiedMessage => 'Please verify your email address to continue. A verification link has been sent to your email.';
+
+  @override
+  String get resendVerificationEmail => 'Resend Verification Email';
+
+  @override
+  String get verificationEmailSent => 'Verification email sent successfully';
+
+  @override
+  String get checkYourEmail => 'Check Your Email';
+
+  @override
   String get categories => 'Categories';
 
   @override
@@ -208,9 +235,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helpAndSupport => 'Help and Support';
-
-  @override
-  String get logout => 'Logout';
 
   @override
   String get errorLoadingData => 'Error loading data';

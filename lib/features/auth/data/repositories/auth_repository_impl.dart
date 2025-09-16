@@ -55,4 +55,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Map<String, dynamic>> refreshToken() async {
     return await remoteDataSource.refreshToken();
   }
+
+  @override
+  Future<Map<String, dynamic>> resendVerificationEmail(String email) async {
+    return await remoteDataSource.resendVerificationEmail(email);
+  }
 }

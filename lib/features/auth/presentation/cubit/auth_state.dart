@@ -32,3 +32,16 @@ class AuthTokenRefreshed extends AuthState {
 
   const AuthTokenRefreshed({this.message = 'تم تحديث الرمز المميز بنجاح'});
 }
+
+class VerificationEmailSentSuccess extends AuthState {
+  final String message;
+
+  const VerificationEmailSentSuccess(this.message);
+}
+
+class EmailNotVerified extends AuthState {
+  final String email;
+  final String message;
+
+  const EmailNotVerified(this.email, this.message);
+}

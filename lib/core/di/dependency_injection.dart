@@ -12,6 +12,7 @@ import 'package:test/features/auth/domain/repositories/auth_repository.dart';
 import 'package:test/features/auth/domain/usecases/login_usecase.dart';
 import 'package:test/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:test/features/auth/domain/usecases/refresh_token_usecase.dart';
+import 'package:test/features/auth/domain/usecases/resend_verification_email_usecase.dart';
 import 'package:test/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:test/features/profile/data/datasources/profile_remote_data_source.dart';
 import 'package:test/features/profile/data/repositories/profile_repository_impl.dart';
@@ -250,6 +251,9 @@ class DependencyInjection {
     getIt.registerLazySingleton<RefreshTokenUseCase>(
       () => RefreshTokenUseCase(getIt()),
     );
+    getIt.registerLazySingleton<ResendVerificationEmailUseCase>(
+      () => ResendVerificationEmailUseCase(getIt()),
+    );
 
     // Register Wishlist dependencies
     getIt.registerLazySingleton<WishlistRemoteDataSource>(
@@ -317,6 +321,7 @@ class DependencyInjection {
         loginUseCase: getIt<LoginUseCase>(),
         logoutUseCase: getIt<LogoutUseCase>(),
         refreshTokenUseCase: getIt<RefreshTokenUseCase>(),
+        resendVerificationEmailUseCase: getIt<ResendVerificationEmailUseCase>(),
         tokenStorageService: getIt<TokenStorageService>(),
         appStateService: getIt<AppStateService>(),
       ),
@@ -417,6 +422,7 @@ class DependencyInjection {
       loginUseCase: _loginUseCase!,
       logoutUseCase: _logoutUseCase!,
       refreshTokenUseCase: _refreshTokenUseCase!,
+      resendVerificationEmailUseCase: getIt<ResendVerificationEmailUseCase>(),
       tokenStorageService: _tokenStorageService!,
       appStateService: _appStateService!,
     );

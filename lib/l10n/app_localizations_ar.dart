@@ -45,6 +45,33 @@ class AppLocalizationsAr extends AppLocalizations {
   String get home => 'الرئيسية';
 
   @override
+  String get confirmLogout => 'تأكيد تسجيل الخروج';
+
+  @override
+  String get logoutMessage => 'هل أنت متأكد من أنك تريد تسجيل الخروج؟';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String get logout => 'تسجيل الخروج';
+
+  @override
+  String get emailVerificationRequired => 'تفعيل البريد الإلكتروني مطلوب';
+
+  @override
+  String get emailNotVerifiedMessage => 'يرجى تفعيل بريدك الإلكتروني للمتابعة. تم إرسال رابط التفعيل إلى بريدك الإلكتروني.';
+
+  @override
+  String get resendVerificationEmail => 'إعادة إرسال بريد التفعيل';
+
+  @override
+  String get verificationEmailSent => 'تم إرسال بريد التفعيل بنجاح';
+
+  @override
+  String get checkYourEmail => 'تحقق من بريدك الإلكتروني';
+
+  @override
   String get categories => 'الأقسام';
 
   @override
@@ -208,9 +235,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get helpAndSupport => 'المساعدة والدعم';
-
-  @override
-  String get logout => 'تسجيل الخروج';
 
   @override
   String get errorLoadingData => 'خطأ في تحميل البيانات';

@@ -18,4 +18,5 @@ abstract class AuthRepository {
   Future<ApiResponse<void>> logout();
   Future<void> resetPassword(String email);
   Future<Map<String, dynamic>> refreshToken();
+  Future<Map<String, dynamic>> resendVerificationEmail(String email);
 }
