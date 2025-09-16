@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/features/auth/presentation/view/forget_password_view.dart';
+import 'package:test/features/auth/presentation/view/forget_password_view_new.dart';
 import 'package:test/features/auth/presentation/cubit/forget_password_cubit.dart';
 import 'package:test/features/auth/presentation/view/register_view.dart';
 import '../../../features/splash/presentation/view/splash_view.dart';
@@ -48,12 +49,12 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
           child: const ProductDetailsView(),
         ),
       );
-    case ForgetPasswordView.routeName:
+    case ForgetPasswordViewNew.routeName:
       print('🔍 Navigation: Navigating to ForgotPasswordView');
       return MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (context) => DependencyInjection.getIt<ForgetPasswordCubit>(),
-          child: const ForgetPasswordView(),
+          child: const ForgetPasswordViewNew(),
         ),
       );
 

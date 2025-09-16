@@ -344,7 +344,7 @@ abstract class AppLocalizations {
   /// No description provided for @writeEmail.
   ///
   /// In en, this message translates to:
-  /// **'Enter username or email'**
+  /// **'Enter email'**
   String get writeEmail;
 
   /// No description provided for @forgotPassword.
@@ -1217,6 +1217,24 @@ abstract class AppLocalizations {
   /// **'Previous'**
   String get previous;
 
+  /// No description provided for @emailStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get emailStep;
+
+  /// No description provided for @otpStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification'**
+  String get otpStep;
+
+  /// No description provided for @passwordStep.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get passwordStep;
+
   /// No description provided for @finish.
   ///
   /// In en, this message translates to:
@@ -1276,6 +1294,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Confirm password'**
   String get confirmPassword;
+
+  /// No description provided for @pleaseEnterEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter email'**
+  String get pleaseEnterEmail;
+
+  /// No description provided for @pleaseEnterPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter password'**
+  String get pleaseEnterPassword;
+
+  /// No description provided for @passwordTooShortMin8.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters'**
+  String get passwordTooShortMin8;
+
+  /// No description provided for @passwordTooLongMax50.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is too long'**
+  String get passwordTooLongMax50;
+
+  /// No description provided for @passwordMustContainUppercase.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain at least one uppercase letter'**
+  String get passwordMustContainUppercase;
+
+  /// No description provided for @passwordMustContainLowercase.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain at least one lowercase letter'**
+  String get passwordMustContainLowercase;
+
+  /// No description provided for @passwordMustContainNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain at least one number'**
+  String get passwordMustContainNumber;
+
+  /// No description provided for @pleaseConfirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Please confirm password'**
+  String get pleaseConfirmPassword;
+
+  /// No description provided for @pleaseEnterFullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter full name'**
+  String get pleaseEnterFullName;
+
+  /// No description provided for @nameTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Name is too short'**
+  String get nameTooShort;
+
+  /// No description provided for @nameTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Name is too long'**
+  String get nameTooLong;
+
+  /// No description provided for @invalidNameFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid name format'**
+  String get invalidNameFormat;
+
+  /// No description provided for @pleaseEnterPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter phone number'**
+  String get pleaseEnterPhoneNumber;
+
+  /// No description provided for @invalidPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid phone number'**
+  String get invalidPhoneNumber;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

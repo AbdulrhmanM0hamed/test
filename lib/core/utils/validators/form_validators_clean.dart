@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test/l10n/app_localizations.dart';
 
 class FormValidators {
   // Private constructor to prevent instantiation
@@ -6,56 +7,58 @@ class FormValidators {
 
   /// Validates email address format and requirements
   static String? validateEmail(String? value, BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (value == null || value.trim().isEmpty) {
-      return 'Please enter email';
+      return l10n.enterValidEmail;
     }
-    
+
     final cleanValue = value.trim();
-    
+
     // Check email format with comprehensive regex
     if (!_isValidEmailFormat(cleanValue)) {
-      return 'Please enter a valid email';
+      return l10n.enterValidEmail;
     }
-    
+
     // Check reasonable length
     if (cleanValue.length > _ValidationConstants.maxEmailLength) {
-      return 'Email is too long';
+      return l10n.enterValidEmail;
     }
-    
+
     return null;
   }
 
   /// Validates password strength and requirements
   static String? validatePassword(String? value, BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (value == null || value.trim().isEmpty) {
-      return 'Please enter password';
+      return l10n.pleaseEnterPassword;
     }
 
     final cleanValue = value.trim();
-    
+
     if (cleanValue.length < _ValidationConstants.minPasswordLength) {
-      return 'Password must be at least 8 characters';
+      return l10n.passwordTooShortMin8;
     }
 
     if (cleanValue.length > _ValidationConstants.maxPasswordLength) {
-      return 'Password is too long';
+      return l10n.passwordTooLongMax50;
     }
 
     // Check password requirements (backend requires all 4 components)
     if (!cleanValue.contains(RegExp(r'[A-Z]'))) {
-      return 'Password must contain at least one uppercase letter';
+      return l10n.passwordMustContainUppercase;
     }
-    
+
     if (!cleanValue.contains(RegExp(r'[a-z]'))) {
-      return 'Password must contain at least one lowercase letter';
+      return l10n.passwordMustContainLowercase;
     }
 
     if (!cleanValue.contains(RegExp(r'[0-9]'))) {
-      return 'Password must contain at least one number';
+      return l10n.passwordMustContainNumber;
     }
-    
-  
-    
+
     return null;
   }
 
@@ -65,53 +68,59 @@ class FormValidators {
     String? originalPassword,
     BuildContext context,
   ) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (value == null || value.trim().isEmpty) {
-      return 'Please confirm password';
+      return l10n.pleaseConfirmPassword;
     }
-    
+
     if (value.trim() != originalPassword?.trim()) {
-      return 'Passwords do not match';
+      return l10n.passwordsDoNotMatch;
     }
-    
+
     return null;
   }
 
   /// Validates full name
   static String? validateFullName(String? value, BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (value == null || value.trim().isEmpty) {
-      return 'Please enter full name';
+      return l10n.pleaseEnterFullName;
     }
-    
+
     final cleanValue = value.trim();
-    
+
     if (cleanValue.length < _ValidationConstants.minNameLength) {
-      return 'Name is too short';
+      return l10n.nameTooShort;
     }
-    
+
     if (cleanValue.length > _ValidationConstants.maxNameLength) {
-      return 'Name is too long';
+      return l10n.nameTooLong;
     }
-    
+
     // Check if name contains only valid characters
     if (!_isValidNameFormat(cleanValue)) {
-      return 'Invalid name format';
+      return l10n.invalidNameFormat;
     }
-    
+
     return null;
   }
 
   /// Validates phone number
   static String? validatePhoneNumber(String? value, BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (value == null || value.trim().isEmpty) {
-      return 'Please enter phone number';
+      return l10n.pleaseEnterPhoneNumber;
     }
-    
+
     final cleanValue = value.trim().replaceAll(RegExp(r'[\s\-\(\)]'), '');
-    
+
     if (!_isValidPhoneFormat(cleanValue)) {
-      return 'Invalid phone number';
+      return l10n.invalidPhoneNumber;
     }
-    
+
     return null;
   }
 
@@ -133,12 +142,12 @@ class FormValidators {
 
   // static int _calculatePasswordStrength(String password) {
   //   int strength = 0;
-    
+
   //   if (password.contains(RegExp(r'[A-Z]'))) strength++;
   //   if (password.contains(RegExp(r'[a-z]'))) strength++;
   //   if (password.contains(RegExp(r'[0-9]'))) strength++;
   //   if (password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) strength++;
-    
+
   //   return strength;
   // }
 }

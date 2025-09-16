@@ -125,7 +125,7 @@ class ForgetPasswordStepIndicator extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildStepLabel(l10n.email, 0),
+              _buildStepLabel(l10n.writeEmail, 0),
               _buildStepLabel(l10n.verificationCode, 1),
               _buildStepLabel(l10n.newPassword, 2),
             ],

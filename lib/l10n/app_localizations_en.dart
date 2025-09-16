@@ -132,7 +132,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ensurePassword => 'Confirm password';
 
   @override
-  String get writeEmail => 'Enter username or email';
+  String get writeEmail => 'Enter email';
 
   @override
   String get forgotPassword => 'Forgot password?';
@@ -570,6 +570,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get previous => 'Previous';
 
   @override
+  String get emailStep => 'Email';
+
+  @override
+  String get otpStep => 'Verification';
+
+  @override
+  String get passwordStep => 'New Password';
+
+  @override
   String get finish => 'Finish';
 
   @override
@@ -598,4 +607,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get confirmPassword => 'Confirm password';
+
+  @override
+  String get pleaseEnterEmail => 'Please enter email';
+
+  @override
+  String get pleaseEnterPassword => 'Please enter password';
+
+  @override
+  String get passwordTooShortMin8 => 'Password must be at least 8 characters';
+
+  @override
+  String get passwordTooLongMax50 => 'Password is too long';
+
+  @override
+  String get passwordMustContainUppercase => 'Password must contain at least one uppercase letter';
+
+  @override
+  String get passwordMustContainLowercase => 'Password must contain at least one lowercase letter';
+
+  @override
+  String get passwordMustContainNumber => 'Password must contain at least one number';
+
+  @override
+  String get pleaseConfirmPassword => 'Please confirm password';
+
+  @override
+  String get pleaseEnterFullName => 'Please enter full name';
+
+  @override
+  String get nameTooShort => 'Name is too short';
+
+  @override
+  String get nameTooLong => 'Name is too long';
+
+  @override
+  String get invalidNameFormat => 'Invalid name format';
+
+  @override
+  String get pleaseEnterPhoneNumber => 'Please enter phone number';
+
+  @override
+  String get invalidPhoneNumber => 'Invalid phone number';
 }

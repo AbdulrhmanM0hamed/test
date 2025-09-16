@@ -14,7 +14,8 @@ class ForgetPasswordEmailStep extends StatefulWidget {
   const ForgetPasswordEmailStep({super.key});
 
   @override
-  State<ForgetPasswordEmailStep> createState() => _ForgetPasswordEmailStepState();
+  State<ForgetPasswordEmailStep> createState() =>
+      _ForgetPasswordEmailStepState();
 }
 
 class _ForgetPasswordEmailStepState extends State<ForgetPasswordEmailStep> {
@@ -30,20 +31,13 @@ class _ForgetPasswordEmailStepState extends State<ForgetPasswordEmailStep> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return BlocListener<ForgetPasswordCubit, ForgetPasswordState>(
       listener: (context, state) {
         if (state is ForgetPasswordError) {
           CustomSnackbar.showError(context: context, message: state.message);
         } else if (state is ForgetPasswordEmailSent) {
-          CustomSnackbar.showSuccess(
-            context: context, 
-            message: CustomSnackbar.getLocalizedMessage(
-              context: context,
-              messageAr: 'تم إرسال رمز التحقق إلى بريدك الإلكتروني',
-              messageEn: 'Verification code sent to your email',
-            ),
-          );
+          CustomSnackbar.showSuccess(context: context, message: state.message);
         }
       },
       child: Form(
@@ -52,7 +46,7 @@ class _ForgetPasswordEmailStepState extends State<ForgetPasswordEmailStep> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 40),
-            
+
             // Title
             Text(
               l10n.forgetPasswordTitle,
@@ -62,9 +56,9 @@ class _ForgetPasswordEmailStepState extends State<ForgetPasswordEmailStep> {
                 color: Theme.of(context).textTheme.headlineLarge?.color,
               ),
             ),
-            
+
             const SizedBox(height: 8),
-            
+
             // Description
             Text(
               l10n.forgetPasswordDesc,
@@ -74,9 +68,9 @@ class _ForgetPasswordEmailStepState extends State<ForgetPasswordEmailStep> {
                 color: Colors.grey[600],
               ),
             ),
-            
+
             const SizedBox(height: 40),
-            
+
             // Email field
             CustomTextField(
               controller: _emailController,
@@ -84,26 +78,24 @@ class _ForgetPasswordEmailStepState extends State<ForgetPasswordEmailStep> {
               hint: l10n.writeEmail,
               keyboardType: TextInputType.emailAddress,
               prefix: const Icon(Icons.email_outlined),
-              validator: (value) => FormValidators.validateEmail(value, context),
+              validator: (value) =>
+                  FormValidators.validateEmail(value, context),
             ),
-            
+
             const SizedBox(height: 40),
-            
+
             // Send button
             BlocBuilder<ForgetPasswordCubit, ForgetPasswordState>(
               builder: (context, state) {
-                final isLoading = state is ForgetPasswordLoading;
-                
                 return CustomButton(
                   text: l10n.sendVerificationCode,
                   onPressed: _sendVerificationCode,
-                  isLoading: isLoading,
                 );
               },
             ),
-            
+
             const Spacer(),
-            
+
             // Back to login
             Center(
               child: TextButton(
@@ -118,7 +110,7 @@ class _ForgetPasswordEmailStepState extends State<ForgetPasswordEmailStep> {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 20),
           ],
         ),
@@ -128,7 +120,9 @@ class _ForgetPasswordEmailStepState extends State<ForgetPasswordEmailStep> {
 
   void _sendVerificationCode() {
     if (_formKey.currentState!.validate()) {
-      context.read<ForgetPasswordCubit>().sendForgetPasswordRequest(_emailController.text.trim());
+      context.read<ForgetPasswordCubit>().sendForgetPasswordRequest(
+        _emailController.text.trim(),
+      );
     }
   }
 }

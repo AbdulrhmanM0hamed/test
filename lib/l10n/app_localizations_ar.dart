@@ -93,7 +93,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get dontHaveAccount => 'ليس لديك حساب؟';
 
   @override
-  String get email => 'اسم المستخدم او البريد الإلكتروني';
+  String get email => 'البريد الإلكتروني';
 
   @override
   String get password => 'كلمة المرور';
@@ -132,7 +132,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get ensurePassword => 'تأكيد كلمة المرور';
 
   @override
-  String get writeEmail => 'اكتب اسم المستخدم او البريد الإلكتروني';
+  String get writeEmail => 'اكتب البريد الإلكتروني';
 
   @override
   String get forgotPassword => 'هل نسيت كلمة المرور؟';
@@ -570,6 +570,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get previous => 'السابق';
 
   @override
+  String get emailStep => 'البريد الإلكتروني';
+
+  @override
+  String get otpStep => 'رمز التحقق';
+
+  @override
+  String get passwordStep => 'كلمة المرور الجديدة';
+
+  @override
   String get finish => 'إنهاء';
 
   @override
@@ -598,4 +607,46 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get confirmPassword => 'تأكيد كلمة المرور';
+
+  @override
+  String get pleaseEnterEmail => 'يرجى إدخال البريد الإلكتروني';
+
+  @override
+  String get pleaseEnterPassword => 'يرجى إدخال كلمة المرور';
+
+  @override
+  String get passwordTooShortMin8 => 'كلمة المرور يجب أن تكون 8 أحرف على الأقل';
+
+  @override
+  String get passwordTooLongMax50 => 'كلمة المرور طويلة جداً';
+
+  @override
+  String get passwordMustContainUppercase => 'كلمة المرور يجب أن تحتوي على حرف كبير';
+
+  @override
+  String get passwordMustContainLowercase => 'كلمة المرور يجب أن تحتوي على حرف صغير';
+
+  @override
+  String get passwordMustContainNumber => 'كلمة المرور يجب أن تحتوي على رقم';
+
+  @override
+  String get pleaseConfirmPassword => 'يرجى تأكيد كلمة المرور';
+
+  @override
+  String get pleaseEnterFullName => 'يرجى إدخال الاسم الكامل';
+
+  @override
+  String get nameTooShort => 'الاسم قصير جداً';
+
+  @override
+  String get nameTooLong => 'الاسم طويل جداً';
+
+  @override
+  String get invalidNameFormat => 'صيغة الاسم غير صحيحة';
+
+  @override
+  String get pleaseEnterPhoneNumber => 'يرجى إدخال رقم الهاتف';
+
+  @override
+  String get invalidPhoneNumber => 'رقم الهاتف غير صحيح';
 }
