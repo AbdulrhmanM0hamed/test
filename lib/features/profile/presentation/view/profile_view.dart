@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
+import 'package:test/core/utils/constant/font_manger.dart';
+import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/core/utils/widgets/logout_confirmation_dialog.dart';
 import 'package:test/features/profile/domain/entities/user_profile.dart';
@@ -33,7 +36,6 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
       body: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {
           if (state is ProfileError) {
@@ -42,6 +44,11 @@ class _ProfileViewState extends State<ProfileView> {
             CustomSnackbar.showSuccess(
               context: context,
               message: AppLocalizations.of(context)!.dataUpdatedSuccessfully,
+            );
+          } else if (state is ProfileImageUpdated) {
+            CustomSnackbar.showSuccess(
+              context: context,
+              message: AppLocalizations.of(context)!.imageUpdatedSuccessfully,
             );
           }
         },
@@ -130,16 +137,7 @@ class _ProfileViewState extends State<ProfileView> {
                             Container(
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withValues(alpha: 0.1),
-                                    spreadRadius: 1,
-                                    blurRadius: 5,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,7 +149,6 @@ class _ProfileViewState extends State<ProfileView> {
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.black87,
                                     ),
                                   ),
                                   const SizedBox(height: 16),
@@ -206,16 +203,7 @@ class _ProfileViewState extends State<ProfileView> {
                             Container(
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withValues(alpha: 0.1),
-                                    spreadRadius: 1,
-                                    blurRadius: 5,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
                               ),
                               child: Row(
                                 children: [
@@ -250,105 +238,6 @@ class _ProfileViewState extends State<ProfileView> {
                             const SizedBox(height: 16),
 
                             // Location Information (Simplified)
-                            Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withValues(alpha: 0.1),
-                                    spreadRadius: 1,
-                                    blurRadius: 5,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.location_on,
-                                    color: Colors.orange[600],
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'الموقع',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                        Text(
-                                          '${userProfile.city.titleAr}, ${userProfile.country.titleAr}',
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            const SizedBox(height: 16),
-
-                            // Account Stats
-                            Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withValues(alpha: 0.1),
-                                    spreadRadius: 1,
-                                    blurRadius: 5,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.calendar_today,
-                                    color: Colors.purple[600],
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          AppLocalizations.of(
-                                            context,
-                                          )!.memberSince,
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                        Text(
-                                          _getJoinedYear(userProfile.createdAt),
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-
                             const SizedBox(height: 24),
 
                             // Actions Section
@@ -438,11 +327,56 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   void _showImagePicker(BuildContext context) {
-    // TODO: Implement image picker
-    CustomSnackbar.showInfo(
+    showModalBottomSheet(
       context: context,
-      message: AppLocalizations.of(context)!.imageChangeFeatureComingSoon,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('المعرض'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  _pickImage(ImageSource.gallery);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('الكاميرا'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  _pickImage(ImageSource.camera);
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(
+        source: source,
+        maxWidth: 1024,
+        maxHeight: 1024,
+        imageQuality: 85,
+      );
+
+      if (image != null) {
+        context.read<ProfileCubit>().updateProfileImage(image.path);
+      }
+    } catch (e) {
+      if (mounted) {
+        CustomSnackbar.showError(
+          context: context,
+          message: AppLocalizations.of(context)!.errorSelectingImage,
+        );
+      }
+    }
   }
 
   void _showEditDialog(
@@ -538,13 +472,17 @@ class _ProfileViewState extends State<ProfileView> {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                    style: getSemiBoldStyle(
+                      color: Colors.grey[600],
+                      fontSize: FontSize.size15,
+                      fontFamily: FontConstant.cairo,
+                    ),
                   ),
                   Text(
                     value.isNotEmpty ? value : 'غير محدد',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                    style: getMediumStyle(
+                      fontSize: FontSize.size16,
+                      fontFamily: FontConstant.cairo,
                     ),
                   ),
                 ],

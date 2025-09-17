@@ -41,7 +41,6 @@ class _EditPhoneViewState extends State<EditPhoneView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: context.l10n.phoneNumber),
-      backgroundColor: Colors.grey[50],
       body: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {
           if (state is ProfileError) {
@@ -72,7 +71,6 @@ class _EditPhoneViewState extends State<EditPhoneView> {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.green[50],
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: Colors.green[200]!),
                         ),

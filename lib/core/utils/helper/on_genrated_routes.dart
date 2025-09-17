@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
-import 'package:test/features/auth/presentation/view/forget_password_view.dart';
 import 'package:test/features/auth/presentation/view/forget_password_view_new.dart';
 import 'package:test/features/auth/presentation/cubit/forget_password_cubit.dart';
 import 'package:test/features/auth/presentation/view/register_view.dart';

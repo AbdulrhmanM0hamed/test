@@ -787,4 +787,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get passwordUpdateTip => 'Keep your account secure by updating your password regularly and using a strong password.';
+
+  @override
+  String get imageUpdatedSuccessfully => 'Image updated successfully';
+
+  @override
+  String get gallery => 'Gallery';
+
+  @override
+  String get camera => 'Camera';
+
+  @override
+  String get errorSelectingImage => 'Error selecting image';
 }

@@ -286,5 +286,9 @@
   "addressTipsTitle": "Address writing tips:",
   "addressTips": "• Write street and neighborhood name\n• Add building or apartment number\n• Mention city and governorate\n• You can add distinctive landmarks",
   "addressUpdateNotAvailable": "Address editing is not available currently - this feature will be added soon",
-   "passwordUpdateTip": "Keep your account secure by updating your password regularly and using a strong password."
+  "passwordUpdateTip": "Keep your account secure by updating your password regularly and using a strong password.",
+  "imageUpdatedSuccessfully": "Image updated successfully",
+  "gallery": "Gallery",
+  "camera": "Camera",
+  "errorSelectingImage": "Error selecting image"
 }

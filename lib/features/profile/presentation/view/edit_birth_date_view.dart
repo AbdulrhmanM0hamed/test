@@ -4,6 +4,8 @@ import 'package:test/core/services/profile_refresh_service.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/core/utils/common/custom_app_bar.dart';
 import 'package:test/core/utils/common/custom_button.dart';
+import 'package:test/core/utils/constant/font_manger.dart';
+import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/features/profile/domain/entities/update_profile_request.dart';
 import 'package:test/features/profile/domain/entities/user_profile.dart';
@@ -39,7 +41,6 @@ class _EditBirthDateViewState extends State<EditBirthDateView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: context.l10n.birthDate),
-      backgroundColor: Colors.grey[50],
       body: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {
           if (state is ProfileError) {
@@ -68,7 +69,6 @@ class _EditBirthDateViewState extends State<EditBirthDateView> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.purple[50],
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Colors.purple[200]!),
                       ),
@@ -104,7 +104,7 @@ class _EditBirthDateViewState extends State<EditBirthDateView> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.grey[100],
+                        color: Colors.grey[650],
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
@@ -115,9 +115,9 @@ class _EditBirthDateViewState extends State<EditBirthDateView> {
                             widget.userProfile.birthDate?.isNotEmpty == true
                                 ? _formatDate(widget.userProfile.birthDate!)
                                 : context.l10n.notSpecifiedValue,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.black87,
+                            style: getBoldStyle(
+                              fontFamily: FontConstant.cairo,
+                              fontSize: FontSize.size16,
                             ),
                           ),
                         ],
@@ -141,7 +141,6 @@ class _EditBirthDateViewState extends State<EditBirthDateView> {
                         width: double.infinity,
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: Colors.grey[300]!),
                         ),
@@ -159,9 +158,12 @@ class _EditBirthDateViewState extends State<EditBirthDateView> {
                                   ? _formatDate(_selectedDate.toString())
                                   : context.l10n.selectBirthDate,
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: FontSize.size16,
                                 color: _selectedDate != null
-                                    ? Colors.black87
+                                    ? Theme.of(context).brightness ==
+                                              Brightness.light
+                                          ? Colors.black
+                                          : Colors.white
                                     : Colors.grey[600],
                               ),
                             ),
@@ -211,7 +213,9 @@ class _EditBirthDateViewState extends State<EditBirthDateView> {
   Future<void> _selectDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate ?? DateTime.now().subtract(const Duration(days: 365 * 20)),
+      initialDate:
+          _selectedDate ??
+          DateTime.now().subtract(const Duration(days: 365 * 20)),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
       locale: const Locale('ar'),

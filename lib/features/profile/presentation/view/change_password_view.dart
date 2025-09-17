@@ -40,7 +40,6 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: context.l10n.changePassword),
-      backgroundColor: Colors.grey[50],
       body: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {
           if (state is ProfileError) {
@@ -71,7 +70,6 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.red[50],
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: Colors.red[200]!),
                         ),
@@ -106,7 +104,8 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                       PasswordField(
                         hintText: context.l10n.currentPasswordHint,
                         controller: _oldPasswordController,
-                        validator: (value) => FormValidators.validatePassword(value, context),
+                        validator: (value) =>
+                            FormValidators.validatePassword(value, context),
                       ),
                       const SizedBox(height: 24),
 
@@ -123,7 +122,8 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                       PasswordField(
                         hintText: context.l10n.newPasswordHint,
                         controller: _newPasswordController,
-                        validator: (value) => FormValidators.validatePassword(value, context),
+                        validator: (value) =>
+                            FormValidators.validatePassword(value, context),
                       ),
                       const SizedBox(height: 24),
 
@@ -140,11 +140,12 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                       PasswordField(
                         hintText: context.l10n.confirmNewPasswordHint,
                         controller: _confirmPasswordController,
-                        validator: (value) => FormValidators.validatePasswordConfirmation(
-                          value,
-                          _newPasswordController.text,
-                          context,
-                        ),
+                        validator: (value) =>
+                            FormValidators.validatePasswordConfirmation(
+                              value,
+                              _newPasswordController.text,
+                              context,
+                            ),
                       ),
                       const Spacer(),
 

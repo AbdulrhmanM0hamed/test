@@ -1654,6 +1654,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Keep your account secure by updating your password regularly and using a strong password.'**
   String get passwordUpdateTip;
+
+  /// No description provided for @imageUpdatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Image updated successfully'**
+  String get imageUpdatedSuccessfully;
+
+  /// No description provided for @gallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get gallery;
+
+  /// No description provided for @camera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get camera;
+
+  /// No description provided for @errorSelectingImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Error selecting image'**
+  String get errorSelectingImage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

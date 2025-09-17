@@ -30,6 +30,12 @@ class ProfileImageUploading extends ProfileState {
   ProfileImageUploading(this.currentProfile);
 }
 
+class ProfileImageUpdated extends ProfileState {
+  final UserProfile userProfile;
+
+  ProfileImageUpdated(this.userProfile);
+}
+
 class ProfileError extends ProfileState {
   final String message;
 

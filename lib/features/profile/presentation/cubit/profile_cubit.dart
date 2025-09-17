@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/models/api_response.dart';
 import 'package:test/core/services/data_refresh_service.dart';
@@ -79,14 +80,37 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> updateProfileImage(String imagePath) async {
     try {
       final currentState = state;
+      UserProfile currentProfile;
+
       if (currentState is ProfileLoaded) {
-        if (!isClosed) emit(ProfileImageUploading(currentState.userProfile));
-
-        await profileRepository.updateProfileImage(imagePath);
-
-        // إشعار جميع المستمعين بتحديث البروفايل
-        _profileRefreshService.notifyProfileUpdated();
+        currentProfile = currentState.userProfile;
+      } else if (currentState is ProfileUpdating) {
+        currentProfile = currentState.currentProfile;
+      } else if (currentState is ProfileImageUploading) {
+        currentProfile = currentState.currentProfile;
+      } else {
+        // إذا لم يكن البروفايل محمل، نحمله أولاً
+        await getProfile();
+        if (state is! ProfileLoaded) {
+          return;
+        }
+        currentProfile = (state as ProfileLoaded).userProfile;
       }
+
+      if (!isClosed) emit(ProfileImageUploading(currentProfile));
+
+      // استخدام updateProfileNew مع primary_image
+      final request = UpdateProfileRequest(primaryImage: File(imagePath));
+      await updateProfileUseCase(request);
+
+      // إشعار جميع المستمعين بتحديث البروفايل
+      _profileRefreshService.notifyProfileUpdated();
+
+      // تحديث البروفايل من السيرفر للحصول على أحدث البيانات
+      if (!isClosed) await getProfile();
+      
+      // إرسال حالة نجاح تحديث الصورة
+      if (!isClosed) emit(ProfileImageUpdated(currentProfile));
     } catch (e) {
       final errorMessage = ErrorHandler.extractErrorMessage(e);
       if (!isClosed) emit(ProfileError(errorMessage));

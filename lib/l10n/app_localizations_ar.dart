@@ -787,4 +787,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get passwordUpdateTip => 'حافظ على أمان حسابك بتحديث كلمة المرور بانتظام واستخدام كلمة مرور قوية.';
+
+  @override
+  String get imageUpdatedSuccessfully => 'تم تحديث الصورة الشخصية بنجاح';
+
+  @override
+  String get gallery => 'المعرض';
+
+  @override
+  String get camera => 'الكاميرا';
+
+  @override
+  String get errorSelectingImage => 'خطأ في اختيار الصورة';
 }

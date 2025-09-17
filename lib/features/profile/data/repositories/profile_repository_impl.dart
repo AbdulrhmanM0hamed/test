@@ -1,4 +1,3 @@
-import 'package:test/core/models/api_response.dart';
 import 'package:test/features/profile/domain/entities/user_profile.dart';
 import 'package:test/features/profile/domain/entities/update_profile_request.dart';
 import 'package:test/features/profile/domain/repositories/profile_repository.dart';
