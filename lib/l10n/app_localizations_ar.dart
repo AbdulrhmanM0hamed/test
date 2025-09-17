@@ -682,4 +682,109 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get profileUpdatedSuccessfully => 'تم تحديث الملف الشخصي بنجاح';
+
+  @override
+  String get currentPasswordHint => 'أدخل كلمة المرور الحالية';
+
+  @override
+  String get newPasswordHint => 'أدخل كلمة المرور الجديدة';
+
+  @override
+  String get confirmNewPasswordHint => 'تأكيد كلمة المرور الجديدة';
+
+  @override
+  String get phoneNumberMinLength => 'رقم الهاتف يجب أن يكون 10 أرقام على الأقل';
+
+  @override
+  String get nameMinLength => 'الاسم يجب أن يكون حرفين على الأقل';
+
+  @override
+  String get selectBirthDate => 'اختر تاريخ الميلاد';
+
+  @override
+  String get pleaseSelectBirthDate => 'يرجى اختيار تاريخ الميلاد';
+
+  @override
+  String get birthDateNotChanged => 'لم يتم تغيير تاريخ الميلاد';
+
+  @override
+  String get nameNotChanged => 'لم يتم تغيير الاسم';
+
+  @override
+  String get phoneNotChanged => 'لم يتم تغيير رقم الهاتف';
+
+  @override
+  String get saveChanges => 'حفظ التغييرات';
+
+  @override
+  String get currentName => 'الاسم الحالي';
+
+  @override
+  String get newName => 'الاسم الجديد';
+
+  @override
+  String get currentPhone => 'رقم الهاتف الحالي';
+
+  @override
+  String get newPhone => 'رقم الهاتف الجديد';
+
+  @override
+  String get currentBirthDate => 'تاريخ الميلاد الحالي';
+
+  @override
+  String get newBirthDate => 'تاريخ الميلاد الجديد';
+
+  @override
+  String get currentPasswordLabel => 'كلمة المرور الحالية';
+
+  @override
+  String get newPasswordLabel => 'كلمة المرور الجديدة';
+
+  @override
+  String get confirmNewPasswordLabel => 'تأكيد كلمة المرور الجديدة';
+
+  @override
+  String get securityTip => 'حافظ على أمان حسابك بتحديث كلمة المرور بانتظام واستخدام كلمة مرور قوية.';
+
+  @override
+  String get nameUpdateTip => 'يمكنك تغيير اسمك الكامل هنا. سيظهر الاسم الجديد في ملفك الشخصي.';
+
+  @override
+  String get phoneUpdateTip => 'يمكنك تحديث رقم هاتفك هنا. تأكد من إدخال رقم صحيح للتواصل.';
+
+  @override
+  String get birthDateUpdateTip => 'يمكنك تحديث تاريخ ميلادك هنا. هذه المعلومة تساعد في تخصيص تجربتك.';
+
+  @override
+  String get notSpecifiedValue => 'غير محدد';
+
+  @override
+  String get currentAddress => 'العنوان الحالي';
+
+  @override
+  String get newAddress => 'العنوان الجديد';
+
+  @override
+  String get addressRequired => 'العنوان مطلوب';
+
+  @override
+  String get addressMinLength => 'العنوان يجب أن يكون 5 أحرف على الأقل';
+
+  @override
+  String get addressNotChanged => 'لم يتم تغيير العنوان';
+
+  @override
+  String get addressUpdateTip => 'يمكنك تحديث عنوانك هنا. هذا يساعد في تحسين خدمات التوصيل.';
+
+  @override
+  String get addressTipsTitle => 'نصائح لكتابة العنوان:';
+
+  @override
+  String get addressTips => '• اكتب اسم الشارع والحي\n• أضف رقم المبنى أو الشقة\n• اذكر المدينة والمحافظة\n• يمكنك إضافة علامات مميزة';
+
+  @override
+  String get addressUpdateNotAvailable => 'تعديل العنوان غير متاح حالياً - سيتم إضافة هذه الميزة قريباً';
+
+  @override
+  String get passwordUpdateTip => 'حافظ على أمان حسابك بتحديث كلمة المرور بانتظام واستخدام كلمة مرور قوية.';
 }

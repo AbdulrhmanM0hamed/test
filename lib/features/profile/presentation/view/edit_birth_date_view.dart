@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test/core/services/profile_refresh_service.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
+import 'package:test/core/utils/common/custom_app_bar.dart';
 import 'package:test/core/utils/common/custom_button.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/features/profile/domain/entities/update_profile_request.dart';
@@ -36,13 +38,7 @@ class _EditBirthDateViewState extends State<EditBirthDateView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.birthDate),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-        centerTitle: true,
-      ),
+      appBar: CustomAppBar(title: context.l10n.birthDate),
       backgroundColor: Colors.grey[50],
       body: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {
@@ -53,6 +49,8 @@ class _EditBirthDateViewState extends State<EditBirthDateView> {
               context: context,
               message: context.l10n.profileUpdatedSuccessfully,
             );
+            // إشعار جميع الصفحات بتحديث البروفايل
+            ProfileRefreshService().notifyProfileUpdated();
             Navigator.of(context).pop();
           }
         },
@@ -80,7 +78,7 @@ class _EditBirthDateViewState extends State<EditBirthDateView> {
                           const SizedBox(width: 12),
                           Expanded(
                             child: Text(
-                              'يمكنك تحديث تاريخ ميلادك هنا. هذه المعلومة تساعد في تخصيص تجربتك.',
+                              context.l10n.birthDateUpdateTip,
                               style: TextStyle(
                                 color: Colors.purple[700],
                                 fontSize: 14,
@@ -94,7 +92,7 @@ class _EditBirthDateViewState extends State<EditBirthDateView> {
 
                     // Current Birth Date Display
                     Text(
-                      'تاريخ الميلاد الحالي',
+                      context.l10n.currentBirthDate,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -116,7 +114,7 @@ class _EditBirthDateViewState extends State<EditBirthDateView> {
                           Text(
                             widget.userProfile.birthDate?.isNotEmpty == true
                                 ? _formatDate(widget.userProfile.birthDate!)
-                                : 'غير محدد',
+                                : context.l10n.notSpecifiedValue,
                             style: const TextStyle(
                               fontSize: 16,
                               color: Colors.black87,
@@ -129,7 +127,7 @@ class _EditBirthDateViewState extends State<EditBirthDateView> {
 
                     // New Birth Date Selection
                     Text(
-                      'تاريخ الميلاد الجديد',
+                      context.l10n.newBirthDate,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -159,7 +157,7 @@ class _EditBirthDateViewState extends State<EditBirthDateView> {
                             Text(
                               _selectedDate != null
                                   ? _formatDate(_selectedDate.toString())
-                                  : 'اختر تاريخ الميلاد',
+                                  : context.l10n.selectBirthDate,
                               style: TextStyle(
                                 fontSize: 16,
                                 color: _selectedDate != null
@@ -180,7 +178,7 @@ class _EditBirthDateViewState extends State<EditBirthDateView> {
 
                     // Save Button
                     CustomButton(
-                      text: 'حفظ التغييرات',
+                      text: context.l10n.saveChanges,
                       onPressed: isLoading ? null : _updateBirthDate,
                       isLoading: isLoading,
                     ),
@@ -243,7 +241,7 @@ class _EditBirthDateViewState extends State<EditBirthDateView> {
     if (_selectedDate == null) {
       CustomSnackbar.showWarning(
         context: context,
-        message: 'يرجى اختيار تاريخ الميلاد',
+        message: context.l10n.pleaseSelectBirthDate,
       );
       return;
     }
@@ -252,7 +250,7 @@ class _EditBirthDateViewState extends State<EditBirthDateView> {
     if (newBirthDate == widget.userProfile.birthDate) {
       CustomSnackbar.showWarning(
         context: context,
-        message: 'لم يتم تغيير تاريخ الميلاد',
+        message: context.l10n.birthDateNotChanged,
       );
       return;
     }

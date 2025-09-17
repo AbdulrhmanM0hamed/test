@@ -21,23 +21,25 @@ class UpdateProfileRequestModel extends UpdateProfileRequest {
     if (name != null) {
       formData.fields.add(MapEntry('name', name!));
     }
-    
+
     if (oldPassword != null) {
       formData.fields.add(MapEntry('old_password', oldPassword!));
     }
-    
+
     if (newPassword != null) {
       formData.fields.add(MapEntry('new_password', newPassword!));
     }
-    
+
     if (confirmPassword != null) {
-      formData.fields.add(MapEntry('confirm_password', confirmPassword!));
+      formData.fields.add(
+        MapEntry('new_password_confirmation', confirmPassword!),
+      );
     }
-    
+
     if (birthDate != null) {
       formData.fields.add(MapEntry('birth_date', birthDate!));
     }
-    
+
     if (phone != null) {
       formData.fields.add(MapEntry('phone', phone!));
     }

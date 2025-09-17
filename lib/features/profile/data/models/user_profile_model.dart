@@ -44,9 +44,21 @@ class UserProfileModel extends UserProfile {
       cityId: json['city_id'],
       regionId: json['region_id'],
       countryName: json['counrty'] ?? '', // Note: API has typo "counrty"
-      city: CityModel.fromJson(json['city']),
-      region: RegionModel.fromJson(json['region']),
-      country: CountryModel.fromJson(json['country']),
+      city: json['city'] != null
+          ? CityModel.fromJson(json['city'])
+          : const CityModel(id: 0, titleEn: '', titleAr: '', countryId: 0),
+      region: json['region'] != null
+          ? RegionModel.fromJson(json['region'])
+          : const RegionModel(id: 0, titleEn: '', titleAr: '', cityId: 0),
+      country: json['country'] != null
+          ? CountryModel.fromJson(json['country'])
+          : const CountryModel(
+              id: 0,
+              titleEn: '',
+              titleAr: '',
+              shortcut: '',
+              code: '',
+            ),
     );
   }
 

@@ -1444,6 +1444,216 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile updated successfully'**
   String get profileUpdatedSuccessfully;
+
+  /// No description provided for @currentPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter current password'**
+  String get currentPasswordHint;
+
+  /// No description provided for @newPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter new password'**
+  String get newPasswordHint;
+
+  /// No description provided for @confirmNewPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm new password'**
+  String get confirmNewPasswordHint;
+
+  /// No description provided for @phoneNumberMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number must be at least 10 digits'**
+  String get phoneNumberMinLength;
+
+  /// No description provided for @nameMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Name must be at least 2 characters'**
+  String get nameMinLength;
+
+  /// No description provided for @selectBirthDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Select birth date'**
+  String get selectBirthDate;
+
+  /// No description provided for @pleaseSelectBirthDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select birth date'**
+  String get pleaseSelectBirthDate;
+
+  /// No description provided for @birthDateNotChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Birth date not changed'**
+  String get birthDateNotChanged;
+
+  /// No description provided for @nameNotChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Name not changed'**
+  String get nameNotChanged;
+
+  /// No description provided for @phoneNotChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number not changed'**
+  String get phoneNotChanged;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChanges;
+
+  /// No description provided for @currentName.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Name'**
+  String get currentName;
+
+  /// No description provided for @newName.
+  ///
+  /// In en, this message translates to:
+  /// **'New Name'**
+  String get newName;
+
+  /// No description provided for @currentPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Phone'**
+  String get currentPhone;
+
+  /// No description provided for @newPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'New Phone'**
+  String get newPhone;
+
+  /// No description provided for @currentBirthDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Birth Date'**
+  String get currentBirthDate;
+
+  /// No description provided for @newBirthDate.
+  ///
+  /// In en, this message translates to:
+  /// **'New Birth Date'**
+  String get newBirthDate;
+
+  /// No description provided for @currentPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Password'**
+  String get currentPasswordLabel;
+
+  /// No description provided for @newPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get newPasswordLabel;
+
+  /// No description provided for @confirmNewPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm New Password'**
+  String get confirmNewPasswordLabel;
+
+  /// No description provided for @securityTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep your account secure by updating your password regularly and using a strong password.'**
+  String get securityTip;
+
+  /// No description provided for @nameUpdateTip.
+  ///
+  /// In en, this message translates to:
+  /// **'You can change your full name here. The new name will appear in your profile.'**
+  String get nameUpdateTip;
+
+  /// No description provided for @phoneUpdateTip.
+  ///
+  /// In en, this message translates to:
+  /// **'You can update your phone number here. Make sure to enter a valid number for contact.'**
+  String get phoneUpdateTip;
+
+  /// No description provided for @birthDateUpdateTip.
+  ///
+  /// In en, this message translates to:
+  /// **'You can update your birth date here. This information helps personalize your experience.'**
+  String get birthDateUpdateTip;
+
+  /// No description provided for @notSpecifiedValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Not specified'**
+  String get notSpecifiedValue;
+
+  /// No description provided for @currentAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Address'**
+  String get currentAddress;
+
+  /// No description provided for @newAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'New Address'**
+  String get newAddress;
+
+  /// No description provided for @addressRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Address is required'**
+  String get addressRequired;
+
+  /// No description provided for @addressMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Address must be at least 5 characters'**
+  String get addressMinLength;
+
+  /// No description provided for @addressNotChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Address not changed'**
+  String get addressNotChanged;
+
+  /// No description provided for @addressUpdateTip.
+  ///
+  /// In en, this message translates to:
+  /// **'You can update your address here. This helps improve delivery services.'**
+  String get addressUpdateTip;
+
+  /// No description provided for @addressTipsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Address writing tips:'**
+  String get addressTipsTitle;
+
+  /// No description provided for @addressTips.
+  ///
+  /// In en, this message translates to:
+  /// **'• Write street and neighborhood name\n• Add building or apartment number\n• Mention city and governorate\n• You can add distinctive landmarks'**
+  String get addressTips;
+
+  /// No description provided for @addressUpdateNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Address editing is not available currently - this feature will be added soon'**
+  String get addressUpdateNotAvailable;
+
+  /// No description provided for @passwordUpdateTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep your account secure by updating your password regularly and using a strong password.'**
+  String get passwordUpdateTip;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

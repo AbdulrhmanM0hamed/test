@@ -6,15 +6,13 @@ import 'package:test/core/utils/widgets/logout_confirmation_dialog.dart';
 import 'package:test/features/profile/domain/entities/user_profile.dart';
 import 'package:test/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:test/features/profile/presentation/cubit/profile_state.dart';
-import 'package:test/features/profile/presentation/widgets/profile_header.dart';
-import 'package:test/features/profile/presentation/widgets/profile_info_card.dart';
-import 'package:test/features/profile/presentation/widgets/profile_stats_card.dart';
-import 'package:test/features/profile/presentation/widgets/profile_action_button.dart';
+import 'package:test/features/profile/presentation/view/edit_birth_date_view.dart';
 import 'package:test/features/profile/presentation/view/edit_name_view.dart';
 import 'package:test/features/profile/presentation/view/edit_phone_view.dart';
-import 'package:test/features/profile/presentation/view/edit_birth_date_view.dart';
-import 'package:test/features/profile/presentation/view/edit_address_view.dart';
-import 'package:test/features/profile/presentation/view/security_privacy_view.dart';
+import 'package:test/features/profile/presentation/view/change_password_view.dart';
+import 'package:test/features/profile/presentation/widgets/profile_action_button.dart';
+import 'package:test/features/profile/presentation/widgets/profile_header.dart';
+import 'package:test/features/profile/presentation/widgets/profile_stats_card.dart';
 import 'package:test/l10n/app_localizations.dart';
 import 'package:test/core/di/dependency_injection.dart';
 
@@ -128,30 +126,6 @@ class _ProfileViewState extends State<ProfileView> {
 
                             const SizedBox(height: 24),
 
-                            // Personal Information Section
-                            Text(
-                              AppLocalizations.of(context)!.personalInformation,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-
-                            ProfileInfoCard(
-                              title: AppLocalizations.of(context)!.fullName,
-                              value: userProfile.name,
-                              icon: Icons.person,
-                              isEditable: true,
-                              onTap: () => _showEditDialog(
-                                context,
-                                'name',
-                                userProfile.name,
-                                userProfile,
-                              ),
-                            ),
-
                             // Quick Edit Cards Section
                             Container(
                               padding: const EdgeInsets.all(16),
@@ -160,7 +134,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.grey.withOpacity(0.1),
+                                    color: Colors.grey.withValues(alpha: 0.1),
                                     spreadRadius: 1,
                                     blurRadius: 5,
                                     offset: const Offset(0, 2),
@@ -170,8 +144,10 @@ class _ProfileViewState extends State<ProfileView> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    'معلومات الملف الشخصي',
+                                  Text(
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.personalInformation,
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -181,31 +157,44 @@ class _ProfileViewState extends State<ProfileView> {
                                   const SizedBox(height: 16),
                                   _buildQuickEditRow(
                                     Icons.person,
-                                    'الاسم',
+                                    AppLocalizations.of(context)!.fullName,
                                     userProfile.name,
                                     Colors.blue,
-                                    () => _showEditDialog(context, 'name', userProfile.name, userProfile),
+                                    () => _showEditDialog(
+                                      context,
+                                      'name',
+                                      userProfile.name,
+                                      userProfile,
+                                    ),
                                   ),
                                   _buildQuickEditRow(
                                     Icons.phone,
-                                    'رقم الهاتف',
+                                    AppLocalizations.of(context)!.phoneNumber,
                                     userProfile.phone,
                                     Colors.green,
-                                    () => _showEditDialog(context, 'phone', userProfile.phone, userProfile),
+                                    () => _showEditDialog(
+                                      context,
+                                      'phone',
+                                      userProfile.phone,
+                                      userProfile,
+                                    ),
                                   ),
                                   _buildQuickEditRow(
                                     Icons.cake,
-                                    'تاريخ الميلاد',
-                                    userProfile.birthDate?.isNotEmpty == true ? _formatBirthDate(userProfile.birthDate!) : 'غير محدد',
+                                    AppLocalizations.of(context)!.birthDate,
+                                    userProfile.birthDate?.isNotEmpty == true
+                                        ? _formatBirthDate(
+                                            userProfile.birthDate!,
+                                          )
+                                        : AppLocalizations.of(
+                                            context,
+                                          )!.notSpecifiedValue,
                                     Colors.pink,
-                                    () => _showDatePicker(context, userProfile.birthDate, userProfile),
-                                  ),
-                                  _buildQuickEditRow(
-                                    Icons.location_on,
-                                    'العنوان',
-                                    userProfile.address?.isNotEmpty == true ? userProfile.address! : 'غير محدد',
-                                    Colors.red,
-                                    () => _showEditDialog(context, 'address', userProfile.address ?? '', userProfile),
+                                    () => _showDatePicker(
+                                      context,
+                                      userProfile.birthDate,
+                                      userProfile,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -221,7 +210,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.grey.withOpacity(0.1),
+                                    color: Colors.grey.withValues(alpha: 0.1),
                                     spreadRadius: 1,
                                     blurRadius: 5,
                                     offset: const Offset(0, 2),
@@ -234,11 +223,12 @@ class _ProfileViewState extends State<ProfileView> {
                                   const SizedBox(width: 12),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        const Text(
-                                          'البريد الإلكتروني',
-                                          style: TextStyle(
+                                        Text(
+                                          AppLocalizations.of(context)!.email,
+                                          style: const TextStyle(
                                             fontSize: 14,
                                             color: Colors.grey,
                                           ),
@@ -267,7 +257,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.grey.withOpacity(0.1),
+                                    color: Colors.grey.withValues(alpha: 0.1),
                                     spreadRadius: 1,
                                     blurRadius: 5,
                                     offset: const Offset(0, 2),
@@ -276,11 +266,15 @@ class _ProfileViewState extends State<ProfileView> {
                               ),
                               child: Row(
                                 children: [
-                                  Icon(Icons.location_on, color: Colors.orange[600]),
+                                  Icon(
+                                    Icons.location_on,
+                                    color: Colors.orange[600],
+                                  ),
                                   const SizedBox(width: 12),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         const Text(
                                           'الموقع',
@@ -313,7 +307,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.grey.withOpacity(0.1),
+                                    color: Colors.grey.withValues(alpha: 0.1),
                                     spreadRadius: 1,
                                     blurRadius: 5,
                                     offset: const Offset(0, 2),
@@ -322,15 +316,21 @@ class _ProfileViewState extends State<ProfileView> {
                               ),
                               child: Row(
                                 children: [
-                                  Icon(Icons.calendar_today, color: Colors.purple[600]),
+                                  Icon(
+                                    Icons.calendar_today,
+                                    color: Colors.purple[600],
+                                  ),
                                   const SizedBox(width: 12),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        const Text(
-                                          'عضو منذ',
-                                          style: TextStyle(
+                                        Text(
+                                          AppLocalizations.of(
+                                            context,
+                                          )!.memberSince,
+                                          style: const TextStyle(
                                             fontSize: 14,
                                             color: Colors.grey,
                                           ),
@@ -352,37 +352,15 @@ class _ProfileViewState extends State<ProfileView> {
                             const SizedBox(height: 24),
 
                             // Actions Section
-                            Text(
-                              AppLocalizations.of(context)!.settings,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-
-                            ProfileActionButton(
-                              title: AppLocalizations.of(context)!.editProfile,
-                              icon: Icons.edit,
-                              onTap: () =>
-                                  _showEditProfileSheet(context, userProfile),
-                            ),
-
-                            ProfileActionButton(
-                              title: AppLocalizations.of(
-                                context,
-                              )!.accountSettings,
-                              icon: Icons.settings,
-                              onTap: () => _showAccountSettings(context),
-                            ),
-
                             ProfileActionButton(
                               title: AppLocalizations.of(
                                 context,
                               )!.securityAndPrivacy,
                               icon: Icons.security,
-                              onTap: () => _showSecuritySettings(context, userProfile),
+                              onTap: () => _navigateToChangePassword(
+                                context,
+                                userProfile,
+                              ),
                             ),
 
                             ProfileActionButton(
@@ -410,7 +388,7 @@ class _ProfileViewState extends State<ProfileView> {
 
                 if (isUpdating)
                   Container(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.black.withValues(alpha: 0.3),
                     child: const Center(child: CustomProgressIndicator()),
                   ),
               ],
@@ -459,7 +437,6 @@ class _ProfileViewState extends State<ProfileView> {
     }
   }
 
-
   void _showImagePicker(BuildContext context) {
     // TODO: Implement image picker
     CustomSnackbar.showInfo(
@@ -481,9 +458,7 @@ class _ProfileViewState extends State<ProfileView> {
       case 'phone':
         _navigateToEditPhone(context, userProfile);
         break;
-      case 'address':
-        _navigateToEditAddress(context, userProfile);
-        break;
+
       default:
         _showEditProfileSheet(context, userProfile);
     }
@@ -496,7 +471,6 @@ class _ProfileViewState extends State<ProfileView> {
   ) {
     _navigateToEditBirthDate(context, userProfile);
   }
-
 
   void _showEditProfileSheet(BuildContext context, UserProfile userProfile) {
     // This method is kept for backward compatibility but not used anymore
@@ -515,8 +489,19 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  void _showSecuritySettings(BuildContext context, UserProfile userProfile) {
-    _navigateToSecurityPrivacy(context, userProfile);
+  void _navigateToChangePassword(
+    BuildContext context,
+    UserProfile userProfile,
+  ) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocProvider<ProfileCubit>(
+          create: (context) => DependencyInjection.getIt<ProfileCubit>(),
+          child: ChangePasswordView(userProfile: userProfile),
+        ),
+      ),
+    );
   }
 
   void _showHelpCenter(BuildContext context) {
@@ -553,10 +538,7 @@ class _ProfileViewState extends State<ProfileView> {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   Text(
                     value.isNotEmpty ? value : 'غير محدد',
@@ -568,11 +550,7 @@ class _ProfileViewState extends State<ProfileView> {
                 ],
               ),
             ),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: 16,
-              color: Colors.grey[400],
-            ),
+            Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey[400]),
           ],
         ),
       ),
@@ -619,30 +597,6 @@ class _ProfileViewState extends State<ProfileView> {
         builder: (context) => BlocProvider<ProfileCubit>(
           create: (context) => DependencyInjection.getIt<ProfileCubit>(),
           child: EditBirthDateView(userProfile: userProfile),
-        ),
-      ),
-    );
-  }
-
-  void _navigateToEditAddress(BuildContext context, UserProfile userProfile) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BlocProvider<ProfileCubit>(
-          create: (context) => DependencyInjection.getIt<ProfileCubit>(),
-          child: EditAddressView(userProfile: userProfile),
-        ),
-      ),
-    );
-  }
-
-  void _navigateToSecurityPrivacy(BuildContext context, UserProfile userProfile) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BlocProvider<ProfileCubit>(
-          create: (context) => DependencyInjection.getIt<ProfileCubit>(),
-          child: SecurityPrivacyView(userProfile: userProfile),
         ),
       ),
     );

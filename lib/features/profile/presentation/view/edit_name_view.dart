@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test/core/services/profile_refresh_service.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
+import 'package:test/core/utils/common/custom_app_bar.dart';
 import 'package:test/core/utils/common/custom_button.dart';
 import 'package:test/core/utils/common/custom_text_field.dart';
+import 'package:test/core/utils/validators/form_validators_clean.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/features/profile/domain/entities/update_profile_request.dart';
 import 'package:test/features/profile/domain/entities/user_profile.dart';
@@ -49,14 +52,7 @@ class _EditNameViewState extends State<EditNameView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.fullName),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-        centerTitle: true,
-      ),
-      backgroundColor: Colors.grey[50],
+      appBar: CustomAppBar(title: context.l10n.fullName),
       body: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {
           if (state is ProfileError) {
@@ -66,6 +62,8 @@ class _EditNameViewState extends State<EditNameView> {
               context: context,
               message: context.l10n.profileUpdatedSuccessfully,
             );
+            // إشعار جميع الصفحات بتحديث البروفايل
+            ProfileRefreshService().notifyProfileUpdated();
             Navigator.of(context).pop();
           }
         },
@@ -95,7 +93,7 @@ class _EditNameViewState extends State<EditNameView> {
                             const SizedBox(width: 12),
                             Expanded(
                               child: Text(
-                                'يمكنك تغيير اسمك الكامل هنا. سيظهر الاسم الجديد في ملفك الشخصي.',
+                                context.l10n.nameUpdateTip,
                                 style: TextStyle(
                                   color: Colors.blue[700],
                                   fontSize: 14,
@@ -109,7 +107,7 @@ class _EditNameViewState extends State<EditNameView> {
 
                       // Current Name Display
                       Text(
-                        'الاسم الحالي',
+                        context.l10n.currentName,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -136,7 +134,7 @@ class _EditNameViewState extends State<EditNameView> {
 
                       // New Name Input
                       Text(
-                        'الاسم الجديد',
+                        context.l10n.newName,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -147,21 +145,14 @@ class _EditNameViewState extends State<EditNameView> {
                       CustomTextField(
                         hint: context.l10n.fullName,
                         controller: _nameController,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return context.l10n.nameRequired;
-                          }
-                          if (value.trim().length < 2) {
-                            return 'الاسم يجب أن يكون حرفين على الأقل';
-                          }
-                          return null;
-                        },
+                        validator: (value) =>
+                            FormValidators.validateFullName(value, context),
                       ),
                       const Spacer(),
 
                       // Save Button
                       CustomButton(
-                        text: 'حفظ التغييرات',
+                        text: context.l10n.saveChanges,
                         onPressed: isLoading ? null : _updateName,
                         isLoading: isLoading,
                       ),
@@ -200,7 +191,7 @@ class _EditNameViewState extends State<EditNameView> {
       print('DEBUG: Name unchanged, showing warning');
       CustomSnackbar.showWarning(
         context: context,
-        message: 'لم يتم تغيير الاسم',
+        message: context.l10n.nameNotChanged,
       );
       return;
     }

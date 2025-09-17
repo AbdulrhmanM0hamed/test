@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/models/api_response.dart';
 import 'package:test/core/services/data_refresh_service.dart';
+import 'package:test/core/services/profile_refresh_service.dart';
 import 'package:test/core/utils/error/error_handler.dart';
 import 'package:test/features/profile/domain/entities/update_profile_request.dart';
+import 'package:test/features/profile/domain/entities/user_profile.dart';
 import 'package:test/features/profile/domain/usecases/get_profile_usecase.dart';
 import 'package:test/features/profile/domain/usecases/update_profile_usecase.dart';
 import 'package:test/features/profile/domain/repositories/profile_repository.dart';
@@ -13,6 +16,8 @@ class ProfileCubit extends Cubit<ProfileState> {
   final UpdateProfileUseCase updateProfileUseCase;
   final ProfileRepository profileRepository;
   final DataRefreshService? dataRefreshService;
+  final ProfileRefreshService _profileRefreshService = ProfileRefreshService();
+  StreamSubscription? _refreshSubscription;
 
   ProfileCubit({
     required this.getProfileUseCase,
@@ -21,16 +26,23 @@ class ProfileCubit extends Cubit<ProfileState> {
     this.dataRefreshService,
   }) : super(ProfileInitial()) {
     dataRefreshService?.registerRefreshCallback(_refreshData);
+
+    // الاستماع لتحديثات البروفايل
+    _refreshSubscription = _profileRefreshService.refreshStream.listen((_) {
+      if (!isClosed) {
+        getProfile();
+      }
+    });
   }
 
   Future<void> getProfile() async {
     try {
-      emit(ProfileLoading());
+      if (!isClosed) emit(ProfileLoading());
       final userProfile = await getProfileUseCase();
-      emit(ProfileLoaded(userProfile));
+      if (!isClosed) emit(ProfileLoaded(userProfile));
     } catch (e) {
       final errorMessage = ErrorHandler.extractErrorMessage(e);
-      emit(ProfileError(errorMessage));
+      if (!isClosed) emit(ProfileError(errorMessage));
     }
   }
 
@@ -44,7 +56,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       final currentState = state;
       if (currentState is ProfileLoaded) {
-        emit(ProfileUpdating(currentState.userProfile));
+        if (!isClosed) emit(ProfileUpdating(currentState.userProfile));
 
         final updatedProfile = await profileRepository.updateProfile(
           name: name,
@@ -54,13 +66,13 @@ class ProfileCubit extends Cubit<ProfileState> {
           gender: gender,
         );
 
-        emit(ProfileUpdated(updatedProfile));
-        // Keep the updated profile loaded
-        emit(ProfileLoaded(updatedProfile));
+        if (!isClosed) emit(ProfileUpdated(updatedProfile));
+        // إشعار جميع المستمعين بتحديث البروفايل
+        _profileRefreshService.notifyProfileUpdated();
       }
     } catch (e) {
       final errorMessage = ErrorHandler.extractErrorMessage(e);
-      emit(ProfileError(errorMessage));
+      if (!isClosed) emit(ProfileError(errorMessage));
     }
   }
 
@@ -68,16 +80,16 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       final currentState = state;
       if (currentState is ProfileLoaded) {
-        emit(ProfileImageUploading(currentState.userProfile));
+        if (!isClosed) emit(ProfileImageUploading(currentState.userProfile));
 
         await profileRepository.updateProfileImage(imagePath);
 
-        // Refresh profile to get updated image
-        await getProfile();
+        // إشعار جميع المستمعين بتحديث البروفايل
+        _profileRefreshService.notifyProfileUpdated();
       }
     } catch (e) {
       final errorMessage = ErrorHandler.extractErrorMessage(e);
-      emit(ProfileError(errorMessage));
+      if (!isClosed) emit(ProfileError(errorMessage));
     }
   }
 
@@ -94,21 +106,28 @@ class ProfileCubit extends Cubit<ProfileState> {
       final currentState = state;
       print('DEBUG: Current state: ${currentState.runtimeType}');
 
-      // إذا لم يكن البروفايل محمل، نحمله أولاً
-      if (currentState is ProfileInitial || currentState is ProfileError) {
+      // بدء حالة التحديث فوراً
+      UserProfile currentProfile;
+      if (currentState is ProfileLoaded) {
+        currentProfile = currentState.userProfile;
+      } else if (currentState is ProfileUpdating) {
+        currentProfile = currentState.currentProfile;
+      } else if (currentState is ProfileImageUploading) {
+        currentProfile = currentState.currentProfile;
+      } else {
+        // إذا لم يكن البروفايل محمل، نحمله أولاً
         print('DEBUG: Profile not loaded, loading first...');
         await getProfile();
 
-        // التحقق من نجاح التحميل
         if (state is! ProfileLoaded) {
           print('DEBUG: Failed to load profile, cannot update');
           return;
         }
+        currentProfile = (state as ProfileLoaded).userProfile;
       }
 
-      final profileState = state as ProfileLoaded;
       print('DEBUG: Profile loaded, proceeding with update');
-      emit(ProfileUpdating(profileState.userProfile));
+      if (!isClosed) emit(ProfileUpdating(currentProfile));
 
       print('DEBUG: Calling updateProfileUseCase');
       final updatedProfile = await updateProfileUseCase(request);
@@ -116,10 +135,10 @@ class ProfileCubit extends Cubit<ProfileState> {
       print('DEBUG: Updated profile name: ${updatedProfile.name}');
 
       print('DEBUG: Emitting ProfileUpdated');
-      emit(ProfileUpdated(updatedProfile));
+      if (!isClosed) emit(ProfileUpdated(updatedProfile));
 
-      print('DEBUG: Emitting ProfileLoaded with updated profile');
-      emit(ProfileLoaded(updatedProfile));
+      print('DEBUG: Refreshing profile from server to get latest data');
+      if (!isClosed) await getProfile();
     } catch (e) {
       print('DEBUG: Exception caught in updateProfileNew: $e');
       print('DEBUG: Exception type: ${e.runtimeType}');
@@ -127,11 +146,11 @@ class ProfileCubit extends Cubit<ProfileState> {
       if (e is ApiException) {
         String errorMessage = e.getFirstErrorMessage();
         print('DEBUG: ApiException error message: $errorMessage');
-        emit(ProfileError(errorMessage));
+        if (!isClosed) emit(ProfileError(errorMessage));
       } else {
         final errorMessage = ErrorHandler.extractErrorMessage(e);
         print('DEBUG: General error message: $errorMessage');
-        emit(ProfileError(errorMessage));
+        if (!isClosed) emit(ProfileError(errorMessage));
       }
     }
   }
@@ -143,6 +162,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   @override
   Future<void> close() {
     dataRefreshService?.unregisterRefreshCallback(_refreshData);
+    _refreshSubscription?.cancel();
     return super.close();
   }
 

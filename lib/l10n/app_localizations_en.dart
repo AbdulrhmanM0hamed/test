@@ -682,4 +682,109 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileUpdatedSuccessfully => 'Profile updated successfully';
+
+  @override
+  String get currentPasswordHint => 'Enter current password';
+
+  @override
+  String get newPasswordHint => 'Enter new password';
+
+  @override
+  String get confirmNewPasswordHint => 'Confirm new password';
+
+  @override
+  String get phoneNumberMinLength => 'Phone number must be at least 10 digits';
+
+  @override
+  String get nameMinLength => 'Name must be at least 2 characters';
+
+  @override
+  String get selectBirthDate => 'Select birth date';
+
+  @override
+  String get pleaseSelectBirthDate => 'Please select birth date';
+
+  @override
+  String get birthDateNotChanged => 'Birth date not changed';
+
+  @override
+  String get nameNotChanged => 'Name not changed';
+
+  @override
+  String get phoneNotChanged => 'Phone number not changed';
+
+  @override
+  String get saveChanges => 'Save Changes';
+
+  @override
+  String get currentName => 'Current Name';
+
+  @override
+  String get newName => 'New Name';
+
+  @override
+  String get currentPhone => 'Current Phone';
+
+  @override
+  String get newPhone => 'New Phone';
+
+  @override
+  String get currentBirthDate => 'Current Birth Date';
+
+  @override
+  String get newBirthDate => 'New Birth Date';
+
+  @override
+  String get currentPasswordLabel => 'Current Password';
+
+  @override
+  String get newPasswordLabel => 'New Password';
+
+  @override
+  String get confirmNewPasswordLabel => 'Confirm New Password';
+
+  @override
+  String get securityTip => 'Keep your account secure by updating your password regularly and using a strong password.';
+
+  @override
+  String get nameUpdateTip => 'You can change your full name here. The new name will appear in your profile.';
+
+  @override
+  String get phoneUpdateTip => 'You can update your phone number here. Make sure to enter a valid number for contact.';
+
+  @override
+  String get birthDateUpdateTip => 'You can update your birth date here. This information helps personalize your experience.';
+
+  @override
+  String get notSpecifiedValue => 'Not specified';
+
+  @override
+  String get currentAddress => 'Current Address';
+
+  @override
+  String get newAddress => 'New Address';
+
+  @override
+  String get addressRequired => 'Address is required';
+
+  @override
+  String get addressMinLength => 'Address must be at least 5 characters';
+
+  @override
+  String get addressNotChanged => 'Address not changed';
+
+  @override
+  String get addressUpdateTip => 'You can update your address here. This helps improve delivery services.';
+
+  @override
+  String get addressTipsTitle => 'Address writing tips:';
+
+  @override
+  String get addressTips => '• Write street and neighborhood name\n• Add building or apartment number\n• Mention city and governorate\n• You can add distinctive landmarks';
+
+  @override
+  String get addressUpdateNotAvailable => 'Address editing is not available currently - this feature will be added soon';
+
+  @override
+  String get passwordUpdateTip => 'Keep your account secure by updating your password regularly and using a strong password.';
 }

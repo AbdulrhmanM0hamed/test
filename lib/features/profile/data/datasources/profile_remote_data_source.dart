@@ -87,7 +87,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     if (request.oldPassword != null) data['old_password'] = request.oldPassword;
     if (request.newPassword != null) data['new_password'] = request.newPassword;
     if (request.confirmPassword != null)
-      data['confirm_password'] = request.confirmPassword;
+      data['new_password_confirmation'] = request.confirmPassword;
 
     print('DEBUG: Request data: $data');
     print('DEBUG: Making POST request to ${ApiEndpoints.updateProfile}');
