@@ -799,4 +799,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorSelectingImage => 'Error selecting image';
+
+  @override
+  String get logoutConfirmationTitle => 'Are you sure you want to log out?';
+
+  @override
+  String get logoutConfirmationMessage => 'Your current session will be ended and you\'ll need to sign in again';
+
+  @override
+  String get cancelButton => 'Cancel';
+
+  @override
+  String get logoutButton => 'Log Out';
 }

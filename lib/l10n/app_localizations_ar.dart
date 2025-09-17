@@ -799,4 +799,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get errorSelectingImage => 'خطأ في اختيار الصورة';
+
+  @override
+  String get logoutConfirmationTitle => 'هل أنت متأكد من رغبتك في تسجيل الخروج؟';
+
+  @override
+  String get logoutConfirmationMessage => 'سيتم إنهاء جلستك الحالية وستحتاج لتسجيل الدخول مرة أخرى';
+
+  @override
+  String get cancelButton => 'إلغاء';
+
+  @override
+  String get logoutButton => 'تسجيل خروج';
 }

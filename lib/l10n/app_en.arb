@@ -290,5 +290,9 @@
   "imageUpdatedSuccessfully": "Image updated successfully",
   "gallery": "Gallery",
   "camera": "Camera",
-  "errorSelectingImage": "Error selecting image"
+  "errorSelectingImage": "Error selecting image",
+  "logoutConfirmationTitle": "Are you sure you want to log out?",
+  "logoutConfirmationMessage": "Your current session will be ended and you'll need to sign in again",
+  "cancelButton": "Cancel",
+  "logoutButton": "Log Out"
 }

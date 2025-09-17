@@ -291,5 +291,9 @@
   "gallery": "المعرض",
   "camera": "الكاميرا",
   "errorSelectingImage": "خطأ في اختيار الصورة",
-  "imageUpdatedSuccessfully": "تم تحديث الصورة الشخصية بنجاح"
+  "imageUpdatedSuccessfully": "تم تحديث الصورة الشخصية بنجاح",
+  "logoutConfirmationTitle": "هل أنت متأكد من رغبتك في تسجيل الخروج؟",
+  "logoutConfirmationMessage": "سيتم إنهاء جلستك الحالية وستحتاج لتسجيل الدخول مرة أخرى",
+  "cancelButton": "إلغاء",
+  "logoutButton": "تسجيل خروج"
 }

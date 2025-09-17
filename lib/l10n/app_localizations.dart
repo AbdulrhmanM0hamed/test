@@ -1678,6 +1678,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error selecting image'**
   String get errorSelectingImage;
+
+  /// No description provided for @logoutConfirmationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to log out?'**
+  String get logoutConfirmationTitle;
+
+  /// No description provided for @logoutConfirmationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your current session will be ended and you\'ll need to sign in again'**
+  String get logoutConfirmationMessage;
+
+  /// No description provided for @cancelButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancelButton;
+
+  /// No description provided for @logoutButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get logoutButton;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
