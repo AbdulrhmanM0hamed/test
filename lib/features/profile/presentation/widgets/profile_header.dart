@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/features/profile/domain/entities/user_profile.dart';
 
 class ProfileHeader extends StatelessWidget {
@@ -12,14 +13,7 @@ class ProfileHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Theme.of(context).primaryColor,
-            Theme.of(context).primaryColor.withValues(alpha: 0.8),
-          ],
-        ),
+        color: AppColors.primary,
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(32),
           bottomRight: Radius.circular(32),

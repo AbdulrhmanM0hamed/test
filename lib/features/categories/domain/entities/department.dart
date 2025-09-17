@@ -3,6 +3,7 @@ class Department {
   final String name;
   final String slug;
   final String image;
+  
   final String icon;
   final int countOfProduct;
   final List<Category> categories;

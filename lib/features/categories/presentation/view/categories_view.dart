@@ -68,7 +68,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                       child: Center(child: CircularProgressIndicator()),
                     );
                   }
-                  
+
                   if (departmentState is DepartmentLoaded) {
                     final departments = departmentState.departments;
 
@@ -88,7 +88,7 @@ class _CategoriesViewState extends State<CategoriesView> {
 
                     return _buildDepartmentTabs(departments);
                   }
-                  
+
                   if (departmentState is DepartmentError) {
                     return Container(
                       height: 60,
@@ -101,7 +101,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                       ),
                     );
                   }
-                  
+
                   return const SizedBox.shrink();
                 },
               ),
@@ -294,7 +294,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                       borderRadius: BorderRadius.circular(12),
                       child: department.image.isNotEmpty
                           ? Image.network(
-                              department.image,
+                              department.icon,
                               width: 40,
                               height: 40,
                               fit: BoxFit.cover,
