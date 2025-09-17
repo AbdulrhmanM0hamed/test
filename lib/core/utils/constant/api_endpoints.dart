@@ -1,5 +1,5 @@
 class ApiEndpoints {
-  static String get baseUrl => 'https://sobiehcoffee.com/dashboard/public/api';
+  static String get baseUrl => 'https://sobiehcoffee.com/sobieh/public/api';
 
   static String get login => '$baseUrl/signin';
   static String get register => '$baseUrl/signup';
@@ -21,10 +21,9 @@ class ApiEndpoints {
   static const String bestSellerProducts = '/best-seller-products';
   static const String latestProducts = '/latest-products';
   static const String specialOfferProducts = '/special-offer-products';
-  static const String addToWishlist = '/wishlist/add';
-  static const String removeFromWishlist = '/wishlist/remove';
-
-  static const String getWishlist = '/wishlist';
+  static String get addToWishlist => '$baseUrl/wishlist/add';
+  static String removeFromWishlist(int productId) => '$baseUrl/wishlist/remove/$productId';
+  static String get getWishlist => '$baseUrl/wishlist';
 
   static String featuredProductsUrl({int? countryId}) =>
       '$baseUrl$featuredProducts${countryId != null ? '?country_id=$countryId' : ''}';

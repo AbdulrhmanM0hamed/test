@@ -350,7 +350,7 @@ class _LoginViewState extends State<LoginView> {
                                   const SizedBox(height: 8),
                                   PasswordField(
                                     controller: _passwordController,
-                                    hintText: AppLocalizations.of(
+                                    hint: AppLocalizations.of(
                                       context,
                                     )!.writePassword,
                                     validator:

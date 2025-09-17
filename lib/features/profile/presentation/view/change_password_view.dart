@@ -102,7 +102,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                       ),
                       const SizedBox(height: 8),
                       PasswordField(
-                        hintText: context.l10n.currentPasswordHint,
+                        hint: context.l10n.currentPasswordHint,
                         controller: _oldPasswordController,
                         validator: (value) =>
                             FormValidators.validatePassword(value, context),
@@ -120,7 +120,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                       ),
                       const SizedBox(height: 8),
                       PasswordField(
-                        hintText: context.l10n.newPasswordHint,
+                        hint: context.l10n.newPasswordHint,
                         controller: _newPasswordController,
                         validator: (value) =>
                             FormValidators.validatePassword(value, context),
@@ -138,7 +138,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                       ),
                       const SizedBox(height: 8),
                       PasswordField(
-                        hintText: context.l10n.confirmNewPasswordHint,
+                        hint: context.l10n.confirmNewPasswordHint,
                         controller: _confirmPasswordController,
                         validator: (value) =>
                             FormValidators.validatePasswordConfirmation(
@@ -153,7 +153,6 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                       CustomButton(
                         text: context.l10n.saveChanges,
                         onPressed: isLoading ? null : _updatePassword,
-                        isLoading: isLoading,
                       ),
                       const SizedBox(height: 20),
                     ],

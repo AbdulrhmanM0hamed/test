@@ -27,13 +27,8 @@ class WishlistRemoteDataSourceImpl implements WishlistRemoteDataSource {
 
   @override
   Future<Map<String, dynamic>> removeFromWishlist(int productId) async {
-    final response = await _dioService.post(
-      ApiEndpoints.removeFromWishlist,
-      data: {
-        'items': [
-          {'product_id': productId},
-        ],
-      },
+    final response = await _dioService.delete(
+      ApiEndpoints.removeFromWishlist(productId),
     );
     return response.data;
   }

@@ -1,35 +1,102 @@
-import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import '../theme/app_colors.dart';
 
 class PasswordField extends StatefulWidget {
+  final TextEditingController? controller;
+  final String? label;
+  final String? hint;
+  final String? Function(String?)? validator;
+  final TextInputType? keyboardType;
+  final void Function(String)? onChanged;
+  final void Function(String)? onSubmitted;
+  final Widget? prefix;
+  final bool readOnly;
+  final VoidCallback? onTap;
+  final List<TextInputFormatter>? inputFormatters;
+  final int? maxLines;
+  final int? maxLength;
+  final TextDirection? textDirection;
+  final bool? enabled;
+  final TextAlign textAlign;
+  final String? initialValue;
+  final FocusNode? focusNode;
+  final Color? fillColor;
+  final void Function(String?)? onSaved;
+  final bool showToggleIcon;
+
   const PasswordField({
     super.key,
-    required this.hintText,
-    this.validator,
     this.controller,
+    this.label,
+    this.hint,
+    this.validator,
+    this.keyboardType,
+    this.onChanged,
+    this.onSubmitted,
+    this.prefix,
+    this.readOnly = false,
+    this.onTap,
+    this.inputFormatters,
+    this.maxLines = 1,
+    this.maxLength,
+    this.textDirection,
+    this.enabled,
+    this.textAlign = TextAlign.start,
+    this.initialValue,
+    this.focusNode,
+    this.fillColor,
     this.onSaved,
+    this.showToggleIcon = true,
   });
-
-  final TextEditingController? controller;
-  final String? Function(String?)? validator;
-  final void Function(String?)? onSaved;
-  final String hintText;
 
   @override
   State<PasswordField> createState() => _PasswordFieldState();
 }
 
 class _PasswordFieldState extends State<PasswordField> {
-  bool _isObscure = true;
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
-      obscureText: _isObscure,
+      initialValue: widget.initialValue,
+      focusNode: widget.focusNode,
+      obscureText: _obscureText,
+      keyboardType: widget.keyboardType,
+      onChanged: widget.onChanged,
+      onFieldSubmitted: widget.onSubmitted,
+      readOnly: widget.readOnly,
+      onTap: widget.onTap,
+      inputFormatters: widget.inputFormatters,
+      maxLines: widget.maxLines,
+      maxLength: widget.maxLength,
+      textDirection: widget.textDirection,
+      enabled: widget.enabled,
+      textAlign: widget.textAlign,
       validator: widget.validator,
       onSaved: widget.onSaved,
+      style: Theme.of(context).textTheme.bodyMedium,
       decoration: InputDecoration(
+        labelText: widget.label,
+        hintText: widget.hint,
+        prefixIcon: widget.prefix ?? const Icon(Icons.lock_outline),
+        suffixIcon: widget.showToggleIcon
+            ? IconButton(
+                icon: Icon(
+                  _obscureText ? Icons.visibility_off : Icons.visibility,
+                  color: Theme.of(context).hintColor,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+              )
+            : null,
+        filled: true,
+        fillColor: widget.fillColor ?? Colors.transparent,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: AppColors.border),
@@ -45,16 +112,6 @@ class _PasswordFieldState extends State<PasswordField> {
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: AppColors.error),
-        ),
-        prefixIcon: const Icon(Icons.lock),
-        labelText: widget.hintText,
-        suffixIcon: IconButton(
-          icon: Icon(_isObscure ? Icons.visibility_off : Icons.visibility),
-          onPressed: () {
-            setState(() {
-              _isObscure = !_isObscure;
-            });
-          },
         ),
       ),
     );

@@ -215,7 +215,7 @@ class RegistrationLocationSelector extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton.icon(
-                  onPressed: () => context.read<LocationCubit>().getCountries(),
+              onPressed: () => context.read<LocationCubit>().getCountries(),
                   icon: Icon(Icons.refresh, size: 18),
                   label: Text(
                     AppLocalizations.of(context)!.retry,

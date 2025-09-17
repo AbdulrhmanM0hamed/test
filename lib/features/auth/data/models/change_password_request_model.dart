@@ -13,7 +13,7 @@ class ChangePasswordRequestModel extends ChangePasswordRequest {
       'email': email,
       'otp': otp,
       'password': password,
-      'confirm_password': confirmPassword,
+      'password_confirmation': confirmPassword,
     };
   }
 

@@ -158,7 +158,6 @@ class _EditPhoneViewState extends State<EditPhoneView> {
                       CustomButton(
                         text: context.l10n.saveChanges,
                         onPressed: isLoading ? null : _updatePhone,
-                        isLoading: isLoading,
                       ),
                       const SizedBox(height: 20),
                     ],

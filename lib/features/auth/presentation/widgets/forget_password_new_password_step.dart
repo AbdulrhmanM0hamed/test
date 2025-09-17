@@ -59,7 +59,7 @@ class _ForgetPasswordNewPasswordStepState
           // New Password field
           PasswordField(
             controller: _passwordController,
-            hintText: l10n.newPassword,
+            hint: l10n.newPassword,
             validator: (value) =>
                 FormValidators.validatePassword(value, context),
           ),
@@ -69,7 +69,7 @@ class _ForgetPasswordNewPasswordStepState
           // Confirm Password field
           PasswordField(
             controller: _confirmPasswordController,
-            hintText: l10n.confirmNewPassword,
+            hint: l10n.confirmNewPassword,
             validator: (value) => FormValidators.validatePasswordConfirmation(
               value,
               _passwordController.text,

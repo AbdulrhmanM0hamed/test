@@ -79,7 +79,7 @@ class RegistrationFormFields extends StatelessWidget {
           label: s.password,
           child: PasswordField(
             controller: passwordController,
-            hintText: s.writePassword,
+            hint: s.writePassword,
 
             validator: (value) =>
                 FormValidators.validatePassword(value, context),
@@ -92,7 +92,7 @@ class RegistrationFormFields extends StatelessWidget {
           label: s.confirmPassword,
           child: PasswordField(
             controller: confirmPasswordController,
-            hintText: s.reEnterPassword,
+            hint: s.reEnterPassword,
             validator: (value) => FormValidators.validatePasswordConfirmation(
               value,
               passwordController.text,

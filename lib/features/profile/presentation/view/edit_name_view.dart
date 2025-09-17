@@ -154,7 +154,6 @@ class _EditNameViewState extends State<EditNameView> {
                       CustomButton(
                         text: context.l10n.saveChanges,
                         onPressed: isLoading ? null : _updateName,
-                        isLoading: isLoading,
                       ),
                       const SizedBox(height: 20),
                     ],

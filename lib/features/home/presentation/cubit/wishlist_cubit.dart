@@ -18,17 +18,28 @@ class WishlistCubit extends Cubit<WishlistState> {
     this._getWishlistUseCase,
   ) : super(WishlistInitial());
 
+  void initializeWithProduct(int productId, bool isFavorite) {
+    if (isFavorite) {
+      _wishlistItems.add(productId);
+    }
+  }
+
   Set<int> get wishlistItems => Set.unmodifiable(_wishlistItems);
 
   bool isInWishlist(int productId) => _wishlistItems.contains(productId);
 
   Future<void> addToWishlist(int productId) async {
     emit(WishlistLoading());
-    
+
     try {
       final response = await _addToWishlistUseCase(productId);
       _wishlistItems.add(productId);
-      emit(WishlistAddedSuccess(productId, response['message'] ?? 'Added to wishlist'));
+      emit(
+        WishlistAddedSuccess(
+          productId,
+          response['message'] ?? 'Added to wishlist',
+        ),
+      );
     } catch (e) {
       emit(WishlistError(e.toString()));
     }
@@ -36,11 +47,16 @@ class WishlistCubit extends Cubit<WishlistState> {
 
   Future<void> removeFromWishlist(int productId) async {
     emit(WishlistLoading());
-    
+
     try {
       final response = await _removeFromWishlistUseCase(productId);
       _wishlistItems.remove(productId);
-      emit(WishlistRemovedSuccess(productId, response['message'] ?? 'Removed from wishlist'));
+      emit(
+        WishlistRemovedSuccess(
+          productId,
+          response['message'] ?? 'Removed from wishlist',
+        ),
+      );
     } catch (e) {
       emit(WishlistError(e.toString()));
     }
@@ -56,11 +72,11 @@ class WishlistCubit extends Cubit<WishlistState> {
 
   Future<void> loadWishlist() async {
     emit(WishlistLoading());
-    
+
     try {
       final response = await _getWishlistUseCase();
       _wishlistItems.clear();
-      
+
       // Assuming the API returns wishlist items with product IDs
       if (response['data'] != null && response['data'] is List) {
         final List<dynamic> items = response['data'];
@@ -70,7 +86,7 @@ class WishlistCubit extends Cubit<WishlistState> {
           }
         }
       }
-      
+
       emit(WishlistLoadedSuccess(_wishlistItems.toList()));
     } catch (e) {
       emit(WishlistError(e.toString()));

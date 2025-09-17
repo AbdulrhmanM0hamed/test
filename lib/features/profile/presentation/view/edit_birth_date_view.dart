@@ -182,7 +182,6 @@ class _EditBirthDateViewState extends State<EditBirthDateView> {
                     CustomButton(
                       text: context.l10n.saveChanges,
                       onPressed: isLoading ? null : _updateBirthDate,
-                      isLoading: isLoading,
                     ),
                     const SizedBox(height: 20),
                   ],

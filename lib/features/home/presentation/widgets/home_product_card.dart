@@ -232,14 +232,23 @@ class _HomeProductCardState extends State<HomeProductCard>
 
   Widget _buildFavoriteButton() {
     return BlocProvider(
-      create: (context) => WishlistCubit(
-        DependencyInjection.getIt.get<AddToWishlistUseCase>(),
-        DependencyInjection.getIt.get<RemoveFromWishlistUseCase>(),
-        DependencyInjection.getIt.get<GetWishlistUseCase>(),
-      ),
+      create: (context) {
+        final cubit = WishlistCubit(
+          DependencyInjection.getIt.get<AddToWishlistUseCase>(),
+          DependencyInjection.getIt.get<RemoveFromWishlistUseCase>(),
+          DependencyInjection.getIt.get<GetWishlistUseCase>(),
+        );
+        // Initialize with current product favorite status
+        cubit.initializeWithProduct(
+          widget.product.id,
+          widget.product.isFavorite,
+        );
+        return cubit;
+      },
       child: BlocBuilder<WishlistCubit, WishlistState>(
         builder: (context, state) {
           final wishlistCubit = context.read<WishlistCubit>();
+          final isInWishlist = wishlistCubit.isInWishlist(widget.product.id);
 
           return GestureDetector(
             onTap: () {
@@ -270,12 +279,8 @@ class _HomeProductCardState extends State<HomeProductCard>
                       ),
                     )
                   : Icon(
-                      widget.product.isFavorite
-                          ? Icons.favorite
-                          : Icons.favorite_border,
-                      color: widget.product.isFavorite
-                          ? Colors.red
-                          : Colors.grey[600],
+                      isInWishlist ? Icons.favorite : Icons.favorite_border,
+                      color: isInWishlist ? Colors.red : Colors.grey[600],
                       size: 18,
                     ),
             ),

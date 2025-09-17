@@ -415,14 +415,6 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  void _showAccountSettings(BuildContext context) {
-    // TODO: Implement account settings
-    CustomSnackbar.showInfo(
-      context: context,
-      message: AppLocalizations.of(context)!.accountSettingsComingSoon,
-    );
-  }
-
   void _navigateToChangePassword(
     BuildContext context,
     UserProfile userProfile,
