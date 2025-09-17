@@ -8,7 +8,8 @@ part 'product_details_state.dart';
 class ProductDetailsCubit extends Cubit<ProductDetailsState> {
   final GetProductDetailsUseCase _getProductDetailsUseCase;
 
-  ProductDetailsCubit(this._getProductDetailsUseCase) : super(ProductDetailsInitial());
+  ProductDetailsCubit(this._getProductDetailsUseCase)
+    : super(ProductDetailsInitial());
 
   Future<void> getProductDetails(int productId) async {
     emit(ProductDetailsLoading());
@@ -22,7 +23,10 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
         emit(ProductDetailsError(response.message));
       }
     } catch (e) {
-      emit(ProductDetailsError('An unexpected error occurred: ${e.toString()}'));
+      if (!isClosed)
+        emit(
+          ProductDetailsError('An unexpected error occurred: ${e.toString()}'),
+        );
     }
   }
 

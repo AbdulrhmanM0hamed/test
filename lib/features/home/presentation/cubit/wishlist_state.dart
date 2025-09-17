@@ -1,50 +1,50 @@
-part of 'wishlist_cubit.dart';
+// part of 'wishlist_cubit.dart';
 
-abstract class WishlistState extends Equatable {
-  const WishlistState();
+// abstract class WishlistState extends Equatable {
+//   const WishlistState();
 
-  @override
-  List<Object> get props => [];
-}
+//   @override
+//   List<Object> get props => [];
+// }
 
-class WishlistInitial extends WishlistState {}
+// class WishlistInitial extends WishlistState {}
 
-class WishlistLoading extends WishlistState {}
+// class WishlistLoading extends WishlistState {}
 
-class WishlistAddedSuccess extends WishlistState {
-  final int productId;
-  final String message;
+// class WishlistAddedSuccess extends WishlistState {
+//   final int productId;
+//   final String message;
 
-  const WishlistAddedSuccess(this.productId, this.message);
+//   const WishlistAddedSuccess(this.productId, this.message);
 
-  @override
-  List<Object> get props => [productId, message];
-}
+//   @override
+//   List<Object> get props => [productId, message];
+// }
 
-class WishlistRemovedSuccess extends WishlistState {
-  final int productId;
-  final String message;
+// class WishlistRemovedSuccess extends WishlistState {
+//   final int productId;
+//   final String message;
 
-  const WishlistRemovedSuccess(this.productId, this.message);
+//   const WishlistRemovedSuccess(this.productId, this.message);
 
-  @override
-  List<Object> get props => [productId, message];
-}
+//   @override
+//   List<Object> get props => [productId, message];
+// }
 
-class WishlistLoadedSuccess extends WishlistState {
-  final List<int> productIds;
+// class WishlistLoadedSuccess extends WishlistState {
+//   final List<int> productIds;
 
-  const WishlistLoadedSuccess(this.productIds);
+//   const WishlistLoadedSuccess(this.productIds);
 
-  @override
-  List<Object> get props => [productIds];
-}
+//   @override
+//   List<Object> get props => [productIds];
+// }
 
-class WishlistError extends WishlistState {
-  final String message;
+// class WishlistError extends WishlistState {
+//   final String message;
 
-  const WishlistError(this.message);
+//   const WishlistError(this.message);
 
-  @override
-  List<Object> get props => [message];
-}
+//   @override
+//   List<Object> get props => [message];
+// }

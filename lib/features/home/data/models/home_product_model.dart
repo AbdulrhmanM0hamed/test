@@ -30,6 +30,12 @@ class HomeProductModel extends HomeProduct {
       originalPrice = fakePriceValue.toString();
     }
 
+    // Debug is_fav value
+    print('🔍 HomeProductModel: Product ${json['id']} - is_fav raw value: ${json['is_fav']} (type: ${json['is_fav'].runtimeType})');
+    
+    final isFav = json['is_fav'] == "1" || json['is_fav'] == 1;
+    print('🔍 HomeProductModel: Product ${json['id']} - isFavorite result: $isFav');
+
     return HomeProductModel(
       id: json['id'] ?? 0,
       name: json['name'] ?? '',
@@ -46,7 +52,7 @@ class HomeProductModel extends HomeProduct {
       isFeatured: true, // من API featured products
       isLatest: true, // من API latest products
       isSpecialOffer: json['discount'] != null && json['discount'] > 0,
-      isFavorite: json['is_fav'] == "1",
+      isFavorite: isFav,
     );
   }
 

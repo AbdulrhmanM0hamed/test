@@ -22,8 +22,9 @@ class ApiEndpoints {
   static const String latestProducts = '/latest-products';
   static const String specialOfferProducts = '/special-offer-products';
   static String get addToWishlist => '$baseUrl/wishlist/add';
-  static String removeFromWishlist(int productId) => '$baseUrl/wishlist/remove/$productId';
-  static String get getWishlist => '$baseUrl/wishlist';
+  static String removeFromWishlist(int productId) =>
+      '$baseUrl/wishlist/remove/$productId';
+  static String get getWishlist => '$baseUrl/my-wishlist';
 
   static String featuredProductsUrl({int? countryId}) =>
       '$baseUrl$featuredProducts${countryId != null ? '?country_id=$countryId' : ''}';

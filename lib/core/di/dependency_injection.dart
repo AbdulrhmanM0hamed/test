@@ -70,9 +70,13 @@ import 'package:test/features/product_details/domain/repositories/product_detail
 import 'package:test/features/product_details/domain/usecases/get_product_details_usecase.dart';
 import 'package:test/features/product_details/presentation/cubit/product_details_cubit.dart';
 // Wishlist feature imports
-import 'package:test/features/home/data/datasources/wishlist_remote_data_source.dart';
-import 'package:test/features/home/data/repositories/wishlist_repository.dart';
-import 'package:test/features/home/domain/usecases/wishlist_use_case.dart';
+import 'package:test/features/wishlist/data/datasources/wishlist_remote_data_source.dart';
+import 'package:test/features/wishlist/data/repositories/wishlist_repository_impl.dart';
+import 'package:test/features/wishlist/domain/repositories/wishlist_repository.dart';
+import 'package:test/features/wishlist/domain/usecases/get_my_wishlist_use_case.dart';
+import 'package:test/features/wishlist/domain/usecases/add_to_wishlist_use_case.dart';
+import 'package:test/features/wishlist/domain/usecases/remove_from_wishlist_use_case.dart';
+import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 
 class DependencyInjection {
   static final GetIt getIt = GetIt.instance;
@@ -284,14 +288,14 @@ class DependencyInjection {
     getIt.registerLazySingleton<WishlistRepository>(
       () => WishlistRepositoryImpl(getIt()),
     );
+    getIt.registerLazySingleton<GetMyWishlistUseCase>(
+      () => GetMyWishlistUseCase(getIt()),
+    );
     getIt.registerLazySingleton<AddToWishlistUseCase>(
       () => AddToWishlistUseCase(getIt()),
     );
     getIt.registerLazySingleton<RemoveFromWishlistUseCase>(
       () => RemoveFromWishlistUseCase(getIt()),
-    );
-    getIt.registerLazySingleton<GetWishlistUseCase>(
-      () => GetWishlistUseCase(getIt()),
     );
 
     getIt.registerSingleton<ProfileRepository>(_profileRepository!);
@@ -438,6 +442,15 @@ class DependencyInjection {
         forgetPasswordUseCase: getIt<ForgetPasswordUseCase>(),
         checkOtpUseCase: getIt<CheckOtpUseCase>(),
         changePasswordUseCase: getIt<ChangePasswordUseCase>(),
+      ),
+    );
+
+    // Wishlist Cubit
+    getIt.registerFactory<WishlistCubit>(
+      () => WishlistCubit(
+        getIt<GetMyWishlistUseCase>(),
+        getIt<AddToWishlistUseCase>(),
+        getIt<RemoveFromWishlistUseCase>(),
       ),
     );
   }

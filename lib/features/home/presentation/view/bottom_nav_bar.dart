@@ -2,12 +2,15 @@ import 'package:test/features/profile/presentation/view/profile_wrapper.dart';
 import 'package:test/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/constant/app_assets.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/features/home/presentation/view/home_page.dart';
 import 'package:test/features/categories/presentation/view/categories_view.dart';
+import 'package:test/features/wishlist/presentation/view/wishlist_view.dart';
+import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/services/app_state_service.dart';
 import 'package:test/features/home/presentation/widgets/login_prompt_widget.dart';
@@ -33,12 +36,18 @@ class _HomeViewState extends State<BottomNavBar> {
 
   void _initializeScreens() {
     final appStateService = DependencyInjection.getIt.get<AppStateService>();
-    final isLoggedIn = appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
-    
+    final isLoggedIn =
+        appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+
     _screens = [
       const HomePage(),
       const CategoriesView(),
-      const Center(child: Text('Favorites')),
+      isLoggedIn
+          ? BlocProvider(
+              create: (context) => DependencyInjection.getIt<WishlistCubit>(),
+              child: const WishlistView(),
+            )
+          : const LoginPromptWidget(),
       const Center(child: Text('Cart')),
       isLoggedIn ? const ProfileWrapper() : const LoginPromptWidget(),
     ];
@@ -72,7 +81,6 @@ class _HomeViewState extends State<BottomNavBar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-        
           _buildNavItem(
             1,
             AppAssets.categoryIcon,

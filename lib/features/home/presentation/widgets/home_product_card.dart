@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/utils/constant/app_assets.dart';
 import '../../../../core/utils/constant/font_manger.dart';
@@ -10,8 +11,6 @@ import '../../../../core/utils/theme/app_colors.dart';
 import '../../../../core/utils/animations/custom_progress_indcator.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../domain/entities/home_product.dart';
-import '../../domain/usecases/wishlist_use_case.dart';
-import '../cubit/wishlist_cubit.dart';
 
 class HomeProductCard extends StatefulWidget {
   final HomeProduct product;
@@ -29,10 +28,17 @@ class _HomeProductCardState extends State<HomeProductCard>
   late Animation<Offset> _slideAnimation;
   late Animation<double> _fadeAnimation;
   bool _isPressed = false;
+  bool _isInWishlist = false;
 
   @override
   void initState() {
     super.initState();
+
+    // Initialize wishlist state from product data
+    _isInWishlist = widget.product.isFavorite;
+    print(
+      '🔍 HomeProductCard: Product ${widget.product.id} - isFavorite: ${widget.product.isFavorite}, _isInWishlist: $_isInWishlist',
+    );
 
     _controller = AnimationController(
       vsync: this,
@@ -232,27 +238,63 @@ class _HomeProductCardState extends State<HomeProductCard>
 
   Widget _buildFavoriteButton() {
     return BlocProvider(
-      create: (context) {
-        final cubit = WishlistCubit(
-          DependencyInjection.getIt.get<AddToWishlistUseCase>(),
-          DependencyInjection.getIt.get<RemoveFromWishlistUseCase>(),
-          DependencyInjection.getIt.get<GetWishlistUseCase>(),
-        );
-        // Initialize with current product favorite status
-        cubit.initializeWithProduct(
-          widget.product.id,
-          widget.product.isFavorite,
-        );
-        return cubit;
-      },
-      child: BlocBuilder<WishlistCubit, WishlistState>(
+      create: (context) => DependencyInjection.getIt<WishlistCubit>(),
+      child: BlocConsumer<WishlistCubit, WishlistState>(
+        listener: (context, state) {
+          if (state is WishlistItemAdded &&
+              state.productId == widget.product.id) {
+            setState(() {
+              _isInWishlist = true;
+            });
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          } else if (state is WishlistItemRemoved &&
+              state.productId == widget.product.id) {
+            setState(() {
+              _isInWishlist = false;
+            });
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.orange,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          } else if (state is WishlistError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 3),
+                action: SnackBarAction(
+                  label: 'إغلاق',
+                  textColor: Colors.white,
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  },
+                ),
+              ),
+            );
+          }
+        },
         builder: (context, state) {
           final wishlistCubit = context.read<WishlistCubit>();
-          final isInWishlist = wishlistCubit.isInWishlist(widget.product.id);
 
           return GestureDetector(
             onTap: () {
-              wishlistCubit.toggleWishlist(widget.product.id);
+              // Prevent multiple taps while loading
+              if (state is WishlistLoading) return;
+
+              if (_isInWishlist) {
+                wishlistCubit.removeFromWishlist(widget.product.id);
+              } else {
+                wishlistCubit.addToWishlist(widget.product.id);
+              }
             },
             child: Container(
               padding: const EdgeInsets.all(6),
@@ -279,8 +321,8 @@ class _HomeProductCardState extends State<HomeProductCard>
                       ),
                     )
                   : Icon(
-                      isInWishlist ? Icons.favorite : Icons.favorite_border,
-                      color: isInWishlist ? Colors.red : Colors.grey[600],
+                      _isInWishlist ? Icons.favorite : Icons.favorite_border,
+                      color: _isInWishlist ? Colors.red : Colors.grey[600],
                       size: 18,
                     ),
             ),

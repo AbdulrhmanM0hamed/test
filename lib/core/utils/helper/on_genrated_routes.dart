@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/features/auth/presentation/view/forget_password_view_new.dart';
 import 'package:test/features/auth/presentation/cubit/forget_password_cubit.dart';
+import 'package:test/features/wishlist/presentation/view/wishlist_view.dart';
+import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/features/auth/presentation/view/register_view.dart';
 import '../../../features/splash/presentation/view/splash_view.dart';
 import '../../../features/onboarding/presentation/view/onboarding_view.dart';
@@ -54,6 +56,19 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
         builder: (context) => BlocProvider(
           create: (context) => DependencyInjection.getIt<ForgetPasswordCubit>(),
           child: const ForgetPasswordViewNew(),
+        ),
+      );
+
+    case WishlistView.routeName:
+      print('🔍 Navigation: Navigating to WishlistView');
+      return MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) {
+            final cubit = DependencyInjection.getIt<WishlistCubit>();
+            cubit.getMyWishlist();
+            return cubit;
+          },
+          child: const WishlistView(),
         ),
       );
 
