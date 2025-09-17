@@ -33,16 +33,16 @@ class RegistrationFormFields extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s = AppLocalizations.of(context);
+    final s = AppLocalizations.of(context)!;
 
     return Column(
       children: [
         // Name Field
         _buildFieldWithLabel(
-          label: 'الاسم الكامل',
+          label: s.fullName,
           child: CustomTextField(
             controller: nameController,
-            hint: 'أدخل الاسم الكامل',
+            hint: s.enterFullName,
             validator: (value) =>
                 FormValidators.validateFullName(value, context),
           ),
@@ -51,7 +51,7 @@ class RegistrationFormFields extends StatelessWidget {
 
         // Email Field
         _buildFieldWithLabel(
-          label: s!.email,
+          label: s.email,
           child: CustomTextField(
             controller: emailController,
             hint: s.writeEmail,
@@ -63,10 +63,10 @@ class RegistrationFormFields extends StatelessWidget {
 
         // Phone Field
         _buildFieldWithLabel(
-          label: 'رقم الهاتف',
+          label: s.phoneNumber,
           child: CustomTextField(
             controller: phoneController,
-            hint: 'أدخل رقم الهاتف',
+            hint: s.enterPhoneNumber,
             keyboardType: TextInputType.phone,
             validator: (value) =>
                 FormValidators.validatePhoneNumber(value, context),
@@ -89,11 +89,10 @@ class RegistrationFormFields extends StatelessWidget {
 
         // Confirm Password Field
         _buildFieldWithLabel(
-          label: 'تأكيد كلمة المرور',
+          label: s.confirmPassword,
           child: PasswordField(
             controller: confirmPasswordController,
-            hintText: 'أدخل كلمة المرور مرة أخرى',
-
+            hintText: s.reEnterPassword,
             validator: (value) => FormValidators.validatePasswordConfirmation(
               value,
               passwordController.text,
@@ -114,7 +113,6 @@ class RegistrationFormFields extends StatelessWidget {
           style: getMediumStyle(
             fontFamily: FontConstant.cairo,
             fontSize: FontSize.size14,
-            color: AppColors.textPrimary,
           ),
         ),
         const SizedBox(height: 8),

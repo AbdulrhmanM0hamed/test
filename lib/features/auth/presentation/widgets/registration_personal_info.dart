@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:test/l10n/app_localizations.dart';
 
 class RegistrationPersonalInfo extends StatelessWidget {
   final DateTime? selectedBirthDate;
@@ -19,12 +20,11 @@ class RegistrationPersonalInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
         // Birth Date Field
         _buildFieldWithLabel(
-          label: 'التاريخ',
+          label: AppLocalizations.of(context)!.birthDate,
           child: GestureDetector(
             onTap: onBirthDateTap,
             child: Container(
@@ -33,7 +33,6 @@ class RegistrationPersonalInfo extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: AppColors.border),
-                color: Colors.white,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -41,13 +40,10 @@ class RegistrationPersonalInfo extends StatelessWidget {
                   Text(
                     selectedBirthDate != null
                         ? '${selectedBirthDate!.day}/${selectedBirthDate!.month}/${selectedBirthDate!.year}'
-                        : 'اختر تاريخ الميلاد',
+                        : AppLocalizations.of(context)!.selectBirthDate,
                     style: getRegularStyle(
                       fontFamily: FontConstant.cairo,
                       fontSize: FontSize.size14,
-                      color: selectedBirthDate != null
-                          ? AppColors.textPrimary
-                          : AppColors.textSecondary,
                     ),
                   ),
                   const Icon(
@@ -64,7 +60,7 @@ class RegistrationPersonalInfo extends StatelessWidget {
 
         // Gender Selection
         _buildFieldWithLabel(
-          label: 'الجنس',
+          label: AppLocalizations.of(context)!.gender,
           child: Row(
             children: [
               Expanded(
@@ -82,7 +78,7 @@ class RegistrationPersonalInfo extends StatelessWidget {
                       ),
                       color: selectedGender == 'male'
                           ? AppColors.primary.withValues(alpha: 0.05)
-                          : Colors.white,
+                          : Colors.grey[650],
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -95,13 +91,16 @@ class RegistrationPersonalInfo extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'ذكر',
+                          AppLocalizations.of(context)!.male,
                           style: getMediumStyle(
                             fontFamily: FontConstant.cairo,
                             fontSize: FontSize.size14,
                             color: selectedGender == 'male'
                                 ? AppColors.primary
-                                : AppColors.textPrimary,
+                                : Theme.of(context).brightness ==
+                                      Brightness.light
+                                ? AppColors.black
+                                : AppColors.white,
                           ),
                         ),
                       ],
@@ -125,7 +124,7 @@ class RegistrationPersonalInfo extends StatelessWidget {
                       ),
                       color: selectedGender == 'female'
                           ? AppColors.primary.withValues(alpha: 0.05)
-                          : Colors.white,
+                          : Colors.grey[650],
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -138,13 +137,16 @@ class RegistrationPersonalInfo extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'أنثى',
+                          AppLocalizations.of(context)!.female,
                           style: getMediumStyle(
                             fontFamily: FontConstant.cairo,
                             fontSize: FontSize.size14,
                             color: selectedGender == 'female'
                                 ? AppColors.primary
-                                : AppColors.textPrimary,
+                                : Theme.of(context).brightness ==
+                                      Brightness.light
+                                ? AppColors.black
+                                : AppColors.white,
                           ),
                         ),
                       ],
@@ -168,7 +170,6 @@ class RegistrationPersonalInfo extends StatelessWidget {
           style: getMediumStyle(
             fontFamily: FontConstant.cairo,
             fontSize: FontSize.size14,
-            color: AppColors.textPrimary,
           ),
         ),
         const SizedBox(height: 8),

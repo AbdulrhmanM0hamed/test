@@ -10,6 +10,7 @@ import 'package:test/features/profile/domain/entities/city.dart';
 import 'package:test/features/profile/domain/entities/country.dart';
 import 'package:test/features/profile/domain/entities/region.dart';
 import 'package:provider/provider.dart';
+import 'package:test/l10n/app_localizations.dart';
 
 class RegistrationLocationSelector extends StatelessWidget {
   final Country? selectedCountry;
@@ -31,14 +32,13 @@ class RegistrationLocationSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return BlocBuilder<LocationCubit, LocationState>(
       builder: (context, state) {
         return Column(
           children: [
             // Country Selection
             _buildFieldWithLabel(
-              label: 'الدولة',
+              label: AppLocalizations.of(context)!.country,
               child: _buildCountrySelector(context),
             ),
             const SizedBox(height: 16),
@@ -46,7 +46,7 @@ class RegistrationLocationSelector extends StatelessWidget {
             // City Selection (only show if country is selected)
             if (selectedCountry != null) ...[
               _buildFieldWithLabel(
-                label: 'المدينة',
+                label: AppLocalizations.of(context)!.city,
                 child: _buildCityDropdown(context, state),
               ),
               const SizedBox(height: 16),
@@ -55,7 +55,7 @@ class RegistrationLocationSelector extends StatelessWidget {
             // Region Selection (only show if city is selected)
             if (selectedCity != null) ...[
               _buildFieldWithLabel(
-                label: 'المنطقة',
+                label: AppLocalizations.of(context)!.region,
                 child: _buildRegionDropdown(context, state),
               ),
             ],
@@ -90,7 +90,7 @@ class RegistrationLocationSelector extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'جاري تحميل الدول...',
+                  AppLocalizations.of(context)!.loadingCountries,
                   style: getMediumStyle(
                     fontFamily: FontConstant.cairo,
                     fontSize: FontSize.size14,
@@ -132,12 +132,14 @@ class RegistrationLocationSelector extends StatelessWidget {
                       height: 20,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.primary,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      'جاري تحميل المدن...',
+                      AppLocalizations.of(context)!.loadingCities,
                       style: getMediumStyle(
                         fontFamily: FontConstant.cairo,
                         fontSize: FontSize.size14,
@@ -186,11 +188,15 @@ class RegistrationLocationSelector extends StatelessWidget {
                     color: Colors.red.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(50),
                   ),
-                  child: Icon(Icons.wifi_off_rounded, color: Colors.red, size: 28),
+                  child: Icon(
+                    Icons.wifi_off_rounded,
+                    color: Colors.red,
+                    size: 28,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'خطأ في تحميل الدول',
+                  AppLocalizations.of(context)!.errorLoadingCountries,
                   style: getBoldStyle(
                     fontFamily: FontConstant.cairo,
                     fontSize: FontSize.size16,
@@ -199,7 +205,7 @@ class RegistrationLocationSelector extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'تأكد من اتصالك بالإنترنت وحاول مرة أخرى',
+                  AppLocalizations.of(context)!.checkInternetConnection,
                   style: getRegularStyle(
                     fontFamily: FontConstant.cairo,
                     fontSize: FontSize.size12,
@@ -212,7 +218,7 @@ class RegistrationLocationSelector extends StatelessWidget {
                   onPressed: () => context.read<LocationCubit>().getCountries(),
                   icon: Icon(Icons.refresh, size: 18),
                   label: Text(
-                    'إعادة المحاولة',
+                    AppLocalizations.of(context)!.retry,
                     style: getBoldStyle(
                       fontFamily: FontConstant.cairo,
                       fontSize: FontSize.size14,
@@ -222,7 +228,10 @@ class RegistrationLocationSelector extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 12,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -263,7 +272,7 @@ class RegistrationLocationSelector extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'اختر دولتك',
+                  AppLocalizations.of(context)!.selectYourCountry,
                   style: getBoldStyle(
                     fontFamily: FontConstant.cairo,
                     fontSize: FontSize.size16,
@@ -272,7 +281,7 @@ class RegistrationLocationSelector extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'اضغط لتحميل الدول المتاحة',
+                  AppLocalizations.of(context)!.tapToLoadCountries,
                   style: getRegularStyle(
                     fontFamily: FontConstant.cairo,
                     fontSize: FontSize.size12,
@@ -301,7 +310,7 @@ class RegistrationLocationSelector extends StatelessWidget {
       itemBuilder: (context, index) {
         final country = countries[index];
         final isSelected = selectedCountry?.id == country.id;
-        
+
         return GestureDetector(
           onTap: () {
             onCountrySelected(country);
@@ -315,7 +324,7 @@ class RegistrationLocationSelector extends StatelessWidget {
                 color: isSelected ? AppColors.primary : AppColors.border,
                 width: isSelected ? 2 : 1,
               ),
-              gradient: isSelected 
+              gradient: isSelected
                   ? LinearGradient(
                       colors: [
                         AppColors.primary.withOpacity(0.1),
@@ -328,7 +337,7 @@ class RegistrationLocationSelector extends StatelessWidget {
               color: isSelected ? null : Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: isSelected 
+                  color: isSelected
                       ? AppColors.primary.withOpacity(0.2)
                       : Colors.black.withOpacity(0.05),
                   blurRadius: isSelected ? 8 : 4,
@@ -407,7 +416,9 @@ class RegistrationLocationSelector extends StatelessWidget {
   }
 
   Widget _buildCityDropdown(BuildContext context, LocationState state) {
-    if (state is LocationCitiesLoaded || state is LocationRegionsLoading || state is LocationRegionsLoaded) {
+    if (state is LocationCitiesLoaded ||
+        state is LocationRegionsLoading ||
+        state is LocationRegionsLoaded) {
       List<City> cities = [];
       if (state is LocationCitiesLoaded) {
         cities = state.cities;

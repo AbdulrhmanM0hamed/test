@@ -482,7 +482,7 @@ abstract class AppLocalizations {
   /// No description provided for @birthDate.
   ///
   /// In en, this message translates to:
-  /// **'Birth Date'**
+  /// **'Date of Birth'**
   String get birthDate;
 
   /// No description provided for @gender.
@@ -1292,7 +1292,7 @@ abstract class AppLocalizations {
   /// No description provided for @confirmPassword.
   ///
   /// In en, this message translates to:
-  /// **'Confirm password'**
+  /// **'Confirm Password'**
   String get confirmPassword;
 
   /// No description provided for @pleaseEnterEmail.
@@ -1702,6 +1702,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Log Out'**
   String get logoutButton;
+
+  /// No description provided for @enterFullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your full name'**
+  String get enterFullName;
+
+  /// No description provided for @enterPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your phone number'**
+  String get enterPhoneNumber;
+
+  /// No description provided for @reEnterPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-enter your password'**
+  String get reEnterPassword;
+
+  /// No description provided for @acceptTermsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'You must accept the terms and conditions'**
+  String get acceptTermsRequired;
+
+  /// No description provided for @birthdateRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your birth date'**
+  String get birthdateRequired;
+
+  /// No description provided for @genderRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your gender'**
+  String get genderRequired;
+
+  /// No description provided for @countryRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your country'**
+  String get countryRequired;
+
+  /// No description provided for @cityRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your city'**
+  String get cityRequired;
+
+  /// No description provided for @regionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your region'**
+  String get regionRequired;
+
+  /// No description provided for @accountCreatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Account created successfully'**
+  String get accountCreatedSuccessfully;
+
+  /// No description provided for @createYourAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your new account'**
+  String get createYourAccount;
+
+  /// No description provided for @alreadyHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get alreadyHaveAccount;
+
+  /// No description provided for @loadingCountries.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading countries...'**
+  String get loadingCountries;
+
+  /// No description provided for @loadingCities.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading cities...'**
+  String get loadingCities;
+
+  /// No description provided for @errorLoadingCountries.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading countries'**
+  String get errorLoadingCountries;
+
+  /// No description provided for @checkInternetConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your internet connection and try again'**
+  String get checkInternetConnection;
+
+  /// No description provided for @selectYourCountry.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your country'**
+  String get selectYourCountry;
+
+  /// No description provided for @tapToLoadCountries.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to load available countries'**
+  String get tapToLoadCountries;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -201,7 +201,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get phoneNumber => 'Phone Number';
 
   @override
-  String get birthDate => 'Birth Date';
+  String get birthDate => 'Date of Birth';
 
   @override
   String get gender => 'Gender';
@@ -606,7 +606,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get enterPassword => 'Enter password';
 
   @override
-  String get confirmPassword => 'Confirm password';
+  String get confirmPassword => 'Confirm Password';
 
   @override
   String get pleaseEnterEmail => 'Please enter email';
@@ -811,4 +811,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get logoutButton => 'Log Out';
+
+  @override
+  String get enterFullName => 'Enter your full name';
+
+  @override
+  String get enterPhoneNumber => 'Enter your phone number';
+
+  @override
+  String get reEnterPassword => 'Re-enter your password';
+
+  @override
+  String get acceptTermsRequired => 'You must accept the terms and conditions';
+
+  @override
+  String get birthdateRequired => 'Please select your birth date';
+
+  @override
+  String get genderRequired => 'Please select your gender';
+
+  @override
+  String get countryRequired => 'Please select your country';
+
+  @override
+  String get cityRequired => 'Please select your city';
+
+  @override
+  String get regionRequired => 'Please select your region';
+
+  @override
+  String get accountCreatedSuccessfully => 'Account created successfully';
+
+  @override
+  String get createYourAccount => 'Create your new account';
+
+  @override
+  String get alreadyHaveAccount => 'Already have an account?';
+
+  @override
+  String get loadingCountries => 'Loading countries...';
+
+  @override
+  String get loadingCities => 'Loading cities...';
+
+  @override
+  String get errorLoadingCountries => 'Error loading countries';
+
+  @override
+  String get checkInternetConnection => 'Please check your internet connection and try again';
+
+  @override
+  String get selectYourCountry => 'Select your country';
+
+  @override
+  String get tapToLoadCountries => 'Tap to load available countries';
 }

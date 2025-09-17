@@ -67,19 +67,6 @@ class _RegisterViewState extends State<RegisterView> {
       lastDate: DateTime.now().subtract(
         const Duration(days: 4380),
       ), // 12 years ago
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: AppColors.primary,
-              onPrimary: Colors.white,
-              surface: Colors.white,
-              onSurface: AppColors.textPrimary,
-            ),
-          ),
-          child: child!,
-        );
-      },
     );
 
     if (picked != null && picked != _selectedBirthDate) {
@@ -94,7 +81,7 @@ class _RegisterViewState extends State<RegisterView> {
       if (!_acceptTerms) {
         CustomSnackbar.showError(
           context: context,
-          message: 'يجب الموافقة على الشروط والأحكام',
+          message: AppLocalizations.of(context)!.acceptTermsRequired,
         );
         return;
       }
@@ -102,7 +89,7 @@ class _RegisterViewState extends State<RegisterView> {
       if (_selectedBirthDate == null) {
         CustomSnackbar.showError(
           context: context,
-          message: 'يرجى اختيار تاريخ الميلاد',
+          message: AppLocalizations.of(context)!.birthdateRequired,
         );
         return;
       }
@@ -110,7 +97,7 @@ class _RegisterViewState extends State<RegisterView> {
       if (_selectedGender == null) {
         CustomSnackbar.showError(
           context: context,
-          message: 'يرجى اختيار الجنس',
+          message: AppLocalizations.of(context)!.genderRequired,
         );
         return;
       }
@@ -118,7 +105,7 @@ class _RegisterViewState extends State<RegisterView> {
       if (_selectedCountry == null) {
         CustomSnackbar.showError(
           context: context,
-          message: 'يرجى اختيار الدولة',
+          message: AppLocalizations.of(context)!.countryRequired,
         );
         return;
       }
@@ -126,7 +113,7 @@ class _RegisterViewState extends State<RegisterView> {
       if (_selectedCity == null) {
         CustomSnackbar.showError(
           context: context,
-          message: 'يرجى اختيار المدينة',
+          message: AppLocalizations.of(context)!.cityRequired,
         );
         return;
       }
@@ -134,7 +121,7 @@ class _RegisterViewState extends State<RegisterView> {
       if (_selectedRegion == null) {
         CustomSnackbar.showError(
           context: context,
-          message: 'يرجى اختيار المنطقة',
+          message: AppLocalizations.of(context)!.regionRequired,
         );
         return;
       }
@@ -171,13 +158,15 @@ class _RegisterViewState extends State<RegisterView> {
       ],
       child: Builder(
         builder: (context) => Scaffold(
-          backgroundColor: Colors.white,
           body: BlocConsumer<RegistrationCubit, RegistrationState>(
             listener: (context, state) {
               if (state is RegistrationSuccess) {
                 CustomSnackbar.showSuccess(
                   context: context,
-                  message: state.message ?? 'تم إنشاء الحساب بنجاح',
+                  message:
+                      state.message ??
+                      s?.accountCreatedSuccessfully ??
+                      'Account created successfully',
                 );
                 Navigator.pushReplacementNamed(context, '/login');
               } else if (state is RegistrationError) {
@@ -219,7 +208,7 @@ class _RegisterViewState extends State<RegisterView> {
 
                               // Welcome Text
                               Text(
-                                'أنشئ حسابك الجديد',
+                                s.createYourAccount,
                                 style: getRegularStyle(
                                   fontFamily: FontConstant.cairo,
                                   fontSize: FontSize.size16,
@@ -375,7 +364,7 @@ class _RegisterViewState extends State<RegisterView> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'لديك حساب بالفعل؟',
+                                    s.alreadyHaveAccount,
                                     style: getRegularStyle(
                                       fontFamily: FontConstant.cairo,
                                       fontSize: FontSize.size14,

@@ -1,5 +1,5 @@
 class ApiEndpoints {
-  static String get baseUrl => 'https://sobiehcoffee.com/sobieh/public/api';
+  static String get baseUrl => 'https://sobiehcoffee.com/dashboard/public/api';
 
   static String get login => '$baseUrl/signin';
   static String get register => '$baseUrl/signup';

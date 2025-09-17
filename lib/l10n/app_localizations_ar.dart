@@ -213,7 +213,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get locationInformation => 'معلومات الموقع';
 
   @override
-  String get country => 'البلد';
+  String get country => 'الدولة';
 
   @override
   String get city => 'المدينة';
@@ -811,4 +811,58 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get logoutButton => 'تسجيل خروج';
+
+  @override
+  String get enterFullName => 'أدخل الاسم الكامل';
+
+  @override
+  String get enterPhoneNumber => 'أدخل رقم الهاتف';
+
+  @override
+  String get reEnterPassword => 'أدخل كلمة المرور مرة أخرى';
+
+  @override
+  String get acceptTermsRequired => 'يجب الموافقة على الشروط والأحكام';
+
+  @override
+  String get birthdateRequired => 'يرجى اختيار تاريخ الميلاد';
+
+  @override
+  String get genderRequired => 'يرجى اختيار الجنس';
+
+  @override
+  String get countryRequired => 'يرجى اختيار الدولة';
+
+  @override
+  String get cityRequired => 'يرجى اختيار المدينة';
+
+  @override
+  String get regionRequired => 'يرجى اختيار المنطقة';
+
+  @override
+  String get accountCreatedSuccessfully => 'تم إنشاء الحساب بنجاح';
+
+  @override
+  String get createYourAccount => 'أنشئ حسابك الجديد';
+
+  @override
+  String get alreadyHaveAccount => 'لديك حساب بالفعل؟';
+
+  @override
+  String get loadingCountries => 'جاري تحميل الدول...';
+
+  @override
+  String get loadingCities => 'جاري تحميل المدن...';
+
+  @override
+  String get errorLoadingCountries => 'حدث خطأ في تحميل الدول';
+
+  @override
+  String get checkInternetConnection => 'تأكد من اتصالك بالإنترنت وحاول مرة أخرى';
+
+  @override
+  String get selectYourCountry => 'اختر دولتك';
+
+  @override
+  String get tapToLoadCountries => 'اضغط لتحميل الدول المتاحة';
 }
