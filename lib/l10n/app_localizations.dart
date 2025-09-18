@@ -1810,6 +1810,318 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap to load available countries'**
   String get tapToLoadCountries;
+
+  /// No description provided for @cartEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Cart is Empty'**
+  String get cartEmpty;
+
+  /// No description provided for @cartEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No products in your shopping cart'**
+  String get cartEmptyMessage;
+
+  /// No description provided for @startShopping.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Shopping'**
+  String get startShopping;
+
+  /// No description provided for @clearAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear All'**
+  String get clearAll;
+
+  /// No description provided for @clearCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Cart'**
+  String get clearCart;
+
+  /// No description provided for @clearCartConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove all products from the cart?'**
+  String get clearCartConfirmation;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
+
+  /// No description provided for @cartCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'All products removed from cart'**
+  String get cartCleared;
+
+  /// No description provided for @failedToClearCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to clear all products from cart'**
+  String get failedToClearCart;
+
+  /// No description provided for @failedToRemoveFromCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to remove product from cart'**
+  String get failedToRemoveFromCart;
+
+  /// No description provided for @failedToAddToCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to add product to cart'**
+  String get failedToAddToCart;
+
+  /// No description provided for @failedToUpdateQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update quantity'**
+  String get failedToUpdateQuantity;
+
+  /// No description provided for @networkError.
+  ///
+  /// In en, this message translates to:
+  /// **'Network connection error'**
+  String get networkError;
+
+  /// No description provided for @serverError.
+  ///
+  /// In en, this message translates to:
+  /// **'Server error'**
+  String get serverError;
+
+  /// No description provided for @unknownError.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred'**
+  String get unknownError;
+
+  /// No description provided for @pleaseCheckConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your internet connection'**
+  String get pleaseCheckConnection;
+
+  /// No description provided for @tryAgainLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Please try again later'**
+  String get tryAgainLater;
+
+  /// No description provided for @remove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get remove;
+
+  /// No description provided for @update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get update;
+
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get loading;
+
+  /// No description provided for @error.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get error;
+
+  /// No description provided for @success.
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
+  String get success;
+
+  /// No description provided for @failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get failed;
+
+  /// No description provided for @productRemovedFromCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Product removed from cart'**
+  String get productRemovedFromCart;
+
+  /// No description provided for @quantityUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity updated'**
+  String get quantityUpdated;
+
+  /// No description provided for @maxQuantityReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum quantity reached'**
+  String get maxQuantityReached;
+
+  /// No description provided for @minQuantityReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum quantity is 1'**
+  String get minQuantityReached;
+
+  /// No description provided for @wishlistEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Wishlist is Empty'**
+  String get wishlistEmpty;
+
+  /// No description provided for @wishlistEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No products in your wishlist'**
+  String get wishlistEmptyMessage;
+
+  /// No description provided for @addProductsToWishlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Add products to your wishlist to see them here'**
+  String get addProductsToWishlist;
+
+  /// No description provided for @clearWishlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Wishlist'**
+  String get clearWishlist;
+
+  /// No description provided for @clearWishlistConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove all products from wishlist?'**
+  String get clearWishlistConfirmation;
+
+  /// No description provided for @wishlistCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'All products removed from wishlist'**
+  String get wishlistCleared;
+
+  /// No description provided for @failedToClearWishlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to clear all products from wishlist'**
+  String get failedToClearWishlist;
+
+  /// No description provided for @failedToRemoveFromWishlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to remove product from wishlist'**
+  String get failedToRemoveFromWishlist;
+
+  /// No description provided for @failedToAddToWishlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to add product to wishlist'**
+  String get failedToAddToWishlist;
+
+  /// No description provided for @productRemovedFromWishlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Product removed from wishlist'**
+  String get productRemovedFromWishlist;
+
+  /// No description provided for @productAddedToWishlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Product added to wishlist'**
+  String get productAddedToWishlist;
+
+  /// No description provided for @moveToCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to Cart'**
+  String get moveToCart;
+
+  /// No description provided for @addedToCartFromWishlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Product moved from wishlist to cart'**
+  String get addedToCartFromWishlist;
+
+  /// No description provided for @failedToMoveToCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to move product to cart'**
+  String get failedToMoveToCart;
+
+  /// No description provided for @loginRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please login first'**
+  String get loginRequired;
+
+  /// No description provided for @productAddedToCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Product added to cart'**
+  String get productAddedToCart;
+
+  /// No description provided for @taxes.
+  ///
+  /// In en, this message translates to:
+  /// **'Taxes'**
+  String get taxes;
+
+  /// No description provided for @confirmDeletion.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Deletion'**
+  String get confirmDeletion;
+
+  /// No description provided for @deleteAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete All'**
+  String get deleteAll;
+
+  /// No description provided for @productsInWishlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Products in Wishlist'**
+  String get productsInWishlist;
+
+  /// No description provided for @loadingWishlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading Wishlist'**
+  String get loadingWishlist;
+
+  /// No description provided for @browseProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse Products'**
+  String get browseProducts;
+
+  /// No description provided for @wishlistEmptyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'No products in your wishlist'**
+  String get wishlistEmptyDescription;
+
+  /// No description provided for @currency.
+  ///
+  /// In en, this message translates to:
+  /// **'EGP'**
+  String get currency;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -865,4 +865,160 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tapToLoadCountries => 'اضغط لتحميل الدول المتاحة';
+
+  @override
+  String get cartEmpty => 'السلة فارغة';
+
+  @override
+  String get cartEmptyMessage => 'لا توجد منتجات في سلة التسوق';
+
+  @override
+  String get startShopping => 'ابدأ التسوق';
+
+  @override
+  String get clearAll => 'حذف الكل';
+
+  @override
+  String get clearCart => 'حذف السلة';
+
+  @override
+  String get clearCartConfirmation => 'هل أنت متأكد من حذف جميع المنتجات من السلة؟';
+
+  @override
+  String get yes => 'نعم';
+
+  @override
+  String get no => 'لا';
+
+  @override
+  String get cartCleared => 'تم حذف جميع المنتجات من السلة';
+
+  @override
+  String get failedToClearCart => 'فشل في حذف جميع المنتجات من السلة';
+
+  @override
+  String get failedToRemoveFromCart => 'فشل في حذف المنتج من السلة';
+
+  @override
+  String get failedToAddToCart => 'فشل في إضافة المنتج للسلة';
+
+  @override
+  String get failedToUpdateQuantity => 'فشل في تحديث الكمية';
+
+  @override
+  String get networkError => 'خطأ في الاتصال بالشبكة';
+
+  @override
+  String get serverError => 'خطأ في الخادم';
+
+  @override
+  String get unknownError => 'حدث خطأ غير متوقع';
+
+  @override
+  String get pleaseCheckConnection => 'يرجى التحقق من اتصال الإنترنت';
+
+  @override
+  String get tryAgainLater => 'حاول مرة أخرى لاحقاً';
+
+  @override
+  String get remove => 'حذف';
+
+  @override
+  String get update => 'تحديث';
+
+  @override
+  String get loading => 'جاري التحميل...';
+
+  @override
+  String get error => 'خطأ';
+
+  @override
+  String get success => 'نجح';
+
+  @override
+  String get failed => 'فشل';
+
+  @override
+  String get productRemovedFromCart => 'تم حذف المنتج من السلة';
+
+  @override
+  String get quantityUpdated => 'تم تحديث الكمية';
+
+  @override
+  String get maxQuantityReached => 'تم الوصول للحد الأقصى من الكمية';
+
+  @override
+  String get minQuantityReached => 'الحد الأدنى للكمية هو 1';
+
+  @override
+  String get wishlistEmpty => 'المفضلة فارغة';
+
+  @override
+  String get wishlistEmptyMessage => 'لا توجد منتجات في قائمة المفضلة';
+
+  @override
+  String get addProductsToWishlist => 'أضف منتجات إلى المفضلة لتظهر هنا';
+
+  @override
+  String get clearWishlist => 'حذف المفضلة';
+
+  @override
+  String get clearWishlistConfirmation => 'هل أنت متأكد من حذف جميع المنتجات من المفضلة؟';
+
+  @override
+  String get wishlistCleared => 'تم حذف جميع المنتجات من المفضلة';
+
+  @override
+  String get failedToClearWishlist => 'فشل في حذف جميع المنتجات من المفضلة';
+
+  @override
+  String get failedToRemoveFromWishlist => 'فشل في حذف المنتج من المفضلة';
+
+  @override
+  String get failedToAddToWishlist => 'فشل في إضافة المنتج للمفضلة';
+
+  @override
+  String get productRemovedFromWishlist => 'تم حذف المنتج من المفضلة';
+
+  @override
+  String get productAddedToWishlist => 'تم إضافة المنتج للمفضلة';
+
+  @override
+  String get moveToCart => 'نقل للسلة';
+
+  @override
+  String get addedToCartFromWishlist => 'تم نقل المنتج من المفضلة للسلة';
+
+  @override
+  String get failedToMoveToCart => 'فشل في نقل المنتج للسلة';
+
+  @override
+  String get loginRequired => 'يجب تسجيل الدخول أولاً';
+
+  @override
+  String get productAddedToCart => 'تم إضافة المنتج إلى السلة';
+
+  @override
+  String get taxes => 'الضرائب';
+
+  @override
+  String get confirmDeletion => 'تأكيد الحذف';
+
+  @override
+  String get deleteAll => 'حذف الكل';
+
+  @override
+  String get productsInWishlist => 'منتجات المفضلة';
+
+  @override
+  String get loadingWishlist => 'جاري تحميل المفضلة...';
+
+  @override
+  String get browseProducts => 'تصفح المنتجات';
+
+  @override
+  String get wishlistEmptyDescription => 'لا توجد منتجات في قائمة المفضلة';
+
+  @override
+  String get currency => 'ج.م';
 }

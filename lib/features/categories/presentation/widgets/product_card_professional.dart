@@ -341,7 +341,7 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
                   children: [
                     // Price
                     Text(
-                      '${widget.product.finalPrice.toStringAsFixed(0)} ${widget.product.currency}',
+                      '${widget.product.finalPrice.toStringAsFixed(0)} ${AppLocalizations.of(context)!.currency}',
                       style: getBoldStyle(
                         fontFamily: FontConstant.cairo,
                         fontSize: FontSize.size14,

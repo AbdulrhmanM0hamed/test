@@ -15,11 +15,7 @@ class WishlistItemCard extends StatefulWidget {
   final WishlistItem item;
   final VoidCallback? onTap;
 
-  const WishlistItemCard({
-    super.key,
-    required this.item,
-    this.onTap,
-  });
+  const WishlistItemCard({super.key, required this.item, this.onTap});
 
   @override
   State<WishlistItemCard> createState() => _WishlistItemCardState();
@@ -179,7 +175,7 @@ class _WishlistItemCardState extends State<WishlistItemCard>
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      'غير متوفر',
+                      AppLocalizations.of(context)!.outOfStock,
                       style: getBoldStyle(
                         fontSize: FontSize.size10,
                         fontFamily: FontConstant.cairo,
@@ -196,7 +192,8 @@ class _WishlistItemCardState extends State<WishlistItemCard>
   }
 
   Widget _buildProductDetails() {
-    final selectedVariant = widget.item.wishlistProduct.productSizeColor.isNotEmpty
+    final selectedVariant =
+        widget.item.wishlistProduct.productSizeColor.isNotEmpty
         ? widget.item.wishlistProduct.productSizeColor.first
         : null;
 
@@ -289,7 +286,7 @@ class _WishlistItemCardState extends State<WishlistItemCard>
           Row(
             children: [
               Text(
-                '${widget.item.product.formattedPrice} ج.م',
+                '${widget.item.product.formattedPrice} ${AppLocalizations.of(context)!.currency}',
                 style: getBoldStyle(
                   fontFamily: FontConstant.cairo,
                   fontSize: FontSize.size15,
@@ -319,46 +316,13 @@ class _WishlistItemCardState extends State<WishlistItemCard>
             style: getMediumStyle(
               fontSize: FontSize.size11,
               fontFamily: FontConstant.cairo,
-              color: widget.item.product.isAvailable ? Colors.green : Colors.red,
+              color: widget.item.product.isAvailable
+                  ? Colors.green
+                  : Colors.red,
             ),
           ),
 
           // Color variant if available
-          if (selectedVariant?.color != null) ...[
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Text(
-                  'اللون: ',
-                  style: getMediumStyle(
-                    fontSize: FontSize.size11,
-                    fontFamily: FontConstant.cairo,
-                    color: Colors.grey[600],
-                  ),
-                ),
-                if (selectedVariant!.colorCode != null)
-                  Container(
-                    width: 16,
-                    height: 16,
-                    margin: const EdgeInsets.only(left: 4),
-                    decoration: BoxDecoration(
-                      color: Color(int.parse(
-                          selectedVariant.colorCode!.replaceFirst('#', '0xFF'))),
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.grey[300]!),
-                    ),
-                  ),
-                Text(
-                  selectedVariant.color!,
-                  style: getMediumStyle(
-                    fontSize: FontSize.size11,
-                    fontFamily: FontConstant.cairo,
-                    color: Colors.grey[700],
-                  ),
-                ),
-              ],
-            ),
-          ],
         ],
       ),
     );
@@ -373,7 +337,9 @@ class _WishlistItemCardState extends State<WishlistItemCard>
           // Remove from wishlist button
           GestureDetector(
             onTap: () {
-              context.read<WishlistCubit>().removeFromWishlist(widget.item.product.id);
+              context.read<WishlistCubit>().removeFromWishlist(
+                widget.item.product.id,
+              );
             },
             child: Container(
               padding: const EdgeInsets.all(8),
@@ -382,11 +348,7 @@ class _WishlistItemCardState extends State<WishlistItemCard>
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
               ),
-              child: Icon(
-                Icons.favorite,
-                color: Colors.red,
-                size: 20,
-              ),
+              child: Icon(Icons.favorite, color: Colors.red, size: 20),
             ),
           ),
 
@@ -399,7 +361,9 @@ class _WishlistItemCardState extends State<WishlistItemCard>
                 // TODO: Implement add to cart functionality
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('تم إضافة ${widget.item.product.name} للسلة'),
+                    content: Text(
+                      '${AppLocalizations.of(context)!.productAddedToCart}: ${widget.item.product.name}',
+                    ),
                     backgroundColor: Colors.green,
                     duration: const Duration(seconds: 2),
                   ),
@@ -410,7 +374,9 @@ class _WishlistItemCardState extends State<WishlistItemCard>
                 decoration: BoxDecoration(
                   color: AppColors.primary.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+                  border: Border.all(
+                    color: AppColors.primary.withValues(alpha: 0.3),
+                  ),
                 ),
                 child: Icon(
                   Icons.shopping_cart_outlined,

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
-import 'package:test/core/utils/common/custom_app_bar.dart';
+import 'package:test/core/utils/constant/font_manger.dart';
+import 'package:test/core/utils/constant/styles_manger.dart';
+import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
+import 'package:test/features/wishlist/presentation/widgets/wishlist_item_card.dart';
+import 'package:test/features/home/presentation/view/bottom_nav_bar.dart';
+import 'package:test/l10n/app_localizations.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
-import '../../../../core/utils/constant/font_manger.dart';
-import '../../../../core/utils/constant/styles_manger.dart';
-import '../../../../core/utils/theme/app_colors.dart';
-import '../widgets/wishlist_item_card.dart';
-import '../cubit/wishlist_cubit.dart';
-import '../../../home/presentation/view/bottom_nav_bar.dart';
 
 class WishlistView extends StatefulWidget {
   static const String routeName = '/wishlist';
@@ -54,7 +54,7 @@ class _WishlistViewState extends State<WishlistView>
         surfaceTintColor: Colors.transparent,
         automaticallyImplyLeading: false,
         title: Text(
-          'المفضلة',
+          AppLocalizations.of(context)!.favorite,
           style: getBoldStyle(
             fontSize: FontSize.size20,
             fontFamily: FontConstant.cairo,
@@ -64,15 +64,12 @@ class _WishlistViewState extends State<WishlistView>
         actions: [
           BlocBuilder<WishlistCubit, WishlistState>(
             builder: (context, state) {
-              if (state is WishlistLoaded && state.wishlistResponse.wishlist.isNotEmpty) {
+              if (state is WishlistLoaded &&
+                  state.wishlistResponse.wishlist.isNotEmpty) {
                 return IconButton(
-                  icon: Icon(
-                    Icons.delete_sweep,
-                    color: Colors.red,
-                    size: 24,
-                  ),
+                  icon: Icon(Icons.delete_sweep, color: Colors.red, size: 24),
                   onPressed: () => _showClearAllDialog(context),
-                  tooltip: 'حذف الكل',
+                  tooltip: AppLocalizations.of(context)!.clearAll,
                 );
               }
               return const SizedBox.shrink();
@@ -147,7 +144,7 @@ class _WishlistViewState extends State<WishlistView>
           ),
           const SizedBox(height: 24),
           Text(
-            'قائمة المفضلة فارغة',
+            AppLocalizations.of(context)!.wishlistEmpty,
             style: getBoldStyle(
               fontSize: FontSize.size20,
               fontFamily: FontConstant.cairo,
@@ -158,7 +155,7 @@ class _WishlistViewState extends State<WishlistView>
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Text(
-              'لم تقم بإضافة أي منتجات إلى قائمة المفضلة بعد.\nابدأ في استكشاف المنتجات وأضف ما يعجبك!',
+              AppLocalizations.of(context)!.wishlistEmptyDescription,
               textAlign: TextAlign.center,
               style: getRegularStyle(
                 fontSize: FontSize.size14,
@@ -175,7 +172,7 @@ class _WishlistViewState extends State<WishlistView>
             },
             icon: const Icon(Icons.shopping_bag_outlined),
             label: Text(
-              'تصفح المنتجات',
+              AppLocalizations.of(context)!.browseProducts,
               style: getBoldStyle(
                 fontSize: FontSize.size16,
                 fontFamily: FontConstant.cairo,
@@ -244,7 +241,7 @@ class _WishlistViewState extends State<WishlistView>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'منتجاتك المفضلة',
+                        AppLocalizations.of(context)!.addProductsToWishlist,
                         style: getBoldStyle(
                           fontSize: FontSize.size16,
                           fontFamily: FontConstant.cairo,
@@ -253,7 +250,7 @@ class _WishlistViewState extends State<WishlistView>
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'لديك ${state.wishlistResponse.count} منتج في المفضلة',
+                        '${state.wishlistResponse.count} ${AppLocalizations.of(context)!.productsInWishlist}',
                         style: getMediumStyle(
                           fontSize: FontSize.size13,
                           fontFamily: FontConstant.cairo,
@@ -278,7 +275,7 @@ class _WishlistViewState extends State<WishlistView>
                   item: item,
                   onTap: () {
                     // TODO: Navigate to product details
-                    print('Navigate to product: ${item.product.id}');
+                    ////print('Navigate to product: ${item.product.id}');
                   },
                 );
               },
@@ -308,7 +305,7 @@ class _WishlistViewState extends State<WishlistView>
           ),
           const SizedBox(height: 24),
           Text(
-            'حدث خطأ',
+            AppLocalizations.of(context)!.error,
             style: getBoldStyle(
               fontSize: FontSize.size18,
               fontFamily: FontConstant.cairo,
@@ -335,7 +332,7 @@ class _WishlistViewState extends State<WishlistView>
             },
             icon: const Icon(Icons.refresh),
             label: Text(
-              'إعادة المحاولة',
+              AppLocalizations.of(context)!.retry,
               style: getBoldStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
@@ -369,7 +366,7 @@ class _WishlistViewState extends State<WishlistView>
           const CustomProgressIndicator(),
           const SizedBox(height: 16),
           Text(
-            'جاري تحميل المفضلة...',
+            AppLocalizations.of(context)!.loadingWishlist,
             style: getMediumStyle(
               fontSize: FontSize.size14,
               fontFamily: FontConstant.cairo,
@@ -387,14 +384,14 @@ class _WishlistViewState extends State<WishlistView>
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           title: Text(
-            'تأكيد الحذف',
+            AppLocalizations.of(context)!.confirmDeletion,
             style: getBoldStyle(
               fontSize: FontSize.size18,
               fontFamily: FontConstant.cairo,
             ),
           ),
           content: Text(
-            'هل أنت متأكد من حذف جميع المنتجات من المفضلة؟',
+            AppLocalizations.of(context)!.confirmDeletion,
             style: getRegularStyle(
               fontSize: FontSize.size14,
               fontFamily: FontConstant.cairo,
@@ -404,7 +401,7 @@ class _WishlistViewState extends State<WishlistView>
             TextButton(
               onPressed: () => Navigator.of(dialogContext).pop(),
               child: Text(
-                'إلغاء',
+                AppLocalizations.of(context)!.cancel,
                 style: getMediumStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
@@ -418,7 +415,7 @@ class _WishlistViewState extends State<WishlistView>
                 context.read<WishlistCubit>().removeAllFromWishlist();
               },
               child: Text(
-                'حذف الكل',
+                AppLocalizations.of(context)!.deleteAll,
                 style: getMediumStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,

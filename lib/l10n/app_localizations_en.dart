@@ -865,4 +865,160 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tapToLoadCountries => 'Tap to load available countries';
+
+  @override
+  String get cartEmpty => 'Cart is Empty';
+
+  @override
+  String get cartEmptyMessage => 'No products in your shopping cart';
+
+  @override
+  String get startShopping => 'Start Shopping';
+
+  @override
+  String get clearAll => 'Clear All';
+
+  @override
+  String get clearCart => 'Clear Cart';
+
+  @override
+  String get clearCartConfirmation => 'Are you sure you want to remove all products from the cart?';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get cartCleared => 'All products removed from cart';
+
+  @override
+  String get failedToClearCart => 'Failed to clear all products from cart';
+
+  @override
+  String get failedToRemoveFromCart => 'Failed to remove product from cart';
+
+  @override
+  String get failedToAddToCart => 'Failed to add product to cart';
+
+  @override
+  String get failedToUpdateQuantity => 'Failed to update quantity';
+
+  @override
+  String get networkError => 'Network connection error';
+
+  @override
+  String get serverError => 'Server error';
+
+  @override
+  String get unknownError => 'An unexpected error occurred';
+
+  @override
+  String get pleaseCheckConnection => 'Please check your internet connection';
+
+  @override
+  String get tryAgainLater => 'Please try again later';
+
+  @override
+  String get remove => 'Remove';
+
+  @override
+  String get update => 'Update';
+
+  @override
+  String get loading => 'Loading...';
+
+  @override
+  String get error => 'Error';
+
+  @override
+  String get success => 'Success';
+
+  @override
+  String get failed => 'Failed';
+
+  @override
+  String get productRemovedFromCart => 'Product removed from cart';
+
+  @override
+  String get quantityUpdated => 'Quantity updated';
+
+  @override
+  String get maxQuantityReached => 'Maximum quantity reached';
+
+  @override
+  String get minQuantityReached => 'Minimum quantity is 1';
+
+  @override
+  String get wishlistEmpty => 'Wishlist is Empty';
+
+  @override
+  String get wishlistEmptyMessage => 'No products in your wishlist';
+
+  @override
+  String get addProductsToWishlist => 'Add products to your wishlist to see them here';
+
+  @override
+  String get clearWishlist => 'Clear Wishlist';
+
+  @override
+  String get clearWishlistConfirmation => 'Are you sure you want to remove all products from wishlist?';
+
+  @override
+  String get wishlistCleared => 'All products removed from wishlist';
+
+  @override
+  String get failedToClearWishlist => 'Failed to clear all products from wishlist';
+
+  @override
+  String get failedToRemoveFromWishlist => 'Failed to remove product from wishlist';
+
+  @override
+  String get failedToAddToWishlist => 'Failed to add product to wishlist';
+
+  @override
+  String get productRemovedFromWishlist => 'Product removed from wishlist';
+
+  @override
+  String get productAddedToWishlist => 'Product added to wishlist';
+
+  @override
+  String get moveToCart => 'Move to Cart';
+
+  @override
+  String get addedToCartFromWishlist => 'Product moved from wishlist to cart';
+
+  @override
+  String get failedToMoveToCart => 'Failed to move product to cart';
+
+  @override
+  String get loginRequired => 'Please login first';
+
+  @override
+  String get productAddedToCart => 'Product added to cart';
+
+  @override
+  String get taxes => 'Taxes';
+
+  @override
+  String get confirmDeletion => 'Confirm Deletion';
+
+  @override
+  String get deleteAll => 'Delete All';
+
+  @override
+  String get productsInWishlist => 'Products in Wishlist';
+
+  @override
+  String get loadingWishlist => 'Loading Wishlist';
+
+  @override
+  String get browseProducts => 'Browse Products';
+
+  @override
+  String get wishlistEmptyDescription => 'No products in your wishlist';
+
+  @override
+  String get currency => 'EGP';
 }

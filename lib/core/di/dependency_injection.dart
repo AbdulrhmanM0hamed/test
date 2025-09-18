@@ -496,6 +496,7 @@ class DependencyInjection {
         getIt<AddToWishlistUseCase>(),
         getIt<RemoveFromWishlistUseCase>(),
         getIt<RemoveAllFromWishlistUseCase>(),
+        dataRefreshService: getIt<DataRefreshService>(),
       ),
     );
 
@@ -506,6 +507,7 @@ class DependencyInjection {
         addToCartUseCase: getIt<AddToCartUseCase>(),
         removeFromCartUseCase: getIt<RemoveFromCartUseCase>(),
         removeAllFromCartUseCase: getIt<RemoveAllFromCartUseCase>(),
+        dataRefreshService: getIt<DataRefreshService>(),
       ),
     );
   }

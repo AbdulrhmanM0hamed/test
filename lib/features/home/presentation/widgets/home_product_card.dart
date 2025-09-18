@@ -189,7 +189,7 @@ class _HomeProductCardState extends State<HomeProductCard>
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    'غير متوفر',
+                    AppLocalizations.of(context)!.notAvailable,
                     style: getBoldStyle(
                       fontSize: FontSize.size12,
                       fontFamily: FontConstant.cairo,
@@ -418,7 +418,7 @@ class _HomeProductCardState extends State<HomeProductCard>
                   children: [
                     // Price
                     Text(
-                      '${_formatPrice(widget.product.price)} ج.م',
+                      '${_formatPrice(widget.product.price)} ${AppLocalizations.of(context)!.currency}',
                       style: getBoldStyle(
                         fontFamily: FontConstant.cairo,
                         fontSize: FontSize.size14,

@@ -10,6 +10,7 @@ import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/features/cart/presentation/cubit/cart_state.dart';
 import 'package:test/features/cart/presentation/widgets/cart_item_card.dart';
 import 'package:test/features/home/presentation/view/bottom_nav_bar.dart';
+import 'package:test/l10n/app_localizations.dart';
 
 class CartView extends StatefulWidget {
   const CartView({super.key});
@@ -97,7 +98,7 @@ class _CartViewState extends State<CartView>
               return IconButton(
                 icon: Icon(Icons.delete_sweep, color: Colors.red, size: 24),
                 onPressed: () => _showClearCartDialog(context),
-                tooltip: 'حذف الكل',
+                tooltip: AppLocalizations.of(context)!.clearAll,
               );
             }
             return const SizedBox.shrink();
@@ -124,7 +125,7 @@ class _CartViewState extends State<CartView>
           ),
           const SizedBox(height: 24),
           Text(
-            'السلة فارغة',
+            AppLocalizations.of(context)!.cartEmpty,
             style: getBoldStyle(
               fontSize: FontSize.size20,
               fontFamily: FontConstant.cairo,
@@ -133,7 +134,7 @@ class _CartViewState extends State<CartView>
           ),
           const SizedBox(height: 12),
           Text(
-            'ابدأ بإضافة منتجات إلى سلتك',
+            AppLocalizations.of(context)!.cartEmptyMessage,
             style: getMediumStyle(
               fontSize: FontSize.size14,
               fontFamily: FontConstant.cairo,
@@ -153,7 +154,7 @@ class _CartViewState extends State<CartView>
               ),
             ),
             child: Text(
-              'تسوق الآن',
+              AppLocalizations.of(context)!.startShopping,
               style: getBoldStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
@@ -239,7 +240,7 @@ class _CartViewState extends State<CartView>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'الضرائب',
+                AppLocalizations.of(context)!.taxes,
                 style: getMediumStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
@@ -299,7 +300,7 @@ class _CartViewState extends State<CartView>
                 elevation: 2,
               ),
               child: Text(
-                'إتمام الطلب',
+                AppLocalizations.of(context)!.completeOrder,
                 style: getBoldStyle(
                   fontSize: FontSize.size16,
                   fontFamily: FontConstant.cairo,
@@ -321,7 +322,7 @@ class _CartViewState extends State<CartView>
           Icon(Icons.error_outline, size: 80, color: Colors.red[300]),
           const SizedBox(height: 16),
           Text(
-            'حدث خطأ',
+            AppLocalizations.of(context)!.error,
             style: getBoldStyle(
               fontSize: FontSize.size18,
               fontFamily: FontConstant.cairo,
@@ -342,7 +343,7 @@ class _CartViewState extends State<CartView>
           ElevatedButton(
             onPressed: () => context.read<CartCubit>().getCart(),
             child: Text(
-              'إعادة المحاولة',
+              AppLocalizations.of(context)!.retry,
               style: getBoldStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
@@ -375,14 +376,14 @@ class _CartViewState extends State<CartView>
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           title: Text(
-            'تأكيد الحذف',
+            AppLocalizations.of(context)!.clearCart,
             style: getBoldStyle(
               fontSize: FontSize.size16,
               fontFamily: FontConstant.cairo,
             ),
           ),
           content: Text(
-            'هل أنت متأكد من حذف جميع المنتجات من السلة؟',
+            AppLocalizations.of(context)!.clearCartConfirmation,
             style: getMediumStyle(
               fontSize: FontSize.size14,
               fontFamily: FontConstant.cairo,
@@ -392,7 +393,7 @@ class _CartViewState extends State<CartView>
             TextButton(
               onPressed: () => Navigator.pop(dialogContext),
               child: Text(
-                'إلغاء',
+                AppLocalizations.of(context)!.cancel,
                 style: getMediumStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
@@ -406,7 +407,7 @@ class _CartViewState extends State<CartView>
                 cartCubit.removeAllFromCart();
               },
               child: Text(
-                'حذف الكل',
+                AppLocalizations.of(context)!.clearAll,
                 style: getBoldStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,

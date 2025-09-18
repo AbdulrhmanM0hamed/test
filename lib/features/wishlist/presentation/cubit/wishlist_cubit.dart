@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:test/core/services/data_refresh_service.dart';
 import '../../domain/entities/wishlist_item.dart';
 import '../../domain/usecases/get_my_wishlist_use_case.dart';
 import '../../domain/usecases/add_to_wishlist_use_case.dart';
@@ -13,13 +14,17 @@ class WishlistCubit extends Cubit<WishlistState> {
   final AddToWishlistUseCase _addToWishlistUseCase;
   final RemoveFromWishlistUseCase _removeFromWishlistUseCase;
   final RemoveAllFromWishlistUseCase _removeAllFromWishlistUseCase;
+  final DataRefreshService? dataRefreshService;
 
   WishlistCubit(
     this._getMyWishlistUseCase,
     this._addToWishlistUseCase,
     this._removeFromWishlistUseCase,
-    this._removeAllFromWishlistUseCase,
-  ) : super(WishlistInitial());
+    this._removeAllFromWishlistUseCase, {
+    this.dataRefreshService,
+  }) : super(WishlistInitial()) {
+    dataRefreshService?.registerRefreshCallback(_refreshData);
+  }
 
   Future<void> getMyWishlist() async {
     emit(WishlistLoading());
@@ -64,56 +69,66 @@ class WishlistCubit extends Cubit<WishlistState> {
         emit(
           WishlistItemAdded(
             productId,
-            response['message'] ?? 'تم إضافة المنتج للمفضلة',
+            response['message'] ?? 'productAddedToWishlist',
           ),
         );
       }
     } catch (e) {
       if (!isClosed) {
-        emit(WishlistError('فشل في إضافة المنتج للمفضلة'));
+        emit(WishlistError('failedToAddToWishlist'));
       }
     }
   }
 
   Future<void> removeAllFromWishlist() async {
     try {
-      print('🗑️ WishlistCubit: Starting removeAllFromWishlist');
-      print('🔍 UseCase instance: $_removeAllFromWishlistUseCase');
-      
+      //print('🗑️ WishlistCubit: Starting removeAllFromWishlist');
+      //print('🔍 UseCase instance: $_removeAllFromWishlistUseCase');
+
       final result = await _removeAllFromWishlistUseCase();
-      
-      print('📋 WishlistCubit: UseCase result received');
-      
+
+      //print('📋 WishlistCubit: UseCase result received');
+
       result.fold(
         (failure) {
-          print('❌ WishlistCubit: UseCase failed with: ${failure.message}');
+          //print('❌ WishlistCubit: UseCase failed with: ${failure.message}');
           if (!isClosed) {
             emit(WishlistError(failure.message));
           }
         },
         (message) {
-          print('✅ WishlistCubit: UseCase success with message: $message');
+          //print('✅ WishlistCubit: UseCase success with message: $message');
           if (!isClosed) {
             emit(WishlistCleared(message));
-            print('🔄 WishlistCubit: Refreshing wishlist after clear');
+            //print('🔄 WishlistCubit: Refreshing wishlist after clear');
             // Refresh wishlist to show empty state
             getMyWishlist();
           }
         },
       );
     } catch (e) {
-      print('💥 WishlistCubit: Unexpected error in removeAllFromWishlist');
-      print('🔥 Error: $e');
-      print('📍 Error type: ${e.runtimeType}');
-      print('🔍 Stack trace: ${StackTrace.current}');
-      
+      //print('💥 WishlistCubit: Unexpected error in removeAllFromWishlist');
+      //print('🔥 Error: $e');
+      //print('📍 Error type: ${e.runtimeType}');
+      //print('🔍 Stack trace: ${StackTrace.current}');
+
       if (!isClosed) {
-        emit(WishlistError('فشل في حذف جميع المنتجات من المفضلة'));
+        emit(WishlistError('failedToClearWishlist'));
       }
     }
   }
 
   void resetState() {
     emit(WishlistInitial());
+  }
+
+  void _refreshData() {
+    getMyWishlist();
+  }
+
+  @override
+  Future<void> close() {
+    dataRefreshService?.unregisterRefreshCallback(_refreshData);
+    return super.close();
   }
 }

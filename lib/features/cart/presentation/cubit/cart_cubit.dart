@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test/core/services/data_refresh_service.dart';
 import '../../domain/entities/add_to_cart_request.dart';
 import '../../domain/usecases/get_cart_usecase.dart';
 import '../../domain/usecases/add_to_cart_usecase.dart';
@@ -11,13 +12,17 @@ class CartCubit extends Cubit<CartState> {
   final AddToCartUseCase addToCartUseCase;
   final RemoveFromCartUseCase removeFromCartUseCase;
   final RemoveAllFromCartUseCase removeAllFromCartUseCase;
+  final DataRefreshService? dataRefreshService;
 
   CartCubit({
     required this.getCartUseCase,
     required this.addToCartUseCase,
     required this.removeFromCartUseCase,
     required this.removeAllFromCartUseCase,
-  }) : super(CartInitial());
+    this.dataRefreshService,
+  }) : super(CartInitial()) {
+    dataRefreshService?.registerRefreshCallback(_refreshData);
+  }
 
   Future<void> getCart() async {
     emit(CartLoading());
@@ -101,5 +106,15 @@ class CartCubit extends Cubit<CartState> {
       return (state as CartLoaded).cart.totalPriceAsDouble;
     }
     return 0.0;
+  }
+
+  void _refreshData() {
+    getCart();
+  }
+
+  @override
+  Future<void> close() {
+    dataRefreshService?.unregisterRefreshCallback(_refreshData);
+    return super.close();
   }
 }
