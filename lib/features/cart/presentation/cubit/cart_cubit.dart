@@ -1,0 +1,105 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../domain/entities/add_to_cart_request.dart';
+import '../../domain/usecases/get_cart_usecase.dart';
+import '../../domain/usecases/add_to_cart_usecase.dart';
+import '../../domain/usecases/remove_from_cart_usecase.dart';
+import '../../domain/usecases/remove_all_from_cart_usecase.dart';
+import 'cart_state.dart';
+
+class CartCubit extends Cubit<CartState> {
+  final GetCartUseCase getCartUseCase;
+  final AddToCartUseCase addToCartUseCase;
+  final RemoveFromCartUseCase removeFromCartUseCase;
+  final RemoveAllFromCartUseCase removeAllFromCartUseCase;
+
+  CartCubit({
+    required this.getCartUseCase,
+    required this.addToCartUseCase,
+    required this.removeFromCartUseCase,
+    required this.removeAllFromCartUseCase,
+  }) : super(CartInitial());
+
+  Future<void> getCart() async {
+    emit(CartLoading());
+
+    final result = await getCartUseCase();
+
+    result.fold((failure) => emit(CartError(failure.message)), (cart) {
+      if (cart.isEmpty) {
+        emit(CartEmpty());
+      } else {
+        emit(CartLoaded(cart));
+      }
+    });
+  }
+
+  Future<void> addToCart({
+    required int productId,
+    required int productSizeColorId,
+    int quantity = 1,
+  }) async {
+    emit(CartItemAdding(productId));
+
+    final request = AddToCartRequest(
+      items: [
+        CartItemRequest(
+          productId: productId,
+          productSizeColorId: productSizeColorId,
+          quantity: quantity,
+        ),
+      ],
+    );
+
+    final result = await addToCartUseCase(request);
+
+    result.fold((failure) => emit(CartError(failure.message)), (message) {
+      emit(CartItemAdded(message, productId));
+      // Refresh cart after adding item
+      getCart();
+    });
+  }
+
+  Future<void> removeFromCart(int cartItemId) async {
+    emit(CartItemRemoving(cartItemId));
+
+    final result = await removeFromCartUseCase(cartItemId);
+
+    result.fold((failure) => emit(CartError(failure.message)), (message) {
+      emit(CartItemRemoved(message, cartItemId));
+      // Refresh cart after removing item
+      getCart();
+    });
+  }
+
+  Future<void> removeAllFromCart() async {
+    emit(CartClearing());
+
+    final result = await removeAllFromCartUseCase();
+
+    result.fold((failure) => emit(CartError(failure.message)), (message) {
+      emit(CartCleared(message));
+      emit(CartEmpty());
+    });
+  }
+
+  int get cartItemCount {
+    if (state is CartLoaded) {
+      return (state as CartLoaded).cart.totalQuantity;
+    }
+    return 0;
+  }
+
+  bool get hasItems {
+    if (state is CartLoaded) {
+      return (state as CartLoaded).cart.isNotEmpty;
+    }
+    return false;
+  }
+
+  double get totalPrice {
+    if (state is CartLoaded) {
+      return (state as CartLoaded).cart.totalPriceAsDouble;
+    }
+    return 0.0;
+  }
+}

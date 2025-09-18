@@ -15,6 +15,7 @@ class HomeProduct {
   final bool isLatest;
   final bool isSpecialOffer;
   final bool isFavorite;
+  final int? productSizeColorId;
 
   const HomeProduct({
     required this.id,
@@ -33,6 +34,7 @@ class HomeProduct {
     required this.isLatest,
     required this.isSpecialOffer,
     required this.isFavorite,
+    this.productSizeColorId,
   });
 
   bool get hasDiscount => discount != null && discount! > 0;

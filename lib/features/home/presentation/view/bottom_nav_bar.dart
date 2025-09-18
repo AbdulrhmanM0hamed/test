@@ -1,3 +1,4 @@
+import 'package:test/features/cart/presentation/cubit/cart_state.dart';
 import 'package:test/features/profile/presentation/view/profile_wrapper.dart';
 import 'package:test/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,8 @@ import 'package:test/features/home/presentation/view/home_page.dart';
 import 'package:test/features/categories/presentation/view/categories_view.dart';
 import 'package:test/features/wishlist/presentation/view/wishlist_view.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
+import 'package:test/features/cart/presentation/view/cart_view.dart';
+import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/services/app_state_service.dart';
 import 'package:test/features/home/presentation/widgets/login_prompt_widget.dart';
@@ -22,22 +25,43 @@ class BottomNavBar extends StatefulWidget {
 
   @override
   State<BottomNavBar> createState() => _HomeViewState();
+
+  // Static method to navigate to home tab from other widgets
+  static void navigateToHome() {
+    _HomeViewState._instance?._onNavItemTapped(0);
+  }
 }
 
 class _HomeViewState extends State<BottomNavBar> {
   int _selectedIndex = 0;
   late final List<Widget> _screens;
+  late CartCubit _cartCubit;
+
+  // Static reference to allow access from other widgets
+  static _HomeViewState? _instance;
 
   @override
   void initState() {
     super.initState();
+    _instance = this;
     _initializeScreens();
+  }
+
+  @override
+  void dispose() {
+    _instance = null;
+    super.dispose();
   }
 
   void _initializeScreens() {
     final appStateService = DependencyInjection.getIt.get<AppStateService>();
     final isLoggedIn =
         appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+
+    // Initialize cart cubit for badge count
+    if (isLoggedIn) {
+      _cartCubit = DependencyInjection.getIt<CartCubit>()..getCart();
+    }
 
     _screens = [
       const HomePage(),
@@ -48,7 +72,9 @@ class _HomeViewState extends State<BottomNavBar> {
               child: const WishlistView(),
             )
           : const LoginPromptWidget(),
-      const Center(child: Text('Cart')),
+      isLoggedIn
+          ? BlocProvider.value(value: _cartCubit, child: const CartView())
+          : const LoginPromptWidget(),
       isLoggedIn ? const ProfileWrapper() : const LoginPromptWidget(),
     ];
   }
@@ -58,6 +84,7 @@ class _HomeViewState extends State<BottomNavBar> {
       _selectedIndex = index;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -99,12 +126,7 @@ class _HomeViewState extends State<BottomNavBar> {
             AppAssets.homeIconOutline,
             AppLocalizations.of(context)!.home,
           ),
-          _buildNavItem(
-            3,
-            AppAssets.cartIcon,
-            AppAssets.cartIconOutline,
-            AppLocalizations.of(context)!.cart,
-          ),
+          _buildCartNavItem(),
           _buildNavItem(
             4,
             AppAssets.profileIcon,
@@ -200,6 +222,95 @@ class _HomeViewState extends State<BottomNavBar> {
                   : Colors.grey,
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCartNavItem() {
+    final index = 3;
+    final isSelected = _selectedIndex == index;
+    final appStateService = DependencyInjection.getIt.get<AppStateService>();
+    final isLoggedIn =
+        appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+
+    return GestureDetector(
+      onTap: () => _onNavItemTapped(index),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 46,
+                width: 46,
+                decoration: BoxDecoration(
+                  color: isSelected ? AppColors.white : Colors.transparent,
+                  borderRadius: BorderRadius.circular(32),
+                ),
+                padding: const EdgeInsets.all(10),
+                child: SvgPicture.asset(
+                  isSelected ? AppAssets.cartIcon : AppAssets.cartIconOutline,
+                  color: isSelected ? AppColors.primary : Colors.grey,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                AppLocalizations.of(context)!.cart,
+                style: getSemiBoldStyle(
+                  fontFamily: FontConstant.cairo,
+                  fontSize: FontSize.size10,
+                  color: isSelected
+                      ? Theme.of(context).textTheme.bodyMedium?.color
+                      : Colors.grey,
+                ),
+              ),
+            ],
+          ),
+          // Cart Badge
+          if (isLoggedIn)
+            Positioned(
+              right: 8,
+              top: -2,
+              child: BlocBuilder<CartCubit, CartState>(
+                bloc: _cartCubit,
+                builder: (context, state) {
+                  final itemCount = _cartCubit.cartItemCount;
+                  if (itemCount > 0) {
+                    return Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.2),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 18,
+                        minHeight: 18,
+                      ),
+                      child: Text(
+                        itemCount > 99 ? '99+' : itemCount.toString(),
+                        style: getBoldStyle(
+                          fontSize: FontSize.size10,
+                          fontFamily: FontConstant.cairo,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+            ),
         ],
       ),
     );

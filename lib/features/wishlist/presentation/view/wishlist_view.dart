@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/core/utils/common/custom_app_bar.dart';
-import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/constant/font_manger.dart';
+import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
-import '../../../../core/utils/animations/custom_progress_indcator.dart';
-import '../cubit/wishlist_cubit.dart';
+import '../../domain/entities/wishlist_item.dart';
 import '../widgets/wishlist_item_card.dart';
+import '../cubit/wishlist_cubit.dart';
+import '../../../home/presentation/view/bottom_nav_bar.dart';
 
 class WishlistView extends StatefulWidget {
   static const String routeName = '/wishlist';
@@ -187,7 +190,8 @@ class _WishlistViewState extends State<WishlistView>
           const SizedBox(height: 32),
           ElevatedButton.icon(
             onPressed: () {
-              Navigator.of(context).pop();
+              // Navigate to home tab using static method
+              BottomNavBar.navigateToHome();
             },
             icon: const Icon(Icons.shopping_bag_outlined),
             label: Text(

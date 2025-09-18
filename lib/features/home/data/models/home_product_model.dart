@@ -18,6 +18,7 @@ class HomeProductModel extends HomeProduct {
     required super.isLatest,
     required super.isSpecialOffer,
     required super.isFavorite,
+    super.productSizeColorId,
   });
 
   factory HomeProductModel.fromJson(Map<String, dynamic> json) {
@@ -53,6 +54,7 @@ class HomeProductModel extends HomeProduct {
       isLatest: true, // من API latest products
       isSpecialOffer: json['discount'] != null && json['discount'] > 0,
       isFavorite: isFav,
+      productSizeColorId: json['product_size_color_id'],
     );
   }
 
@@ -94,6 +96,7 @@ class HomeProductModel extends HomeProduct {
       isLatest: isLatest,
       isSpecialOffer: isSpecialOffer,
       isFavorite: isFavorite,
+      productSizeColorId: productSizeColorId,
     );
   }
 }

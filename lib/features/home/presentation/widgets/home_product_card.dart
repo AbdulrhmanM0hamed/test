@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
+import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:test/features/cart/presentation/cubit/cart_state.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/utils/constant/app_assets.dart';
 import '../../../../core/utils/constant/font_manger.dart';
@@ -246,40 +249,21 @@ class _HomeProductCardState extends State<HomeProductCard>
             setState(() {
               _isInWishlist = true;
             });
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.green,
-                duration: const Duration(seconds: 2),
-              ),
+            CustomSnackbar.showSuccess(
+              context: context,
+              message: state.message,
             );
           } else if (state is WishlistItemRemoved &&
               state.productId == widget.product.id) {
             setState(() {
               _isInWishlist = false;
             });
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.orange,
-                duration: const Duration(seconds: 2),
-              ),
+            CustomSnackbar.showWarning(
+              context: context,
+              message: state.message,
             );
           } else if (state is WishlistError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.red,
-                duration: const Duration(seconds: 3),
-                action: SnackBarAction(
-                  label: 'إغلاق',
-                  textColor: Colors.white,
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  },
-                ),
-              ),
-            );
+            CustomSnackbar.showError(context: context, message: state.message);
           }
         },
         builder: (context, state) {
@@ -463,73 +447,122 @@ class _HomeProductCardState extends State<HomeProductCard>
               ),
 
               // Add to Cart Button
-              GestureDetector(
-                onTap: () {
-                  // TODO: Implement add to cart functionality
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: AppColors.primary.withValues(alpha: 0.3),
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      // Bottom shadow (darker)
-                      BoxShadow(
-                        color: AppColors.primary.withValues(alpha: 0.4),
-                        blurRadius: 0,
-                        offset: const Offset(0, 2),
+              BlocProvider(
+                create: (context) => DependencyInjection.getIt<CartCubit>(),
+                child: BlocConsumer<CartCubit, CartState>(
+                  listener: (context, state) {
+                    if (state is CartItemAdded &&
+                        state.productId == widget.product.id) {
+                      CustomSnackbar.showSuccess(
+                        context: context,
+                        message: state.message,
+                      );
+                    } else if (state is CartError) {
+                      CustomSnackbar.showError(
+                        context: context,
+                        message: state.message,
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    final cartCubit = context.read<CartCubit>();
+                    final isLoading =
+                        state is CartItemAdding &&
+                        state.productId == widget.product.id;
+
+                    return GestureDetector(
+                      onTap: isLoading
+                          ? null
+                          : () {
+                              if (widget.product.productSizeColorId != null) {
+                                cartCubit.addToCart(
+                                  productId: widget.product.id,
+                                  productSizeColorId:
+                                      widget.product.productSizeColorId!,
+                                  quantity: 1,
+                                );
+                              } else {
+                                CustomSnackbar.showWarning(
+                                  context: context,
+                                  message: 'معلومات المنتج غير مكتملة',
+                                );
+                              }
+                            },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: AppColors.primary.withValues(alpha: 0.3),
+                            width: 1,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(alpha: 0.4),
+                              blurRadius: 0,
+                              offset: const Offset(0, 2),
+                            ),
+                            BoxShadow(
+                              color: Colors.white.withValues(alpha: 0.8),
+                              blurRadius: 0,
+                              offset: const Offset(-1, -1),
+                            ),
+                            BoxShadow(
+                              color: Colors.white.withValues(alpha: 0.5),
+                              blurRadius: 0,
+                              offset: const Offset(1, 1),
+                              spreadRadius: 0.5,
+                            ),
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.1),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                              spreadRadius: 0.5,
+                            ),
+                          ],
+                        ),
+                        child: isLoading
+                            ? SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    AppColors.primary,
+                                  ),
+                                ),
+                              )
+                            : Icon(
+                                Icons.add_shopping_cart_rounded,
+                                size: 18,
+                                color: AppColors.primary,
+                              ),
                       ),
-                      // Middle shadow
-                      BoxShadow(
-                        color: Colors.white.withValues(alpha: 0.8),
-                        blurRadius: 0,
-                        offset: const Offset(-1, -1),
-                      ),
-                      // Top highlight
-                      BoxShadow(
-                        color: Colors.white.withValues(alpha: 0.5),
-                        blurRadius: 0,
-                        offset: const Offset(1, 1),
-                        spreadRadius: 0.5,
-                      ),
-                      // Soft outer glow
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                        spreadRadius: 0.5,
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    Icons.add_shopping_cart_rounded,
-                    size: 18,
-                    color: AppColors.primary,
-                  ),
+                    );
+                  },
                 ),
               ),
-              if (widget.product.hasDiscount &&
-                  widget.product.originalPrice != null) ...[
-                const SizedBox(width: 8),
-                Text(
-                  '${_formatPrice(widget.product.originalPrice!)} ج.م',
-                  style: TextStyle(
-                    fontSize: FontSize.size12,
-                    fontFamily: FontConstant.cairo,
-                    color: Colors.grey[500],
-                    decoration: TextDecoration.lineThrough,
-                  ),
-                ),
-              ],
             ],
           ),
+
+          // Discount Price
+          if (widget.product.hasDiscount &&
+              widget.product.originalPrice != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              '${_formatPrice(widget.product.originalPrice!)} ج.م',
+              style: TextStyle(
+                fontSize: FontSize.size12,
+                fontFamily: FontConstant.cairo,
+                color: Colors.grey[500],
+                decoration: TextDecoration.lineThrough,
+              ),
+            ),
+          ],
 
           const SizedBox(height: 6),
 
@@ -537,7 +570,7 @@ class _HomeProductCardState extends State<HomeProductCard>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Stock status
+              // Availability text
               Text(
                 widget.product.availabilityText,
                 style: getMediumStyle(
@@ -546,7 +579,8 @@ class _HomeProductCardState extends State<HomeProductCard>
                   color: widget.product.isAvailable ? Colors.green : Colors.red,
                 ),
               ),
-              // Stock quantity
+
+              // Stock Quantity
               if (widget.product.stock > 0)
                 Container(
                   padding: const EdgeInsets.symmetric(

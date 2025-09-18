@@ -26,6 +26,12 @@ class ApiEndpoints {
       '$baseUrl/wishlist/remove/$productId';
   static String get getWishlist => '$baseUrl/my-wishlist';
 
+  // Cart endpoints
+  static String get addToCart => '$baseUrl/cart/add';
+  static String get getCart => '$baseUrl/my-cart';
+  static String removeFromCart(int cartItemId) => '$baseUrl/cart/remove/$cartItemId';
+  static String get removeAllFromCart => '$baseUrl/cart/remove-all';
+
   static String featuredProductsUrl({int? countryId}) =>
       '$baseUrl$featuredProducts${countryId != null ? '?country_id=$countryId' : ''}';
   static String bestSellerProductsUrl({int? countryId}) =>

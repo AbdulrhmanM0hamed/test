@@ -2,10 +2,12 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/core/services/data_refresh_service.dart';
 import 'package:test/core/services/network/dio_service.dart';
+import 'package:test/core/services/network/network_info.dart';
 import 'package:test/core/services/token_storage_service.dart';
 import 'package:test/core/services/app_state_service.dart';
 import 'package:test/core/services/language_service.dart';
 import 'package:test/core/services/country_service.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:test/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:test/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:test/features/auth/domain/repositories/auth_repository.dart';
@@ -77,6 +79,15 @@ import 'package:test/features/wishlist/domain/usecases/get_my_wishlist_use_case.
 import 'package:test/features/wishlist/domain/usecases/add_to_wishlist_use_case.dart';
 import 'package:test/features/wishlist/domain/usecases/remove_from_wishlist_use_case.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
+// Cart feature imports
+import 'package:test/features/cart/data/datasources/cart_remote_data_source.dart';
+import 'package:test/features/cart/data/repositories/cart_repository_impl.dart';
+import 'package:test/features/cart/domain/repositories/cart_repository.dart';
+import 'package:test/features/cart/domain/usecases/get_cart_usecase.dart';
+import 'package:test/features/cart/domain/usecases/add_to_cart_usecase.dart';
+import 'package:test/features/cart/domain/usecases/remove_from_cart_usecase.dart';
+import 'package:test/features/cart/domain/usecases/remove_all_from_cart_usecase.dart';
+import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 
 class DependencyInjection {
   static final GetIt getIt = GetIt.instance;
@@ -148,6 +159,11 @@ class DependencyInjection {
     _dataRefreshService = DataRefreshService(_languageService!);
     _countryService = CountryService.instance;
 
+    // Initialize network info
+    final connectivity = Connectivity();
+    final networkInfo = NetworkInfoImpl(connectivity);
+    getIt.registerSingleton<NetworkInfo>(networkInfo);
+
     // Initialize dio service
     _dioService = DioService.instance;
     _dioService!.setTokenStorageService(_tokenStorageService!);
@@ -167,15 +183,21 @@ class DependencyInjection {
     _loginUseCase = LoginUseCase(_authRepository!);
     _logoutUseCase = LogoutUseCase(_authRepository!);
     _refreshTokenUseCase = RefreshTokenUseCase(_authRepository!);
-    _forgetPasswordUseCase = ForgetPasswordUseCase(repository: _authRepository!);
+    _forgetPasswordUseCase = ForgetPasswordUseCase(
+      repository: _authRepository!,
+    );
     _checkOtpUseCase = CheckOtpUseCase(repository: _authRepository!);
-    _changePasswordUseCase = ChangePasswordUseCase(repository: _authRepository!);
+    _changePasswordUseCase = ChangePasswordUseCase(
+      repository: _authRepository!,
+    );
 
     // Initialize Profile dependencies
     _profileRemoteDataSource = ProfileRemoteDataSourceImpl(_dioService!);
     _profileRepository = ProfileRepositoryImpl(_profileRemoteDataSource!);
     _getProfileUseCase = GetProfileUseCase(_profileRepository!);
-    _updateProfileUseCase = UpdateProfileUseCase(repository: _profileRepository!);
+    _updateProfileUseCase = UpdateProfileUseCase(
+      repository: _profileRepository!,
+    );
 
     // Initialize Registration dependencies
     _locationRemoteDataSource = LocationRemoteDataSourceImpl(
@@ -296,6 +318,24 @@ class DependencyInjection {
     );
     getIt.registerLazySingleton<RemoveFromWishlistUseCase>(
       () => RemoveFromWishlistUseCase(getIt()),
+    );
+
+    // Register Cart dependencies
+    getIt.registerLazySingleton<CartRemoteDataSource>(
+      () => CartRemoteDataSourceImpl(dioService: getIt()),
+    );
+    getIt.registerLazySingleton<CartRepository>(
+      () => CartRepositoryImpl(remoteDataSource: getIt(), networkInfo: getIt()),
+    );
+    getIt.registerLazySingleton<GetCartUseCase>(() => GetCartUseCase(getIt()));
+    getIt.registerLazySingleton<AddToCartUseCase>(
+      () => AddToCartUseCase(getIt()),
+    );
+    getIt.registerLazySingleton<RemoveFromCartUseCase>(
+      () => RemoveFromCartUseCase(getIt()),
+    );
+    getIt.registerLazySingleton<RemoveAllFromCartUseCase>(
+      () => RemoveAllFromCartUseCase(getIt()),
     );
 
     getIt.registerSingleton<ProfileRepository>(_profileRepository!);
@@ -451,6 +491,16 @@ class DependencyInjection {
         getIt<GetMyWishlistUseCase>(),
         getIt<AddToWishlistUseCase>(),
         getIt<RemoveFromWishlistUseCase>(),
+      ),
+    );
+
+    // Cart Cubit
+    getIt.registerFactory<CartCubit>(
+      () => CartCubit(
+        getCartUseCase: getIt<GetCartUseCase>(),
+        addToCartUseCase: getIt<AddToCartUseCase>(),
+        removeFromCartUseCase: getIt<RemoveFromCartUseCase>(),
+        removeAllFromCartUseCase: getIt<RemoveAllFromCartUseCase>(),
       ),
     );
   }
