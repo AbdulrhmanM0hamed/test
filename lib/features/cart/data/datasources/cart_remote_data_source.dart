@@ -20,8 +20,21 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
   Future<CartModel> getCart() async {
     try {
       final response = await dioService.get(ApiEndpoints.getCart);
-      
+
       if (response.statusCode == 200) {
+        // Check if the response data is a string indicating empty cart
+        if (response.data['data'] is String &&
+            response.data['data'].toString().contains(
+              'Cart not found or is empty',
+            )) {
+          // Return empty cart model
+          return const CartModel(
+            items: [],
+            totalProductPrice: '0',
+            totalTaxAmount: '0',
+            totalPrice: '0',
+          );
+        }
         return CartModel.fromJson(response.data);
       } else {
         throw Exception('Failed to get cart: ${response.statusMessage}');
@@ -40,7 +53,7 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
         ApiEndpoints.addToCart,
         data: request.toJson(),
       );
-      
+
       if (response.statusCode == 200) {
         return response.data['message'] ?? 'تم إضافة المنتج إلى السلة بنجاح';
       } else {
@@ -62,11 +75,13 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
       final response = await dioService.delete(
         ApiEndpoints.removeFromCart(cartItemId),
       );
-      
+
       if (response.statusCode == 200) {
         return response.data['message'] ?? 'تم حذف المنتج من السلة بنجاح';
       } else {
-        throw Exception('Failed to remove from cart: ${response.statusMessage}');
+        throw Exception(
+          'Failed to remove from cart: ${response.statusMessage}',
+        );
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
@@ -81,12 +96,11 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
   @override
   Future<String> removeAllFromCart() async {
     try {
-      final response = await dioService.delete(
-        ApiEndpoints.removeAllFromCart,
-      );
-      
+      final response = await dioService.delete(ApiEndpoints.removeAllFromCart);
+
       if (response.statusCode == 200) {
-        return response.data['message'] ?? 'تم حذف جميع المنتجات من السلة بنجاح';
+        return response.data['message'] ??
+            'تم حذف جميع المنتجات من السلة بنجاح';
       } else {
         throw Exception('Failed to clear cart: ${response.statusMessage}');
       }
