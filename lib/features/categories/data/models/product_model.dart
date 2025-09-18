@@ -21,6 +21,8 @@ class ProductModel extends Product {
     required super.countOfAvailable,
     required super.countOfReviews,
     super.currency,
+    super.quantityInCart,
+    super.productSizeColorId,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
@@ -48,6 +50,8 @@ class ProductModel extends Product {
       countOfAvailable: json['countOfAvailable'] as int,
       countOfReviews: json['countOfReviews'] as int,
       currency: 'ج.م',
+      quantityInCart: json['quantity_in_cart'] as int?,
+      productSizeColorId: json['product_size_color_id'] as int?,
     );
   }
 
@@ -71,6 +75,8 @@ class ProductModel extends Product {
       'limitation': limitation,
       'countOfAvailable': countOfAvailable,
       'countOfReviews': countOfReviews,
+      'quantity_in_cart': quantityInCart,
+      'product_size_color_id': productSizeColorId,
     };
   }
 }

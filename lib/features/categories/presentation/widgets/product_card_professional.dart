@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test/core/utils/widgets/custom_snackbar.dart';
+import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:test/core/services/cart_global_service.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/utils/constant/app_assets.dart';
 import '../../../../core/utils/constant/font_manger.dart';
@@ -34,6 +38,7 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
   late Animation<Offset> _slideAnimation;
   late Animation<double> _fadeAnimation;
   bool _isPressed = false;
+  bool _isAddingToCart = false;
 
   @override
   void initState() {
@@ -393,58 +398,183 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
                 ),
               ),
 
-              // Add to Cart Button
-              GestureDetector(
-                onTap: () {
-                  // TODO: Implement add to cart functionality
+              // Add to Cart Button with Visual Indicator
+              StreamBuilder<CartEvent>(
+                stream: CartGlobalService.instance.cartEventStream,
+                builder: (context, eventSnapshot) {
+                  return StatefulBuilder(
+                    builder: (context, setState) {
+                      // Calculate current quantity in cart and available quantity
+                      final currentQuantity =
+                          widget.product.quantityInCart ?? 0;
+                      // Use the minimum of limitation and stock to respect both constraints
+                      final maxAllowed = widget.product.limitation > 0
+                          ? (widget.product.limitation < widget.product.stock
+                                ? widget.product.limitation
+                                : widget.product.stock)
+                          : widget.product.stock;
+                      final canAddMore = currentQuantity < maxAllowed;
+                      final isInCart = currentQuantity > 0;
+
+                      // Always show Add to Cart button with visual indicator
+                      return GestureDetector(
+                        onTap:
+                            (_isAddingToCart ||
+                                !widget.product.isAvailable ||
+                                !canAddMore)
+                            ? null
+                            : () async {
+                                setState(() {
+                                  _isAddingToCart = true;
+                                });
+
+                                try {
+                                  final cartCubit = context.read<CartCubit>();
+
+                                  // Use productSizeColorId if available, otherwise use product id as fallback
+                                  final sizeColorId =
+                                      widget.product.productSizeColorId ??
+                                      widget.product.id;
+
+                                  await cartCubit.addToCart(
+                                    productId: widget.product.id,
+                                    productSizeColorId: sizeColorId,
+                                    quantity: currentQuantity + 1,
+                                  );
+
+                                  debugPrint(
+                                    '✅ CategoryProductCard: Product added successfully',
+                                  );
+                                } catch (e) {
+                                  CustomSnackbar.showError(
+                                    context: context,
+                                    message: AppLocalizations.of(
+                                      context,
+                                    )!.failedToAddToCart,
+                                  );
+                                } finally {
+                                  setState(() {
+                                    _isAddingToCart = false;
+                                  });
+                                }
+                              },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            // Different background color if product is in cart
+                            color: isInCart
+                                ? AppColors.primary.withValues(alpha: 0.2)
+                                : (widget.product.isAvailable && canAddMore)
+                                ? AppColors.primary.withValues(alpha: 0.1)
+                                : Colors.grey.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: isInCart
+                                  ? AppColors.primary.withValues(alpha: 0.5)
+                                  : (widget.product.isAvailable && canAddMore)
+                                  ? AppColors.primary.withValues(alpha: 0.3)
+                                  : Colors.grey.withValues(alpha: 0.3),
+                              width: isInCart ? 2 : 1,
+                            ),
+                            boxShadow:
+                                (widget.product.isAvailable && canAddMore)
+                                ? [
+                                    BoxShadow(
+                                      color: isInCart
+                                          ? AppColors.primary.withValues(
+                                              alpha: 0.6,
+                                            )
+                                          : AppColors.primary.withValues(
+                                              alpha: 0.4,
+                                            ),
+                                      blurRadius: isInCart ? 2 : 0,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                    BoxShadow(
+                                      color: Colors.white.withValues(
+                                        alpha: 0.8,
+                                      ),
+                                      blurRadius: 0,
+                                      offset: const Offset(-1, -1),
+                                    ),
+                                    BoxShadow(
+                                      color: Colors.white.withValues(
+                                        alpha: 0.5,
+                                      ),
+                                      blurRadius: 0,
+                                      offset: const Offset(1, 1),
+                                      spreadRadius: 0.5,
+                                    ),
+                                    BoxShadow(
+                                      color: Colors.black.withValues(
+                                        alpha: 0.1,
+                                      ),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                      spreadRadius: 0.5,
+                                    ),
+                                  ]
+                                : [],
+                          ),
+                          child: _isAddingToCart
+                              ? SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      AppColors.primary,
+                                    ),
+                                  ),
+                                )
+                              : Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      isInCart
+                                          ? Icons.shopping_cart
+                                          : Icons.add_shopping_cart_rounded,
+                                      size: 18,
+                                      color:
+                                          (widget.product.isAvailable &&
+                                              canAddMore)
+                                          ? AppColors.primary
+                                          : Colors.grey,
+                                    ),
+                                    // Show quantity badge if product is in cart
+                                    if (isInCart) ...[
+                                      const SizedBox(width: 4),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 6,
+                                          vertical: 2,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.primary,
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          '$currentQuantity',
+                                          style: getBoldStyle(
+                                            fontSize: FontSize.size10,
+                                            fontFamily: FontConstant.cairo,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                        ),
+                      );
+                    },
+                  );
                 },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: AppColors.primary.withValues(alpha: 0.3),
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      // Bottom shadow (darker)
-                      BoxShadow(
-                        color: AppColors.primary.withValues(alpha: 0.4),
-                        blurRadius: 0,
-                        offset: const Offset(0, 2),
-                      ),
-                      // Middle shadow
-                      BoxShadow(
-                        color: Colors.white.withValues(alpha: 0.8),
-                        blurRadius: 0,
-                        offset: const Offset(-1, -1),
-                      ),
-                      // Top highlight
-                      BoxShadow(
-                        color: Colors.white.withValues(alpha: 0.5),
-                        blurRadius: 0,
-                        offset: const Offset(1, 1),
-                        spreadRadius: 0.5,
-                      ),
-                      // Soft outer glow
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                        spreadRadius: 0.5,
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    Icons.add_shopping_cart_rounded,
-                    size: 18,
-                    color: AppColors.primary,
-                  ),
-                ),
               ),
             ],
           ),

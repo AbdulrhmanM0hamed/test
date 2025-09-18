@@ -18,6 +18,8 @@ class Product {
   final int countOfAvailable;
   final int countOfReviews;
   final String currency;
+  final int? quantityInCart;
+  final int? productSizeColorId;
 
   const Product({
     required this.id,
@@ -39,6 +41,8 @@ class Product {
     required this.countOfAvailable,
     required this.countOfReviews,
     this.currency = 'ج.م',
+    this.quantityInCart,
+    this.productSizeColorId,
   });
 
   /// السعر النهائي (هو realPrice)
