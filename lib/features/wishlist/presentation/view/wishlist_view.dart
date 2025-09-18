@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/core/utils/common/custom_app_bar.dart';
+import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
-import '../../domain/entities/wishlist_item.dart';
 import '../widgets/wishlist_item_card.dart';
 import '../cubit/wishlist_cubit.dart';
 import '../../../home/presentation/view/bottom_nav_bar.dart';
@@ -57,22 +56,12 @@ class _WishlistViewState extends State<WishlistView>
         opacity: _fadeAnimation,
         child: BlocConsumer<WishlistCubit, WishlistState>(
           listener: (context, state) {
-            if (state is WishlistItemRemoved) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: Colors.green,
-                  duration: const Duration(seconds: 2),
-                ),
-              );
+            if (state is WishlistItemAdded) {
+              CustomSnackbar.showSuccess(context: context, message: state.message);
+            } else if (state is WishlistItemRemoved) {
+              CustomSnackbar.showWarning(context: context, message: state.message);
             } else if (state is WishlistError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: Colors.red,
-                  duration: const Duration(seconds: 3),
-                ),
-              );
+              CustomSnackbar.showError(context: context, message: state.message);
             }
           },
           builder: (context, state) {

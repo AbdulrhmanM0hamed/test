@@ -26,12 +26,13 @@ class HomeProductCard extends StatefulWidget {
 
 class _HomeProductCardState extends State<HomeProductCard>
     with SingleTickerProviderStateMixin {
+  bool _isInWishlist = false;
+  bool _isAddingToCart = false;
+  bool _isWishlistLoading = false;
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;
   late Animation<double> _fadeAnimation;
   bool _isPressed = false;
-  bool _isInWishlist = false;
-  bool _isAddingToCart = false;
 
   @override
   void initState() {
@@ -246,22 +247,25 @@ class _HomeProductCardState extends State<HomeProductCard>
             state.productId == widget.product.id) {
           setState(() {
             _isInWishlist = true;
+            _isWishlistLoading = false;
           });
-          CustomSnackbar.showSuccess(
-            context: context,
-            message: state.message,
-          );
+          // Remove snackbar - handled by WishlistView
         } else if (state is WishlistItemRemoved &&
             state.productId == widget.product.id) {
           setState(() {
             _isInWishlist = false;
+            _isWishlistLoading = false;
           });
-          CustomSnackbar.showWarning(
-            context: context,
-            message: state.message,
-          );
+          // Remove snackbar - handled by WishlistView
         } else if (state is WishlistError) {
-          CustomSnackbar.showError(context: context, message: state.message);
+          // Reset loading for this product on error
+          setState(() {
+            _isWishlistLoading = false;
+          });
+          // Only show error snackbar for this specific product
+          if (state.toString().contains('${widget.product.id}')) {
+            CustomSnackbar.showError(context: context, message: state.message);
+          }
         }
       },
       builder: (context, state) {
@@ -270,10 +274,17 @@ class _HomeProductCardState extends State<HomeProductCard>
 
         return GestureDetector(
           onTap: () {
-            // Prevent multiple taps while loading
-            if (state is WishlistLoading) return;
+            // Prevent multiple taps while this product is loading
+            if (_isWishlistLoading) return;
 
-            debugPrint('❤️ HomeProductCard: ${_isInWishlist ? 'Removing' : 'Adding'} product ${widget.product.id} ${_isInWishlist ? 'from' : 'to'} wishlist');
+            debugPrint(
+              '❤️ HomeProductCard: ${_isInWishlist ? 'Removing' : 'Adding'} product ${widget.product.id} ${_isInWishlist ? 'from' : 'to'} wishlist',
+            );
+
+            // Set loading state for this specific product
+            setState(() {
+              _isWishlistLoading = true;
+            });
 
             if (_isInWishlist) {
               wishlistCubit.removeFromWishlist(widget.product.id);
@@ -294,7 +305,7 @@ class _HomeProductCardState extends State<HomeProductCard>
                 ),
               ],
             ),
-            child: state is WishlistLoading
+            child: _isWishlistLoading
                 ? SizedBox(
                     width: 18,
                     height: 18,
@@ -462,8 +473,10 @@ class _HomeProductCardState extends State<HomeProductCard>
                                   });
 
                                   try {
-                                    debugPrint('🛒 HomeProductCard: Adding product ${widget.product.id} to cart directly via CartCubit');
-                                    
+                                    debugPrint(
+                                      '🛒 HomeProductCard: Adding product ${widget.product.id} to cart directly via CartCubit',
+                                    );
+
                                     // Get CartCubit from the context (provided by bottom nav bar)
                                     final cartCubit = context.read<CartCubit>();
                                     await cartCubit.addToCart(
@@ -472,14 +485,14 @@ class _HomeProductCardState extends State<HomeProductCard>
                                           widget.product.productSizeColorId!,
                                       quantity: 1,
                                     );
-                                    
-                                    debugPrint('✅ HomeProductCard: Product added successfully');
-                                    
-                                    CustomSnackbar.showSuccess(
-                                      context: context,
-                                      message: 'تم إضافة المنتج للسلة بنجاح',
+
+                                    debugPrint(
+                                      '✅ HomeProductCard: Product added successfully',
                                     );
+
+                                    // Remove snackbar - handled by CartView listener
                                   } catch (e) {
+                                    // Only show error snackbar for cart failures
                                     CustomSnackbar.showError(
                                       context: context,
                                       message:
