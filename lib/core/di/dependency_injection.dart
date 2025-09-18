@@ -78,6 +78,7 @@ import 'package:test/features/wishlist/domain/repositories/wishlist_repository.d
 import 'package:test/features/wishlist/domain/usecases/get_my_wishlist_use_case.dart';
 import 'package:test/features/wishlist/domain/usecases/add_to_wishlist_use_case.dart';
 import 'package:test/features/wishlist/domain/usecases/remove_from_wishlist_use_case.dart';
+import 'package:test/features/wishlist/domain/usecases/remove_all_from_wishlist_use_case.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 // Cart feature imports
 import 'package:test/features/cart/data/datasources/cart_remote_data_source.dart';
@@ -319,6 +320,9 @@ class DependencyInjection {
     getIt.registerLazySingleton<RemoveFromWishlistUseCase>(
       () => RemoveFromWishlistUseCase(getIt()),
     );
+    getIt.registerLazySingleton<RemoveAllFromWishlistUseCase>(
+      () => RemoveAllFromWishlistUseCase(getIt()),
+    );
 
     // Register Cart dependencies
     getIt.registerLazySingleton<CartRemoteDataSource>(
@@ -491,6 +495,7 @@ class DependencyInjection {
         getIt<GetMyWishlistUseCase>(),
         getIt<AddToWishlistUseCase>(),
         getIt<RemoveFromWishlistUseCase>(),
+        getIt<RemoveAllFromWishlistUseCase>(),
       ),
     );
 

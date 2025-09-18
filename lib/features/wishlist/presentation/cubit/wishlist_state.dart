@@ -50,3 +50,12 @@ class WishlistItemAdded extends WishlistState {
   @override
   List<Object?> get props => [productId, message];
 }
+
+class WishlistCleared extends WishlistState {
+  final String message;
+
+  const WishlistCleared(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}

@@ -25,6 +25,7 @@ class ApiEndpoints {
   static String removeFromWishlist(int productId) =>
       '$baseUrl/wishlist/remove/$productId';
   static String get getWishlist => '$baseUrl/my-wishlist';
+  static String get removeAllFromWishlist => '$baseUrl/wishlist/remove-all';
 
   // Cart endpoints
   static String get addToCart => '$baseUrl/cart/add';

@@ -21,4 +21,9 @@ class WishlistRepositoryImpl implements WishlistRepository {
   Future<Map<String, dynamic>> removeFromWishlist(int productId) async {
     return await _remoteDataSource.removeFromWishlist(productId);
   }
+
+  @override
+  Future<Map<String, dynamic>> removeAllFromWishlist() async {
+    return await _remoteDataSource.removeAllFromWishlist();
+  }
 }

@@ -6,6 +6,7 @@ abstract class WishlistRemoteDataSource {
   Future<WishlistResponseModel> getMyWishlist();
   Future<Map<String, dynamic>> addToWishlist(int productId);
   Future<Map<String, dynamic>> removeFromWishlist(int productId);
+  Future<Map<String, dynamic>> removeAllFromWishlist();
 }
 
 class WishlistRemoteDataSourceImpl implements WishlistRemoteDataSource {
@@ -32,8 +33,8 @@ class WishlistRemoteDataSourceImpl implements WishlistRemoteDataSource {
   Future<Map<String, dynamic>> addToWishlist(int productId) async {
     final requestData = {
       'items': [
-        {'product_id': productId}
-      ]
+        {'product_id': productId},
+      ],
     };
 
     final response = await _dioService.post(
@@ -51,5 +52,28 @@ class WishlistRemoteDataSourceImpl implements WishlistRemoteDataSource {
     );
 
     return response.data;
+  }
+
+  @override
+  Future<Map<String, dynamic>> removeAllFromWishlist() async {
+    try {
+      print('🗑️ WishlistRemoteDataSource: Starting removeAllFromWishlist');
+      print('🌐 API Endpoint: ${ApiEndpoints.removeAllFromWishlist}');
+
+      final response = await _dioService.delete(
+        ApiEndpoints.removeAllFromWishlist,
+      );
+
+      print('✅ WishlistRemoteDataSource: removeAllFromWishlist success');
+      print('📊 Response status: ${response.statusCode}');
+      print('📋 Response data: ${response.data}');
+
+      return response.data;
+    } catch (e) {
+      print('❌ WishlistRemoteDataSource: removeAllFromWishlist failed');
+      print('🔥 Error: $e');
+      print('📍 Error type: ${e.runtimeType}');
+      rethrow;
+    }
   }
 }

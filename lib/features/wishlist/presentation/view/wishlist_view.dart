@@ -48,20 +48,63 @@ class _WishlistViewState extends State<WishlistView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: 'المفضلة',
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        surfaceTintColor: Colors.transparent,
         automaticallyImplyLeading: false,
+        title: Text(
+          'المفضلة',
+          style: getBoldStyle(
+            fontSize: FontSize.size20,
+            fontFamily: FontConstant.cairo,
+            color: Theme.of(context).textTheme.titleLarge?.color,
+          ),
+        ),
+        actions: [
+          BlocBuilder<WishlistCubit, WishlistState>(
+            builder: (context, state) {
+              if (state is WishlistLoaded && state.wishlistResponse.wishlist.isNotEmpty) {
+                return IconButton(
+                  icon: Icon(
+                    Icons.delete_sweep,
+                    color: Colors.red,
+                    size: 24,
+                  ),
+                  onPressed: () => _showClearAllDialog(context),
+                  tooltip: 'حذف الكل',
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: FadeTransition(
         opacity: _fadeAnimation,
         child: BlocConsumer<WishlistCubit, WishlistState>(
           listener: (context, state) {
             if (state is WishlistItemAdded) {
-              CustomSnackbar.showSuccess(context: context, message: state.message);
+              CustomSnackbar.showSuccess(
+                context: context,
+                message: state.message,
+              );
             } else if (state is WishlistItemRemoved) {
-              CustomSnackbar.showWarning(context: context, message: state.message);
+              CustomSnackbar.showWarning(
+                context: context,
+                message: state.message,
+              );
+            } else if (state is WishlistCleared) {
+              CustomSnackbar.showSuccess(
+                context: context,
+                message: state.message,
+              );
             } else if (state is WishlistError) {
-              CustomSnackbar.showError(context: context, message: state.message);
+              CustomSnackbar.showError(
+                context: context,
+                message: state.message,
+              );
             }
           },
           builder: (context, state) {
@@ -78,58 +121,6 @@ class _WishlistViewState extends State<WishlistView>
           },
         ),
       ),
-    );
-  }
-
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
-    return AppBar(
-      elevation: 0,
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      surfaceTintColor: Colors.transparent,
-      leading: IconButton(
-        icon: Icon(
-          Icons.arrow_back_ios,
-          color: Theme.of(context).iconTheme.color,
-        ),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-      title: Text(
-        'المفضلة',
-        style: getBoldStyle(
-          fontSize: FontSize.size20,
-          fontFamily: FontConstant.cairo,
-          color: Theme.of(context).textTheme.titleLarge?.color,
-        ),
-      ),
-      centerTitle: true,
-      actions: [
-        BlocBuilder<WishlistCubit, WishlistState>(
-          builder: (context, state) {
-            if (state is WishlistLoaded && state.wishlistResponse.count > 0) {
-              return Container(
-                margin: const EdgeInsets.only(right: 16),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  '${state.wishlistResponse.count}',
-                  style: getBoldStyle(
-                    fontSize: FontSize.size14,
-                    fontFamily: FontConstant.cairo,
-                    color: AppColors.primary,
-                  ),
-                ),
-              );
-            }
-            return const SizedBox.shrink();
-          },
-        ),
-      ],
     );
   }
 
@@ -387,6 +378,57 @@ class _WishlistViewState extends State<WishlistView>
           ),
         ],
       ),
+    );
+  }
+
+  void _showClearAllDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text(
+            'تأكيد الحذف',
+            style: getBoldStyle(
+              fontSize: FontSize.size18,
+              fontFamily: FontConstant.cairo,
+            ),
+          ),
+          content: Text(
+            'هل أنت متأكد من حذف جميع المنتجات من المفضلة؟',
+            style: getRegularStyle(
+              fontSize: FontSize.size14,
+              fontFamily: FontConstant.cairo,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(
+                'إلغاء',
+                style: getMediumStyle(
+                  fontSize: FontSize.size14,
+                  fontFamily: FontConstant.cairo,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+                context.read<WishlistCubit>().removeAllFromWishlist();
+              },
+              child: Text(
+                'حذف الكل',
+                style: getMediumStyle(
+                  fontSize: FontSize.size14,
+                  fontFamily: FontConstant.cairo,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

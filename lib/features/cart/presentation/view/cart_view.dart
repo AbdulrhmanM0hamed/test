@@ -78,33 +78,32 @@ class _CartViewState extends State<CartView>
 
   PreferredSizeWidget _buildAppBar(BuildContext context, CartState state) {
     return AppBar(
-      backgroundColor: Colors.white,
       elevation: 0,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      surfaceTintColor: Colors.transparent,
+      automaticallyImplyLeading: false,
       title: Text(
         'السلة',
         style: getBoldStyle(
-          fontSize: FontSize.size18,
+          fontSize: FontSize.size20,
           fontFamily: FontConstant.cairo,
-          color: Colors.black87,
+          color: Theme.of(context).textTheme.titleLarge?.color,
         ),
-      ),
-      centerTitle: true,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios, color: Colors.black87),
-        onPressed: () => Navigator.pop(context),
       ),
       actions: [
         BlocBuilder<CartCubit, CartState>(
           builder: (context, state) {
             if (state is CartLoaded && state.cart.isNotEmpty) {
               return IconButton(
-                icon: const Icon(Icons.delete_sweep, color: Colors.red),
+                icon: Icon(Icons.delete_sweep, color: Colors.red, size: 24),
                 onPressed: () => _showClearCartDialog(context),
+                tooltip: 'حذف الكل',
               );
             }
             return const SizedBox.shrink();
           },
         ),
+        const SizedBox(width: 8),
       ],
     );
   }
