@@ -90,7 +90,7 @@ class _CartItemCardState extends State<CartItemCard>
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
+                  color: Colors.black.withValues(alpha: 0.08),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                   spreadRadius: 0,
@@ -171,52 +171,6 @@ class _CartItemCardState extends State<CartItemCard>
         const SizedBox(height: 4),
 
         // Size and Color Info
-        if (widget.cartItem.product.sizeName != null ||
-            widget.cartItem.product.colorCode != null) ...[
-          Row(
-            children: [
-              if (widget.cartItem.product.sizeName != null) ...[
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Text(
-                    widget.cartItem.product.sizeName!,
-                    style: getMediumStyle(
-                      fontSize: FontSize.size10,
-                      fontFamily: FontConstant.cairo,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 4),
-              ],
-              if (widget.cartItem.product.colorCode != null)
-                Container(
-                  width: 16,
-                  height: 16,
-                  decoration: BoxDecoration(
-                    color: Color(
-                      int.parse(
-                        widget.cartItem.product.colorCode!.replaceFirst(
-                          '#',
-                          '0xFF',
-                        ),
-                      ),
-                    ),
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.grey[300]!, width: 1),
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 8),
-        ],
 
         // Price and Rating
         Row(
@@ -260,6 +214,91 @@ class _CartItemCardState extends State<CartItemCard>
     );
   }
 
+  // Helper method to build quantity control buttons
+  Widget _buildQuantityButton({
+    required IconData icon,
+    required VoidCallback? onPressed,
+    bool isDisabled = false,
+    Color? iconColor,
+  }) {
+    return Container(
+      width: 28,
+      height: 28,
+      decoration: BoxDecoration(
+        color: isDisabled
+            ? Colors.grey[100]
+            : AppColors.primary.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(
+          color: isDisabled
+              ? Colors.grey[300]!
+              : AppColors.primary.withValues(alpha: 0.3),
+          width: 1,
+        ),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: isDisabled ? null : onPressed,
+          borderRadius: BorderRadius.circular(6),
+          child: Icon(
+            icon,
+            size: 16,
+            color: isDisabled
+                ? Colors.grey[400]
+                : (iconColor ?? AppColors.primary),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRemoveButton() {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: _isRemoving ? null : _handleRemove,
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.red.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.red.withValues(alpha: 0.2)),
+          ),
+          child: Icon(
+            Icons.delete_outline,
+            color: _isRemoving ? Colors.grey[400] : Colors.red,
+            size: 20,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Widget _buildRemoveButton() {
+  //   return Material(
+  //     color: Colors.transparent,
+  //     child: InkWell(
+  //       onTap: _isRemoving ? null : _handleRemove,
+  //       borderRadius: BorderRadius.circular(8),
+  //       child: Container(
+  //         padding: const EdgeInsets.all(8),
+  //         decoration: BoxDecoration(
+  //           color: Colors.red.withValues(alpha:0.05),
+  //           borderRadius: BorderRadius.circular(8),
+  //           border: Border.all(color: Colors.red.withValues(alpha:0.2)),
+  //         ),
+  //         child: Icon(
+  //           Icons.delete_outline,
+  //           color: _isRemoving ? Colors.grey[400] : Colors.red,
+  //           size: 20,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
   Widget _buildActionsColumn() {
     // Check if this item is currently being updated
     final cartState = context.watch<CartCubit>().state;
@@ -267,115 +306,100 @@ class _CartItemCardState extends State<CartItemCard>
         cartState is CartItemUpdating &&
         cartState.cartItemId == widget.cartItem.id;
 
+    final currentQuantity = widget.cartItem.quantity;
+    final maxAllowed = widget.cartItem.product.limitation > 0
+        ? (widget.cartItem.product.limitation < widget.cartItem.countOfAvailable
+              ? widget.cartItem.product.limitation
+              : widget.cartItem.countOfAvailable)
+        : widget.cartItem.countOfAvailable;
+    final canIncrease =
+        currentQuantity < maxAllowed &&
+        currentQuantity < widget.cartItem.countOfAvailable;
+    final canDecrease = currentQuantity > 1;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         // Remove Button
-        GestureDetector(
-          onTap: _isRemoving ? null : _handleRemove,
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.red.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+        _buildRemoveButton(),
+        const SizedBox(height: 16),
+        // Quantity Controls
+        if (_isUpdating) ...[
+          const SizedBox(
+            width: 100,
+            height: 32,
+            child: Center(
+              child: SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                ),
+              ),
             ),
-            child: _isRemoving
-                ? SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CustomProgressIndicator(),
-                  )
-                : Icon(Icons.delete_outline, color: Colors.red, size: 16),
           ),
-        ),
+        ] else ...[
+          Container(
+            height: 32,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.grey[200]!),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.03),
+                  blurRadius: 4,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Decrease Button
+                _buildQuantityButton(
+                  icon: Icons.remove,
+                  onPressed: canDecrease
+                      ? () =>
+                            widget.onQuantityChanged?.call(currentQuantity - 1)
+                      : null,
+                  isDisabled: !canDecrease,
+                ),
 
-        const SizedBox(height: 12),
-
-        // Smart Quantity Controls with Stock Limitations
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.grey[50],
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.grey[300]!),
-          ),
-          child: Column(
-            children: [
-              // Increase Button
-              GestureDetector(
-                onTap: () {
-                  final currentQuantity = widget.cartItem.quantity;
-                  // Use the minimum of limitation and countOfAvailable to respect both constraints
-                  final maxAllowed = widget.cartItem.product.limitation > 0
-                      ? (widget.cartItem.product.limitation <
-                                widget.cartItem.countOfAvailable
-                            ? widget.cartItem.product.limitation
-                            : widget.cartItem.countOfAvailable)
-                      : widget.cartItem.countOfAvailable;
-
-                  // Check if we can increase quantity
-                  final canIncrease = currentQuantity < maxAllowed;
-
-                  if (canIncrease && widget.onQuantityChanged != null) {
-                    widget.onQuantityChanged!(currentQuantity + 1);
-                  }
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  child: Icon(
-                    Icons.add,
-                    size: 16,
-                    color: () {
-                      final currentQuantity = widget.cartItem.quantity;
-                      // Use the minimum of limitation and countOfAvailable to respect both constraints
-                      final maxAllowed = widget.cartItem.product.limitation > 0
-                          ? (widget.cartItem.product.limitation <
-                                    widget.cartItem.countOfAvailable
-                                ? widget.cartItem.product.limitation
-                                : widget.cartItem.countOfAvailable)
-                          : widget.cartItem.countOfAvailable;
-                      final canIncrease = currentQuantity < maxAllowed;
-                      return canIncrease ? AppColors.primary : Colors.grey[400];
-                    }(),
+                // Quantity Display
+                Container(
+                  width: 36,
+                  alignment: Alignment.center,
+                  decoration: const BoxDecoration(
+                    border: Border.symmetric(
+                      vertical: BorderSide(color: Color(0xFFF0F0F0), width: 1),
+                    ),
+                  ),
+                  child: Text(
+                    '$currentQuantity',
+                    style: getBoldStyle(
+                      fontSize: FontSize.size14,
+                      fontFamily: FontConstant.cairo,
+                      color: Colors.grey[800],
+                    ),
                   ),
                 ),
-              ),
 
-              // Quantity Display
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                child: Text(
-                  '${widget.cartItem.quantity}',
-                  style: getBoldStyle(
-                    fontSize: FontSize.size12,
-                    fontFamily: FontConstant.cairo,
-                    color: Colors.black87,
-                  ),
+                // Increase Button
+                _buildQuantityButton(
+                  icon: Icons.add,
+                  onPressed: canIncrease
+                      ? () =>
+                            widget.onQuantityChanged?.call(currentQuantity + 1)
+                      : null,
+                  isDisabled: !canIncrease,
                 ),
-              ),
-
-              // Decrease Button
-              GestureDetector(
-                onTap: widget.cartItem.quantity > 1
-                    ? () => widget.onQuantityChanged?.call(
-                        widget.cartItem.quantity - 1,
-                      )
-                    : null,
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  child: Icon(
-                    Icons.remove,
-                    size: 16,
-                    color: widget.cartItem.quantity > 1
-                        ? AppColors.primary
-                        : Colors.grey[400],
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+        ],
       ],
     );
   }
