@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
@@ -293,27 +294,34 @@ class _CategoriesViewState extends State<CategoriesView> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: department.image.isNotEmpty
-                          ? Image.network(
-                              department.icon,
+                        
+                          ? CachedNetworkImage(
+                              imageUrl: department.icon,
                               width: 40,
                               height: 40,
                               fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Icon(
-                                  Icons.category_outlined,
-                                  color: isSelected
-                                      ? AppColors.primary
-                                      : Colors.grey[600],
-                                  size: 20,
-                                );
-                              },
+                              placeholder: (context, url) => Container(
+                                width: 40,
+                                height: 40,
+                                padding: const EdgeInsets.all(8),
+                                child: const CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Icon(
+                                Icons.category_outlined,
+                                size: 24,
+                                color: isSelected
+                                    ? Colors.white
+                                    : Colors.grey[600],
+                              ),
                             )
                           : Icon(
                               Icons.category_outlined,
+                              size: 24,
                               color: isSelected
-                                  ? AppColors.primary
+                                  ? Colors.white
                                   : Colors.grey[600],
-                              size: 20,
                             ),
                     ),
                   ),
