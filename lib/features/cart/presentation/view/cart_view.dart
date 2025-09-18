@@ -182,7 +182,13 @@ class _CartViewState extends State<CartView>
                 onRemove: () =>
                     context.read<CartCubit>().removeFromCart(cartItem.id),
                 onQuantityChanged: (newQuantity) {
-                  // TODO: Implement quantity update
+                  // Use the new updateCartItemQuantity method which handles all the logic
+                  context.read<CartCubit>().updateCartItemQuantity(
+                    cartItemId: cartItem.id,
+                    newQuantity: newQuantity,
+                    productId: cartItem.product.id,
+                    productSizeColorId: cartItem.productSizeColorId,
+                  );
                 },
               );
             },

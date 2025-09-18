@@ -903,6 +903,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get failedToAddToCart => 'Failed to add product to cart';
 
   @override
+  String get incompleteProductInfo => 'Incomplete product information';
+
+  @override
   String get failedToUpdateQuantity => 'Failed to update quantity';
 
   @override

@@ -903,6 +903,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get failedToAddToCart => 'فشل في إضافة المنتج للسلة';
 
   @override
+  String get incompleteProductInfo => 'معلومات المنتج غير مكتملة';
+
+  @override
   String get failedToUpdateQuantity => 'فشل في تحديث الكمية';
 
   @override

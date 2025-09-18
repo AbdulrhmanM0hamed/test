@@ -339,6 +339,7 @@
   "failedToClearCart": "فشل في حذف جميع المنتجات من السلة",
   "failedToRemoveFromCart": "فشل في حذف المنتج من السلة",
   "failedToAddToCart": "فشل في إضافة المنتج للسلة",
+  "incompleteProductInfo": "معلومات المنتج غير مكتملة",
   "failedToUpdateQuantity": "فشل في تحديث الكمية",
   "networkError": "خطأ في الاتصال بالشبكة",
   "serverError": "خطأ في الخادم",

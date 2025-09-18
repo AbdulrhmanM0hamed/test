@@ -12,13 +12,15 @@ class HomeProductModel extends HomeProduct {
     required super.reviewCount,
     required super.brandName,
     super.brandLogo,
-    required super.stock,
+    required super.countOfAvailable,
     required super.isBest,
     required super.isFeatured,
     required super.isLatest,
     required super.isSpecialOffer,
     required super.isFavorite,
     super.productSizeColorId,
+    required super.quantityInCart,
+    required super.limitation,
   });
 
   factory HomeProductModel.fromJson(Map<String, dynamic> json) {
@@ -32,10 +34,8 @@ class HomeProductModel extends HomeProduct {
     }
 
     // Debug is_fav value
-    print('🔍 HomeProductModel: Product ${json['id']} - is_fav raw value: ${json['is_fav']} (type: ${json['is_fav'].runtimeType})');
-    
+
     final isFav = json['is_fav'] == "1" || json['is_fav'] == 1;
-    print('🔍 HomeProductModel: Product ${json['id']} - isFavorite result: $isFav');
 
     return HomeProductModel(
       id: json['id'] ?? 0,
@@ -48,13 +48,15 @@ class HomeProductModel extends HomeProduct {
       reviewCount: json['num_of_user_review'] ?? 0,
       brandName: json['brand_name'] ?? '',
       brandLogo: json['brand_logo'],
-      stock: json['stock'] ?? 0,
+      countOfAvailable: json['countOfAvailable'] ?? 0,
       isBest: json['isBest'] ?? false,
       isFeatured: true, // من API featured products
       isLatest: true, // من API latest products
       isSpecialOffer: json['discount'] != null && json['discount'] > 0,
       isFavorite: isFav,
       productSizeColorId: json['product_size_color_id'],
+      quantityInCart: json['quantity_in_cart'] ?? 0,
+      limitation: json['limitation'] ?? 10,
     );
   }
 
@@ -70,11 +72,15 @@ class HomeProductModel extends HomeProduct {
       'review_count': reviewCount,
       'brand_name': brandName,
       'brand_logo': brandLogo,
-      'stock': stock,
+      'countOfAvailable': countOfAvailable,
       'is_best': isBest,
       'is_featured': isFeatured,
       'is_latest': isLatest,
       'is_special_offer': isSpecialOffer,
+      'is_favorite': isFavorite,
+      'product_size_color_id': productSizeColorId,
+      'quantity_in_cart': quantityInCart,
+      'limitation': limitation,
     };
   }
 
@@ -90,13 +96,15 @@ class HomeProductModel extends HomeProduct {
       reviewCount: reviewCount,
       brandName: brandName,
       brandLogo: brandLogo,
-      stock: stock,
+      countOfAvailable: countOfAvailable,
       isBest: isBest,
       isFeatured: isFeatured,
       isLatest: isLatest,
       isSpecialOffer: isSpecialOffer,
       isFavorite: isFavorite,
       productSizeColorId: productSizeColorId,
+      quantityInCart: quantityInCart,
+      limitation: limitation,
     );
   }
 }

@@ -344,6 +344,7 @@
   "failedToClearCart": "Failed to clear all products from cart",
   "failedToRemoveFromCart": "Failed to remove product from cart",
   "failedToAddToCart": "Failed to add product to cart",
+  "incompleteProductInfo": "Incomplete product information",
   "failedToUpdateQuantity": "Failed to update quantity",
   "networkError": "Network connection error",
   "serverError": "Server error",

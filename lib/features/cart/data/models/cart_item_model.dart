@@ -15,7 +15,8 @@ class CartItemModel extends CartItem {
       id: json['id'] ?? 0,
       quantity: json['quantity'] ?? 0,
       product: CartProductModel.fromJson(json['product'] ?? {}),
-      taxes: (json['taxes'] as List<dynamic>?)
+      taxes:
+          (json['taxes'] as List<dynamic>?)
               ?.map((tax) => CartTaxModel.fromJson(tax))
               .toList() ??
           [],
@@ -63,6 +64,7 @@ class CartProductModel extends CartProduct {
     super.sizeId,
     super.sizeName,
     required super.stock,
+    required super.limitation,
   });
 
   factory CartProductModel.fromJson(Map<String, dynamic> json) {
@@ -81,6 +83,7 @@ class CartProductModel extends CartProduct {
       sizeId: json['size_id'],
       sizeName: json['size_name'],
       stock: json['stock'] ?? 0,
+      limitation: json['limitation'] ?? 10,
     );
   }
 
@@ -100,15 +103,13 @@ class CartProductModel extends CartProduct {
       'size_id': sizeId,
       'size_name': sizeName,
       'stock': stock,
+      'limitation': limitation,
     };
   }
 }
 
 class CartTaxModel extends CartTax {
-  const CartTaxModel({
-    required super.name,
-    required super.amount,
-  });
+  const CartTaxModel({required super.name, required super.amount});
 
   factory CartTaxModel.fromJson(Map<String, dynamic> json) {
     return CartTaxModel(
@@ -118,9 +119,6 @@ class CartTaxModel extends CartTax {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'amount': amount,
-    };
+    return {'name': name, 'amount': amount};
   }
 }

@@ -112,6 +112,66 @@ class CartCubit extends Cubit<CartState> {
     getCart();
   }
 
+  Future<void> updateCartItemQuantity({
+    required int cartItemId,
+    required int newQuantity,
+    required int productId,
+    required int productSizeColorId,
+  }) async {
+    if (newQuantity <= 0) {
+      await removeFromCart(cartItemId);
+      return;
+    }
+
+    // If we're in a loaded state, we can optimize by updating the UI immediately
+    if (state is CartLoaded) {
+      final currentState = state as CartLoaded;
+      emit(CartItemUpdating(cartItemId, newQuantity));
+      
+      try {
+        // First remove the item
+        await removeFromCartUseCase(cartItemId);
+        
+        // Then add it back with the new quantity
+        final request = AddToCartRequest(
+          items: [
+            CartItemRequest(
+              productId: productId,
+              productSizeColorId: productSizeColorId,
+              quantity: newQuantity,
+            ),
+          ],
+        );
+
+        final result = await addToCartUseCase(request);
+        
+        result.fold(
+          (failure) {
+            // If there's an error, revert to the previous state
+            emit(currentState);
+            emit(CartError(failure.message));
+          },
+          (_) {
+            // On success, refresh the cart to get the latest state
+            getCart();
+          },
+        );
+      } catch (e) {
+        // If any error occurs, revert to the previous state
+        emit(currentState);
+        emit(CartError('Failed to update cart item quantity'));
+      }
+    } else {
+      // Fallback for non-loaded states
+      await removeFromCart(cartItemId);
+      await addToCart(
+        productId: productId,
+        productSizeColorId: productSizeColorId,
+        quantity: newQuantity,
+      );
+    }
+  }
+
   @override
   Future<void> close() {
     dataRefreshService?.unregisterRefreshCallback(_refreshData);

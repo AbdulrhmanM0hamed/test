@@ -457,14 +457,30 @@ class _HomeProductCardState extends State<HomeProductCard>
                 ),
               ),
 
-              // Add to Cart Button
+              // Add to Cart Button with Visual Indicator
               StreamBuilder<CartEvent>(
                 stream: CartGlobalService.instance.cartEventStream,
                 builder: (context, eventSnapshot) {
                   return StatefulBuilder(
                     builder: (context, setState) {
+                      // Calculate current quantity in cart and available quantity
+                      final currentQuantity = widget.product.quantityInCart;
+                      // Use the minimum of limitation and countOfAvailable to respect both constraints
+                      final maxAllowed = widget.product.limitation > 0
+                          ? (widget.product.limitation <
+                                    widget.product.countOfAvailable
+                                ? widget.product.limitation
+                                : widget.product.countOfAvailable)
+                          : widget.product.countOfAvailable;
+                      final canAddMore = currentQuantity < maxAllowed;
+                      final isInCart = currentQuantity > 0;
+
+                      // Always show Add to Cart button with visual indicator
                       return GestureDetector(
-                        onTap: _isAddingToCart
+                        onTap:
+                            (_isAddingToCart ||
+                                !widget.product.isAvailable ||
+                                !canAddMore)
                             ? null
                             : () async {
                                 if (widget.product.productSizeColorId != null) {
@@ -473,30 +489,23 @@ class _HomeProductCardState extends State<HomeProductCard>
                                   });
 
                                   try {
-                                    debugPrint(
-                                      '🛒 HomeProductCard: Adding product ${widget.product.id} to cart directly via CartCubit',
-                                    );
-
-                                    // Get CartCubit from the context (provided by bottom nav bar)
                                     final cartCubit = context.read<CartCubit>();
                                     await cartCubit.addToCart(
                                       productId: widget.product.id,
                                       productSizeColorId:
                                           widget.product.productSizeColorId!,
-                                      quantity: 1,
+                                      quantity: currentQuantity + 1,
                                     );
 
                                     debugPrint(
                                       '✅ HomeProductCard: Product added successfully',
                                     );
-
-                                    // Remove snackbar - handled by CartView listener
                                   } catch (e) {
-                                    // Only show error snackbar for cart failures
                                     CustomSnackbar.showError(
                                       context: context,
-                                      message:
-                                          'حدث خطأ أثناء إضافة المنتج للسلة',
+                                      message: AppLocalizations.of(
+                                        context,
+                                      )!.failedToAddToCart,
                                     );
                                   } finally {
                                     setState(() {
@@ -506,7 +515,9 @@ class _HomeProductCardState extends State<HomeProductCard>
                                 } else {
                                   CustomSnackbar.showWarning(
                                     context: context,
-                                    message: 'معلومات المنتج غير مكتملة',
+                                    message: AppLocalizations.of(
+                                      context,
+                                    )!.incompleteProductInfo,
                                   );
                                 }
                               },
@@ -516,36 +527,60 @@ class _HomeProductCardState extends State<HomeProductCard>
                             vertical: 8,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: 0.1),
+                            // Different background color if product is in cart
+                            color: isInCart
+                                ? AppColors.primary.withValues(alpha: 0.2)
+                                : (widget.product.isAvailable && canAddMore)
+                                ? AppColors.primary.withValues(alpha: 0.1)
+                                : Colors.grey.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: AppColors.primary.withValues(alpha: 0.3),
-                              width: 1,
+                              color: isInCart
+                                  ? AppColors.primary.withValues(alpha: 0.5)
+                                  : (widget.product.isAvailable && canAddMore)
+                                  ? AppColors.primary.withValues(alpha: 0.3)
+                                  : Colors.grey.withValues(alpha: 0.3),
+                              width: isInCart ? 2 : 1,
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.primary.withValues(alpha: 0.4),
-                                blurRadius: 0,
-                                offset: const Offset(0, 2),
-                              ),
-                              BoxShadow(
-                                color: Colors.white.withValues(alpha: 0.8),
-                                blurRadius: 0,
-                                offset: const Offset(-1, -1),
-                              ),
-                              BoxShadow(
-                                color: Colors.white.withValues(alpha: 0.5),
-                                blurRadius: 0,
-                                offset: const Offset(1, 1),
-                                spreadRadius: 0.5,
-                              ),
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.1),
-                                blurRadius: 4,
-                                offset: const Offset(0, 2),
-                                spreadRadius: 0.5,
-                              ),
-                            ],
+                            boxShadow:
+                                (widget.product.isAvailable && canAddMore)
+                                ? [
+                                    BoxShadow(
+                                      color: isInCart
+                                          ? AppColors.primary.withValues(
+                                              alpha: 0.6,
+                                            )
+                                          : AppColors.primary.withValues(
+                                              alpha: 0.4,
+                                            ),
+                                      blurRadius: isInCart ? 2 : 0,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                    BoxShadow(
+                                      color: Colors.white.withValues(
+                                        alpha: 0.8,
+                                      ),
+                                      blurRadius: 0,
+                                      offset: const Offset(-1, -1),
+                                    ),
+                                    BoxShadow(
+                                      color: Colors.white.withValues(
+                                        alpha: 0.5,
+                                      ),
+                                      blurRadius: 0,
+                                      offset: const Offset(1, 1),
+                                      spreadRadius: 0.5,
+                                    ),
+                                    BoxShadow(
+                                      color: Colors.black.withValues(
+                                        alpha: 0.1,
+                                      ),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                      spreadRadius: 0.5,
+                                    ),
+                                  ]
+                                : [],
                           ),
                           child: _isAddingToCart
                               ? SizedBox(
@@ -558,10 +593,45 @@ class _HomeProductCardState extends State<HomeProductCard>
                                     ),
                                   ),
                                 )
-                              : Icon(
-                                  Icons.add_shopping_cart_rounded,
-                                  size: 18,
-                                  color: AppColors.primary,
+                              : Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      isInCart
+                                          ? Icons.shopping_cart
+                                          : Icons.add_shopping_cart_rounded,
+                                      size: 18,
+                                      color:
+                                          (widget.product.isAvailable &&
+                                              canAddMore)
+                                          ? AppColors.primary
+                                          : Colors.grey,
+                                    ),
+                                    // Show quantity badge if product is in cart
+                                    if (isInCart) ...[
+                                      const SizedBox(width: 4),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 6,
+                                          vertical: 2,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.primary,
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          '$currentQuantity',
+                                          style: getBoldStyle(
+                                            fontSize: FontSize.size10,
+                                            fontFamily: FontConstant.cairo,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ],
                                 ),
                         ),
                       );
@@ -603,8 +673,8 @@ class _HomeProductCardState extends State<HomeProductCard>
                 ),
               ),
 
-              // Stock Quantity
-              if (widget.product.stock > 0)
+              // Available Quantity
+              if (widget.product.countOfAvailable > 0)
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 6,
@@ -618,7 +688,7 @@ class _HomeProductCardState extends State<HomeProductCard>
                     ),
                   ),
                   child: Text(
-                    'متوفر ${widget.product.stock}',
+                    'متوفر ${widget.product.countOfAvailable}',
                     style: getMediumStyle(
                       fontSize: FontSize.size10,
                       fontFamily: FontConstant.cairo,

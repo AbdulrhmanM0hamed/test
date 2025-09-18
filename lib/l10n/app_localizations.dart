@@ -1883,6 +1883,12 @@ abstract class AppLocalizations {
   /// **'Failed to add product to cart'**
   String get failedToAddToCart;
 
+  /// No description provided for @incompleteProductInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Incomplete product information'**
+  String get incompleteProductInfo;
+
   /// No description provided for @failedToUpdateQuantity.
   ///
   /// In en, this message translates to:

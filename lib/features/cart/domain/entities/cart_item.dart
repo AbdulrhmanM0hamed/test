@@ -41,6 +41,7 @@ class CartProduct {
   final int? sizeId;
   final String? sizeName;
   final int stock;
+  final int limitation;
 
   const CartProduct({
     required this.id,
@@ -57,6 +58,7 @@ class CartProduct {
     this.sizeId,
     this.sizeName,
     required this.stock,
+    required this.limitation,
   });
 
   bool get hasDiscount => discount > 0;

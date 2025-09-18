@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
+import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:test/features/cart/presentation/cubit/cart_state.dart';
+import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/utils/constant/app_assets.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
@@ -30,6 +34,7 @@ class _CartItemCardState extends State<CartItemCard>
   late Animation<double> _scaleAnimation;
   late Animation<Offset> _slideAnimation;
   bool _isRemoving = false;
+  bool _isUpdating = false;
 
   @override
   void initState() {
@@ -67,38 +72,46 @@ class _CartItemCardState extends State<CartItemCard>
 
   @override
   Widget build(BuildContext context) {
-    return SlideTransition(
-      position: _slideAnimation,
-      child: ScaleTransition(
-        scale: _scaleAnimation,
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.08),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-                spreadRadius: 0,
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                // Product Image
-                _buildProductImage(),
-                const SizedBox(width: 16),
-
-                // Product Details
-                Expanded(child: _buildProductDetails()),
-
-                // Actions Column
-                _buildActionsColumn(),
+    return BlocListener<CartCubit, CartState>(
+      listener: (context, state) {
+        // Reset updating state if there was an error
+        if (state is CartError) {
+          setState(() => _isUpdating = false);
+        }
+      },
+      child: SlideTransition(
+        position: _slideAnimation,
+        child: ScaleTransition(
+          scale: _scaleAnimation,
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                  spreadRadius: 0,
+                ),
               ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  // Product Image
+                  _buildProductImage(),
+                  const SizedBox(width: 16),
+
+                  // Product Details
+                  Expanded(child: _buildProductDetails()),
+
+                  // Actions Column
+                  _buildActionsColumn(),
+                ],
+              ),
             ),
           ),
         ),
@@ -209,7 +222,7 @@ class _CartItemCardState extends State<CartItemCard>
         Row(
           children: [
             Text(
-              '${widget.cartItem.product.realPrice} ج.م',
+              '${widget.cartItem.product.realPrice} ${AppLocalizations.of(context)?.currency}',
               style: getBoldStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
@@ -248,7 +261,15 @@ class _CartItemCardState extends State<CartItemCard>
   }
 
   Widget _buildActionsColumn() {
+    // Check if this item is currently being updated
+    final cartState = context.watch<CartCubit>().state;
+    _isUpdating =
+        cartState is CartItemUpdating &&
+        cartState.cartItemId == widget.cartItem.id;
+
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         // Remove Button
         GestureDetector(
@@ -272,7 +293,7 @@ class _CartItemCardState extends State<CartItemCard>
 
         const SizedBox(height: 12),
 
-        // Quantity Controls
+        // Smart Quantity Controls with Stock Limitations
         Container(
           decoration: BoxDecoration(
             color: Colors.grey[50],
@@ -283,12 +304,41 @@ class _CartItemCardState extends State<CartItemCard>
             children: [
               // Increase Button
               GestureDetector(
-                onTap: () => widget.onQuantityChanged?.call(
-                  widget.cartItem.quantity + 1,
-                ),
+                onTap: () {
+                  final currentQuantity = widget.cartItem.quantity;
+                  // Use the minimum of limitation and countOfAvailable to respect both constraints
+                  final maxAllowed = widget.cartItem.product.limitation > 0
+                      ? (widget.cartItem.product.limitation <
+                                widget.cartItem.countOfAvailable
+                            ? widget.cartItem.product.limitation
+                            : widget.cartItem.countOfAvailable)
+                      : widget.cartItem.countOfAvailable;
+
+                  // Check if we can increase quantity
+                  final canIncrease = currentQuantity < maxAllowed;
+
+                  if (canIncrease && widget.onQuantityChanged != null) {
+                    widget.onQuantityChanged!(currentQuantity + 1);
+                  }
+                },
                 child: Container(
                   padding: const EdgeInsets.all(4),
-                  child: Icon(Icons.add, size: 16, color: AppColors.primary),
+                  child: Icon(
+                    Icons.add,
+                    size: 16,
+                    color: () {
+                      final currentQuantity = widget.cartItem.quantity;
+                      // Use the minimum of limitation and countOfAvailable to respect both constraints
+                      final maxAllowed = widget.cartItem.product.limitation > 0
+                          ? (widget.cartItem.product.limitation <
+                                    widget.cartItem.countOfAvailable
+                                ? widget.cartItem.product.limitation
+                                : widget.cartItem.countOfAvailable)
+                          : widget.cartItem.countOfAvailable;
+                      final canIncrease = currentQuantity < maxAllowed;
+                      return canIncrease ? AppColors.primary : Colors.grey[400];
+                    }(),
+                  ),
                 ),
               ),
 

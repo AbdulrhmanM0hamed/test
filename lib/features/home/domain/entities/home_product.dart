@@ -9,13 +9,15 @@ class HomeProduct {
   final int reviewCount;
   final String brandName;
   final String? brandLogo;
-  final int stock;
+  final int countOfAvailable;
   final bool isBest;
   final bool isFeatured;
   final bool isLatest;
   final bool isSpecialOffer;
   final bool isFavorite;
   final int? productSizeColorId;
+  final int quantityInCart;
+  final int limitation;
 
   const HomeProduct({
     required this.id,
@@ -28,24 +30,26 @@ class HomeProduct {
     required this.reviewCount,
     required this.brandName,
     this.brandLogo,
-    required this.stock,
+    required this.countOfAvailable,
     required this.isBest,
     required this.isFeatured,
     required this.isLatest,
     required this.isSpecialOffer,
     required this.isFavorite,
     this.productSizeColorId,
+    required this.quantityInCart,
+    required this.limitation,
   });
 
   bool get hasDiscount => discount != null && discount! > 0;
-  
-  bool get isAvailable => stock > 0;
-  
+
+  bool get isAvailable => countOfAvailable > 0;
+
   String get availabilityText {
-    if (stock > 10) return 'متوفر';
-    if (stock > 0) return 'قطع قليلة متبقية';
+    if (countOfAvailable > 10) return 'متوفر';
+    if (countOfAvailable > 0) return 'قطع قليلة متبقية';
     return 'غير متوفر';
   }
-  
+
   String get discountText => hasDiscount ? '${discount!}%' : '';
 }
