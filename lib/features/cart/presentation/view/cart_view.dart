@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
+import 'package:test/core/utils/constant/font_manger.dart';
+import 'package:test/core/utils/constant/styles_manger.dart';
+import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:test/core/services/cart_global_service.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
-import '../../../../core/di/dependency_injection.dart';
-import '../../../../core/utils/constant/font_manger.dart';
-import '../../../../core/utils/constant/styles_manger.dart';
-import '../../../../core/utils/theme/app_colors.dart';
-import '../widgets/cart_item_card.dart';
-import '../cubit/cart_cubit.dart';
-import '../cubit/cart_state.dart';
-import '../../../home/presentation/view/bottom_nav_bar.dart';
+import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:test/features/cart/presentation/cubit/cart_state.dart';
+import 'package:test/features/cart/presentation/widgets/cart_item_card.dart';
+import 'package:test/features/home/presentation/view/bottom_nav_bar.dart';
 
 class CartView extends StatefulWidget {
   const CartView({super.key});
@@ -36,6 +36,14 @@ class _CartViewState extends State<CartView>
     );
 
     _animationController.forward();
+
+    // Listen to cart global service events to refresh cart when items are added
+    CartGlobalService.instance.cartEventStream.listen((event) {
+      if (event == CartEvent.itemAdded) {
+        // Refresh cart data when item is added from other screens
+        context.read<CartCubit>().getCart();
+      }
+    });
   }
 
   @override
@@ -46,34 +54,29 @@ class _CartViewState extends State<CartView>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => DependencyInjection.getIt<CartCubit>()..getCart(),
-      child: Scaffold(
-        backgroundColor: Colors.grey[50],
-        appBar: _buildAppBar(context),
-        body: FadeTransition(
+    return BlocConsumer<CartCubit, CartState>(
+      listener: _handleStateChanges,
+      builder: (context, state) {
+        return FadeTransition(
           opacity: _fadeAnimation,
-          child: BlocConsumer<CartCubit, CartState>(
-            listener: _handleStateChanges,
-            builder: (context, state) {
-              if (state is CartLoading) {
-                return _buildLoadingState();
-              } else if (state is CartEmpty) {
-                return _buildEmptyState(context);
-              } else if (state is CartLoaded) {
-                return _buildLoadedState(context, state);
-              } else if (state is CartError) {
-                return _buildErrorState(context, state);
-              }
-              return _buildLoadingState();
-            },
+          child: Scaffold(
+            appBar: _buildAppBar(context, state),
+            body: state is CartLoading
+                ? _buildLoadingState()
+                : state is CartEmpty
+                ? _buildEmptyState(context)
+                : state is CartLoaded
+                ? _buildLoadedState(context, state)
+                : state is CartError
+                ? _buildErrorState(context, state)
+                : _buildLoadingState(),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(BuildContext context, CartState state) {
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 0,

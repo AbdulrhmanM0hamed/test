@@ -52,10 +52,10 @@ class CartCubit extends Cubit<CartState> {
 
     final result = await addToCartUseCase(request);
 
-    result.fold((failure) => emit(CartError(failure.message)), (message) {
+    result.fold((failure) => emit(CartError(failure.message)), (message) async {
       emit(CartItemAdded(message, productId));
-      // Refresh cart after adding item
-      getCart();
+      // Refresh cart after adding item to ensure UI updates
+      await getCart();
     });
   }
 
@@ -64,10 +64,10 @@ class CartCubit extends Cubit<CartState> {
 
     final result = await removeFromCartUseCase(cartItemId);
 
-    result.fold((failure) => emit(CartError(failure.message)), (message) {
+    result.fold((failure) => emit(CartError(failure.message)), (message) async {
       emit(CartItemRemoved(message, cartItemId));
       // Refresh cart after removing item
-      getCart();
+      await getCart();
     });
   }
 

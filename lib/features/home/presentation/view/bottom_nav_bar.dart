@@ -16,6 +16,7 @@ import 'package:test/features/cart/presentation/view/cart_view.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/services/app_state_service.dart';
+import 'package:test/core/services/cart_global_service.dart';
 import 'package:test/features/home/presentation/widgets/login_prompt_widget.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -36,6 +37,7 @@ class _HomeViewState extends State<BottomNavBar> {
   int _selectedIndex = 0;
   late final List<Widget> _screens;
   late CartCubit _cartCubit;
+  late WishlistCubit _wishlistCubit;
 
   // Static reference to allow access from other widgets
   static _HomeViewState? _instance;
@@ -45,6 +47,21 @@ class _HomeViewState extends State<BottomNavBar> {
     super.initState();
     _instance = this;
     _initializeScreens();
+    _initializeCartGlobalService();
+  }
+
+  Future<void> _initializeCartGlobalService() async {
+    final appStateService = DependencyInjection.getIt.get<AppStateService>();
+    final isLoggedIn =
+        appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+
+    debugPrint('🔐 BottomNavBar: User logged in: $isLoggedIn');
+
+    if (isLoggedIn) {
+      debugPrint('🚀 BottomNavBar: Initializing CartGlobalService...');
+      await CartGlobalService.instance.initialize();
+      debugPrint('✅ BottomNavBar: CartGlobalService initialized');
+    }
   }
 
   @override
@@ -58,17 +75,30 @@ class _HomeViewState extends State<BottomNavBar> {
     final isLoggedIn =
         appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
 
-    // Initialize cart cubit for badge count
+    // Initialize cubits for logged in users
     if (isLoggedIn) {
       _cartCubit = DependencyInjection.getIt<CartCubit>()..getCart();
+      _wishlistCubit = DependencyInjection.getIt<WishlistCubit>()
+        ..getMyWishlist();
     }
 
     _screens = [
-      const HomePage(),
+      isLoggedIn
+          ? MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: _cartCubit),
+                BlocProvider.value(value: _wishlistCubit),
+              ],
+              child: const HomePage(),
+            )
+          : const HomePage(),
       const CategoriesView(),
       isLoggedIn
-          ? BlocProvider(
-              create: (context) => DependencyInjection.getIt<WishlistCubit>(),
+          ? MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: _cartCubit),
+                BlocProvider.value(value: _wishlistCubit),
+              ],
               child: const WishlistView(),
             )
           : const LoginPromptWidget(),
@@ -85,14 +115,33 @@ class _HomeViewState extends State<BottomNavBar> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
+    final appStateService = DependencyInjection.getIt.get<AppStateService>();
+    final isLoggedIn =
+        appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+
     return Scaffold(
-      body: IndexedStack(index: _selectedIndex, children: _screens),
+      body: isLoggedIn
+          ? MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: _cartCubit),
+                BlocProvider.value(value: _wishlistCubit),
+              ],
+              child: IndexedStack(index: _selectedIndex, children: _screens),
+            )
+          : IndexedStack(index: _selectedIndex, children: _screens),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-        child: _buildCustomBottomNavBar(),
+        child: isLoggedIn
+            ? MultiBlocProvider(
+                providers: [
+                  BlocProvider.value(value: _cartCubit),
+                  BlocProvider.value(value: _wishlistCubit),
+                ],
+                child: _buildCustomBottomNavBar(),
+              )
+            : _buildCustomBottomNavBar(),
       ),
     );
   }
@@ -275,9 +324,12 @@ class _HomeViewState extends State<BottomNavBar> {
               right: 8,
               top: -2,
               child: BlocBuilder<CartCubit, CartState>(
-                bloc: _cartCubit,
                 builder: (context, state) {
-                  final itemCount = _cartCubit.cartItemCount;
+                  int itemCount = 0;
+                  if (state is CartLoaded) {
+                    itemCount = state.cart.totalQuantity;
+                  }
+                  debugPrint('🔢 BottomNavBar Badge: Cart state: ${state.runtimeType}, count: $itemCount');
                   if (itemCount > 0) {
                     return Container(
                       padding: const EdgeInsets.all(4),
