@@ -411,41 +411,108 @@ class _HomeProductCardState extends State<HomeProductCard>
 
           const SizedBox(height: 8),
 
-          // Rating
+          // Price, Rating and Add to Cart in one row
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SvgPicture.asset(AppAssets.starIcon, width: 14, height: 14),
-              const SizedBox(width: 4),
-              Text(
-                '${widget.product.star}',
-                style: getSemiBoldStyle(
-                  fontSize: FontSize.size12,
-                  fontFamily: FontConstant.cairo,
+              // Price and Rating Column
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Price
+                    Text(
+                      '${_formatPrice(widget.product.price)} ج.م',
+                      style: getBoldStyle(
+                        fontFamily: FontConstant.cairo,
+                        fontSize: FontSize.size14,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    // Rating
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          AppAssets.starIcon,
+                          width: 12,
+                          height: 12,
+                        ),
+                        const SizedBox(width: 2),
+                        Text(
+                          '${widget.product.star}',
+                          style: getSemiBoldStyle(
+                            fontSize: FontSize.size11,
+                            fontFamily: FontConstant.cairo,
+                          ),
+                        ),
+                        const SizedBox(width: 2),
+                        Text(
+                          '(${widget.product.reviewCount})',
+                          style: getMediumStyle(
+                            fontSize: FontSize.size10,
+                            fontFamily: FontConstant.cairo,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(width: 4),
-              Text(
-                '(${widget.product.reviewCount})',
-                style: getMediumStyle(
-                  fontSize: FontSize.size11,
-                  fontFamily: FontConstant.cairo,
-                  color: Colors.grey[600],
-                ),
-              ),
-            ],
-          ),
 
-          const SizedBox(height: 8),
-
-          // Price section
-          Row(
-            children: [
-              Text(
-                '${_formatPrice(widget.product.price)} ج.م',
-                style: getBoldStyle(
-                  fontFamily: FontConstant.cairo,
-                  fontSize: FontSize.size14,
-                  color: AppColors.primary,
+              // Add to Cart Button
+              GestureDetector(
+                onTap: () {
+                  // TODO: Implement add to cart functionality
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: AppColors.primary.withValues(alpha: 0.3),
+                      width: 1,
+                    ),
+                    boxShadow: [
+                      // Bottom shadow (darker)
+                      BoxShadow(
+                        color: AppColors.primary.withValues(alpha: 0.4),
+                        blurRadius: 0,
+                        offset: const Offset(0, 2),
+                      ),
+                      // Middle shadow
+                      BoxShadow(
+                        color: Colors.white.withValues(alpha: 0.8),
+                        blurRadius: 0,
+                        offset: const Offset(-1, -1),
+                      ),
+                      // Top highlight
+                      BoxShadow(
+                        color: Colors.white.withValues(alpha: 0.5),
+                        blurRadius: 0,
+                        offset: const Offset(1, 1),
+                        spreadRadius: 0.5,
+                      ),
+                      // Soft outer glow
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                        spreadRadius: 0.5,
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    Icons.add_shopping_cart_rounded,
+                    size: 18,
+                    color: AppColors.primary,
+                  ),
                 ),
               ),
               if (widget.product.hasDiscount &&
