@@ -48,8 +48,7 @@ class HomePageBody extends StatelessWidget {
         ),
         BlocProvider<DepartmentCubit>(
           create: (context) =>
-              DependencyInjection.getIt<DepartmentCubit>()
-                ..getDepartments(),
+              DependencyInjection.getIt<DepartmentCubit>()..getDepartments(),
         ),
       ],
       child: Column(
@@ -80,9 +79,7 @@ class HomePageBody extends StatelessWidget {
                     innerContext
                         .read<SpecialOfferProductsCubit>()
                         .getSpecialOfferProducts();
-                    innerContext
-                        .read<DepartmentCubit>()
-                        .getDepartments();
+                    innerContext.read<DepartmentCubit>().getDepartments();
                   },
                   child: CustomScrollView(
                     physics: const BouncingScrollPhysics(),
@@ -183,7 +180,7 @@ class HomePageBody extends StatelessWidget {
 
                             // Stores Showcase Section
                             const SizedBox(height: 24),
-                            const StoresShowcaseSection(),
+                            //  const StoresShowcaseSection(),
 
                             // Footer space
                             const SizedBox(height: 20),
