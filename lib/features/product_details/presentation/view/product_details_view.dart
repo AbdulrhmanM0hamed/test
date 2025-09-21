@@ -5,6 +5,8 @@ import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/services/global_cubit_service.dart';
+import '../../../wishlist/presentation/cubit/wishlist_cubit.dart';
 import '../../domain/entities/product_details.dart';
 import '../cubit/product_details_cubit.dart';
 import '../widgets/product_image_gallery.dart';
@@ -28,6 +30,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
   late TabController _tabController;
   late ScrollController _scrollController;
   bool _showFloatingCart = false;
+  bool _isWishlistLoading = false;
 
   @override
   void initState() {
@@ -55,30 +58,65 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
     }
   }
 
+  Future<void> _toggleWishlist(int productId, bool isCurrentlyInWishlist) async {
+    if (_isWishlistLoading) return;
+
+    setState(() {
+      _isWishlistLoading = true;
+    });
+
+    try {
+      if (isCurrentlyInWishlist) {
+        await GlobalCubitService.instance.removeFromWishlist(productId);
+      } else {
+        await GlobalCubitService.instance.addToWishlist(productId);
+      }
+    } catch (error) {
+      // Error handling is done in the GlobalCubitService
+      print('Error toggling wishlist: $error');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isWishlistLoading = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
-        builder: (context, state) {
-          if (state is ProductDetailsLoading) {
-            return const Center(child: CustomProgressIndicator());
-          }
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(
+          value: GlobalCubitService.instance.cartCubit!,
+        ),
+        BlocProvider.value(
+          value: GlobalCubitService.instance.wishlistCubit!,
+        ),
+      ],
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
+          builder: (context, state) {
+            if (state is ProductDetailsLoading) {
+              return const Center(child: CustomProgressIndicator());
+            }
 
-          if (state is ProductDetailsError) {
-            return _buildErrorState(state.message);
-          }
+            if (state is ProductDetailsError) {
+              return _buildErrorState(state.message);
+            }
 
-          if (state is ProductDetailsLoaded) {
-            return _buildProductDetailsContent(state.productDetails);
-          }
+            if (state is ProductDetailsLoaded) {
+              return _buildProductDetailsContent(state.productDetails);
+            }
 
-          return const SizedBox.shrink();
-        },
+            return const SizedBox.shrink();
+          },
+        ),
+        floatingActionButton: _showFloatingCart
+            ? const CartFloatingButton()
+            : null,
       ),
-      floatingActionButton: _showFloatingCart
-          ? const CartFloatingButton()
-          : null,
     );
   }
 
@@ -213,29 +251,51 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
       ),
       centerTitle: true,
       actions: [
-        IconButton(
-          onPressed: () {
-            // TODO: Add to favorites
-          },
-          icon: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
+        BlocBuilder<WishlistCubit, WishlistState>(
+          builder: (context, wishlistState) {
+            // Check if product is in wishlist
+            bool isInWishlist = false;
+            if (wishlistState is WishlistLoaded) {
+              isInWishlist = wishlistState.wishlistResponse.wishlist
+                  .any((item) => item.product.id == product.id);
+            }
+
+            return IconButton(
+              onPressed: _isWishlistLoading
+                  ? null
+                  : () => _toggleWishlist(product.id, isInWishlist),
+              icon: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: isInWishlist ? AppColors.primary.withValues(alpha: 0.1) : null,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: const Icon(
-              Icons.favorite_border,
-              
-              size: 20,
-            ),
-          ),
+                child: _isWishlistLoading
+                    ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            isInWishlist ? AppColors.primary : Colors.grey,
+                          ),
+                        ),
+                      )
+                    : Icon(
+                        isInWishlist ? Icons.favorite : Icons.favorite_border,
+                        color: isInWishlist ? AppColors.primary : null,
+                        size: 20,
+                      ),
+              ),
+            );
+          },
         ),
         const SizedBox(width: 16),
       ],

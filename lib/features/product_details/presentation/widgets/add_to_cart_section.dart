@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/common/custom_button.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/l10n/app_localizations.dart';
+import '../../../../core/services/global_cubit_service.dart';
+import '../../../cart/presentation/cubit/cart_cubit.dart';
+import '../../../cart/presentation/cubit/cart_state.dart';
 import '../../domain/entities/product_details.dart';
+import 'cart_floating_button.dart';
 
 class AddToCartSection extends StatefulWidget {
   final ProductDetails product;
@@ -18,6 +23,7 @@ class AddToCartSection extends StatefulWidget {
 class _AddToCartSectionState extends State<AddToCartSection> {
   int _quantity = 1;
   ProductSizeColor? _selectedVariant;
+  bool _isAddingToCart = false;
 
   @override
   void initState() {
@@ -34,7 +40,6 @@ class _AddToCartSectionState extends State<AddToCartSection> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-       
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.grey[200]!, width: 1),
       ),
@@ -59,21 +64,55 @@ class _AddToCartSectionState extends State<AddToCartSection> {
           const SizedBox(height: 20),
 
           // Add to cart button
-          CustomButton(
-            text: isAvailable
-                ? AppLocalizations.of(context)!.addToCart
-                : AppLocalizations.of(context)!.outOfStock,
-            onPressed: isAvailable ? _addToCart : null,
-            backgroundColor: isAvailable ? AppColors.primary : Colors.grey,
-            height: 56,
-            prefix: Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: Icon(
-                isAvailable ? Icons.shopping_cart_outlined : Icons.block,
-                size: 24,
-                color: Colors.white,
-              ),
-            ),
+          BlocBuilder<CartCubit, CartState>(
+            builder: (context, cartState) {
+              // Check if product is already in cart
+              bool isInCart = false;
+              int currentQuantity = 0;
+              if (cartState is CartLoaded) {
+                final cartItem = cartState.cart.getItemByProductId(
+                  widget.product.id,
+                );
+                isInCart = cartItem != null;
+                currentQuantity = cartItem?.quantity ?? 0;
+              }
+
+              return CustomButton(
+                text: _isAddingToCart
+                    ? AppLocalizations.of(context)!.loading
+                    : isAvailable
+                    ? (isInCart
+                          ? '${AppLocalizations.of(context)!.addToCart} ($currentQuantity)'
+                          : AppLocalizations.of(context)!.addToCart)
+                    : AppLocalizations.of(context)!.outOfStock,
+                onPressed: (isAvailable && !_isAddingToCart)
+                    ? _addToCart
+                    : null,
+                backgroundColor: isAvailable ? AppColors.primary : Colors.grey,
+                height: 56,
+                prefix: Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: _isAddingToCart
+                      ? SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
+                            ),
+                          ),
+                        )
+                      : Icon(
+                          isAvailable
+                              ? Icons.shopping_cart_outlined
+                              : Icons.block,
+                          size: 24,
+                          color: Colors.white,
+                        ),
+                ),
+              );
+            },
           ),
 
           const SizedBox(height: 12),
@@ -121,7 +160,6 @@ class _AddToCartSectionState extends State<AddToCartSection> {
   Widget _buildQuantitySelector() {
     return Container(
       decoration: BoxDecoration(
-       
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey[300]!, width: 1),
       ),
@@ -141,13 +179,15 @@ class _AddToCartSectionState extends State<AddToCartSection> {
               style: getSemiBoldStyle(
                 fontSize: FontSize.size16,
                 fontFamily: FontConstant.cairo,
-              
               ),
             ),
           ),
           _buildQuantityButton(
             icon: Icons.add,
-            onPressed: _quantity < widget.product.limitation
+            onPressed:
+                _quantity < widget.product.stock &&
+                    (_quantity < widget.product.limitation ||
+                        widget.product.limitation == 0)
                 ? () => setState(() => _quantity++)
                 : null,
           ),
@@ -181,42 +221,111 @@ class _AddToCartSectionState extends State<AddToCartSection> {
     );
   }
 
-  void _addToCart() {
-    // TODO: Implement add to cart functionality
+  Future<void> _addToCart() async {
+    if (_isAddingToCart) return;
+
+    setState(() {
+      _isAddingToCart = true;
+    });
+
+    try {
+      // Use the selected variant's ID if available, otherwise use product ID
+      final productSizeColorId =
+          _selectedVariant?.id ?? widget.product.productSizeColor.first.id;
+
+      await GlobalCubitService.instance.addToCart(
+        productId: widget.product.id,
+        productSizeColorId: productSizeColorId,
+        quantity: _quantity,
+      );
+
+      if (mounted) {
+        _showCustomSnackBar(
+          message: '${AppLocalizations.of(context)!.productAddedToCart}',
+          isSuccess: true,
+          icon: Icons.check_circle_outline,
+        );
+      }
+    } catch (error) {
+      if (mounted) {
+        _showCustomSnackBar(
+          message: AppLocalizations.of(context)!.failedToAddToCart,
+          isSuccess: false,
+          icon: Icons.error_outline,
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isAddingToCart = false;
+        });
+      }
+    }
+  }
+
+  void _buyNow() {
+    // TODO: Implement buy now functionality - navigate to checkout
+    _showCustomSnackBar(
+      message: 'الانتقال إلى صفحة الدفع...',
+      isSuccess: true,
+      icon: Icons.flash_on_outlined,
+    );
+  }
+
+  void _showCustomSnackBar({
+    required String message,
+    required bool isSuccess,
+    required IconData icon,
+  }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          '${AppLocalizations.of(context)!.addedToCart} $_quantity ${AppLocalizations.of(context)!.toCart}',
-          style: getMediumStyle(
-            fontSize: FontSize.size14,
-            fontFamily: FontConstant.cairo,
-            color: Colors.white,
-          ),
+        content: Row(
+          children: [
+            Icon(icon, color: Colors.white, size: 24),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                message,
+                style: getSemiBoldStyle(
+                  fontSize: FontSize.size14,
+                  fontFamily: FontConstant.cairo,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: isSuccess ? Colors.green[600] : Colors.red[600],
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         margin: const EdgeInsets.all(16),
+        duration: const Duration(seconds: 3),
+        action: SnackBarAction(
+          label: AppLocalizations.of(context)!.cart,
+          textColor: Colors.white,
+          onPressed: () {
+            _showCartBottomSheet(context);
+          },
+        ),
       ),
     );
   }
 
-  void _buyNow() {
-    // TODO: Implement buy now functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'الانتقال إلى صفحة الدفع...',
-          style: getMediumStyle(
-            fontSize: FontSize.size14,
-            fontFamily: FontConstant.cairo,
-            color: Colors.white,
+  void _showCartBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => MultiBlocProvider(
+        providers: [
+          BlocProvider.value(
+            value: GlobalCubitService.instance.cartCubit!,
           ),
-        ),
-        backgroundColor: AppColors.primary,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        margin: const EdgeInsets.all(16),
+          BlocProvider.value(
+            value: GlobalCubitService.instance.wishlistCubit!,
+          ),
+        ],
+        child: const CartBottomSheet(),
       ),
     );
   }
