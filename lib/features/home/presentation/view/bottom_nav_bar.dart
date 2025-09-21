@@ -17,6 +17,7 @@ import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/services/app_state_service.dart';
 import 'package:test/core/services/cart_global_service.dart';
+import 'package:test/core/services/global_cubit_service.dart';
 import 'package:test/features/home/presentation/widgets/login_prompt_widget.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -75,11 +76,12 @@ class _HomeViewState extends State<BottomNavBar> {
     final isLoggedIn =
         appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
 
-    // Initialize cubits for logged in users
+    // Initialize global cubit service first
     if (isLoggedIn) {
-      _cartCubit = DependencyInjection.getIt<CartCubit>()..getCart();
-      _wishlistCubit = DependencyInjection.getIt<WishlistCubit>()
-        ..getMyWishlist();
+      GlobalCubitService.instance.initialize();
+      _cartCubit = GlobalCubitService.instance.cartCubit!;
+      _wishlistCubit = GlobalCubitService.instance.wishlistCubit!;
+      debugPrint('🌍 BottomNavBar: Using global cubit instances');
     }
 
     _screens = [
@@ -163,12 +165,7 @@ class _HomeViewState extends State<BottomNavBar> {
             AppAssets.categoryIconOutline,
             AppLocalizations.of(context)!.categories,
           ),
-          _buildNavItem(
-            2,
-            AppAssets.favoriteIcon,
-            AppAssets.favoriteIconOutline,
-            AppLocalizations.of(context)!.favorite,
-          ),
+          _buildWishlistNavItem(),
           _buildNavItem(
             0,
             AppAssets.homeIcon,
@@ -276,6 +273,102 @@ class _HomeViewState extends State<BottomNavBar> {
     );
   }
 
+  Widget _buildWishlistNavItem() {
+    final index = 2;
+    final isSelected = _selectedIndex == index;
+    final appStateService = DependencyInjection.getIt.get<AppStateService>();
+    final isLoggedIn =
+        appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+
+    return GestureDetector(
+      onTap: () => _onNavItemTapped(index),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 46,
+                width: 46,
+                decoration: BoxDecoration(
+                  color: isSelected ? AppColors.white : Colors.transparent,
+                  borderRadius: BorderRadius.circular(32),
+                ),
+                padding: const EdgeInsets.all(10),
+                child: SvgPicture.asset(
+                  isSelected
+                      ? AppAssets.favoriteIcon
+                      : AppAssets.favoriteIconOutline,
+                  color: isSelected ? AppColors.primary : Colors.grey,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                AppLocalizations.of(context)!.favorite,
+                style: getSemiBoldStyle(
+                  fontFamily: FontConstant.cairo,
+                  fontSize: FontSize.size10,
+                  color: isSelected
+                      ? Theme.of(context).textTheme.bodyMedium?.color
+                      : Colors.grey,
+                ),
+              ),
+            ],
+          ),
+          // Wishlist Badge
+          if (isLoggedIn)
+            Positioned(
+              right: 8,
+              top: -2,
+              child: BlocBuilder<WishlistCubit, WishlistState>(
+                builder: (context, state) {
+                  int itemCount = 0;
+                  if (state is WishlistLoaded) {
+                    itemCount = state.wishlistResponse.count;
+                  }
+                  debugPrint(
+                    '❤️ BottomNavBar Badge: Wishlist state: ${state.runtimeType}, count: $itemCount',
+                  );
+                  if (itemCount > 0) {
+                    return Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.2),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 18,
+                        minHeight: 18,
+                      ),
+                      child: Text(
+                        itemCount > 99 ? '99+' : itemCount.toString(),
+                        style: getBoldStyle(
+                          fontSize: FontSize.size10,
+                          fontFamily: FontConstant.cairo,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildCartNavItem() {
     final index = 3;
     final isSelected = _selectedIndex == index;
@@ -329,7 +422,9 @@ class _HomeViewState extends State<BottomNavBar> {
                   if (state is CartLoaded) {
                     itemCount = state.cart.totalQuantity;
                   }
-                  debugPrint('🔢 BottomNavBar Badge: Cart state: ${state.runtimeType}, count: $itemCount');
+                  debugPrint(
+                    '🔢 BottomNavBar Badge: Cart state: ${state.runtimeType}, count: $itemCount',
+                  );
                   if (itemCount > 0) {
                     return Container(
                       padding: const EdgeInsets.all(4),

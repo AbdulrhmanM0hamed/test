@@ -4,8 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
-import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/core/services/cart_global_service.dart';
+import 'package:test/core/services/global_cubit_service.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/utils/constant/app_assets.dart';
 import '../../../../core/utils/constant/font_manger.dart';
@@ -269,9 +269,6 @@ class _HomeProductCardState extends State<HomeProductCard>
         }
       },
       builder: (context, state) {
-        // Get WishlistCubit from the context (provided by bottom nav bar)
-        final wishlistCubit = context.read<WishlistCubit>();
-
         return GestureDetector(
           onTap: () {
             // Prevent multiple taps while this product is loading
@@ -286,10 +283,37 @@ class _HomeProductCardState extends State<HomeProductCard>
               _isWishlistLoading = true;
             });
 
+            // Use global service for wishlist operations
             if (_isInWishlist) {
-              wishlistCubit.removeFromWishlist(widget.product.id);
+              GlobalCubitService.instance.removeFromWishlist(widget.product.id).then((_) {
+                if (mounted) {
+                  setState(() {
+                    _isInWishlist = false;
+                    _isWishlistLoading = false;
+                  });
+                }
+              }).catchError((error) {
+                if (mounted) {
+                  setState(() {
+                    _isWishlistLoading = false;
+                  });
+                }
+              });
             } else {
-              wishlistCubit.addToWishlist(widget.product.id);
+              GlobalCubitService.instance.addToWishlist(widget.product.id).then((_) {
+                if (mounted) {
+                  setState(() {
+                    _isInWishlist = true;
+                    _isWishlistLoading = false;
+                  });
+                }
+              }).catchError((error) {
+                if (mounted) {
+                  setState(() {
+                    _isWishlistLoading = false;
+                  });
+                }
+              });
             }
           },
           child: Container(
@@ -489,16 +513,16 @@ class _HomeProductCardState extends State<HomeProductCard>
                                   });
 
                                   try {
-                                    final cartCubit = context.read<CartCubit>();
-                                    await cartCubit.addToCart(
+                                    debugPrint(
+                                      '🛒 HomeProductCard: Adding product ${widget.product.id} to cart with quantity ${currentQuantity + 1}',
+                                    );
+                                    
+                                    // Use global service for cart operations
+                                    await GlobalCubitService.instance.addToCart(
                                       productId: widget.product.id,
                                       productSizeColorId:
                                           widget.product.productSizeColorId!,
                                       quantity: currentQuantity + 1,
-                                    );
-
-                                    debugPrint(
-                                      '✅ HomeProductCard: Product added successfully',
                                     );
                                   } catch (e) {
                                     CustomSnackbar.showError(

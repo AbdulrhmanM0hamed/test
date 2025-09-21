@@ -8,6 +8,8 @@ import 'package:test/features/home/presentation/cubits/latest_products/latest_pr
 import 'package:test/features/home/presentation/cubits/latest_products/latest_products_state.dart';
 import 'package:test/features/home/presentation/widgets/home_product_card.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
+import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:test/core/services/app_state_service.dart';
 import 'package:test/l10n/app_localizations.dart';
 
 class LatestProductsView extends StatelessWidget {
@@ -17,15 +19,49 @@ class LatestProductsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appStateService = DependencyInjection.getIt<AppStateService>();
+    final isLoggedIn =
+        appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+
+    // Try to get existing cubits from parent context (bottom nav bar)
+    WishlistCubit? existingWishlistCubit;
+    CartCubit? existingCartCubit;
+
+    if (isLoggedIn) {
+      try {
+        existingWishlistCubit = context.read<WishlistCubit>();
+        existingCartCubit = context.read<CartCubit>();
+        debugPrint(
+          '🔗 LatestProductsView: Using existing cubits from parent context',
+        );
+      } catch (e) {
+        debugPrint(
+          '⚠️ LatestProductsView: No existing cubits found, creating new ones',
+        );
+      }
+    }
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (context) =>
-              DependencyInjection.getIt<LatestProductsCubit>()..getLatestProducts(),
+              DependencyInjection.getIt<LatestProductsCubit>()
+                ..getLatestProducts(),
         ),
-        BlocProvider(
-          create: (context) => DependencyInjection.getIt<WishlistCubit>(),
-        ),
+        if (isLoggedIn) ...[
+          if (existingWishlistCubit != null)
+            BlocProvider.value(value: existingWishlistCubit)
+          else
+            BlocProvider(
+              create: (context) => DependencyInjection.getIt<WishlistCubit>(),
+            ),
+          if (existingCartCubit != null)
+            BlocProvider.value(value: existingCartCubit)
+          else
+            BlocProvider(
+              create: (context) => DependencyInjection.getIt<CartCubit>(),
+            ),
+        ],
       ],
       child: Scaffold(
         appBar: CustomAppBar(
@@ -56,18 +92,20 @@ class LatestProductsView extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   child: GridView.builder(
                     physics: const AlwaysScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.65,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.65,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                        ),
                     itemCount: products.length,
                     itemBuilder: (context, index) {
                       final product = products[index];
                       return HomeProductCard(
                         product: product,
-                        onTap: () => _navigateToProductDetails(context, product),
+                        onTap: () =>
+                            _navigateToProductDetails(context, product),
                       );
                     },
                   ),
@@ -87,18 +125,11 @@ class LatestProductsView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.error_outline,
-            size: 64,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.error_outline, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
             message,
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 16,
-            ),
+            style: TextStyle(color: Colors.grey[600], fontSize: 16),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
@@ -118,18 +149,11 @@ class LatestProductsView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.new_releases_outlined,
-            size: 64,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.new_releases_outlined, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
             AppLocalizations.of(context)!.noLatestAvailable,
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 16,
-            ),
+            style: TextStyle(color: Colors.grey[600], fontSize: 16),
             textAlign: TextAlign.center,
           ),
         ],
@@ -138,10 +162,6 @@ class LatestProductsView extends StatelessWidget {
   }
 
   void _navigateToProductDetails(BuildContext context, HomeProduct product) {
-    Navigator.pushNamed(
-      context,
-      '/product-details',
-      arguments: product.id,
-    );
+    Navigator.pushNamed(context, '/product-details', arguments: product.id);
   }
 }

@@ -8,6 +8,8 @@ import 'package:test/features/home/presentation/cubits/featured_products/feature
 import 'package:test/features/home/presentation/cubits/featured_products/featured_products_state.dart';
 import 'package:test/features/home/presentation/widgets/home_product_card.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
+import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:test/core/services/app_state_service.dart';
 import 'package:test/l10n/app_localizations.dart';
 
 class FeaturedProductsView extends StatelessWidget {
@@ -17,15 +19,43 @@ class FeaturedProductsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appStateService = DependencyInjection.getIt<AppStateService>();
+    final isLoggedIn = appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+    
+    // Try to get existing cubits from parent context (bottom nav bar)
+    WishlistCubit? existingWishlistCubit;
+    CartCubit? existingCartCubit;
+    
+    if (isLoggedIn) {
+      try {
+        existingWishlistCubit = context.read<WishlistCubit>();
+        existingCartCubit = context.read<CartCubit>();
+        debugPrint('🔗 FeaturedProductsView: Using existing cubits from parent context');
+      } catch (e) {
+        debugPrint('⚠️ FeaturedProductsView: No existing cubits found, creating new ones');
+      }
+    }
+    
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (context) =>
               DependencyInjection.getIt<FeaturedProductsCubit>()..getFeaturedProducts(),
         ),
-        BlocProvider(
-          create: (context) => DependencyInjection.getIt<WishlistCubit>(),
-        ),
+        if (isLoggedIn) ...[
+          if (existingWishlistCubit != null)
+            BlocProvider.value(value: existingWishlistCubit)
+          else
+            BlocProvider(
+              create: (context) => DependencyInjection.getIt<WishlistCubit>(),
+            ),
+          if (existingCartCubit != null)
+            BlocProvider.value(value: existingCartCubit)
+          else
+            BlocProvider(
+              create: (context) => DependencyInjection.getIt<CartCubit>(),
+            ),
+        ],
       ],
       child: Scaffold(
         appBar: CustomAppBar(
