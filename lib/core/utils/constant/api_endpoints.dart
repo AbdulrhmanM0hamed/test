@@ -13,6 +13,7 @@ class ApiEndpoints {
   static String get myAccount => '$baseUrl/my-account';
   static String get updateProfile => '$baseUrl/update-profile';
   static String get categories => '$baseUrl/departments';
+  static String get mainCategories => '$baseUrl/main-categories';
   static String productsByDepartment(String departmentName) =>
       '$baseUrl/products-by-department/$departmentName';
 
@@ -30,7 +31,8 @@ class ApiEndpoints {
   // Cart endpoints
   static String get addToCart => '$baseUrl/cart/add';
   static String get getCart => '$baseUrl/my-cart';
-  static String removeFromCart(int cartItemId) => '$baseUrl/cart/remove/$cartItemId';
+  static String removeFromCart(int cartItemId) =>
+      '$baseUrl/cart/remove/$cartItemId';
   static String get removeAllFromCart => '$baseUrl/cart/remove-all';
 
   static String featuredProductsUrl({int? countryId}) =>

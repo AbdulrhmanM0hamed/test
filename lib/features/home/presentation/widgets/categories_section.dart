@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test/features/categories/presentation/cubit/department_cubit.dart';
-import 'package:test/features/categories/presentation/cubit/department_state.dart';
 import 'package:test/features/categories/presentation/widgets/categories_shimmer.dart';
+import 'package:test/features/home/presentation/cubit/main_category_cubit.dart';
+import 'package:test/features/home/presentation/cubit/main_category_state.dart';
 import 'package:test/features/home/presentation/widgets/category_card.dart';
 import 'package:test/features/home/presentation/widgets/section_header.dart';
 import 'package:test/l10n/app_localizations.dart';
@@ -17,7 +17,9 @@ class CategoriesSection extends StatelessWidget {
       children: [
         // العنوان مع زر المشاهدة
         SectionHeader(
-          onSeeAll: () {},
+          onSeeAll: () {
+            Navigator.pushNamed(context, '/all-categories');
+          },
           title: AppLocalizations.of(context)!.categories,
           icon: Icons.category,
           iconColor: Colors.blue,
@@ -34,27 +36,41 @@ class CategoriesSection extends StatelessWidget {
 class ShoppingCategories extends StatelessWidget {
   const ShoppingCategories({super.key});
 
-  void _handleCategoryTap(String departmentSlug, String departmentName) {
-    // هنا يمكن إضافة منطق الانتقال إلى صفحة الفئة المحددة
-    print('تم النقر على القسم: $departmentName - $departmentSlug');
+  void _handleCategoryTap(
+    BuildContext context,
+    String categorySlug,
+    String categoryName,
+    int categoryId,
+  ) {
+    // Navigate to categories view with mainCategoryId filter
+    Navigator.pushNamed(
+      context,
+      '/categories',
+      arguments: {'mainCategoryId': categoryId, 'categoryName': categoryName},
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DepartmentCubit, DepartmentState>(
+    return BlocBuilder<MainCategoryCubit, MainCategoryState>(
       builder: (context, state) {
-        if (state is DepartmentLoading) {
+        if (state is MainCategoryLoading) {
           return const CategoriesShimmer();
-        } else if (state is DepartmentLoaded) {
+        } else if (state is MainCategoryLoaded) {
+          // Filter only categories that should appear on home page
+          final homeCategories = state.categories
+              .where((category) => category.home)
+              .toList();
+
           return SizedBox(
             height: 130,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 12),
-              itemCount: state.departments.length,
+              itemCount: homeCategories.length,
               itemBuilder: (context, index) {
-                final department = state.departments[index];
+                final category = homeCategories[index];
                 return AnimatedOpacity(
                   duration: Duration(milliseconds: 500),
                   opacity: 1.0,
@@ -67,11 +83,13 @@ class ShoppingCategories extends StatelessWidget {
                     },
                     child: CategoryCard(
                       category: CategoryItem(
-                        title: department.name,
-                        image: department.image,
+                        title: category.name,
+                        image: category.icon,
                         onTap: () => _handleCategoryTap(
-                          department.slug,
-                          department.name,
+                          context,
+                          category.slug,
+                          category.name,
+                          category.id,
                         ),
                       ),
                     ),
@@ -80,7 +98,7 @@ class ShoppingCategories extends StatelessWidget {
               },
             ),
           );
-        } else if (state is DepartmentError) {
+        } else if (state is MainCategoryError) {
           return SizedBox(
             height: 130,
             child: Center(

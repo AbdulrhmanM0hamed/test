@@ -13,7 +13,7 @@ import '../cubits/featured_products/featured_products_cubit.dart';
 import '../cubits/best_seller_products/best_seller_products_cubit.dart';
 import '../cubits/latest_products/latest_products_cubit.dart';
 import '../cubits/special_offer_products/special_offer_products_cubit.dart';
-import 'package:test/features/categories/presentation/cubit/department_cubit.dart';
+import 'package:test/features/home/presentation/cubit/main_category_cubit.dart';
 
 class HomePageBody extends StatelessWidget {
   const HomePageBody({super.key});
@@ -46,9 +46,9 @@ class HomePageBody extends StatelessWidget {
               DependencyInjection.getIt<SpecialOfferProductsCubit>()
                 ..getSpecialOfferProducts(),
         ),
-        BlocProvider<DepartmentCubit>(
+        BlocProvider<MainCategoryCubit>(
           create: (context) =>
-              DependencyInjection.getIt<DepartmentCubit>()..getDepartments(),
+              DependencyInjection.getIt<MainCategoryCubit>()..getMainCategories(),
         ),
       ],
       child: Column(
@@ -79,7 +79,7 @@ class HomePageBody extends StatelessWidget {
                     innerContext
                         .read<SpecialOfferProductsCubit>()
                         .getSpecialOfferProducts();
-                    innerContext.read<DepartmentCubit>().getDepartments();
+                    innerContext.read<MainCategoryCubit>().getMainCategories();
                   },
                   child: CustomScrollView(
                     physics: const BouncingScrollPhysics(),
@@ -110,11 +110,11 @@ class HomePageBody extends StatelessWidget {
                               },
                               onFavoritePressed: (product) {
                                 // TODO: Toggle favorite
-                                print('Favorite pressed: ${product.name}');
+                                //print('Favorite pressed: ${product.name}');
                               },
                               onSeeAll: () {
                                 // TODO: Navigate to special offers page
-                                print('See all special offers');
+                                //print('See all special offers');
                               },
                             ),
 
@@ -130,11 +130,11 @@ class HomePageBody extends StatelessWidget {
                               },
                               onFavoritePressed: (product) {
                                 // TODO: Toggle favorite
-                                print('Favorite pressed: ${product.name}');
+                                //print('Favorite pressed: ${product.name}');
                               },
                               onSeeAll: () {
                                 // TODO: Navigate to featured products page
-                                print('See all featured products');
+                                //print('See all featured products');
                               },
                             ),
 
@@ -150,11 +150,11 @@ class HomePageBody extends StatelessWidget {
                               },
                               onFavoritePressed: (product) {
                                 // TODO: Toggle favorite
-                                print('Favorite pressed: ${product.name}');
+                                //print('Favorite pressed: ${product.name}');
                               },
                               onSeeAll: () {
                                 // TODO: Navigate to best seller products page
-                                print('See all best seller products');
+                                //print('See all best seller products');
                               },
                             ),
 
@@ -170,11 +170,11 @@ class HomePageBody extends StatelessWidget {
                               },
                               onFavoritePressed: (product) {
                                 // TODO: Toggle favorite
-                                print('Favorite pressed: ${product.name}');
+                                //print('Favorite pressed: ${product.name}');
                               },
                               onSeeAll: () {
                                 // TODO: Navigate to latest products page
-                                print('See all latest products');
+                                //print('See all latest products');
                               },
                             ),
 

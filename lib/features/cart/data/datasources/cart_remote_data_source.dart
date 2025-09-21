@@ -22,11 +22,13 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
       final response = await dioService.get(ApiEndpoints.getCart);
 
       if (response.statusCode == 200) {
-        // Check if the response data is a string indicating empty cart
-        if (response.data['data'] is String &&
-            response.data['data'].toString().contains(
-              'Cart not found or is empty',
-            )) {
+        // Check if the response data is an empty array or string indicating empty cart
+        if ((response.data['data'] is List &&
+                (response.data['data'] as List).isEmpty) ||
+            (response.data['data'] is String &&
+                response.data['data'].toString().contains(
+                  'Cart not found or is empty',
+                ))) {
           // Return empty cart model
           return const CartModel(
             items: [],

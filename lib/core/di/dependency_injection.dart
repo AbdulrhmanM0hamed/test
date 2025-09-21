@@ -89,6 +89,12 @@ import 'package:test/features/cart/domain/usecases/add_to_cart_usecase.dart';
 import 'package:test/features/cart/domain/usecases/remove_from_cart_usecase.dart';
 import 'package:test/features/cart/domain/usecases/remove_all_from_cart_usecase.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
+// Main Categories feature imports
+import 'package:test/features/home/data/datasources/main_category_remote_data_source.dart';
+import 'package:test/features/home/data/repositories/main_category_repository_impl.dart';
+import 'package:test/features/home/domain/repositories/main_category_repository.dart';
+import 'package:test/features/home/domain/usecases/get_main_categories_usecase.dart';
+import 'package:test/features/home/presentation/cubit/main_category_cubit.dart';
 
 class DependencyInjection {
   static final GetIt getIt = GetIt.instance;
@@ -145,6 +151,11 @@ class DependencyInjection {
   static ProductDetailsRemoteDataSource? _productDetailsRemoteDataSource;
   static ProductDetailsRepository? _productDetailsRepository;
   static GetProductDetailsUseCase? _getProductDetailsUseCase;
+
+  // Main Categories feature
+  static MainCategoryRemoteDataSource? _mainCategoryRemoteDataSource;
+  static MainCategoryRepository? _mainCategoryRepository;
+  static GetMainCategoriesUseCase? _getMainCategoriesUseCase;
 
   static Future<void> init() async {
     final sharedPreferences = await SharedPreferences.getInstance();
@@ -274,6 +285,18 @@ class DependencyInjection {
       _productDetailsRepository!,
     );
 
+    // Initialize Main Categories dependencies
+    _mainCategoryRemoteDataSource = MainCategoryRemoteDataSourceImpl(
+      dioService: _dioService!,
+    );
+    _mainCategoryRepository = MainCategoryRepositoryImpl(
+      remoteDataSource: _mainCategoryRemoteDataSource!,
+      networkInfo: networkInfo,
+    );
+    _getMainCategoriesUseCase = GetMainCategoriesUseCase(
+      repository: _mainCategoryRepository!,
+    );
+
     // Register with GetIt (LanguageService already registered above)
     getIt.registerSingleton<TokenStorageService>(_tokenStorageService!);
     getIt.registerSingleton<AppStateService>(_appStateService!);
@@ -382,6 +405,9 @@ class DependencyInjection {
     getIt.registerSingleton<GetProductDetailsUseCase>(
       _getProductDetailsUseCase!,
     );
+    // Main Categories singletons
+    getIt.registerSingleton<MainCategoryRepository>(_mainCategoryRepository!);
+    getIt.registerSingleton<GetMainCategoriesUseCase>(_getMainCategoriesUseCase!);
 
     // Register FCM Service
     // getIt.registerSingleton<FCMService>(FCMService());
@@ -507,6 +533,14 @@ class DependencyInjection {
         addToCartUseCase: getIt<AddToCartUseCase>(),
         removeFromCartUseCase: getIt<RemoveFromCartUseCase>(),
         removeAllFromCartUseCase: getIt<RemoveAllFromCartUseCase>(),
+        dataRefreshService: getIt<DataRefreshService>(),
+      ),
+    );
+
+    // Main Category Cubit
+    getIt.registerFactory<MainCategoryCubit>(
+      () => MainCategoryCubit(
+        getMainCategoriesUseCase: getIt<GetMainCategoriesUseCase>(),
         dataRefreshService: getIt<DataRefreshService>(),
       ),
     );

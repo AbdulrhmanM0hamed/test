@@ -25,6 +25,26 @@ class CategoriesView extends StatefulWidget {
 
 class _CategoriesViewState extends State<CategoriesView> {
   int? selectedDepartmentId;
+  int? mainCategoryId;
+  String? categoryName;
+  bool _hasAppliedFilter = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Extract navigation arguments after the first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args =
+          ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+      if (args != null) {
+        setState(() {
+          mainCategoryId = args['mainCategoryId'] as int?;
+          categoryName = args['categoryName'] as String?;
+        });
+      }
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,19 +60,22 @@ class _CategoriesViewState extends State<CategoriesView> {
               DependencyInjection.getIt.get<ProductsFilterCubit>(),
         ),
       ],
-      child: Scaffold(
+      child: Builder(
+        builder: (context) {
+          // Apply the main category filter after providers are available (only once)
+          if (mainCategoryId != null && !_hasAppliedFilter) {
+            _hasAppliedFilter = true;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              context.read<ProductsFilterCubit>().updateMainCategory(mainCategoryId!);
+            });
+          }
+          
+          return Scaffold(
         appBar: AppBar(
-          title: Text(
-            'الفئات',
-            style: getSemiBoldStyle(
-              fontSize: FontSize.size18,
-              fontFamily: FontConstant.cairo,
-              color: Colors.black,
-            ),
-          ),
+          title: Text(categoryName ?? AppLocalizations.of(context)!.categories),
           backgroundColor: Colors.white,
           elevation: 0,
-          centerTitle: true,
+          foregroundColor: Colors.black,
         ),
         body: SafeArea(
           child: Column(
@@ -60,52 +83,53 @@ class _CategoriesViewState extends State<CategoriesView> {
               // شريط البحث مع الفلترة المتقدمة
               const SearchBarWidget(),
 
-              // علامات تبويب الأقسام
-              BlocBuilder<DepartmentCubit, DepartmentState>(
-                builder: (context, departmentState) {
-                  if (departmentState is DepartmentLoading) {
-                    return const SizedBox(
-                      height: 60,
-                      child: Center(child: CircularProgressIndicator()),
-                    );
-                  }
-
-                  if (departmentState is DepartmentLoaded) {
-                    final departments = departmentState.departments;
-
-                    if (departments.isEmpty) {
-                      return const SizedBox.shrink();
+              // علامات تبويب الأقسام (مخفية عند الفلترة بالفئة الرئيسية)
+              if (mainCategoryId == null)
+                BlocBuilder<DepartmentCubit, DepartmentState>(
+                  builder: (context, departmentState) {
+                    if (departmentState is DepartmentLoading) {
+                      return const SizedBox(
+                        height: 60,
+                        child: Center(child: CircularProgressIndicator()),
+                      );
                     }
 
-                    // تحديد القسم الأول افتراضياً
-                    if (selectedDepartmentId == null) {
-                      selectedDepartmentId = departments.first.id;
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        context.read<ProductsFilterCubit>().updateFilter(
-                          departmentId: selectedDepartmentId,
-                        );
-                      });
+                    if (departmentState is DepartmentLoaded) {
+                      final departments = departmentState.departments;
+
+                      if (departments.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
+
+                      // تحديد القسم الأول افتراضياً
+                      if (selectedDepartmentId == null) {
+                        selectedDepartmentId = departments.first.id;
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          context.read<ProductsFilterCubit>().updateFilter(
+                            departmentId: selectedDepartmentId,
+                          );
+                        });
+                      }
+
+                      return _buildDepartmentTabs(departments);
                     }
 
-                    return _buildDepartmentTabs(departments);
-                  }
-
-                  if (departmentState is DepartmentError) {
-                    return Container(
-                      height: 60,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Center(
-                        child: Text(
-                          departmentState.message,
-                          style: const TextStyle(color: Colors.red),
+                    if (departmentState is DepartmentError) {
+                      return Container(
+                        height: 60,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Center(
+                          child: Text(
+                            departmentState.message,
+                            style: const TextStyle(color: Colors.red),
+                          ),
                         ),
-                      ),
-                    );
-                  }
+                      );
+                    }
 
-                  return const SizedBox.shrink();
-                },
-              ),
+                    return const SizedBox.shrink();
+                  },
+                ),
 
               // شبكة المنتجات مع الفلترة
               Expanded(
@@ -227,6 +251,8 @@ class _CategoriesViewState extends State<CategoriesView> {
             ],
           ),
         ),
+          );
+        },
       ),
     );
   }
@@ -294,7 +320,6 @@ class _CategoriesViewState extends State<CategoriesView> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: department.image.isNotEmpty
-                        
                           ? CachedNetworkImage(
                               imageUrl: department.icon,
                               width: 40,

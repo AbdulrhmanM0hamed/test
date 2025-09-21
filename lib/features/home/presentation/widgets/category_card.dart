@@ -2,6 +2,7 @@ import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class CategoryCard extends StatefulWidget {
   final CategoryItem category;
@@ -60,16 +61,18 @@ class _CategoryCardState extends State<CategoryCard> {
                 ],
               ),
               child: widget.category.image.startsWith('http')
-                  ? Image.network(
-                      widget.category.image,
+                  ? CachedNetworkImage(
+                      imageUrl: widget.category.image,
                       fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(Icons.category, size: 30);
-                      },
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return const CircularProgressIndicator(strokeWidth: 2);
-                      },
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.category, size: 30),
+                      placeholder: (context, url) => const Center(
+                        child: SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                      ),
                     )
                   : Image.asset(widget.category.image, fit: BoxFit.contain),
             ),

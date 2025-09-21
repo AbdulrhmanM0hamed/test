@@ -6,6 +6,9 @@ import 'package:test/features/auth/presentation/cubit/forget_password_cubit.dart
 import 'package:test/features/wishlist/presentation/view/wishlist_view.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/features/auth/presentation/view/register_view.dart';
+import 'package:test/features/categories/presentation/view/categories_view.dart';
+import 'package:test/features/home/presentation/view/all_categories_view.dart';
+import 'package:test/features/home/presentation/cubit/main_category_cubit.dart';
 import '../../../features/splash/presentation/view/splash_view.dart';
 import '../../../features/onboarding/presentation/view/onboarding_view.dart';
 import '../../../features/auth/presentation/view/login_view.dart';
@@ -70,6 +73,26 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
           },
           child: const WishlistView(),
         ),
+      );
+
+    case '/all-categories':
+      print('🔍 Navigation: Navigating to AllCategoriesView');
+      return MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) {
+            final cubit = DependencyInjection.getIt<MainCategoryCubit>();
+            cubit.getMainCategories();
+            return cubit;
+          },
+          child: const AllCategoriesView(),
+        ),
+      );
+
+    case '/categories':
+      print('🔍 Navigation: Navigating to CategoriesView');
+      return MaterialPageRoute(
+        builder: (context) => const CategoriesView(),
+        settings: settings, // Pass arguments through settings
       );
 
     default:
