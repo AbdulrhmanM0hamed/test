@@ -447,7 +447,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get shoppingCart => 'سلة التسوق';
 
   @override
-  String get total => 'المجموع';
+  String get total => 'الإجمالي';
 
   @override
   String get completeOrder => 'إتمام الطلب';
@@ -931,6 +931,24 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get loading => 'جاري التحميل...';
+
+  @override
+  String get notLoggedIn => 'أنت غير مسجل دخول';
+
+  @override
+  String get loginToAccessAccount => 'يرجى تسجيل الدخول للوصول إلى حسابك الشخصي وإدارة معلوماتك';
+
+  @override
+  String get dontHaveAccountQuestion => 'ليس لديك حساب؟';
+
+  @override
+  String get createNewAccount => 'إنشاء حساب جديد';
+
+  @override
+  String get cartTitle => 'السلة';
+
+  @override
+  String get subTotal => 'الإجمالي';
 
   @override
   String get error => 'خطأ';

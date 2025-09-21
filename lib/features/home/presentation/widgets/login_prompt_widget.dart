@@ -4,6 +4,7 @@ import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/core/utils/common/custom_button.dart';
 import 'package:test/features/auth/presentation/view/login_view.dart';
+import 'package:test/l10n/app_localizations.dart';
 
 class LoginPromptWidget extends StatelessWidget {
   const LoginPromptWidget({super.key});
@@ -11,7 +12,6 @@ class LoginPromptWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -33,22 +33,21 @@ class LoginPromptWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 32),
-              
+
               // Title
               Text(
-                'أنت غير مسجل دخول',
+                AppLocalizations.of(context)!.notLoggedIn,
                 style: getBoldStyle(
                   fontFamily: FontConstant.cairo,
                   fontSize: FontSize.size24,
-                  color: AppColors.textPrimary,
                 ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
-              
+
               // Description
               Text(
-                'يرجى تسجيل الدخول للوصول إلى حسابك الشخصي وإدارة معلوماتك',
+                AppLocalizations.of(context)!.loginToAccessAccount,
                 style: getRegularStyle(
                   fontFamily: FontConstant.cairo,
                   fontSize: FontSize.size16,
@@ -57,22 +56,22 @@ class LoginPromptWidget extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 40),
-              
+
               // Login Button
               CustomButton(
-                text: 'تسجيل الدخول',
+                text: AppLocalizations.of(context)!.login,
                 onPressed: () {
                   Navigator.pushNamed(context, LoginView.routeName);
                 },
               ),
               const SizedBox(height: 16),
-              
+
               // Register Link
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'ليس لديك حساب؟ ',
+                    '${AppLocalizations.of(context)!.dontHaveAccountQuestion} ',
                     style: getRegularStyle(
                       fontFamily: FontConstant.cairo,
                       fontSize: FontSize.size14,
@@ -84,7 +83,7 @@ class LoginPromptWidget extends StatelessWidget {
                       Navigator.pushNamed(context, '/register');
                     },
                     child: Text(
-                      'إنشاء حساب جديد',
+                      AppLocalizations.of(context)!.createNewAccount,
                       style: getBoldStyle(
                         fontFamily: FontConstant.cairo,
                         fontSize: FontSize.size14,

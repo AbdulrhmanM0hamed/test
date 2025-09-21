@@ -62,6 +62,7 @@ class _CartViewState extends State<CartView>
         return FadeTransition(
           opacity: _fadeAnimation,
           child: Scaffold(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             appBar: _buildAppBar(context, state),
             body: state is CartLoading
                 ? _buildLoadingState()
@@ -85,7 +86,7 @@ class _CartViewState extends State<CartView>
       surfaceTintColor: Colors.transparent,
       automaticallyImplyLeading: false,
       title: Text(
-        'السلة',
+        AppLocalizations.of(context)!.cartTitle,
         style: getBoldStyle(
           fontSize: FontSize.size20,
           fontFamily: FontConstant.cairo,
@@ -213,11 +214,10 @@ class _CartViewState extends State<CartView>
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),
@@ -230,11 +230,11 @@ class _CartViewState extends State<CartView>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'المجموع الفرعي',
+                AppLocalizations.of(context)!.subTotal,
                 style: getMediumStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
-                  color: Colors.grey[600],
+                  color: Colors.grey[650],
                 ),
               ),
               Text(
@@ -242,7 +242,6 @@ class _CartViewState extends State<CartView>
                 style: getBoldStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
-                  color: Colors.black87,
                 ),
               ),
             ],
@@ -258,15 +257,14 @@ class _CartViewState extends State<CartView>
                 style: getMediumStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
-                  color: Colors.grey[600],
+                  color: Colors.grey[650],
                 ),
               ),
               Text(
-                '${state.cart.totalTaxAmount} ج.م',
+                '${state.cart.totalTaxAmount}${AppLocalizations.of(context)!.currency}',
                 style: getBoldStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
-                  color: Colors.black87,
                 ),
               ),
             ],
@@ -278,15 +276,14 @@ class _CartViewState extends State<CartView>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'الإجمالي',
+                AppLocalizations.of(context)!.total,
                 style: getBoldStyle(
                   fontSize: FontSize.size16,
                   fontFamily: FontConstant.cairo,
-                  color: Colors.black87,
                 ),
               ),
               Text(
-                '${state.cart.totalPrice} ج.م',
+                '${state.cart.totalPrice} ${AppLocalizations.of(context)!.currency}',
                 style: getBoldStyle(
                   fontSize: FontSize.size18,
                   fontFamily: FontConstant.cairo,
@@ -301,26 +298,12 @@ class _CartViewState extends State<CartView>
           // Checkout Button
           SizedBox(
             width: double.infinity,
-            child: ElevatedButton(
+            child: CustomButton(
               onPressed: () {
                 // TODO: Navigate to checkout
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                elevation: 2,
-              ),
-              child: Text(
-                AppLocalizations.of(context)!.completeOrder,
-                style: getBoldStyle(
-                  fontSize: FontSize.size16,
-                  fontFamily: FontConstant.cairo,
-                  color: Colors.white,
-                ),
-              ),
+
+              text: AppLocalizations.of(context)!.completeOrder,
             ),
           ),
         ],

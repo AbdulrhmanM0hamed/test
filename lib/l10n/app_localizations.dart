@@ -1943,6 +1943,42 @@ abstract class AppLocalizations {
   /// **'Loading...'**
   String get loading;
 
+  /// No description provided for @notLoggedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not logged in'**
+  String get notLoggedIn;
+
+  /// No description provided for @loginToAccessAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Please log in to access your account and manage your information'**
+  String get loginToAccessAccount;
+
+  /// No description provided for @dontHaveAccountQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account?'**
+  String get dontHaveAccountQuestion;
+
+  /// No description provided for @createNewAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create new account'**
+  String get createNewAccount;
+
+  /// No description provided for @cartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cart'**
+  String get cartTitle;
+
+  /// No description provided for @subTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Sub Total'**
+  String get subTotal;
+
   /// No description provided for @error.
   ///
   /// In en, this message translates to:

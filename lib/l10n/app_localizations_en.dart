@@ -933,6 +933,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loading => 'Loading...';
 
   @override
+  String get notLoggedIn => 'You are not logged in';
+
+  @override
+  String get loginToAccessAccount => 'Please log in to access your account and manage your information';
+
+  @override
+  String get dontHaveAccountQuestion => 'Don\'t have an account?';
+
+  @override
+  String get createNewAccount => 'Create new account';
+
+  @override
+  String get cartTitle => 'Cart';
+
+  @override
+  String get subTotal => 'Sub Total';
+
+  @override
   String get error => 'Error';
 
   @override

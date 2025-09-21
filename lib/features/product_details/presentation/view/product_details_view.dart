@@ -221,8 +221,8 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 8,
+                color: AppColors.primary.withValues(alpha: 0.08),
+                blurRadius: 1,
                 offset: const Offset(0, 2),
               ),
             ],
@@ -267,8 +267,8 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
-                      blurRadius: 8,
+                      color: AppColors.primary.withValues(alpha: 0.08),
+                      blurRadius: 1,
                       offset: const Offset(0, 2),
                     ),
                   ],
@@ -280,13 +280,13 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           valueColor: AlwaysStoppedAnimation<Color>(
-                            isInWishlist ? AppColors.primary : Colors.grey,
+                            isInWishlist ? AppColors.error : Colors.grey,
                           ),
                         ),
                       )
                     : Icon(
                         isInWishlist ? Icons.favorite : Icons.favorite_border,
-                        color: isInWishlist ? AppColors.primary : null,
+                        color: isInWishlist ? AppColors.error : null,
                         size: 20,
                       ),
               ),

@@ -86,7 +86,6 @@ class _CartItemCardState extends State<CartItemCard>
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: Colors.white,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
@@ -162,7 +161,6 @@ class _CartItemCardState extends State<CartItemCard>
           style: getBoldStyle(
             fontSize: FontSize.size14,
             fontFamily: FontConstant.cairo,
-            color: Colors.black87,
           ),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,

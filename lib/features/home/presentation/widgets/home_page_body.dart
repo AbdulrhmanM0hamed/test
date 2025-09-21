@@ -9,6 +9,7 @@ import 'package:test/features/home/presentation/widgets/home%20sections/special_
 import 'package:test/features/home/presentation/widgets/home%20sections/featured_products_section.dart';
 import 'package:test/features/home/presentation/widgets/home%20sections/best_seller_products_section.dart';
 import 'package:test/features/home/presentation/widgets/home%20sections/latest_products_section.dart';
+import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import '../cubits/featured_products/featured_products_cubit.dart';
 import '../cubits/best_seller_products/best_seller_products_cubit.dart';
 import '../cubits/latest_products/latest_products_cubit.dart';
@@ -26,6 +27,10 @@ class HomePageBody extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
+        // Provide WishlistCubit
+        BlocProvider<WishlistCubit>(
+          create: (context) => DependencyInjection.getIt<WishlistCubit>(),
+        ),
         BlocProvider<FeaturedProductsCubit>(
           create: (context) =>
               DependencyInjection.getIt<FeaturedProductsCubit>()
@@ -48,7 +53,8 @@ class HomePageBody extends StatelessWidget {
         ),
         BlocProvider<MainCategoryCubit>(
           create: (context) =>
-              DependencyInjection.getIt<MainCategoryCubit>()..getMainCategories(),
+              DependencyInjection.getIt<MainCategoryCubit>()
+                ..getMainCategories(),
         ),
       ],
       child: Column(
@@ -132,7 +138,10 @@ class HomePageBody extends StatelessWidget {
                                 //print('Favorite pressed: ${product.name}');
                               },
                               onSeeAll: () {
-                                Navigator.pushNamed(context, '/featured-products');
+                                Navigator.pushNamed(
+                                  context,
+                                  '/featured-products',
+                                );
                               },
                             ),
 
@@ -151,7 +160,10 @@ class HomePageBody extends StatelessWidget {
                                 //print('Favorite pressed: ${product.name}');
                               },
                               onSeeAll: () {
-                                Navigator.pushNamed(context, '/best-seller-products');
+                                Navigator.pushNamed(
+                                  context,
+                                  '/best-seller-products',
+                                );
                               },
                             ),
 
@@ -170,7 +182,10 @@ class HomePageBody extends StatelessWidget {
                                 //print('Favorite pressed: ${product.name}');
                               },
                               onSeeAll: () {
-                                Navigator.pushNamed(context, '/latest-products');
+                                Navigator.pushNamed(
+                                  context,
+                                  '/latest-products',
+                                );
                               },
                             ),
 

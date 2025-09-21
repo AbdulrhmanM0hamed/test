@@ -208,7 +208,7 @@ class _WishlistViewState extends State<WishlistView>
               gradient: LinearGradient(
                 colors: [
                   AppColors.primary.withValues(alpha: 0.1),
-                  AppColors.primary.withValues(alpha: 0.05),
+                  AppColors.primary.withValues(alpha: 0.01),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -226,11 +226,7 @@ class _WishlistViewState extends State<WishlistView>
                     color: AppColors.primary.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
-                    Icons.favorite,
-                    color: AppColors.primary,
-                    size: 24,
-                  ),
+                  child: Icon(Icons.favorite, color: AppColors.error, size: 24),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -242,7 +238,7 @@ class _WishlistViewState extends State<WishlistView>
                         style: getBoldStyle(
                           fontSize: FontSize.size16,
                           fontFamily: FontConstant.cairo,
-                          color: AppColors.primary,
+                          color: AppColors.secondary,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -251,7 +247,7 @@ class _WishlistViewState extends State<WishlistView>
                         style: getMediumStyle(
                           fontSize: FontSize.size13,
                           fontFamily: FontConstant.cairo,
-                          color: Colors.grey[600],
+                          color: Colors.grey[650],
                         ),
                       ),
                     ],
