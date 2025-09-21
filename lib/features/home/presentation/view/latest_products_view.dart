@@ -8,6 +8,9 @@ import 'package:test/features/home/presentation/cubits/latest_products/latest_pr
 import 'package:test/features/home/presentation/cubits/latest_products/latest_products_state.dart';
 import 'package:test/features/home/presentation/widgets/home_product_card.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
+import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:test/features/cart/presentation/cubit/cart_state.dart';
+import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/l10n/app_localizations.dart';
 
 class LatestProductsView extends StatelessWidget {
@@ -21,62 +24,111 @@ class LatestProductsView extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) =>
-              DependencyInjection.getIt<LatestProductsCubit>()..getLatestProducts(),
+              DependencyInjection.getIt<LatestProductsCubit>()
+                ..getLatestProducts(),
         ),
         BlocProvider(
-          create: (context) => DependencyInjection.getIt<WishlistCubit>(),
+          create: (context) =>
+              DependencyInjection.getIt<WishlistCubit>()..getMyWishlist(),
+        ),
+        BlocProvider(
+          create: (context) =>
+              DependencyInjection.getIt<CartCubit>()..getCart(),
         ),
       ],
-      child: Scaffold(
-        appBar: CustomAppBar(
-          title: AppLocalizations.of(context)!.latestProducts,
-        ),
-        body: BlocBuilder<LatestProductsCubit, LatestProductsState>(
-          builder: (context, state) {
-            if (state is LatestProductsLoading) {
-              return const CustomProgressIndicator();
-            }
-
-            if (state is LatestProductsError) {
-              return _buildErrorState(context, state.message);
-            }
-
-            if (state is LatestProductsLoaded) {
-              final products = state.products;
-
-              if (products.isEmpty) {
-                return _buildEmptyState(context);
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<CartCubit, CartState>(
+            listener: (context, state) {
+              if (state is CartItemAdded) {
+                CustomSnackbar.showSuccess(
+                  context: context,
+                  message: AppLocalizations.of(context)!.productAddedToCart,
+                );
+              } else if (state is CartError) {
+                CustomSnackbar.showError(
+                  context: context,
+                  message: state.message,
+                );
+              }
+            },
+          ),
+          BlocListener<WishlistCubit, WishlistState>(
+            listener: (context, state) {
+              if (state is WishlistItemAdded) {
+                CustomSnackbar.showSuccess(
+                  context: context,
+                  message: AppLocalizations.of(context)!.productAddedToWishlist,
+                );
+              } else if (state is WishlistItemRemoved) {
+                CustomSnackbar.showSuccess(
+                  context: context,
+                  message: AppLocalizations.of(
+                    context,
+                  )!.productRemovedFromWishlist,
+                );
+              } else if (state is WishlistError) {
+                CustomSnackbar.showError(
+                  context: context,
+                  message: state.message,
+                );
+              }
+            },
+          ),
+        ],
+        child: Scaffold(
+          appBar: CustomAppBar(
+            title: AppLocalizations.of(context)!.latestProducts,
+          ),
+          body: BlocBuilder<LatestProductsCubit, LatestProductsState>(
+            builder: (context, state) {
+              if (state is LatestProductsLoading) {
+                return const CustomProgressIndicator();
               }
 
-              return RefreshIndicator(
-                onRefresh: () async {
-                  context.read<LatestProductsCubit>().getLatestProducts();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: GridView.builder(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.65,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                    ),
-                    itemCount: products.length,
-                    itemBuilder: (context, index) {
-                      final product = products[index];
-                      return HomeProductCard(
-                        product: product,
-                        onTap: () => _navigateToProductDetails(context, product),
-                      );
-                    },
-                  ),
-                ),
-              );
-            }
+              if (state is LatestProductsError) {
+                return _buildErrorState(context, state.message);
+              }
 
-            return const SizedBox.shrink();
-          },
+              if (state is LatestProductsLoaded) {
+                final products = state.products;
+
+                if (products.isEmpty) {
+                  return _buildEmptyState(context);
+                }
+
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    context.read<LatestProductsCubit>().getLatestProducts();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: GridView.builder(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.65,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                          ),
+                      itemCount: products.length,
+                      itemBuilder: (context, index) {
+                        final product = products[index];
+                        return HomeProductCard(
+                          product: product,
+                          onTap: () =>
+                              _navigateToProductDetails(context, product),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              }
+
+              return const SizedBox.shrink();
+            },
+          ),
         ),
       ),
     );
@@ -87,18 +139,11 @@ class LatestProductsView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.error_outline,
-            size: 64,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.error_outline, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
             message,
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 16,
-            ),
+            style: TextStyle(color: Colors.grey[600], fontSize: 16),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
@@ -118,18 +163,11 @@ class LatestProductsView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.new_releases_outlined,
-            size: 64,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.new_releases_outlined, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
             AppLocalizations.of(context)!.noLatestAvailable,
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 16,
-            ),
+            style: TextStyle(color: Colors.grey[600], fontSize: 16),
             textAlign: TextAlign.center,
           ),
         ],
@@ -138,10 +176,6 @@ class LatestProductsView extends StatelessWidget {
   }
 
   void _navigateToProductDetails(BuildContext context, HomeProduct product) {
-    Navigator.pushNamed(
-      context,
-      '/product-details',
-      arguments: product.id,
-    );
+    Navigator.pushNamed(context, '/product-details', arguments: product.id);
   }
 }

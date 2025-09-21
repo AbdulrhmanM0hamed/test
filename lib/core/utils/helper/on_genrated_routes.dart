@@ -5,6 +5,7 @@ import 'package:test/features/auth/presentation/view/forget_password_view_new.da
 import 'package:test/features/auth/presentation/cubit/forget_password_cubit.dart';
 import 'package:test/features/wishlist/presentation/view/wishlist_view.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
+import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/features/auth/presentation/view/register_view.dart';
 import 'package:test/features/categories/presentation/view/categories_view.dart';
 import 'package:test/features/home/presentation/view/all_categories_view.dart';
@@ -106,12 +107,22 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
     case '/latest-products':
       print('🔍 Navigation: Navigating to LatestProductsView');
       return MaterialPageRoute(
-        builder: (context) => BlocProvider(
-          create: (context) {
-            final cubit = DependencyInjection.getIt<LatestProductsCubit>();
-            cubit.getLatestProducts();
-            return cubit;
-          },
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) {
+                final cubit = DependencyInjection.getIt<LatestProductsCubit>();
+                cubit.getLatestProducts();
+                return cubit;
+              },
+            ),
+            BlocProvider(
+              create: (context) => DependencyInjection.getIt<WishlistCubit>()..getMyWishlist(),
+            ),
+            BlocProvider(
+              create: (context) => DependencyInjection.getIt<CartCubit>()..getCart(),
+            ),
+          ],
           child: const LatestProductsView(),
         ),
       );
@@ -119,12 +130,22 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
     case '/featured-products':
       print('🔍 Navigation: Navigating to FeaturedProductsView');
       return MaterialPageRoute(
-        builder: (context) => BlocProvider(
-          create: (context) {
-            final cubit = DependencyInjection.getIt<FeaturedProductsCubit>();
-            cubit.getFeaturedProducts();
-            return cubit;
-          },
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) {
+                final cubit = DependencyInjection.getIt<FeaturedProductsCubit>();
+                cubit.getFeaturedProducts();
+                return cubit;
+              },
+            ),
+            BlocProvider(
+              create: (context) => DependencyInjection.getIt<WishlistCubit>()..getMyWishlist(),
+            ),
+            BlocProvider(
+              create: (context) => DependencyInjection.getIt<CartCubit>()..getCart(),
+            ),
+          ],
           child: const FeaturedProductsView(),
         ),
       );
@@ -132,12 +153,22 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
     case '/best-seller-products':
       print('🔍 Navigation: Navigating to BestSellerProductsView');
       return MaterialPageRoute(
-        builder: (context) => BlocProvider(
-          create: (context) {
-            final cubit = DependencyInjection.getIt<BestSellerProductsCubit>();
-            cubit.getBestSellerProducts();
-            return cubit;
-          },
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) {
+                final cubit = DependencyInjection.getIt<BestSellerProductsCubit>();
+                cubit.getBestSellerProducts();
+                return cubit;
+              },
+            ),
+            BlocProvider(
+              create: (context) => DependencyInjection.getIt<WishlistCubit>()..getMyWishlist(),
+            ),
+            BlocProvider(
+              create: (context) => DependencyInjection.getIt<CartCubit>()..getCart(),
+            ),
+          ],
           child: const BestSellerProductsView(),
         ),
       );
@@ -145,12 +176,22 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
     case '/special-offers':
       print('🔍 Navigation: Navigating to SpecialOffersView');
       return MaterialPageRoute(
-        builder: (context) => BlocProvider(
-          create: (context) {
-            final cubit = DependencyInjection.getIt<SpecialOfferProductsCubit>();
-            cubit.getSpecialOfferProducts();
-            return cubit;
-          },
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) {
+                final cubit = DependencyInjection.getIt<SpecialOfferProductsCubit>();
+                cubit.getSpecialOfferProducts();
+                return cubit;
+              },
+            ),
+            BlocProvider(
+              create: (context) => DependencyInjection.getIt<WishlistCubit>()..getMyWishlist(),
+            ),
+            BlocProvider(
+              create: (context) => DependencyInjection.getIt<CartCubit>()..getCart(),
+            ),
+          ],
           child: const SpecialOffersView(),
         ),
       );

@@ -8,6 +8,9 @@ import 'package:test/features/home/presentation/cubits/best_seller_products/best
 import 'package:test/features/home/presentation/cubits/best_seller_products/best_seller_products_state.dart';
 import 'package:test/features/home/presentation/widgets/home_product_card.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
+import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:test/features/cart/presentation/cubit/cart_state.dart';
+import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/l10n/app_localizations.dart';
 
 class BestSellerProductsView extends StatelessWidget {
@@ -25,14 +28,55 @@ class BestSellerProductsView extends StatelessWidget {
                 ..getBestSellerProducts(),
         ),
         BlocProvider(
-          create: (context) => DependencyInjection.getIt<WishlistCubit>(),
+          create: (context) => DependencyInjection.getIt<WishlistCubit>()..getMyWishlist(),
+        ),
+        BlocProvider(
+          create: (context) => DependencyInjection.getIt<CartCubit>()..getCart(),
         ),
       ],
-      child: Scaffold(
-        appBar: CustomAppBar(
-          title: AppLocalizations.of(context)!.bestSellerProducts,
-        ),
-        body: BlocBuilder<BestSellerProductsCubit, BestSellerProductsState>(
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<CartCubit, CartState>(
+            listener: (context, state) {
+              if (state is CartItemAdded) {
+                CustomSnackbar.showSuccess(
+                  context: context,
+                  message: AppLocalizations.of(context)!.productAddedToCart,
+                );
+              } else if (state is CartError) {
+                CustomSnackbar.showError(
+                  context: context,
+                  message: state.message,
+                );
+              }
+            },
+          ),
+          BlocListener<WishlistCubit, WishlistState>(
+            listener: (context, state) {
+              if (state is WishlistItemAdded) {
+                CustomSnackbar.showSuccess(
+                  context: context,
+                  message: AppLocalizations.of(context)!.productAddedToWishlist,
+                );
+              } else if (state is WishlistItemRemoved) {
+                CustomSnackbar.showSuccess(
+                  context: context,
+                  message: AppLocalizations.of(context)!.productRemovedFromWishlist,
+                );
+              } else if (state is WishlistError) {
+                CustomSnackbar.showError(
+                  context: context,
+                  message: state.message,
+                );
+              }
+            },
+          ),
+        ],
+        child: Scaffold(
+          appBar: CustomAppBar(
+            title: AppLocalizations.of(context)!.bestSellerProducts,
+          ),
+          body: BlocBuilder<BestSellerProductsCubit, BestSellerProductsState>(
           builder: (context, state) {
             if (state is BestSellerProductsLoading) {
               return const CustomProgressIndicator();
@@ -82,6 +126,7 @@ class BestSellerProductsView extends StatelessWidget {
 
             return const SizedBox.shrink();
           },
+        ),
         ),
       ),
     );
