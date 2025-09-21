@@ -1024,4 +1024,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get currency => 'ج.م';
+
+  @override
+  String get noCategoriesAvailable => 'لا توجد فئات متاحة حالياً';
+
+  @override
+  String get discoverAllCategories => 'اكتشف جميع الفئات';
+
+  @override
+  String get browseCategorizedProducts => 'تصفح مجموعة واسعة من المنتجات المصنفة حسب الفئات';
 }

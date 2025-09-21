@@ -392,5 +392,8 @@
   "no": "No",
   "currency": "EGP",
   "wishlistCleared": "All products removed from wishlist",
-  "failedToClearWishlist": "Failed to clear all products from wishlist"
+  "failedToClearWishlist": "Failed to clear all products from wishlist",
+  "noCategoriesAvailable": "No categories available currently",
+  "discoverAllCategories": "Discover All Categories",
+  "browseCategorizedProducts": "Browse a wide range of products categorized by categories"
 }

@@ -387,5 +387,8 @@
   "no": "لا", 
   "wishlistCleared": "تم حذف جميع المنتجات من المفضلة",
   "failedToClearWishlist": "فشل في حذف جميع المنتجات من المفضلة",
-  "currency": "ج.م"
+  "currency": "ج.م",
+  "noCategoriesAvailable": "لا توجد فئات متاحة حالياً",
+  "discoverAllCategories": "اكتشف جميع الفئات",
+  "browseCategorizedProducts": "تصفح مجموعة واسعة من المنتجات المصنفة حسب الفئات"
 }

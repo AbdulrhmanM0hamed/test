@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
+import 'package:test/core/utils/common/custom_app_bar.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
@@ -45,7 +46,6 @@ class _CategoriesViewState extends State<CategoriesView> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -66,191 +66,196 @@ class _CategoriesViewState extends State<CategoriesView> {
           if (mainCategoryId != null && !_hasAppliedFilter) {
             _hasAppliedFilter = true;
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              context.read<ProductsFilterCubit>().updateMainCategory(mainCategoryId!);
+              context.read<ProductsFilterCubit>().updateMainCategory(
+                mainCategoryId!,
+              );
             });
           }
-          
+
           return Scaffold(
-        appBar: AppBar(
-          title: Text(categoryName ?? AppLocalizations.of(context)!.categories),
-          backgroundColor: Colors.white,
-          elevation: 0,
-          foregroundColor: Colors.black,
-        ),
-        body: SafeArea(
-          child: Column(
-            children: [
-              // شريط البحث مع الفلترة المتقدمة
-              const SearchBarWidget(),
+            appBar: CustomAppBar(
+              title: categoryName ?? AppLocalizations.of(context)!.categories,
+            ),
+            body: SafeArea(
+              child: Column(
+                children: [
+                  // شريط البحث مع الفلترة المتقدمة
+                  const SearchBarWidget(),
 
-              // علامات تبويب الأقسام (مخفية عند الفلترة بالفئة الرئيسية)
-              if (mainCategoryId == null)
-                BlocBuilder<DepartmentCubit, DepartmentState>(
-                  builder: (context, departmentState) {
-                    if (departmentState is DepartmentLoading) {
-                      return const SizedBox(
-                        height: 60,
-                        child: Center(child: CircularProgressIndicator()),
-                      );
-                    }
-
-                    if (departmentState is DepartmentLoaded) {
-                      final departments = departmentState.departments;
-
-                      if (departments.isEmpty) {
-                        return const SizedBox.shrink();
-                      }
-
-                      // تحديد القسم الأول افتراضياً
-                      if (selectedDepartmentId == null) {
-                        selectedDepartmentId = departments.first.id;
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          context.read<ProductsFilterCubit>().updateFilter(
-                            departmentId: selectedDepartmentId,
+                  // علامات تبويب الأقسام (مخفية عند الفلترة بالفئة الرئيسية)
+                  if (mainCategoryId == null)
+                    BlocBuilder<DepartmentCubit, DepartmentState>(
+                      builder: (context, departmentState) {
+                        if (departmentState is DepartmentLoading) {
+                          return const SizedBox(
+                            height: 60,
+                            child: Center(child: CircularProgressIndicator()),
                           );
-                        });
-                      }
+                        }
 
-                      return _buildDepartmentTabs(departments);
-                    }
+                        if (departmentState is DepartmentLoaded) {
+                          final departments = departmentState.departments;
 
-                    if (departmentState is DepartmentError) {
-                      return Container(
-                        height: 60,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Center(
-                          child: Text(
-                            departmentState.message,
-                            style: const TextStyle(color: Colors.red),
-                          ),
-                        ),
-                      );
-                    }
+                          if (departments.isEmpty) {
+                            return const SizedBox.shrink();
+                          }
 
-                    return const SizedBox.shrink();
-                  },
-                ),
+                          // تحديد القسم الأول افتراضياً
+                          if (selectedDepartmentId == null) {
+                            selectedDepartmentId = departments.first.id;
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              context.read<ProductsFilterCubit>().updateFilter(
+                                departmentId: selectedDepartmentId,
+                              );
+                            });
+                          }
 
-              // شبكة المنتجات مع الفلترة
-              Expanded(
-                child: BlocBuilder<ProductsFilterCubit, ProductsFilterState>(
-                  builder: (context, state) {
-                    if (state.isLoading && state.products.isEmpty) {
-                      return const CustomProgressIndicator();
-                    }
+                          return _buildDepartmentTabs(departments);
+                        }
 
-                    if (state.error != null && state.products.isEmpty) {
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.error_outline,
-                              size: 64,
-                              color: Colors.grey[400],
+                        if (departmentState is DepartmentError) {
+                          return Container(
+                            height: 60,
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Center(
+                              child: Text(
+                                departmentState.message,
+                                style: const TextStyle(color: Colors.red),
+                              ),
                             ),
-                            const SizedBox(height: 16),
-                            Text(
-                              state.error!,
-                              style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: 16,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 16),
-                            ElevatedButton(
-                              onPressed: () {
-                                context.read<ProductsFilterCubit>().refresh();
-                              },
-                              child: Text(AppLocalizations.of(context)!.retry),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
+                          );
+                        }
 
-                    if (state.products.isEmpty && !state.isLoading) {
-                      // Check if no filter is applied
-                      if (state.filter.departmentId == null &&
-                          state.filter.mainCategoryId == null &&
-                          state.filter.subCategoryId == null &&
-                          (state.filter.keyword == null ||
-                              state.filter.keyword!.isEmpty)) {
-                        return Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.filter_list_outlined,
-                                size: 64,
-                                color: Colors.grey[400],
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                'اختر قسماً أو استخدم البحث لعرض المنتجات',
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontSize: 16,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'يمكنك أيضاً استخدام الفلتر المتقدم للبحث الدقيق',
-                                style: TextStyle(
-                                  color: Colors.grey[500],
-                                  fontSize: 14,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        );
-                      } else {
-                        return Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.inventory_2_outlined,
-                                size: 64,
-                                color: Colors.grey[400],
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                AppLocalizations.of(
-                                  context,
-                                )!.noProductsInCategory,
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontSize: 16,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    }
+                        return const SizedBox.shrink();
+                      },
+                    ),
 
-                    return ProductsGridWidget(
-                      products: state.products,
-                      onProductTap: (product) {
-                        print('🔍 Categories: Product tapped: ${product.name}');
-                        Navigator.pushNamed(
-                          context,
-                          '/product-details',
-                          arguments: product.id,
+                  // شبكة المنتجات مع الفلترة
+                  Expanded(
+                    child: BlocBuilder<ProductsFilterCubit, ProductsFilterState>(
+                      builder: (context, state) {
+                        if (state.isLoading && state.products.isEmpty) {
+                          return const CustomProgressIndicator();
+                        }
+
+                        if (state.error != null && state.products.isEmpty) {
+                          return Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.error_outline,
+                                  size: 64,
+                                  color: Colors.grey[400],
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  state.error!,
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: 16,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 16),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    context
+                                        .read<ProductsFilterCubit>()
+                                        .refresh();
+                                  },
+                                  child: Text(
+                                    AppLocalizations.of(context)!.retry,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+
+                        if (state.products.isEmpty && !state.isLoading) {
+                          // Check if no filter is applied
+                          if (state.filter.departmentId == null &&
+                              state.filter.mainCategoryId == null &&
+                              state.filter.subCategoryId == null &&
+                              (state.filter.keyword == null ||
+                                  state.filter.keyword!.isEmpty)) {
+                            return Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.filter_list_outlined,
+                                    size: 64,
+                                    color: Colors.grey[400],
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Text(
+                                    'اختر قسماً أو استخدم البحث لعرض المنتجات',
+                                    style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontSize: 16,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    'يمكنك أيضاً استخدام الفلتر المتقدم للبحث الدقيق',
+                                    style: TextStyle(
+                                      color: Colors.grey[500],
+                                      fontSize: 14,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.inventory_2_outlined,
+                                    size: 64,
+                                    color: Colors.grey[400],
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Text(
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.noProductsInCategory,
+                                    style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontSize: 16,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        }
+
+                        return ProductsGridWidget(
+                          products: state.products,
+                          onProductTap: (product) {
+                            print(
+                              '🔍 Categories: Product tapped: ${product.name}',
+                            );
+                            Navigator.pushNamed(
+                              context,
+                              '/product-details',
+                              arguments: product.id,
+                            );
+                          },
                         );
                       },
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
           );
         },
       ),

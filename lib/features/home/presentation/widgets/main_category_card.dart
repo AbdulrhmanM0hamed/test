@@ -32,13 +32,9 @@ class _MainCategoryCardState extends State<MainCategoryCard>
       duration: const Duration(milliseconds: 150),
       vsync: this,
     );
-    _scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.95,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
   }
 
   @override
@@ -114,7 +110,7 @@ class _MainCategoryCardState extends State<MainCategoryCard>
                         ),
                       ),
                     ),
-                    
+
                     // Content
                     Padding(
                       padding: const EdgeInsets.all(20),
@@ -140,8 +136,12 @@ class _MainCategoryCardState extends State<MainCategoryCard>
                                       fit: BoxFit.cover,
                                       placeholder: (context, url) => Container(
                                         decoration: BoxDecoration(
-                                          color: AppColors.primary.withValues(alpha: 0.1),
-                                          borderRadius: BorderRadius.circular(18),
+                                          color: AppColors.primary.withValues(
+                                            alpha: 0.1,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            18,
+                                          ),
                                         ),
                                         child: const Center(
                                           child: SizedBox(
@@ -153,21 +153,26 @@ class _MainCategoryCardState extends State<MainCategoryCard>
                                           ),
                                         ),
                                       ),
-                                      errorWidget: (context, url, error) => Container(
-                                        decoration: BoxDecoration(
-                                          color: AppColors.primary.withValues(alpha: 0.1),
-                                          borderRadius: BorderRadius.circular(18),
-                                        ),
-                                        child: Icon(
-                                          Icons.category_rounded,
-                                          size: 35,
-                                          color: AppColors.primary,
-                                        ),
-                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: AppColors.primary
+                                                  .withValues(alpha: 0.1),
+                                              borderRadius:
+                                                  BorderRadius.circular(18),
+                                            ),
+                                            child: Icon(
+                                              Icons.category_rounded,
+                                              size: 35,
+                                              color: AppColors.primary,
+                                            ),
+                                          ),
                                     )
                                   : Container(
                                       decoration: BoxDecoration(
-                                        color: AppColors.primary.withValues(alpha: 0.1),
+                                        color: AppColors.primary.withValues(
+                                          alpha: 0.1,
+                                        ),
                                         borderRadius: BorderRadius.circular(18),
                                       ),
                                       child: Icon(
@@ -178,9 +183,9 @@ class _MainCategoryCardState extends State<MainCategoryCard>
                                     ),
                             ),
                           ),
-                          
+
                           const SizedBox(width: 16),
-                          
+
                           // Category Info
                           Expanded(
                             child: Column(
@@ -197,34 +202,11 @@ class _MainCategoryCardState extends State<MainCategoryCard>
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                                
+
                                 const SizedBox(height: 6),
-                                
-                                // Sub-categories count
-                                if (widget.category.subCategories.isNotEmpty)
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.secondary.withValues(alpha: 0.1),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Text(
-                                      '${widget.category.subCategories.length} فئة فرعية',
-                                      style: getRegularStyle(
-                                        fontFamily: FontConstant.cairo,
-                                        fontSize: FontSize.size12,
-                                        color: AppColors.secondary,
-                                      ),
-                                    ),
-                                  ),
-                                
-                                const SizedBox(height: 8),
-                                
+
                                 // Description preview
-                                if (widget.category.summary != null && 
+                                if (widget.category.summary != null &&
                                     widget.category.summary!.isNotEmpty)
                                   Text(
                                     _stripHtmlTags(widget.category.summary!),
@@ -239,7 +221,7 @@ class _MainCategoryCardState extends State<MainCategoryCard>
                               ],
                             ),
                           ),
-                          
+
                           // Arrow Icon
                           Container(
                             width: 40,

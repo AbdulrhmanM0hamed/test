@@ -1024,4 +1024,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get currency => 'EGP';
+
+  @override
+  String get noCategoriesAvailable => 'No categories available currently';
+
+  @override
+  String get discoverAllCategories => 'Discover All Categories';
+
+  @override
+  String get browseCategorizedProducts => 'Browse a wide range of products categorized by categories';
 }

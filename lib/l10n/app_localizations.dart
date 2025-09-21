@@ -2128,6 +2128,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'EGP'**
   String get currency;
+
+  /// No description provided for @noCategoriesAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No categories available currently'**
+  String get noCategoriesAvailable;
+
+  /// No description provided for @discoverAllCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover All Categories'**
+  String get discoverAllCategories;
+
+  /// No description provided for @browseCategorizedProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse a wide range of products categorized by categories'**
+  String get browseCategorizedProducts;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
