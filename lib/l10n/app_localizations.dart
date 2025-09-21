@@ -728,7 +728,7 @@ abstract class AppLocalizations {
   /// No description provided for @noFeaturedAvailable.
   ///
   /// In en, this message translates to:
-  /// **'No featured products available'**
+  /// **'No featured products available currently'**
   String get noFeaturedAvailable;
 
   /// No description provided for @noLatestAvailable.
@@ -740,7 +740,7 @@ abstract class AppLocalizations {
   /// No description provided for @noSpecialOffersAvailable.
   ///
   /// In en, this message translates to:
-  /// **'No special offers available'**
+  /// **'No special offers available currently'**
   String get noSpecialOffersAvailable;
 
   /// No description provided for @productVideo.
@@ -2146,6 +2146,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Browse a wide range of products categorized by categories'**
   String get browseCategorizedProducts;
+
+  /// No description provided for @bestSellerProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Best Sellers'**
+  String get bestSellerProducts;
+
+  /// No description provided for @noBestSellerAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No best seller products available currently'**
+  String get noBestSellerAvailable;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

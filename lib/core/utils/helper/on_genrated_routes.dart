@@ -8,7 +8,15 @@ import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/features/auth/presentation/view/register_view.dart';
 import 'package:test/features/categories/presentation/view/categories_view.dart';
 import 'package:test/features/home/presentation/view/all_categories_view.dart';
+import 'package:test/features/home/presentation/view/latest_products_view.dart';
+import 'package:test/features/home/presentation/view/featured_products_view.dart';
+import 'package:test/features/home/presentation/view/best_seller_products_view.dart';
+import 'package:test/features/home/presentation/view/special_offers_view.dart';
 import 'package:test/features/home/presentation/cubit/main_category_cubit.dart';
+import 'package:test/features/home/presentation/cubits/latest_products/latest_products_cubit.dart';
+import 'package:test/features/home/presentation/cubits/featured_products/featured_products_cubit.dart';
+import 'package:test/features/home/presentation/cubits/best_seller_products/best_seller_products_cubit.dart';
+import 'package:test/features/home/presentation/cubits/special_offer_products/special_offer_products_cubit.dart';
 import '../../../features/splash/presentation/view/splash_view.dart';
 import '../../../features/onboarding/presentation/view/onboarding_view.dart';
 import '../../../features/auth/presentation/view/login_view.dart';
@@ -93,6 +101,58 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => const CategoriesView(),
         settings: settings, // Pass arguments through settings
+      );
+
+    case '/latest-products':
+      print('🔍 Navigation: Navigating to LatestProductsView');
+      return MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) {
+            final cubit = DependencyInjection.getIt<LatestProductsCubit>();
+            cubit.getLatestProducts();
+            return cubit;
+          },
+          child: const LatestProductsView(),
+        ),
+      );
+
+    case '/featured-products':
+      print('🔍 Navigation: Navigating to FeaturedProductsView');
+      return MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) {
+            final cubit = DependencyInjection.getIt<FeaturedProductsCubit>();
+            cubit.getFeaturedProducts();
+            return cubit;
+          },
+          child: const FeaturedProductsView(),
+        ),
+      );
+
+    case '/best-seller-products':
+      print('🔍 Navigation: Navigating to BestSellerProductsView');
+      return MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) {
+            final cubit = DependencyInjection.getIt<BestSellerProductsCubit>();
+            cubit.getBestSellerProducts();
+            return cubit;
+          },
+          child: const BestSellerProductsView(),
+        ),
+      );
+
+    case '/special-offers':
+      print('🔍 Navigation: Navigating to SpecialOffersView');
+      return MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) {
+            final cubit = DependencyInjection.getIt<SpecialOfferProductsCubit>();
+            cubit.getSpecialOfferProducts();
+            return cubit;
+          },
+          child: const SpecialOffersView(),
+        ),
       );
 
     default:

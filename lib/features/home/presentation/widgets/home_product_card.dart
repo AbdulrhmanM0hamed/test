@@ -346,7 +346,7 @@ class _HomeProductCardState extends State<HomeProductCard>
 
   Widget _buildProductDetails() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 12, 2),
+      padding: const EdgeInsets.fromLTRB(16, 12, 12, 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -390,5 +390,9 @@
   "currency": "ج.م",
   "noCategoriesAvailable": "لا توجد فئات متاحة حالياً",
   "discoverAllCategories": "اكتشف جميع الفئات",
-  "browseCategorizedProducts": "تصفح مجموعة واسعة من المنتجات المصنفة حسب الفئات"
+  "browseCategorizedProducts": "تصفح مجموعة واسعة من المنتجات المصنفة حسب الفئات",
+  "bestSellerProducts": "الأكثر مبيعاً",
+  "noBestSellerAvailable": "لا توجد منتجات أكثر مبيعاً متاحة حالياً",
+  "noFeaturedAvailable": "لا توجد منتجات مميزة متاحة حالياً",
+  "noSpecialOffersAvailable": "لا توجد عروض خاصة متاحة حالياً"
 }

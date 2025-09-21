@@ -324,13 +324,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get productVideoDescription => 'شاهد عرض توضيحي للمنتج';
 
   @override
-  String get noFeaturedAvailable => 'لا توجد منتجات مميزة متاحة';
+  String get noFeaturedAvailable => 'لا توجد منتجات مميزة متاحة حالياً';
 
   @override
   String get noLatestAvailable => 'لا توجد منتجات جديدة متاحة';
 
   @override
-  String get noSpecialOffersAvailable => 'لا توجد عروض خاصة متاحة';
+  String get noSpecialOffersAvailable => 'لا توجد عروض خاصة متاحة حالياً';
 
   @override
   String get productVideo => 'فيديو المنتج';
@@ -1033,4 +1033,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get browseCategorizedProducts => 'تصفح مجموعة واسعة من المنتجات المصنفة حسب الفئات';
+
+  @override
+  String get bestSellerProducts => 'الأكثر مبيعاً';
+
+  @override
+  String get noBestSellerAvailable => 'لا توجد منتجات أكثر مبيعاً متاحة حالياً';
 }

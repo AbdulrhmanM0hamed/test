@@ -41,7 +41,6 @@ class BestSellerProductsSection extends StatelessWidget {
     );
   }
 
-
   Widget _buildProductsGrid() {
     return BlocBuilder<BestSellerProductsCubit, BestSellerProductsState>(
       builder: (context, state) {
@@ -60,8 +59,13 @@ class BestSellerProductsSection extends StatelessWidget {
             return _buildEmptyState(context);
           }
 
+          // Check if any product has a special offer to determine height
+          final hasSpecialOffer = products.any(
+            (product) => product.isSpecialOffer,
+          );
+
           return SizedBox(
-            height: 270,
+            height: hasSpecialOffer ? 290 : 270,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 16),

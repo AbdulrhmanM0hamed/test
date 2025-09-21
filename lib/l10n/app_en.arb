@@ -395,5 +395,9 @@
   "failedToClearWishlist": "Failed to clear all products from wishlist",
   "noCategoriesAvailable": "No categories available currently",
   "discoverAllCategories": "Discover All Categories",
-  "browseCategorizedProducts": "Browse a wide range of products categorized by categories"
+  "browseCategorizedProducts": "Browse a wide range of products categorized by categories",
+  "bestSellerProducts": "Best Sellers",
+  "noBestSellerAvailable": "No best seller products available currently",
+  "noFeaturedAvailable": "No featured products available currently",
+  "noSpecialOffersAvailable": "No special offers available currently"
 }

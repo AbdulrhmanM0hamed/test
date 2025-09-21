@@ -324,13 +324,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get productVideoDescription => 'Watch a product preview video';
 
   @override
-  String get noFeaturedAvailable => 'No featured products available';
+  String get noFeaturedAvailable => 'No featured products available currently';
 
   @override
   String get noLatestAvailable => 'No new products available';
 
   @override
-  String get noSpecialOffersAvailable => 'No special offers available';
+  String get noSpecialOffersAvailable => 'No special offers available currently';
 
   @override
   String get productVideo => 'Product Video';
@@ -1033,4 +1033,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get browseCategorizedProducts => 'Browse a wide range of products categorized by categories';
+
+  @override
+  String get bestSellerProducts => 'Best Sellers';
+
+  @override
+  String get noBestSellerAvailable => 'No best seller products available currently';
 }

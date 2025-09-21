@@ -113,8 +113,7 @@ class HomePageBody extends StatelessWidget {
                                 //print('Favorite pressed: ${product.name}');
                               },
                               onSeeAll: () {
-                                // TODO: Navigate to special offers page
-                                //print('See all special offers');
+                                Navigator.pushNamed(context, '/special-offers');
                               },
                             ),
 
@@ -133,8 +132,7 @@ class HomePageBody extends StatelessWidget {
                                 //print('Favorite pressed: ${product.name}');
                               },
                               onSeeAll: () {
-                                // TODO: Navigate to featured products page
-                                //print('See all featured products');
+                                Navigator.pushNamed(context, '/featured-products');
                               },
                             ),
 
@@ -153,8 +151,7 @@ class HomePageBody extends StatelessWidget {
                                 //print('Favorite pressed: ${product.name}');
                               },
                               onSeeAll: () {
-                                // TODO: Navigate to best seller products page
-                                //print('See all best seller products');
+                                Navigator.pushNamed(context, '/best-seller-products');
                               },
                             ),
 
@@ -173,8 +170,7 @@ class HomePageBody extends StatelessWidget {
                                 //print('Favorite pressed: ${product.name}');
                               },
                               onSeeAll: () {
-                                // TODO: Navigate to latest products page
-                                //print('See all latest products');
+                                Navigator.pushNamed(context, '/latest-products');
                               },
                             ),
 

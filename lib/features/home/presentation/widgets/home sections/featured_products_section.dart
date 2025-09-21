@@ -28,20 +28,18 @@ class FeaturedProductsSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // featured_products_section.dart
-SectionHeader(
-  onSeeAll: onSeeAll,
-  title: AppLocalizations.of(context)!.featuredProducts,
-  icon: Icons.star,
-  iconColor: Colors.orange,
-  backgroundColor: Colors.orange.withValues(alpha: 0.1),
-),
+        SectionHeader(
+          onSeeAll: onSeeAll,
+          title: AppLocalizations.of(context)!.featuredProducts,
+          icon: Icons.star,
+          iconColor: Colors.orange,
+          backgroundColor: Colors.orange.withValues(alpha: 0.1),
+        ),
         const SizedBox(height: 16),
         _buildProductsGrid(),
       ],
     );
   }
-
-
 
   Widget _buildProductsGrid() {
     return BlocBuilder<FeaturedProductsCubit, FeaturedProductsState>(
@@ -61,8 +59,13 @@ SectionHeader(
             return _buildEmptyState(context);
           }
 
+          // Check if any product has a special offer to determine height
+          final hasSpecialOffer = products.any(
+            (product) => product.isSpecialOffer,
+          );
+
           return SizedBox(
-            height: 270,
+            height: hasSpecialOffer ? 290 : 270,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -72,7 +75,8 @@ SectionHeader(
                 return Container(
                   width: 170,
                   margin: EdgeInsetsDirectional.only(
-                    end: index == (products.length > 4 ? 3 : products.length - 1)
+                    end:
+                        index == (products.length > 4 ? 3 : products.length - 1)
                         ? 0
                         : 12,
                   ),
