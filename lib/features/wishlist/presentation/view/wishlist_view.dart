@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
+import 'package:test/core/utils/common/custom_button.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
@@ -165,28 +166,24 @@ class _WishlistViewState extends State<WishlistView>
             ),
           ),
           const SizedBox(height: 32),
-          ElevatedButton.icon(
-            onPressed: () {
-              // Navigate to home tab using static method
-              BottomNavBar.navigateToHome();
-            },
-            icon: const Icon(Icons.shopping_bag_outlined),
-            label: Text(
-              AppLocalizations.of(context)!.browseProducts,
-              style: getBoldStyle(
-                fontSize: FontSize.size16,
-                fontFamily: FontConstant.cairo,
-                color: Colors.white,
-              ),
-            ),
-            style: ElevatedButton.styleFrom(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 64),
+            child: CustomButton(
+              onPressed: () {
+                // Navigate to home tab using static method
+                BottomNavBar.navigateToHome();
+              },
+              text: AppLocalizations.of(context)!.browseProducts,
               backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+              height: 56,
+              prefix: Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  Icons.shopping_bag_outlined,
+                  size: 24,
+                  color: Colors.white,
+                ),
               ),
-              elevation: 2,
             ),
           ),
         ],

@@ -58,7 +58,10 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
     }
   }
 
-  Future<void> _toggleWishlist(int productId, bool isCurrentlyInWishlist) async {
+  Future<void> _toggleWishlist(
+    int productId,
+    bool isCurrentlyInWishlist,
+  ) async {
     if (_isWishlistLoading) return;
 
     setState(() {
@@ -87,15 +90,10 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(
-          value: GlobalCubitService.instance.cartCubit!,
-        ),
-        BlocProvider.value(
-          value: GlobalCubitService.instance.wishlistCubit!,
-        ),
+        BlocProvider.value(value: GlobalCubitService.instance.cartCubit!),
+        BlocProvider.value(value: GlobalCubitService.instance.wishlistCubit!),
       ],
       child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
           builder: (context, state) {
             if (state is ProductDetailsLoading) {
@@ -158,7 +156,6 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
               style: getSemiBoldStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
-               
               ),
             ),
           ),
@@ -184,7 +181,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
               const SizedBox(height: 24),
               _buildTabSection(product),
               const SizedBox(height: 24),
-              
+
               // Video section
               if (product.videoLink != null && product.videoLink!.isNotEmpty)
                 ProductVideoSection(videoLink: product.videoLink),
@@ -192,7 +189,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
               // Reviews section
               if (product.userReviews.isNotEmpty)
                 ProductReviewsSection(reviews: product.userReviews),
-              
+
               // Add review section
               AddReviewSection(
                 productId: product.id,
@@ -200,7 +197,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
                   // TODO: Refresh reviews after adding new review
                 },
               ),
-              
+
               const SizedBox(height: 100), // Space for floating cart
             ],
           ),
@@ -230,11 +227,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
               ),
             ],
           ),
-          child: const Icon(
-            Icons.arrow_back_ios_new,
-          
-            size: 20,
-          ),
+          child: const Icon(Icons.arrow_back_ios_new, size: 20),
         ),
       ),
       title: Text(
@@ -256,8 +249,9 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
             // Check if product is in wishlist
             bool isInWishlist = false;
             if (wishlistState is WishlistLoaded) {
-              isInWishlist = wishlistState.wishlistResponse.wishlist
-                  .any((item) => item.product.id == product.id);
+              isInWishlist = wishlistState.wishlistResponse.wishlist.any(
+                (item) => item.product.id == product.id,
+              );
             }
 
             return IconButton(
@@ -267,7 +261,9 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
               icon: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: isInWishlist ? AppColors.primary.withValues(alpha: 0.1) : null,
+                  color: isInWishlist
+                      ? AppColors.primary.withValues(alpha: 0.1)
+                      : null,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(

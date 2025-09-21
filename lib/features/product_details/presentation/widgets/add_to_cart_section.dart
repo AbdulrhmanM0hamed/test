@@ -4,6 +4,8 @@ import 'package:test/core/utils/common/custom_button.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:test/core/utils/widgets/custom_snackbar.dart';
+import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/services/global_cubit_service.dart';
 import '../../../cart/presentation/cubit/cart_cubit.dart';
@@ -37,123 +39,122 @@ class _AddToCartSectionState extends State<AddToCartSection> {
   Widget build(BuildContext context) {
     final isAvailable = widget.product.stock > 0;
 
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey[200]!, width: 1),
-      ),
-      child: Column(
-        children: [
-          // Quantity selector
-          Row(
+    return Stack(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey[200]!, width: 1),
+          ),
+          child: Column(
             children: [
-              Text(
-                AppLocalizations.of(context)!.quantity,
-                style: TextStyle(
-                  fontSize: FontSize.size16,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
-                ),
-              ),
-              const Spacer(),
-              _buildQuantitySelector(),
-            ],
-          ),
-
-          const SizedBox(height: 20),
-
-          // Add to cart button
-          BlocBuilder<CartCubit, CartState>(
-            builder: (context, cartState) {
-              // Check if product is already in cart
-              bool isInCart = false;
-              int currentQuantity = 0;
-              if (cartState is CartLoaded) {
-                final cartItem = cartState.cart.getItemByProductId(
-                  widget.product.id,
-                );
-                isInCart = cartItem != null;
-                currentQuantity = cartItem?.quantity ?? 0;
-              }
-
-              return CustomButton(
-                text: _isAddingToCart
-                    ? AppLocalizations.of(context)!.loading
-                    : isAvailable
-                    ? (isInCart
-                          ? '${AppLocalizations.of(context)!.addToCart} ($currentQuantity)'
-                          : AppLocalizations.of(context)!.addToCart)
-                    : AppLocalizations.of(context)!.outOfStock,
-                onPressed: (isAvailable && !_isAddingToCart)
-                    ? _addToCart
-                    : null,
-                backgroundColor: isAvailable ? AppColors.primary : Colors.grey,
-                height: 56,
-                prefix: Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: _isAddingToCart
-                      ? SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white,
-                            ),
-                          ),
-                        )
-                      : Icon(
-                          isAvailable
-                              ? Icons.shopping_cart_outlined
-                              : Icons.block,
-                          size: 24,
-                          color: Colors.white,
-                        ),
-                ),
-              );
-            },
-          ),
-
-          const SizedBox(height: 12),
-
-          // Buy now button
-          if (isAvailable)
-            Container(
-              width: double.infinity,
-              height: 56,
-              decoration: BoxDecoration(
-                border: Border.all(color: AppColors.primary, width: 2),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: MaterialButton(
-                onPressed: _buyNow,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.flash_on_outlined,
-                      size: 24,
+              // Quantity selector
+              Row(
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.quantity,
+                    style: TextStyle(
+                      fontSize: FontSize.size16,
+                      fontWeight: FontWeight.bold,
                       color: AppColors.primary,
                     ),
-                    const SizedBox(width: 12),
-                    Text(
-                      AppLocalizations.of(context)!.buyNow,
-                      style: getBoldStyle(
-                        fontSize: FontSize.size16,
-                        fontFamily: FontConstant.cairo,
-                        color: AppColors.primary,
+                  ),
+                  const Spacer(),
+                  _buildQuantitySelector(),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+
+              // Add to cart button
+              BlocBuilder<CartCubit, CartState>(
+                builder: (context, cartState) {
+                  // Check if product is already in cart
+                  bool isInCart = false;
+                  int currentQuantity = 0;
+                  if (cartState is CartLoaded) {
+                    final cartItem = cartState.cart.getItemByProductId(
+                      widget.product.id,
+                    );
+                    isInCart = cartItem != null;
+                    currentQuantity = cartItem?.quantity ?? 0;
+                  }
+
+                  return CustomButton(
+                    text: isAvailable
+                        ? (isInCart
+                              ? '${AppLocalizations.of(context)!.addToCart} ($currentQuantity)'
+                              : AppLocalizations.of(context)!.addToCart)
+                        : AppLocalizations.of(context)!.outOfStock,
+                    onPressed: (isAvailable && !_isAddingToCart)
+                        ? _addToCart
+                        : null,
+                    backgroundColor: isAvailable
+                        ? AppColors.primary
+                        : Colors.grey,
+                    height: 56,
+                    prefix: Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: Icon(
+                        isAvailable
+                            ? Icons.shopping_cart_outlined
+                            : Icons.block,
+                        size: 24,
+                        color: Colors.white,
                       ),
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
-            ),
-        ],
-      ),
+
+              const SizedBox(height: 12),
+
+              // Buy now button
+              if (isAvailable)
+                Container(
+                  width: double.infinity,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.primary, width: 2),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: MaterialButton(
+                    onPressed: () {},
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.flash_on_outlined,
+                          size: 24,
+                          color: AppColors.primary,
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          AppLocalizations.of(context)!.buyNow,
+                          style: getBoldStyle(
+                            fontSize: FontSize.size16,
+                            fontFamily: FontConstant.cairo,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+
+        // Loading overlay with CustomProgressIndicator
+        if (_isAddingToCart)
+          const Positioned.fill(
+            child: Center(child: CustomProgressIndicator(size: 80)),
+          ),
+      ],
     );
   }
 
@@ -239,19 +240,17 @@ class _AddToCartSectionState extends State<AddToCartSection> {
         quantity: _quantity,
       );
 
-      if (mounted) {
-        _showCustomSnackBar(
-          message: '${AppLocalizations.of(context)!.productAddedToCart}',
-          isSuccess: true,
-          icon: Icons.check_circle_outline,
-        );
-      }
+      // if (mounted) {
+      //   CustomSnackbar.showSuccess(
+      //     context: context,
+      //     message: AppLocalizations.of(context)!.productAddedToCart,
+      //   );
+      // }
     } catch (error) {
       if (mounted) {
-        _showCustomSnackBar(
+        CustomSnackbar.showError(
+          context: context,
           message: AppLocalizations.of(context)!.failedToAddToCart,
-          isSuccess: false,
-          icon: Icons.error_outline,
         );
       }
     } finally {
@@ -263,53 +262,14 @@ class _AddToCartSectionState extends State<AddToCartSection> {
     }
   }
 
-  void _buyNow() {
-    // TODO: Implement buy now functionality - navigate to checkout
-    _showCustomSnackBar(
-      message: 'الانتقال إلى صفحة الدفع...',
-      isSuccess: true,
-      icon: Icons.flash_on_outlined,
-    );
-  }
-
-  void _showCustomSnackBar({
-    required String message,
-    required bool isSuccess,
-    required IconData icon,
-  }) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            Icon(icon, color: Colors.white, size: 24),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                message,
-                style: getSemiBoldStyle(
-                  fontSize: FontSize.size14,
-                  fontFamily: FontConstant.cairo,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: isSuccess ? Colors.green[600] : Colors.red[600],
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        margin: const EdgeInsets.all(16),
-        duration: const Duration(seconds: 3),
-        action: SnackBarAction(
-          label: AppLocalizations.of(context)!.cart,
-          textColor: Colors.white,
-          onPressed: () {
-            _showCartBottomSheet(context);
-          },
-        ),
-      ),
-    );
-  }
+  // void _buyNow() {
+  //   // TODO: Implement buy now functionality - navigate to checkout
+  //   _showCustomSnackBar(
+  //     message: 'الانتقال إلى صفحة الدفع...',
+  //     isSuccess: true,
+  //     icon: Icons.flash_on_outlined,
+  //   );
+  // }
 
   void _showCartBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -318,12 +278,8 @@ class _AddToCartSectionState extends State<AddToCartSection> {
       backgroundColor: Colors.transparent,
       builder: (context) => MultiBlocProvider(
         providers: [
-          BlocProvider.value(
-            value: GlobalCubitService.instance.cartCubit!,
-          ),
-          BlocProvider.value(
-            value: GlobalCubitService.instance.wishlistCubit!,
-          ),
+          BlocProvider.value(value: GlobalCubitService.instance.cartCubit!),
+          BlocProvider.value(value: GlobalCubitService.instance.wishlistCubit!),
         ],
         child: const CartBottomSheet(),
       ),

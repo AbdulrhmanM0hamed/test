@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
+import 'package:test/core/utils/common/custom_button.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
@@ -118,10 +119,17 @@ class _CartViewState extends State<CartView>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.shopping_cart_outlined,
-            size: 120,
-            color: Colors.grey[300],
+          Container(
+            padding: const EdgeInsets.all(32),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.shopping_cart_outlined,
+              size: 80,
+              color: AppColors.primary.withValues(alpha: 0.7),
+            ),
           ),
           const SizedBox(height: 24),
           Text(
@@ -142,23 +150,23 @@ class _CartViewState extends State<CartView>
             ),
           ),
           const SizedBox(height: 32),
-          ElevatedButton(
-            onPressed: () {
-              BottomNavBar.navigateToHome();
-            },
-            style: ElevatedButton.styleFrom(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 64),
+            child: CustomButton(
+              onPressed: () {
+                BottomNavBar.navigateToHome();
+              },
+
+              text: AppLocalizations.of(context)!.startShopping,
               backgroundColor: AppColors.primary,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            child: Text(
-              AppLocalizations.of(context)!.startShopping,
-              style: getBoldStyle(
-                fontSize: FontSize.size14,
-                fontFamily: FontConstant.cairo,
-                color: Colors.white,
+              height: 56,
+              prefix: Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  Icons.shopping_cart_outlined,
+                  size: 24,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
