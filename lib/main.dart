@@ -9,9 +9,16 @@ import 'package:test/core/services/network/dio_service.dart';
 import 'package:test/core/services/language_service.dart';
 import 'package:test/core/services/country_service.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   // Initialize dependency injection
   await DependencyInjection.init();
@@ -53,7 +60,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<LanguageService>(
         builder: (context, languageService, child) {
           return MaterialApp(
-            title: 'e-RAMO Store',
+            title: 'Sobieh Coffee',
             debugShowCheckedModeBanner: false,
             themeMode: ThemeMode.system,
             theme: AppTheme.lightTheme,

@@ -56,7 +56,13 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
       final response = await checkOtpUseCase(request);
 
       if (response.success) {
-        emit(ForgetPasswordOtpVerified(email: _email, otp: otp, message: response.message));
+        emit(
+          ForgetPasswordOtpVerified(
+            email: _email,
+            otp: otp,
+            message: response.message,
+          ),
+        );
       } else {
         emit(ForgetPasswordError(message: response.message));
       }
@@ -90,7 +96,7 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
   // Getters for current step tracking
   String get currentEmail => _email;
   String get currentOtp => _otp;
-  
+
   int get currentStep {
     if (state is ForgetPasswordEmailSent) return 1;
     if (state is ForgetPasswordOtpVerified) return 2;

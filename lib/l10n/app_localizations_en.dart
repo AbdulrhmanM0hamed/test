@@ -1057,4 +1057,166 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noBestSellerAvailable => 'No best seller products available currently';
+
+  @override
+  String get networkConnectionTimeout => 'Network connection timeout';
+
+  @override
+  String get networkConnectionError => 'No internet connection';
+
+  @override
+  String get serverInternalError => 'Internal server error';
+
+  @override
+  String get serverBadGateway => 'Bad gateway error';
+
+  @override
+  String get serverServiceUnavailable => 'Service temporarily unavailable';
+
+  @override
+  String get serverGatewayTimeout => 'Gateway timeout';
+
+  @override
+  String get clientBadRequest => 'Bad request';
+
+  @override
+  String get clientUnauthorized => 'Unauthorized access';
+
+  @override
+  String get clientForbidden => 'Access to this resource is forbidden';
+
+  @override
+  String get clientNotFound => 'Requested resource not found';
+
+  @override
+  String get clientMethodNotAllowed => 'Method not allowed';
+
+  @override
+  String get clientNotAcceptable => 'Content not acceptable';
+
+  @override
+  String get clientRequestTimeout => 'Request timeout';
+
+  @override
+  String get clientConflict => 'Data conflict';
+
+  @override
+  String get clientGone => 'Resource no longer available';
+
+  @override
+  String get clientLengthRequired => 'Content length required';
+
+  @override
+  String get clientPreconditionFailed => 'Precondition failed';
+
+  @override
+  String get clientPayloadTooLarge => 'Payload too large';
+
+  @override
+  String get clientUriTooLong => 'URI too long';
+
+  @override
+  String get clientUnsupportedMediaType => 'Unsupported media type';
+
+  @override
+  String get clientRangeNotSatisfiable => 'Range not satisfiable';
+
+  @override
+  String get clientExpectationFailed => 'Expectation failed';
+
+  @override
+  String get clientTeapot => 'I\'m a teapot (playful error)';
+
+  @override
+  String get clientUnprocessableEntity => 'Unprocessable entity';
+
+  @override
+  String get clientLocked => 'Resource locked';
+
+  @override
+  String get clientFailedDependency => 'Failed dependency';
+
+  @override
+  String get clientTooEarly => 'Too early';
+
+  @override
+  String get clientUpgradeRequired => 'Upgrade required';
+
+  @override
+  String get clientPreconditionRequired => 'Precondition required';
+
+  @override
+  String get clientTooManyRequests => 'Too many requests - please try again later';
+
+  @override
+  String get clientRequestHeaderFieldsTooLarge => 'Request header fields too large';
+
+  @override
+  String get clientUnavailableForLegalReasons => 'Unavailable for legal reasons';
+
+  @override
+  String get serverNotImplemented => 'Feature not implemented';
+
+  @override
+  String get serverHttpVersionNotSupported => 'HTTP version not supported';
+
+  @override
+  String get serverVariantAlsoNegotiates => 'Variant also negotiates';
+
+  @override
+  String get serverInsufficientStorage => 'Insufficient storage';
+
+  @override
+  String get serverLoopDetected => 'Loop detected';
+
+  @override
+  String get serverNotExtended => 'Not extended';
+
+  @override
+  String get serverNetworkAuthenticationRequired => 'Network authentication required';
+
+  @override
+  String get requestCancelled => 'Request cancelled';
+
+  @override
+  String get connectionFailed => 'Connection failed';
+
+  @override
+  String get sendTimeout => 'Send timeout';
+
+  @override
+  String get receiveTimeout => 'Receive timeout';
+
+  @override
+  String get badCertificate => 'Invalid security certificate';
+
+  @override
+  String get badResponse => 'Invalid response from server';
+
+  @override
+  String get unknownNetworkError => 'Unknown network error';
+
+  @override
+  String get parseError => 'Data parsing error';
+
+  @override
+  String get unexpectedError => 'An unexpected error occurred';
+
+  @override
+  String get pleaseCheckInternetConnection => 'Please check your internet connection';
+
+  @override
+  String get pleaseTryAgainLater => 'Please try again later';
+
+  @override
+  String get contactSupportIfPersists => 'Contact support if the problem persists';
+
+  @override
+  String get retryRequest => 'Retry';
+
+  @override
+  String get goBack => 'Go Back';
+
+  @override
+  String get refreshPage => 'Refresh Page';
 }

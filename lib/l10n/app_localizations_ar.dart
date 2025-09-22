@@ -1057,4 +1057,166 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noBestSellerAvailable => 'لا توجد منتجات أكثر مبيعاً متاحة حالياً';
+
+  @override
+  String get networkConnectionTimeout => 'انتهت مهلة الاتصال بالشبكة';
+
+  @override
+  String get networkConnectionError => 'لا يوجد اتصال بالإنترنت';
+
+  @override
+  String get serverInternalError => 'خطأ داخلي في الخادم';
+
+  @override
+  String get serverBadGateway => 'خطأ في بوابة الخادم';
+
+  @override
+  String get serverServiceUnavailable => 'الخدمة غير متاحة مؤقتاً';
+
+  @override
+  String get serverGatewayTimeout => 'انتهت مهلة الاستجابة من الخادم';
+
+  @override
+  String get clientBadRequest => 'طلب غير صحيح';
+
+  @override
+  String get clientUnauthorized => 'غير مخول للوصول';
+
+  @override
+  String get clientForbidden => 'ممنوع الوصول لهذا المورد';
+
+  @override
+  String get clientNotFound => 'المورد المطلوب غير موجود';
+
+  @override
+  String get clientMethodNotAllowed => 'الطريقة المستخدمة غير مسموحة';
+
+  @override
+  String get clientNotAcceptable => 'المحتوى غير مقبول';
+
+  @override
+  String get clientRequestTimeout => 'انتهت مهلة الطلب';
+
+  @override
+  String get clientConflict => 'تعارض في البيانات';
+
+  @override
+  String get clientGone => 'المورد لم يعد متاحاً';
+
+  @override
+  String get clientLengthRequired => 'طول المحتوى مطلوب';
+
+  @override
+  String get clientPreconditionFailed => 'فشل في الشرط المسبق';
+
+  @override
+  String get clientPayloadTooLarge => 'حجم البيانات كبير جداً';
+
+  @override
+  String get clientUriTooLong => 'الرابط طويل جداً';
+
+  @override
+  String get clientUnsupportedMediaType => 'نوع الملف غير مدعوم';
+
+  @override
+  String get clientRangeNotSatisfiable => 'النطاق المطلوب غير متاح';
+
+  @override
+  String get clientExpectationFailed => 'فشل في التوقع';
+
+  @override
+  String get clientTeapot => 'أنا إبريق شاي (خطأ مرح)';
+
+  @override
+  String get clientUnprocessableEntity => 'البيانات غير قابلة للمعالجة';
+
+  @override
+  String get clientLocked => 'المورد مقفل';
+
+  @override
+  String get clientFailedDependency => 'فشل في التبعية';
+
+  @override
+  String get clientTooEarly => 'الطلب مبكر جداً';
+
+  @override
+  String get clientUpgradeRequired => 'ترقية البروتوكول مطلوبة';
+
+  @override
+  String get clientPreconditionRequired => 'شرط مسبق مطلوب';
+
+  @override
+  String get clientTooManyRequests => 'عدد كبير جداً من الطلبات - يرجى المحاولة لاحقاً';
+
+  @override
+  String get clientRequestHeaderFieldsTooLarge => 'حقول رأس الطلب كبيرة جداً';
+
+  @override
+  String get clientUnavailableForLegalReasons => 'غير متاح لأسباب قانونية';
+
+  @override
+  String get serverNotImplemented => 'الميزة غير مطبقة';
+
+  @override
+  String get serverHttpVersionNotSupported => 'إصدار HTTP غير مدعوم';
+
+  @override
+  String get serverVariantAlsoNegotiates => 'متغير يتفاوض أيضاً';
+
+  @override
+  String get serverInsufficientStorage => 'مساحة تخزين غير كافية';
+
+  @override
+  String get serverLoopDetected => 'تم اكتشاف حلقة مفرغة';
+
+  @override
+  String get serverNotExtended => 'غير ممدد';
+
+  @override
+  String get serverNetworkAuthenticationRequired => 'مصادقة الشبكة مطلوبة';
+
+  @override
+  String get requestCancelled => 'تم إلغاء الطلب';
+
+  @override
+  String get connectionFailed => 'فشل الاتصال';
+
+  @override
+  String get sendTimeout => 'انتهت مهلة الإرسال';
+
+  @override
+  String get receiveTimeout => 'انتهت مهلة الاستقبال';
+
+  @override
+  String get badCertificate => 'شهادة أمان غير صالحة';
+
+  @override
+  String get badResponse => 'استجابة غير صحيحة من الخادم';
+
+  @override
+  String get unknownNetworkError => 'خطأ شبكة غير معروف';
+
+  @override
+  String get parseError => 'خطأ في تحليل البيانات';
+
+  @override
+  String get unexpectedError => 'حدث خطأ غير متوقع';
+
+  @override
+  String get pleaseCheckInternetConnection => 'يرجى التحقق من اتصال الإنترنت';
+
+  @override
+  String get pleaseTryAgainLater => 'يرجى المحاولة مرة أخرى لاحقاً';
+
+  @override
+  String get contactSupportIfPersists => 'اتصل بالدعم الفني إذا استمرت المشكلة';
+
+  @override
+  String get retryRequest => 'إعادة المحاولة';
+
+  @override
+  String get goBack => 'العودة';
+
+  @override
+  String get refreshPage => 'تحديث الصفحة';
 }

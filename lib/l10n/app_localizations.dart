@@ -2194,6 +2194,330 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No best seller products available currently'**
   String get noBestSellerAvailable;
+
+  /// No description provided for @networkConnectionTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'Network connection timeout'**
+  String get networkConnectionTimeout;
+
+  /// No description provided for @networkConnectionError.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection'**
+  String get networkConnectionError;
+
+  /// No description provided for @serverInternalError.
+  ///
+  /// In en, this message translates to:
+  /// **'Internal server error'**
+  String get serverInternalError;
+
+  /// No description provided for @serverBadGateway.
+  ///
+  /// In en, this message translates to:
+  /// **'Bad gateway error'**
+  String get serverBadGateway;
+
+  /// No description provided for @serverServiceUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Service temporarily unavailable'**
+  String get serverServiceUnavailable;
+
+  /// No description provided for @serverGatewayTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'Gateway timeout'**
+  String get serverGatewayTimeout;
+
+  /// No description provided for @clientBadRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Bad request'**
+  String get clientBadRequest;
+
+  /// No description provided for @clientUnauthorized.
+  ///
+  /// In en, this message translates to:
+  /// **'Unauthorized access'**
+  String get clientUnauthorized;
+
+  /// No description provided for @clientForbidden.
+  ///
+  /// In en, this message translates to:
+  /// **'Access to this resource is forbidden'**
+  String get clientForbidden;
+
+  /// No description provided for @clientNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested resource not found'**
+  String get clientNotFound;
+
+  /// No description provided for @clientMethodNotAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Method not allowed'**
+  String get clientMethodNotAllowed;
+
+  /// No description provided for @clientNotAcceptable.
+  ///
+  /// In en, this message translates to:
+  /// **'Content not acceptable'**
+  String get clientNotAcceptable;
+
+  /// No description provided for @clientRequestTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'Request timeout'**
+  String get clientRequestTimeout;
+
+  /// No description provided for @clientConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'Data conflict'**
+  String get clientConflict;
+
+  /// No description provided for @clientGone.
+  ///
+  /// In en, this message translates to:
+  /// **'Resource no longer available'**
+  String get clientGone;
+
+  /// No description provided for @clientLengthRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Content length required'**
+  String get clientLengthRequired;
+
+  /// No description provided for @clientPreconditionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Precondition failed'**
+  String get clientPreconditionFailed;
+
+  /// No description provided for @clientPayloadTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Payload too large'**
+  String get clientPayloadTooLarge;
+
+  /// No description provided for @clientUriTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'URI too long'**
+  String get clientUriTooLong;
+
+  /// No description provided for @clientUnsupportedMediaType.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported media type'**
+  String get clientUnsupportedMediaType;
+
+  /// No description provided for @clientRangeNotSatisfiable.
+  ///
+  /// In en, this message translates to:
+  /// **'Range not satisfiable'**
+  String get clientRangeNotSatisfiable;
+
+  /// No description provided for @clientExpectationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Expectation failed'**
+  String get clientExpectationFailed;
+
+  /// No description provided for @clientTeapot.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m a teapot (playful error)'**
+  String get clientTeapot;
+
+  /// No description provided for @clientUnprocessableEntity.
+  ///
+  /// In en, this message translates to:
+  /// **'Unprocessable entity'**
+  String get clientUnprocessableEntity;
+
+  /// No description provided for @clientLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Resource locked'**
+  String get clientLocked;
+
+  /// No description provided for @clientFailedDependency.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed dependency'**
+  String get clientFailedDependency;
+
+  /// No description provided for @clientTooEarly.
+  ///
+  /// In en, this message translates to:
+  /// **'Too early'**
+  String get clientTooEarly;
+
+  /// No description provided for @clientUpgradeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade required'**
+  String get clientUpgradeRequired;
+
+  /// No description provided for @clientPreconditionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Precondition required'**
+  String get clientPreconditionRequired;
+
+  /// No description provided for @clientTooManyRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests - please try again later'**
+  String get clientTooManyRequests;
+
+  /// No description provided for @clientRequestHeaderFieldsTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Request header fields too large'**
+  String get clientRequestHeaderFieldsTooLarge;
+
+  /// No description provided for @clientUnavailableForLegalReasons.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable for legal reasons'**
+  String get clientUnavailableForLegalReasons;
+
+  /// No description provided for @serverNotImplemented.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature not implemented'**
+  String get serverNotImplemented;
+
+  /// No description provided for @serverHttpVersionNotSupported.
+  ///
+  /// In en, this message translates to:
+  /// **'HTTP version not supported'**
+  String get serverHttpVersionNotSupported;
+
+  /// No description provided for @serverVariantAlsoNegotiates.
+  ///
+  /// In en, this message translates to:
+  /// **'Variant also negotiates'**
+  String get serverVariantAlsoNegotiates;
+
+  /// No description provided for @serverInsufficientStorage.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient storage'**
+  String get serverInsufficientStorage;
+
+  /// No description provided for @serverLoopDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'Loop detected'**
+  String get serverLoopDetected;
+
+  /// No description provided for @serverNotExtended.
+  ///
+  /// In en, this message translates to:
+  /// **'Not extended'**
+  String get serverNotExtended;
+
+  /// No description provided for @serverNetworkAuthenticationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Network authentication required'**
+  String get serverNetworkAuthenticationRequired;
+
+  /// No description provided for @requestCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Request cancelled'**
+  String get requestCancelled;
+
+  /// No description provided for @connectionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection failed'**
+  String get connectionFailed;
+
+  /// No description provided for @sendTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'Send timeout'**
+  String get sendTimeout;
+
+  /// No description provided for @receiveTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive timeout'**
+  String get receiveTimeout;
+
+  /// No description provided for @badCertificate.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid security certificate'**
+  String get badCertificate;
+
+  /// No description provided for @badResponse.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid response from server'**
+  String get badResponse;
+
+  /// No description provided for @unknownNetworkError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown network error'**
+  String get unknownNetworkError;
+
+  /// No description provided for @parseError.
+  ///
+  /// In en, this message translates to:
+  /// **'Data parsing error'**
+  String get parseError;
+
+  /// No description provided for @unexpectedError.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred'**
+  String get unexpectedError;
+
+  /// No description provided for @pleaseCheckInternetConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your internet connection'**
+  String get pleaseCheckInternetConnection;
+
+  /// No description provided for @pleaseTryAgainLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Please try again later'**
+  String get pleaseTryAgainLater;
+
+  /// No description provided for @contactSupportIfPersists.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact support if the problem persists'**
+  String get contactSupportIfPersists;
+
+  /// No description provided for @retryRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retryRequest;
+
+  /// No description provided for @goBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Back'**
+  String get goBack;
+
+  /// No description provided for @refreshPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh Page'**
+  String get refreshPage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

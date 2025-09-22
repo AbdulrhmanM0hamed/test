@@ -6,6 +6,8 @@ import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/services/global_cubit_service.dart';
+import '../../../../core/di/dependency_injection.dart';
+import '../../../cart/presentation/cubit/cart_cubit.dart';
 import '../../../wishlist/presentation/cubit/wishlist_cubit.dart';
 import '../../domain/entities/product_details.dart';
 import '../cubit/product_details_cubit.dart';
@@ -88,11 +90,36 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
 
   @override
   Widget build(BuildContext context) {
+    // Check if GlobalCubitService is initialized and cubits are available
+    final globalService = GlobalCubitService.instance;
+    final cartCubit = globalService.cartCubit;
+    final wishlistCubit = globalService.wishlistCubit;
+
+    // If not initialized or cubits are null, create new instances
+    final providers = <BlocProvider>[];
+
+    if (cartCubit != null) {
+      providers.add(BlocProvider.value(value: cartCubit));
+    } else {
+      providers.add(
+        BlocProvider(
+          create: (context) => DependencyInjection.getIt<CartCubit>(),
+        ),
+      );
+    }
+
+    if (wishlistCubit != null) {
+      providers.add(BlocProvider.value(value: wishlistCubit));
+    } else {
+      providers.add(
+        BlocProvider(
+          create: (context) => DependencyInjection.getIt<WishlistCubit>(),
+        ),
+      );
+    }
+
     return MultiBlocProvider(
-      providers: [
-        BlocProvider.value(value: GlobalCubitService.instance.cartCubit!),
-        BlocProvider.value(value: GlobalCubitService.instance.wishlistCubit!),
-      ],
+      providers: providers,
       child: Scaffold(
         body: BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
           builder: (context, state) {
@@ -112,7 +139,10 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
           },
         ),
         floatingActionButton: _showFloatingCart
-            ? const CartFloatingButton()
+            ? BlocProvider.value(
+                value: cartCubit ?? DependencyInjection.getIt<CartCubit>(),
+                child: const CartFloatingButton(),
+              )
             : null,
       ),
     );
@@ -165,10 +195,18 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
   }
 
   Widget _buildProductDetailsContent(ProductDetails product) {
+    // Get cart cubit for nested widgets
+    final globalService = GlobalCubitService.instance;
+    final cartCubit = globalService.cartCubit;
+    final wishlistCubit = globalService.wishlistCubit;
+
     return CustomScrollView(
       controller: _scrollController,
       slivers: [
-        _buildAppBar(product),
+        BlocProvider.value(
+          value: wishlistCubit ?? DependencyInjection.getIt<WishlistCubit>(),
+          child: _buildAppBar(product),
+        ),
         SliverToBoxAdapter(
           child: Column(
             children: [
@@ -177,7 +215,10 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
                 images: product.productImages.map((e) => e.image).toList(),
               ),
               const SizedBox(height: 16),
-              ProductInfoSection(product: product),
+              BlocProvider.value(
+                value: cartCubit ?? DependencyInjection.getIt<CartCubit>(),
+                child: ProductInfoSection(product: product),
+              ),
               const SizedBox(height: 24),
               _buildTabSection(product),
               const SizedBox(height: 24),

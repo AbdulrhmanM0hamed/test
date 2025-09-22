@@ -5,6 +5,7 @@ import 'package:test/core/models/api_response.dart';
 import 'package:test/core/services/token_storage_service.dart';
 import 'package:test/core/utils/constant/api_endpoints.dart';
 import 'package:test/features/auth/domain/repositories/auth_repository.dart';
+import 'package:test/l10n/app_localizations.dart';
 
 class DioService {
   static DioService? _instance;
@@ -47,6 +48,10 @@ class DioService {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+      },
+      // Allow 4xx and 5xx status codes to be handled as responses instead of exceptions
+      validateStatus: (status) {
+        return status != null && status < 500;
       },
     );
 
@@ -214,7 +219,9 @@ class DioService {
 
         // Check if response indicates success
         final bool isSuccess =
-            response.statusCode == 200 || response.statusCode == 201;
+            response.statusCode != null &&
+            response.statusCode! >= 200 &&
+            response.statusCode! < 300;
 
         if (isSuccess) {
           T? parsedData;
@@ -237,6 +244,34 @@ class DioService {
             statusCode: response.statusCode,
           );
         } else {
+          // Handle 4xx client errors with detailed validation messages
+          if (response.statusCode == 422 && responseData['data'] is Map) {
+            final validationErrors =
+                responseData['data'] as Map<String, dynamic>;
+            final errorMessages = <String>[];
+
+            // Extract field-specific error messages
+            validationErrors.forEach((field, fieldErrors) {
+              if (fieldErrors is List && fieldErrors.isNotEmpty) {
+                errorMessages.addAll(fieldErrors.map((e) => e.toString()));
+              } else if (fieldErrors is String) {
+                errorMessages.add(fieldErrors);
+              }
+            });
+
+            String finalMessage =
+                responseData['message'] ?? 'Validation failed';
+            if (errorMessages.isNotEmpty) {
+              finalMessage = errorMessages.join('\n');
+            }
+
+            return ApiResponse.error(
+              message: finalMessage,
+              errors: validationErrors,
+              statusCode: response.statusCode,
+            );
+          }
+
           return ApiResponse.error(
             message: responseData['message'] ?? 'Operation failed',
             errors: responseData['errors'] as Map<String, dynamic>?,
@@ -258,48 +293,97 @@ class DioService {
     }
   }
 
-  /// Handle DioException and create structured ApiException
+  /// Handle DioException and create structured ApiException with localized messages
   ApiException _handleDioException(DioException error) {
-    String message = 'حدث خطأ غير متوقع';
+    String message;
     Map<String, dynamic>? errors;
     int? statusCode = error.response?.statusCode;
 
+    // Get localized messages
+    AppLocalizations? localizations;
+    if (_context != null) {
+      localizations = AppLocalizations.of(_context!);
+    }
+
+    // Check if server provided a custom message
     if (error.response?.data != null && error.response!.data is Map) {
       final responseData = error.response!.data as Map<String, dynamic>;
-      message = responseData['message'] ?? message;
-      errors = responseData['errors'] as Map<String, dynamic>?;
-    } else {
-      // Handle network and other errors
-      switch (error.type) {
-        case DioExceptionType.connectionTimeout:
-        case DioExceptionType.sendTimeout:
-        case DioExceptionType.receiveTimeout:
-          message = 'انتهت مهلة الاتصال. يرجى المحاولة مرة أخرى.';
-          break;
-        case DioExceptionType.badResponse:
-          switch (statusCode) {
-            case 404:
-              message = 'الخدمة غير موجودة';
-              break;
-            case 422:
-              message = 'البيانات المدخلة غير صحيحة';
-              break;
-            case 500:
-              message = 'خطأ في الخادم. يرجى المحاولة لاحقاً.';
-              break;
-            default:
-              message = 'حدث خطأ في الخادم';
+
+      // Extract server message
+      String? serverMessage = responseData['message']?.toString();
+
+      // For validation errors (422), try to extract detailed field errors
+      if (statusCode == 422 && responseData['data'] is Map) {
+        final validationErrors = responseData['data'] as Map<String, dynamic>;
+        final errorMessages = <String>[];
+
+        // Extract field-specific error messages
+        validationErrors.forEach((field, fieldErrors) {
+          if (fieldErrors is List && fieldErrors.isNotEmpty) {
+            errorMessages.addAll(fieldErrors.map((e) => e.toString()));
+          } else if (fieldErrors is String) {
+            errorMessages.add(fieldErrors);
           }
-          break;
-        case DioExceptionType.connectionError:
-          message = 'لا يوجد اتصال بالإنترنت';
-          break;
-        case DioExceptionType.cancel:
-          message = 'تم إلغاء العملية';
-          break;
-        default:
-          message = 'حدث خطأ غير متوقع';
+        });
+
+        // Combine server message with field errors
+        if (errorMessages.isNotEmpty) {
+          if (serverMessage != null && serverMessage.isNotEmpty) {
+            message = '$serverMessage\n${errorMessages.join('\n')}';
+          } else {
+            message = errorMessages.join('\n');
+          }
+        } else if (serverMessage != null && serverMessage.isNotEmpty) {
+          message = serverMessage;
+        } else {
+          message = _getStatusCodeMessage(statusCode, localizations);
+        }
+
+        errors = validationErrors;
+        return ApiException(
+          message: message,
+          errors: errors,
+          statusCode: statusCode,
+        );
       }
+
+      // For other errors, use server message if available
+      if (serverMessage != null && serverMessage.isNotEmpty) {
+        message = serverMessage;
+        errors = responseData['errors'] as Map<String, dynamic>?;
+        return ApiException(
+          message: message,
+          errors: errors,
+          statusCode: statusCode,
+        );
+      }
+    }
+
+    // Handle different error types with comprehensive status codes
+    switch (error.type) {
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.sendTimeout:
+        message = localizations?.sendTimeout ?? 'انتهت مهلة الإرسال';
+        break;
+      case DioExceptionType.receiveTimeout:
+        message = localizations?.receiveTimeout ?? 'انتهت مهلة الاستقبال';
+        break;
+      case DioExceptionType.badCertificate:
+        message = localizations?.badCertificate ?? 'شهادة أمان غير صالحة';
+        break;
+      case DioExceptionType.badResponse:
+        message = _getStatusCodeMessage(statusCode, localizations);
+        break;
+      case DioExceptionType.connectionError:
+        message =
+            localizations?.networkConnectionError ?? 'لا يوجد اتصال بالإنترنت';
+        break;
+      case DioExceptionType.cancel:
+        message = localizations?.requestCancelled ?? 'تم إلغاء الطلب';
+        break;
+      case DioExceptionType.unknown:
+        message = localizations?.unknownNetworkError ?? 'خطأ شبكة غير معروف';
+        break;
     }
 
     return ApiException(
@@ -307,6 +391,119 @@ class DioService {
       errors: errors,
       statusCode: statusCode,
     );
+  }
+
+  /// Get localized message for HTTP status codes
+  String _getStatusCodeMessage(
+    int? statusCode,
+    AppLocalizations? localizations,
+  ) {
+    if (statusCode == null) {
+      return localizations?.badResponse ?? 'استجابة غير صحيحة من الخادم';
+    }
+
+    switch (statusCode) {
+      // 4xx Client Errors
+      case 400:
+        return localizations?.clientBadRequest ?? 'طلب غير صحيح';
+      case 401:
+        return localizations?.clientUnauthorized ?? 'غير مخول للوصول';
+      case 403:
+        return localizations?.clientForbidden ?? 'ممنوع الوصول لهذا المورد';
+      case 404:
+        return localizations?.clientNotFound ?? 'المورد المطلوب غير موجود';
+      case 405:
+        return localizations?.clientMethodNotAllowed ??
+            'الطريقة المستخدمة غير مسموحة';
+      case 406:
+        return localizations?.clientNotAcceptable ?? 'المحتوى غير مقبول';
+      case 408:
+        return localizations?.clientRequestTimeout ?? 'انتهت مهلة الطلب';
+      case 409:
+        return localizations?.clientConflict ?? 'تعارض في البيانات';
+      case 410:
+        return localizations?.clientGone ?? 'المورد لم يعد متاحاً';
+      case 411:
+        return localizations?.clientLengthRequired ?? 'طول المحتوى مطلوب';
+      case 412:
+        return localizations?.clientPreconditionFailed ?? 'فشل في الشرط المسبق';
+      case 413:
+        return localizations?.clientPayloadTooLarge ?? 'حجم البيانات كبير جداً';
+      case 414:
+        return localizations?.clientUriTooLong ?? 'الرابط طويل جداً';
+      case 415:
+        return localizations?.clientUnsupportedMediaType ??
+            'نوع الملف غير مدعوم';
+      case 416:
+        return localizations?.clientRangeNotSatisfiable ??
+            'النطاق المطلوب غير متاح';
+      case 417:
+        return localizations?.clientExpectationFailed ?? 'فشل في التوقع';
+      case 418:
+        return localizations?.clientTeapot ?? 'أنا إبريق شاي (خطأ مرح)';
+      case 422:
+        return localizations?.clientUnprocessableEntity ??
+            'البيانات غير قابلة للمعالجة';
+      case 423:
+        return localizations?.clientLocked ?? 'المورد مقفل';
+      case 424:
+        return localizations?.clientFailedDependency ?? 'فشل في التبعية';
+      case 425:
+        return localizations?.clientTooEarly ?? 'الطلب مبكر جداً';
+      case 426:
+        return localizations?.clientUpgradeRequired ??
+            'ترقية البروتوكول مطلوبة';
+      case 428:
+        return localizations?.clientPreconditionRequired ?? 'شرط مسبق مطلوب';
+      case 429:
+        return localizations?.clientTooManyRequests ??
+            'عدد كبير جداً من الطلبات - يرجى المحاولة لاحقاً';
+      case 431:
+        return localizations?.clientRequestHeaderFieldsTooLarge ??
+            'حقول رأس الطلب كبيرة جداً';
+      case 451:
+        return localizations?.clientUnavailableForLegalReasons ??
+            'غير متاح لأسباب قانونية';
+
+      // 5xx Server Errors
+      case 500:
+        return localizations?.serverInternalError ?? 'خطأ داخلي في الخادم';
+      case 501:
+        return localizations?.serverNotImplemented ?? 'الميزة غير مطبقة';
+      case 502:
+        return localizations?.serverBadGateway ?? 'خطأ في بوابة الخادم';
+      case 503:
+        return localizations?.serverServiceUnavailable ??
+            'الخدمة غير متاحة مؤقتاً';
+      case 504:
+        return localizations?.serverGatewayTimeout ??
+            'انتهت مهلة الاستجابة من الخادم';
+      case 505:
+        return localizations?.serverHttpVersionNotSupported ??
+            'إصدار HTTP غير مدعوم';
+      case 506:
+        return localizations?.serverVariantAlsoNegotiates ??
+            'متغير يتفاوض أيضاً';
+      case 507:
+        return localizations?.serverInsufficientStorage ??
+            'مساحة تخزين غير كافية';
+      case 508:
+        return localizations?.serverLoopDetected ?? 'تم اكتشاف حلقة مفرغة';
+      case 510:
+        return localizations?.serverNotExtended ?? 'غير ممدد';
+      case 511:
+        return localizations?.serverNetworkAuthenticationRequired ??
+            'مصادقة الشبكة مطلوبة';
+
+      default:
+        if (statusCode >= 400 && statusCode < 500) {
+          return localizations?.clientBadRequest ?? 'خطأ في الطلب';
+        } else if (statusCode >= 500) {
+          return localizations?.serverInternalError ?? 'خطأ في الخادم';
+        } else {
+          return localizations?.unexpectedError ?? 'حدث خطأ غير متوقع';
+        }
+    }
   }
 
   /// Enhanced request method with structured response handling

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "833185535926",
+    "project_id": "sobieh-coffee-99fbd",
+    "storage_bucket": "sobieh-coffee-99fbd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833185535926:android:64e2ccd33b7610bb6a5317",
+        "android_client_info": {
+          "package_name": "com.sobieh.coffee"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlZ7Woz8rC8SOmtdgEDcM7i4cK0OB6_vg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
