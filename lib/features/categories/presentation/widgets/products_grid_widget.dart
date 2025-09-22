@@ -64,10 +64,6 @@ class ProductsGridWidget extends StatelessWidget {
               child: ProductCardProfessional(
                 product: products[index],
                 onTap: () => onProductTap(products[index]),
-                onFavoritePressed: () {
-                  // TODO: إضافة وظيفة المفضلة
-                },
-                isFavorite: products[index].isFavorite,
               ),
             );
           },

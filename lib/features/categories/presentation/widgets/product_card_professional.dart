@@ -4,7 +4,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/core/services/cart_global_service.dart';
+import 'package:test/core/services/global_cubit_service.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/utils/constant/app_assets.dart';
 import '../../../../core/utils/constant/font_manger.dart';
@@ -16,15 +18,11 @@ import '../../domain/entities/product.dart';
 class ProductCardProfessional extends StatefulWidget {
   final Product product;
   final VoidCallback? onTap;
-  final VoidCallback? onFavoritePressed;
-  final bool isFavorite;
 
   const ProductCardProfessional({
     super.key,
     required this.product,
     this.onTap,
-    this.onFavoritePressed,
-    this.isFavorite = false,
   });
 
   @override
@@ -39,10 +37,18 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
   late Animation<double> _fadeAnimation;
   bool _isPressed = false;
   bool _isAddingToCart = false;
+  bool _isInWishlist = false;
+  bool _isWishlistLoading = false;
 
   @override
   void initState() {
     super.initState();
+
+    // Initialize wishlist state from product data
+    _isInWishlist = widget.product.isFavorite;
+    print(
+      '🔍 ProductCardProfessional: Product ${widget.product.id} - isFavorite: ${widget.product.isFavorite}, _isInWishlist: $_isInWishlist',
+    );
 
     _controller = AnimationController(
       vsync: this,
@@ -249,27 +255,113 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
   }
 
   Widget _buildFavoriteButton() {
-    return GestureDetector(
-      onTap: widget.onFavoritePressed,
-      child: Container(
-        padding: const EdgeInsets.all(6),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.9),
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
+    return BlocConsumer<WishlistCubit, WishlistState>(
+      listener: (context, state) {
+        if (state is WishlistItemAdded &&
+            state.productId == widget.product.id) {
+          setState(() {
+            _isInWishlist = true;
+            _isWishlistLoading = false;
+          });
+          // Remove snackbar - handled by WishlistView
+        } else if (state is WishlistItemRemoved &&
+            state.productId == widget.product.id) {
+          setState(() {
+            _isInWishlist = false;
+            _isWishlistLoading = false;
+          });
+          // Remove snackbar - handled by WishlistView
+        } else if (state is WishlistError) {
+          // Reset loading for this product on error
+          setState(() {
+            _isWishlistLoading = false;
+          });
+          // Only show error snackbar for this specific product
+          if (state.toString().contains('${widget.product.id}')) {
+            CustomSnackbar.showError(context: context, message: state.message);
+          }
+        }
+      },
+      builder: (context, state) {
+        return GestureDetector(
+          onTap: () {
+            // Prevent multiple taps while this product is loading
+            if (_isWishlistLoading) return;
+
+            debugPrint(
+              '❤️ ProductCardProfessional: ${_isInWishlist ? 'Removing' : 'Adding'} product ${widget.product.id} ${_isInWishlist ? 'from' : 'to'} wishlist',
+            );
+
+            // Set loading state for this specific product
+            setState(() {
+              _isWishlistLoading = true;
+            });
+
+            // Use global service for wishlist operations
+            if (_isInWishlist) {
+              GlobalCubitService.instance.removeFromWishlist(widget.product.id).then((_) {
+                if (mounted) {
+                  setState(() {
+                    _isInWishlist = false;
+                    _isWishlistLoading = false;
+                  });
+                }
+              }).catchError((error) {
+                if (mounted) {
+                  setState(() {
+                    _isWishlistLoading = false;
+                  });
+                }
+              });
+            } else {
+              GlobalCubitService.instance.addToWishlist(widget.product.id).then((_) {
+                if (mounted) {
+                  setState(() {
+                    _isInWishlist = true;
+                    _isWishlistLoading = false;
+                  });
+                }
+              }).catchError((error) {
+                if (mounted) {
+                  setState(() {
+                    _isWishlistLoading = false;
+                  });
+                }
+              });
+            }
+          },
+          child: Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.9),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
-          ],
-        ),
-        child: Icon(
-          widget.isFavorite ? Icons.favorite : Icons.favorite_border,
-          color: widget.isFavorite ? Colors.red : Colors.grey[600],
-          size: 18,
-        ),
-      ),
+            child: _isWishlistLoading
+                ? SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.grey[600]!,
+                      ),
+                    ),
+                  )
+                : Icon(
+                    _isInWishlist ? Icons.favorite : Icons.favorite_border,
+                    color: _isInWishlist ? Colors.red : Colors.grey[600],
+                    size: 18,
+                  ),
+          ),
+        );
+      },
     );
   }
 

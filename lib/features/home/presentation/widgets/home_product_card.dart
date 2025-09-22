@@ -285,35 +285,41 @@ class _HomeProductCardState extends State<HomeProductCard>
 
             // Use global service for wishlist operations
             if (_isInWishlist) {
-              GlobalCubitService.instance.removeFromWishlist(widget.product.id).then((_) {
-                if (mounted) {
-                  setState(() {
-                    _isInWishlist = false;
-                    _isWishlistLoading = false;
+              GlobalCubitService.instance
+                  .removeFromWishlist(widget.product.id)
+                  .then((_) {
+                    if (mounted) {
+                      setState(() {
+                        _isInWishlist = false;
+                        _isWishlistLoading = false;
+                      });
+                    }
+                  })
+                  .catchError((error) {
+                    if (mounted) {
+                      setState(() {
+                        _isWishlistLoading = false;
+                      });
+                    }
                   });
-                }
-              }).catchError((error) {
-                if (mounted) {
-                  setState(() {
-                    _isWishlistLoading = false;
-                  });
-                }
-              });
             } else {
-              GlobalCubitService.instance.addToWishlist(widget.product.id).then((_) {
-                if (mounted) {
-                  setState(() {
-                    _isInWishlist = true;
-                    _isWishlistLoading = false;
+              GlobalCubitService.instance
+                  .addToWishlist(widget.product.id)
+                  .then((_) {
+                    if (mounted) {
+                      setState(() {
+                        _isInWishlist = true;
+                        _isWishlistLoading = false;
+                      });
+                    }
+                  })
+                  .catchError((error) {
+                    if (mounted) {
+                      setState(() {
+                        _isWishlistLoading = false;
+                      });
+                    }
                   });
-                }
-              }).catchError((error) {
-                if (mounted) {
-                  setState(() {
-                    _isWishlistLoading = false;
-                  });
-                }
-              });
             }
           },
           child: Container(
@@ -516,7 +522,7 @@ class _HomeProductCardState extends State<HomeProductCard>
                                     debugPrint(
                                       '🛒 HomeProductCard: Adding product ${widget.product.id} to cart with quantity ${currentQuantity + 1}',
                                     );
-                                    
+
                                     // Use global service for cart operations
                                     await GlobalCubitService.instance.addToCart(
                                       productId: widget.product.id,
