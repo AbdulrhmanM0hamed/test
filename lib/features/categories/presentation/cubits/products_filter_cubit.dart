@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/services/data_refresh_service.dart';
+import 'package:test/core/services/location_service.dart';
 import 'package:test/features/categories/domain/entities/product_filter.dart';
 import 'package:test/features/categories/domain/usecases/get_all_products_usecase.dart';
 import 'package:test/features/categories/presentation/cubits/products_filter_state.dart';
@@ -160,7 +161,19 @@ class ProductsFilterCubit extends Cubit<ProductsFilterState> {
     }
 
     try {
-      final response = await getAllProductsUseCase.call(state.filter);
+      // Get current region ID from LocationService
+      int? regionId;
+      try {
+        final locationService = LocationService.instance;
+        regionId = locationService.selectedRegion?.id;
+      } catch (e) {
+        // LocationService not initialized, continue without region filter
+        print('⚠️ LocationService not available: $e');
+      }
+
+      // Create filter with current region ID
+      final filterWithRegion = state.filter.copyWith(regionId: regionId);
+      final response = await getAllProductsUseCase.call(filterWithRegion);
 
       if (response.success && response.data != null) {
         final newProducts = response.data!.data;

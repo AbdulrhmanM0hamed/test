@@ -61,7 +61,7 @@ class ApiEndpoints {
     int? colorId,
     int? sizeId,
     String? keyword,
-    int? countryId,
+    int? regionId,
     String? tags,
     int? page,
   }) {
@@ -78,7 +78,7 @@ class ApiEndpoints {
     if (colorId != null) params['color_id'] = colorId;
     if (sizeId != null) params['size_id'] = sizeId;
     if (keyword != null) params['keyword'] = keyword;
-    if (countryId != null) params['country_id'] = countryId;
+    if (regionId != null) params['region_id'] = regionId;
     if (tags != null) params['tags'] = tags;
     if (page != null) params['page'] = page;
 

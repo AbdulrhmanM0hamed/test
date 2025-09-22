@@ -9,7 +9,7 @@ abstract class ProductsRemoteDataSource {
     String departmentName, {
     int page = 1,
   });
-  
+
   Future<ApiResponse<ProductsResponseModel>> getAllProducts(
     ProductFilterModel filter,
   );
@@ -68,22 +68,22 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
         colorId: filter.colorId,
         sizeId: filter.sizeId,
         keyword: filter.keyword,
-        countryId: filter.countryId,
+        regionId: filter.regionId,
         tags: filter.tags,
         page: filter.page,
       );
-      
+
       print('🌐 API URL: $url');
       print('🔍 Filter Parameters: ${filter.toJson()}');
-      
+
       final response = await dioService.get(url);
-      
+
       print('📡 API Response Status: ${response.statusCode}');
-      
+
       if (response.statusCode == 200) {
         final productsResponse = ProductsResponseModel.fromJson(response.data);
         print('✅ Successfully loaded ${productsResponse.data.length} products');
-        
+
         return ApiResponse.success(
           data: productsResponse,
           message: 'Products loaded successfully',

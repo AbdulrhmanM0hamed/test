@@ -11,7 +11,7 @@ class ProductFilter {
   final int? colorId;
   final int? sizeId;
   final String? keyword;
-  final int? countryId;
+  final int? regionId;
   final String? tags;
   final int? page;
 
@@ -27,7 +27,7 @@ class ProductFilter {
     this.colorId,
     this.sizeId,
     this.keyword,
-    this.countryId,
+    this.regionId,
     this.tags,
     this.page = 1,
   });
@@ -44,7 +44,7 @@ class ProductFilter {
     int? colorId,
     int? sizeId,
     String? keyword,
-    int? countryId,
+    int? regionId,
     String? tags,
     int? page,
   }) {
@@ -60,7 +60,7 @@ class ProductFilter {
       colorId: colorId ?? this.colorId,
       sizeId: sizeId ?? this.sizeId,
       keyword: keyword ?? this.keyword,
-      countryId: countryId ?? this.countryId,
+      regionId: regionId ?? this.regionId,
       tags: tags ?? this.tags,
       page: page ?? this.page,
     );
@@ -93,7 +93,7 @@ class ProductFilter {
         colorId != null ||
         sizeId != null ||
         (keyword != null && keyword!.isNotEmpty) ||
-        countryId != null ||
+        regionId != null ||
         (tags != null && tags!.isNotEmpty);
   }
 

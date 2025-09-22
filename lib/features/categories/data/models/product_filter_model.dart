@@ -13,7 +13,7 @@ class ProductFilterModel extends ProductFilter {
     super.colorId,
     super.sizeId,
     super.keyword,
-    super.countryId,
+    super.regionId,
     super.tags,
     super.page,
   });
@@ -31,7 +31,7 @@ class ProductFilterModel extends ProductFilter {
       colorId: json['color_id'],
       sizeId: json['size_id'],
       keyword: json['keyword'],
-      countryId: json['country_id'],
+      regionId: json['region_id'],
       tags: json['tags'],
       page: json['page'] ?? 1,
     );
@@ -51,7 +51,7 @@ class ProductFilterModel extends ProductFilter {
     if (colorId != null) data['color_id'] = colorId;
     if (sizeId != null) data['size_id'] = sizeId;
     if (keyword != null) data['keyword'] = keyword;
-    if (countryId != null) data['country_id'] = countryId;
+    if (regionId != null) data['region_id'] = regionId;
     if (tags != null) data['tags'] = tags;
     if (page != null) data['page'] = page;
     
@@ -71,7 +71,7 @@ class ProductFilterModel extends ProductFilter {
     int? colorId,
     int? sizeId,
     String? keyword,
-    int? countryId,
+    int? regionId,
     String? tags,
     int? page,
   }) {
@@ -87,7 +87,7 @@ class ProductFilterModel extends ProductFilter {
       colorId: colorId ?? this.colorId,
       sizeId: sizeId ?? this.sizeId,
       keyword: keyword ?? this.keyword,
-      countryId: countryId ?? this.countryId,
+      regionId: regionId ?? this.regionId,
       tags: tags ?? this.tags,
       page: page ?? this.page,
     );

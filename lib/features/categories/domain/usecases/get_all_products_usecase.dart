@@ -22,7 +22,7 @@ class GetAllProductsUseCase {
       colorId: filter.colorId,
       sizeId: filter.sizeId,
       keyword: filter.keyword,
-      countryId: filter.countryId,
+      regionId: filter.regionId,
       tags: filter.tags,
       page: filter.page,
     );
