@@ -94,4 +94,10 @@ class ApiEndpoints {
   static String get cities => '$baseUrl/cities';
   static String citiesByCountry(int countryId) => '$baseUrl/cities/$countryId';
   static String regions(int cityId) => '$baseUrl/regions/$cityId';
+
+  // Orders endpoints
+  static String get addresses => '$baseUrl/addresses';
+  static String addressById(int addressId) => '$baseUrl/addresses/$addressId';
+  static String get checkPromo => '$baseUrl/check-promo';
+  static String get checkout => '$baseUrl/order/checkout';
 }

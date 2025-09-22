@@ -4,7 +4,6 @@ import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/features/home/presentation/widgets/greeting_header.dart';
 import 'package:test/features/home/presentation/widgets/offers_section.dart';
 import 'package:test/features/home/presentation/widgets/categories_section.dart';
-import 'package:test/features/home/presentation/widgets/stores/stores_showcase.dart';
 import 'package:test/features/home/presentation/widgets/home%20sections/special_offers_section.dart';
 import 'package:test/features/home/presentation/widgets/home%20sections/featured_products_section.dart';
 import 'package:test/features/home/presentation/widgets/home%20sections/best_seller_products_section.dart';

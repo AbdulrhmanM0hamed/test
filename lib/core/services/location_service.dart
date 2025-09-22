@@ -19,8 +19,8 @@ class LocationService extends ChangeNotifier {
 
   City? _selectedCity;
   Region? _selectedRegion;
-  List<City> _cities = [];
-  List<Region> _regions = [];
+  List<CityModel> _cities = [];
+  List<RegionModel> _regions = [];
   bool _isLoadingCities = false;
   bool _isLoadingRegions = false;
   String? _error;
@@ -29,8 +29,8 @@ class LocationService extends ChangeNotifier {
 
   City? get selectedCity => _selectedCity;
   Region? get selectedRegion => _selectedRegion;
-  List<City> get cities => _cities;
-  List<Region> get regions => _regions;
+  List<CityModel> get cities => _cities;
+  List<RegionModel> get regions => _regions;
   bool get isLoadingCities => _isLoadingCities;
   bool get isLoadingRegions => _isLoadingRegions;
   String? get error => _error;

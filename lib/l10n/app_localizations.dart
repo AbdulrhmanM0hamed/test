@@ -2536,6 +2536,306 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Refresh Page'**
   String get refreshPage;
+
+  /// No description provided for @checkout.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkout'**
+  String get checkout;
+
+  /// No description provided for @pleaseSelectAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a delivery address'**
+  String get pleaseSelectAddress;
+
+  /// No description provided for @orderPlacedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Order placed successfully'**
+  String get orderPlacedSuccessfully;
+
+  /// No description provided for @placeOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Place Order'**
+  String get placeOrder;
+
+  /// No description provided for @deliveryAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery Address'**
+  String get deliveryAddress;
+
+  /// No description provided for @manage.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage'**
+  String get manage;
+
+  /// No description provided for @shippingCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipping Cost'**
+  String get shippingCost;
+
+  /// No description provided for @noAddressesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No addresses found'**
+  String get noAddressesFound;
+
+  /// No description provided for @addAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Address'**
+  String get addAddress;
+
+  /// No description provided for @manageAddresses.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Addresses'**
+  String get manageAddresses;
+
+  /// No description provided for @addressDeletedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Address deleted successfully'**
+  String get addressDeletedSuccessfully;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @pleaseEnterPromoCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a promo code'**
+  String get pleaseEnterPromoCode;
+
+  /// No description provided for @promoCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Promo Code'**
+  String get promoCode;
+
+  /// No description provided for @promoCodeAppliedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Promo code applied successfully'**
+  String get promoCodeAppliedSuccessfully;
+
+  /// No description provided for @enterPromoCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter promo code'**
+  String get enterPromoCode;
+
+  /// No description provided for @apply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get apply;
+
+  /// No description provided for @paymentMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Method'**
+  String get paymentMethod;
+
+  /// No description provided for @cashOnDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash on Delivery'**
+  String get cashOnDelivery;
+
+  /// No description provided for @payWhenYouReceive.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay when you receive your order'**
+  String get payWhenYouReceive;
+
+  /// No description provided for @onlinePayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Online Payment'**
+  String get onlinePayment;
+
+  /// No description provided for @comingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming Soon'**
+  String get comingSoon;
+
+  /// No description provided for @orderSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Summary'**
+  String get orderSummary;
+
+  /// No description provided for @subtotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtotal'**
+  String get subtotal;
+
+  /// No description provided for @free.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get free;
+
+  /// No description provided for @youSave.
+  ///
+  /// In en, this message translates to:
+  /// **'You Save'**
+  String get youSave;
+
+  /// No description provided for @addYourFirstAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first delivery address to get started'**
+  String get addYourFirstAddress;
+
+  /// No description provided for @somethingWentWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get somethingWentWrong;
+
+  /// No description provided for @deleteAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Address'**
+  String get deleteAddress;
+
+  /// No description provided for @deleteAddressConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this address?'**
+  String get deleteAddressConfirmation;
+
+  /// No description provided for @editAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Address'**
+  String get editAddress;
+
+  /// No description provided for @addressAddedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Address added successfully'**
+  String get addressAddedSuccessfully;
+
+  /// No description provided for @addressUpdatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Address updated successfully'**
+  String get addressUpdatedSuccessfully;
+
+  /// No description provided for @addressType.
+  ///
+  /// In en, this message translates to:
+  /// **'Address Type'**
+  String get addressType;
+
+  /// No description provided for @location.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get location;
+
+  /// No description provided for @detailedAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Detailed Address'**
+  String get detailedAddress;
+
+  /// No description provided for @enterDetailedAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your detailed address'**
+  String get enterDetailedAddress;
+
+  /// No description provided for @pleaseEnterAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your address'**
+  String get pleaseEnterAddress;
+
+  /// No description provided for @pleaseEnterShippingCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter shipping cost'**
+  String get pleaseEnterShippingCost;
+
+  /// No description provided for @pleaseEnterValidShippingCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid shipping cost'**
+  String get pleaseEnterValidShippingCost;
+
+  /// No description provided for @updateAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Address'**
+  String get updateAddress;
+
+  /// No description provided for @work.
+  ///
+  /// In en, this message translates to:
+  /// **'Work'**
+  String get work;
+
+  /// No description provided for @other.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get other;
+
+  /// No description provided for @pleaseSelectAllLocationFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select all location fields'**
+  String get pleaseSelectAllLocationFields;
+
+  /// No description provided for @select.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get select;
+
+  /// No description provided for @addressDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Address Details'**
+  String get addressDetails;
+
+  /// No description provided for @pleaseSelectCityAndRegion.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select city and region'**
+  String get pleaseSelectCityAndRegion;
+
+  /// No description provided for @noCitiesAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No cities available'**
+  String get noCitiesAvailable;
+
+  /// No description provided for @noRegionsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No regions available'**
+  String get noRegionsAvailable;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

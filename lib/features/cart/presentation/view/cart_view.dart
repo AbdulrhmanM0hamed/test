@@ -11,6 +11,7 @@ import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/features/cart/presentation/cubit/cart_state.dart';
 import 'package:test/features/cart/presentation/widgets/cart_item_card.dart';
 import 'package:test/features/home/presentation/view/bottom_nav_bar.dart';
+import 'package:test/features/orders/presentation/views/checkout_view.dart';
 import 'package:test/l10n/app_localizations.dart';
 
 class CartView extends StatefulWidget {
@@ -214,6 +215,7 @@ class _CartViewState extends State<CartView>
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         boxShadow: [
           BoxShadow(
@@ -238,7 +240,7 @@ class _CartViewState extends State<CartView>
                 ),
               ),
               Text(
-                '${state.cart.totalProductPrice} ج.م',
+                '${state.cart.totalProductPrice} ${AppLocalizations.of(context)!.currency}',
                 style: getBoldStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
@@ -300,6 +302,8 @@ class _CartViewState extends State<CartView>
             width: double.infinity,
             child: CustomButton(
               onPressed: () {
+                Navigator.pushNamed(context, '/checkout');
+
                 // TODO: Navigate to checkout
               },
 

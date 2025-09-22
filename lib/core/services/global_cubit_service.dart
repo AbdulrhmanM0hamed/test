@@ -110,4 +110,13 @@ class GlobalCubitService {
       print('✅ GlobalCubitService: Product removed from wishlist and refreshed');
     }
   }
+
+  /// Refresh cart after successful order (to clear it)
+  Future<void> refreshCartAfterOrder() async {
+    if (_cartCubit != null) {
+      print('🛒 GlobalCubitService: Refreshing cart after successful order');
+      await _cartCubit!.getCart();
+      print('✅ GlobalCubitService: Cart refreshed after order');
+    }
+  }
 }

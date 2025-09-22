@@ -1228,4 +1228,154 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get refreshPage => 'Refresh Page';
+
+  @override
+  String get checkout => 'Checkout';
+
+  @override
+  String get pleaseSelectAddress => 'Please select a delivery address';
+
+  @override
+  String get orderPlacedSuccessfully => 'Order placed successfully';
+
+  @override
+  String get placeOrder => 'Place Order';
+
+  @override
+  String get deliveryAddress => 'Delivery Address';
+
+  @override
+  String get manage => 'Manage';
+
+  @override
+  String get shippingCost => 'Shipping Cost';
+
+  @override
+  String get noAddressesFound => 'No addresses found';
+
+  @override
+  String get addAddress => 'Add Address';
+
+  @override
+  String get manageAddresses => 'Manage Addresses';
+
+  @override
+  String get addressDeletedSuccessfully => 'Address deleted successfully';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get pleaseEnterPromoCode => 'Please enter a promo code';
+
+  @override
+  String get promoCode => 'Promo Code';
+
+  @override
+  String get promoCodeAppliedSuccessfully => 'Promo code applied successfully';
+
+  @override
+  String get enterPromoCode => 'Enter promo code';
+
+  @override
+  String get apply => 'Apply';
+
+  @override
+  String get paymentMethod => 'Payment Method';
+
+  @override
+  String get cashOnDelivery => 'Cash on Delivery';
+
+  @override
+  String get payWhenYouReceive => 'Pay when you receive your order';
+
+  @override
+  String get onlinePayment => 'Online Payment';
+
+  @override
+  String get comingSoon => 'Coming Soon';
+
+  @override
+  String get orderSummary => 'Order Summary';
+
+  @override
+  String get subtotal => 'Subtotal';
+
+  @override
+  String get free => 'Free';
+
+  @override
+  String get youSave => 'You Save';
+
+  @override
+  String get addYourFirstAddress => 'Add your first delivery address to get started';
+
+  @override
+  String get somethingWentWrong => 'Something went wrong';
+
+  @override
+  String get deleteAddress => 'Delete Address';
+
+  @override
+  String get deleteAddressConfirmation => 'Are you sure you want to delete this address?';
+
+  @override
+  String get editAddress => 'Edit Address';
+
+  @override
+  String get addressAddedSuccessfully => 'Address added successfully';
+
+  @override
+  String get addressUpdatedSuccessfully => 'Address updated successfully';
+
+  @override
+  String get addressType => 'Address Type';
+
+  @override
+  String get location => 'Location';
+
+  @override
+  String get detailedAddress => 'Detailed Address';
+
+  @override
+  String get enterDetailedAddress => 'Enter your detailed address';
+
+  @override
+  String get pleaseEnterAddress => 'Please enter your address';
+
+  @override
+  String get pleaseEnterShippingCost => 'Please enter shipping cost';
+
+  @override
+  String get pleaseEnterValidShippingCost => 'Please enter a valid shipping cost';
+
+  @override
+  String get updateAddress => 'Update Address';
+
+  @override
+  String get work => 'Work';
+
+  @override
+  String get other => 'Other';
+
+  @override
+  String get pleaseSelectAllLocationFields => 'Please select all location fields';
+
+  @override
+  String get select => 'Select';
+
+  @override
+  String get addressDetails => 'Address Details';
+
+  @override
+  String get pleaseSelectCityAndRegion => 'Please select city and region';
+
+  @override
+  String get noCitiesAvailable => 'No cities available';
+
+  @override
+  String get noRegionsAvailable => 'No regions available';
 }

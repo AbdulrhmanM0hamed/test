@@ -213,7 +213,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get locationInformation => 'معلومات الموقع';
 
   @override
-  String get country => 'الدولة';
+  String get country => 'البلد';
 
   @override
   String get city => 'المدينة';
@@ -1228,4 +1228,154 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get refreshPage => 'تحديث الصفحة';
+
+  @override
+  String get checkout => 'الدفع';
+
+  @override
+  String get pleaseSelectAddress => 'يرجى اختيار عنوان التوصيل';
+
+  @override
+  String get orderPlacedSuccessfully => 'تم تأكيد الطلب بنجاح';
+
+  @override
+  String get placeOrder => 'تأكيد الطلب';
+
+  @override
+  String get deliveryAddress => 'عنوان التوصيل';
+
+  @override
+  String get manage => 'إدارة';
+
+  @override
+  String get shippingCost => 'تكلفة الشحن';
+
+  @override
+  String get noAddressesFound => 'لم يتم العثور على عناوين';
+
+  @override
+  String get addAddress => 'إضافة عنوان';
+
+  @override
+  String get manageAddresses => 'إدارة العناوين';
+
+  @override
+  String get addressDeletedSuccessfully => 'تم حذف العنوان بنجاح';
+
+  @override
+  String get edit => 'تعديل';
+
+  @override
+  String get delete => 'حذف';
+
+  @override
+  String get pleaseEnterPromoCode => 'يرجى إدخال كود الخصم';
+
+  @override
+  String get promoCode => 'كود الخصم';
+
+  @override
+  String get promoCodeAppliedSuccessfully => 'تم تطبيق كود الخصم بنجاح';
+
+  @override
+  String get enterPromoCode => 'أدخل كود الخصم';
+
+  @override
+  String get apply => 'تطبيق';
+
+  @override
+  String get paymentMethod => 'طريقة الدفع';
+
+  @override
+  String get cashOnDelivery => 'الدفع عند الاستلام';
+
+  @override
+  String get payWhenYouReceive => 'ادفع عند استلام طلبك';
+
+  @override
+  String get onlinePayment => 'الدفع الإلكتروني';
+
+  @override
+  String get comingSoon => 'قريباً';
+
+  @override
+  String get orderSummary => 'ملخص الطلب';
+
+  @override
+  String get subtotal => 'المجموع الفرعي';
+
+  @override
+  String get free => 'مجاني';
+
+  @override
+  String get youSave => 'توفر';
+
+  @override
+  String get addYourFirstAddress => 'أضف أول عنوان توصيل للبدء';
+
+  @override
+  String get somethingWentWrong => 'حدث خطأ ما';
+
+  @override
+  String get deleteAddress => 'حذف العنوان';
+
+  @override
+  String get deleteAddressConfirmation => 'هل أنت متأكد من حذف هذا العنوان؟';
+
+  @override
+  String get editAddress => 'تعديل العنوان';
+
+  @override
+  String get addressAddedSuccessfully => 'تم إضافة العنوان بنجاح';
+
+  @override
+  String get addressUpdatedSuccessfully => 'تم تحديث العنوان بنجاح';
+
+  @override
+  String get addressType => 'نوع العنوان';
+
+  @override
+  String get location => 'الموقع';
+
+  @override
+  String get detailedAddress => 'العنوان التفصيلي';
+
+  @override
+  String get enterDetailedAddress => 'أدخل عنوانك التفصيلي';
+
+  @override
+  String get pleaseEnterAddress => 'يرجى إدخال العنوان';
+
+  @override
+  String get pleaseEnterShippingCost => 'يرجى إدخال تكلفة الشحن';
+
+  @override
+  String get pleaseEnterValidShippingCost => 'يرجى إدخال تكلفة شحن صحيحة';
+
+  @override
+  String get updateAddress => 'تحديث العنوان';
+
+  @override
+  String get work => 'العمل';
+
+  @override
+  String get other => 'أخرى';
+
+  @override
+  String get pleaseSelectAllLocationFields => 'يرجى اختيار جميع حقول الموقع';
+
+  @override
+  String get select => 'اختر';
+
+  @override
+  String get addressDetails => 'تفاصيل العنوان';
+
+  @override
+  String get pleaseSelectCityAndRegion => 'يرجى اختيار المدينة والمنطقة';
+
+  @override
+  String get noCitiesAvailable => 'لا توجد مدن متاحة';
+
+  @override
+  String get noRegionsAvailable => 'لا توجد مناطق متاحة';
 }

@@ -17,6 +17,14 @@ import 'package:test/features/home/presentation/cubits/latest_products/latest_pr
 import 'package:test/features/home/presentation/cubits/featured_products/featured_products_cubit.dart';
 import 'package:test/features/home/presentation/cubits/best_seller_products/best_seller_products_cubit.dart';
 import 'package:test/features/home/presentation/cubits/special_offer_products/special_offer_products_cubit.dart';
+import 'package:test/features/orders/presentation/views/checkout_view.dart';
+import 'package:test/features/orders/presentation/cubit/checkout_cubit.dart';
+import 'package:test/features/orders/presentation/cubit/addresses_cubit.dart';
+import 'package:test/features/orders/presentation/cubit/promo_code_cubit.dart';
+import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:test/features/orders/presentation/widgets/address_management_view.dart';
+import 'package:test/features/orders/presentation/widgets/add_edit_address_view.dart';
+import 'package:test/features/orders/domain/entities/address.dart';
 import '../../../features/splash/presentation/view/splash_view.dart';
 import '../../../features/onboarding/presentation/view/onboarding_view.dart';
 import '../../../features/auth/presentation/view/login_view.dart';
@@ -152,6 +160,66 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
             return cubit;
           },
           child: const SpecialOffersView(),
+        ),
+      );
+
+    case CheckoutView.routeName:
+      print('🔍 Navigation: Navigating to CheckoutView');
+      return MaterialPageRoute(
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) {
+                final cubit = DependencyInjection.getIt<CheckoutCubit>();
+                return cubit;
+              },
+            ),
+            BlocProvider(
+              create: (context) {
+                final cubit = DependencyInjection.getIt<AddressesCubit>();
+                cubit.getAddresses();
+                return cubit;
+              },
+            ),
+            BlocProvider(
+              create: (context) => DependencyInjection.getIt<PromoCodeCubit>(),
+            ),
+            BlocProvider(
+              create: (context) {
+                final cubit = DependencyInjection.getIt<CartCubit>();
+                cubit.getCart();
+                return cubit;
+              },
+            ),
+          ],
+          child: const CheckoutView(),
+        ),
+      );
+
+    case '/address-management':
+      print('🔍 Navigation: Navigating to AddressManagementView');
+      return MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) {
+            final cubit = DependencyInjection.getIt<AddressesCubit>();
+            cubit.getAddresses();
+            return cubit;
+          },
+          child: const AddressManagementView(),
+        ),
+      );
+
+    case '/add-edit-address':
+      print('🔍 Navigation: Navigating to AddEditAddressView');
+      final address = settings.arguments as Address?;
+      return MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) {
+            final cubit = DependencyInjection.getIt<AddressesCubit>();
+            cubit.getAddresses();
+            return cubit;
+          },
+          child: AddEditAddressView(address: address),
         ),
       );
 

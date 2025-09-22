@@ -96,6 +96,25 @@ import 'package:test/features/home/data/repositories/main_category_repository_im
 import 'package:test/features/home/domain/repositories/main_category_repository.dart';
 import 'package:test/features/home/domain/usecases/get_main_categories_usecase.dart';
 import 'package:test/features/home/presentation/cubit/main_category_cubit.dart';
+// Orders feature imports
+import 'package:test/features/orders/data/datasources/addresses_remote_data_source.dart';
+import 'package:test/features/orders/data/datasources/promo_code_remote_data_source.dart';
+import 'package:test/features/orders/data/datasources/orders_remote_data_source.dart';
+import 'package:test/features/orders/data/repositories/addresses_repository_impl.dart';
+import 'package:test/features/orders/data/repositories/promo_code_repository_impl.dart';
+import 'package:test/features/orders/data/repositories/orders_repository_impl.dart';
+import 'package:test/features/orders/domain/repositories/addresses_repository.dart';
+import 'package:test/features/orders/domain/repositories/promo_code_repository.dart';
+import 'package:test/features/orders/domain/repositories/orders_repository.dart';
+import 'package:test/features/orders/domain/usecases/get_addresses_usecase.dart';
+import 'package:test/features/orders/domain/usecases/add_address_usecase.dart';
+import 'package:test/features/orders/domain/usecases/update_address_usecase.dart';
+import 'package:test/features/orders/domain/usecases/delete_address_usecase.dart';
+import 'package:test/features/orders/domain/usecases/check_promo_code_usecase.dart';
+import 'package:test/features/orders/domain/usecases/checkout_usecase.dart';
+import 'package:test/features/orders/presentation/cubit/addresses_cubit.dart';
+import 'package:test/features/orders/presentation/cubit/promo_code_cubit.dart';
+import 'package:test/features/orders/presentation/cubit/checkout_cubit.dart';
 
 class DependencyInjection {
   static final GetIt getIt = GetIt.instance;
@@ -551,6 +570,78 @@ class DependencyInjection {
       () => MainCategoryCubit(
         getMainCategoriesUseCase: getIt<GetMainCategoriesUseCase>(),
         dataRefreshService: getIt<DataRefreshService>(),
+      ),
+    );
+
+    // Orders feature dependencies
+    // Data Sources
+    getIt.registerLazySingleton<AddressesRemoteDataSource>(
+      () => AddressesRemoteDataSourceImpl(dioService: getIt<DioService>()),
+    );
+    getIt.registerLazySingleton<PromoCodeRemoteDataSource>(
+      () => PromoCodeRemoteDataSourceImpl(dioService: getIt<DioService>()),
+    );
+    getIt.registerLazySingleton<OrdersRemoteDataSource>(
+      () => OrdersRemoteDataSourceImpl(dioService: getIt<DioService>()),
+    );
+
+    // Repositories
+    getIt.registerLazySingleton<AddressesRepository>(
+      () => AddressesRepositoryImpl(
+        remoteDataSource: getIt<AddressesRemoteDataSource>(),
+        networkInfo: getIt<NetworkInfo>(),
+      ),
+    );
+    getIt.registerLazySingleton<PromoCodeRepository>(
+      () => PromoCodeRepositoryImpl(
+        remoteDataSource: getIt<PromoCodeRemoteDataSource>(),
+        networkInfo: getIt<NetworkInfo>(),
+      ),
+    );
+    getIt.registerLazySingleton<OrdersRepository>(
+      () => OrdersRepositoryImpl(
+        remoteDataSource: getIt<OrdersRemoteDataSource>(),
+        networkInfo: getIt<NetworkInfo>(),
+      ),
+    );
+
+    // Use Cases
+    getIt.registerLazySingleton<GetAddressesUseCase>(
+      () => GetAddressesUseCase(getIt<AddressesRepository>()),
+    );
+    getIt.registerLazySingleton<AddAddressUseCase>(
+      () => AddAddressUseCase(getIt<AddressesRepository>()),
+    );
+    getIt.registerLazySingleton<UpdateAddressUseCase>(
+      () => UpdateAddressUseCase(getIt<AddressesRepository>()),
+    );
+    getIt.registerLazySingleton<DeleteAddressUseCase>(
+      () => DeleteAddressUseCase(getIt<AddressesRepository>()),
+    );
+    getIt.registerLazySingleton<CheckPromoCodeUseCase>(
+      () => CheckPromoCodeUseCase(getIt<PromoCodeRepository>()),
+    );
+    getIt.registerLazySingleton<CheckoutUseCase>(
+      () => CheckoutUseCase(getIt<OrdersRepository>()),
+    );
+
+    // Cubits
+    getIt.registerFactory<AddressesCubit>(
+      () => AddressesCubit(
+        getAddressesUseCase: getIt<GetAddressesUseCase>(),
+        addAddressUseCase: getIt<AddAddressUseCase>(),
+        updateAddressUseCase: getIt<UpdateAddressUseCase>(),
+        deleteAddressUseCase: getIt<DeleteAddressUseCase>(),
+      ),
+    );
+    getIt.registerFactory<PromoCodeCubit>(
+      () => PromoCodeCubit(
+        checkPromoCodeUseCase: getIt<CheckPromoCodeUseCase>(),
+      ),
+    );
+    getIt.registerFactory<CheckoutCubit>(
+      () => CheckoutCubit(
+        checkoutUseCase: getIt<CheckoutUseCase>(),
       ),
     );
   }
