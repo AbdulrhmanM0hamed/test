@@ -8,6 +8,7 @@ import 'package:test/core/services/app_state_service.dart';
 import 'package:test/core/services/network/dio_service.dart';
 import 'package:test/core/services/language_service.dart';
 import 'package:test/core/services/country_service.dart';
+import 'package:test/core/services/location_service.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -25,6 +26,9 @@ void main() async {
   
   // Initialize CountryService
   await DependencyInjection.getIt.get<CountryService>().initialize();
+  
+  // Initialize LocationService
+  await DependencyInjection.getIt.get<LocationService>().initialize();
 
   // Set preferred orientations to portrait only
   SystemChrome.setPreferredOrientations([
@@ -55,6 +59,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<CountryService>(
           create: (context) => DependencyInjection.getIt.get<CountryService>(),
+        ),
+        ChangeNotifierProvider<LocationService>(
+          create: (context) => DependencyInjection.getIt.get<LocationService>(),
         ),
       ],
       child: Consumer<LanguageService>(

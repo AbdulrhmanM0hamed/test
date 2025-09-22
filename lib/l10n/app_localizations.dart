@@ -1103,6 +1103,24 @@ abstract class AppLocalizations {
   /// **'Select Country'**
   String get selectCountry;
 
+  /// No description provided for @selectLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Location'**
+  String get selectLocation;
+
+  /// No description provided for @selectCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Select City'**
+  String get selectCity;
+
+  /// No description provided for @selectRegion.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Region'**
+  String get selectRegion;
+
   /// No description provided for @forgetPassword.
   ///
   /// In en, this message translates to:

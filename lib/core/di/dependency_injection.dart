@@ -7,6 +7,7 @@ import 'package:test/core/services/token_storage_service.dart';
 import 'package:test/core/services/app_state_service.dart';
 import 'package:test/core/services/language_service.dart';
 import 'package:test/core/services/country_service.dart';
+import 'package:test/core/services/location_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:test/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:test/features/auth/data/repositories/auth_repository_impl.dart';
@@ -104,6 +105,7 @@ class DependencyInjection {
   static LanguageService? _languageService;
   static DataRefreshService? _dataRefreshService;
   static CountryService? _countryService;
+  static LocationService? _locationService;
   static DioService? _dioService;
   static AuthRemoteDataSource? _authRemoteDataSource;
   static AuthRepository? _authRepository;
@@ -179,6 +181,13 @@ class DependencyInjection {
     // Initialize dio service
     _dioService = DioService.instance;
     _dioService!.setTokenStorageService(_tokenStorageService!);
+    
+    // Register DioService immediately after creation
+    getIt.registerSingleton<DioService>(_dioService!);
+
+    // Initialize LocationService after DioService is registered
+    LocationService.init(_languageService!, _dioService!);
+    _locationService = LocationService.instance;
 
     // Initialize data source
     _authRemoteDataSource = AuthRemoteDataSourceImpl(dioService: _dioService!);
@@ -302,7 +311,7 @@ class DependencyInjection {
     getIt.registerSingleton<AppStateService>(_appStateService!);
     getIt.registerSingleton<DataRefreshService>(_dataRefreshService!);
     getIt.registerSingleton<CountryService>(_countryService!);
-    getIt.registerSingleton<DioService>(_dioService!);
+    getIt.registerSingleton<LocationService>(_locationService!);
     getIt.registerLazySingleton<AuthRemoteDataSource>(
       () => AuthRemoteDataSourceImpl(dioService: getIt()),
     );
@@ -592,4 +601,5 @@ class DependencyInjection {
   static DioService get dioService => _dioService!;
   static AuthRepository get authRepository => _authRepository!;
   static LoginUseCase get loginUseCase => _loginUseCase!;
+  static LocationService get locationService => _locationService!;
 }

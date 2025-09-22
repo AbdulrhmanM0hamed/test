@@ -190,6 +190,9 @@
   "clearFilters": "مسح الفلاتر",
   "applyFilters": "تطبيق الفلاتر",
   "selectCountry": "اختر الدولة",
+  "selectLocation": "اختر الموقع",
+  "selectCity": "اختر المدينة", 
+  "selectRegion": "اختر المنطقة",
   
   "forgetPassword": "نسيت كلمة المرور",
   "forgetPasswordTitle": "استعادة كلمة المرور",

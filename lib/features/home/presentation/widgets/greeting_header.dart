@@ -8,7 +8,7 @@ import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/l10n/app_localizations.dart';
 import 'header_search_bar.dart';
-import 'country_selector_header.dart';
+import 'location_selector_header.dart';
 
 class GreetingHeader extends StatefulWidget {
   final String username;
@@ -79,7 +79,7 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      const CountrySelectorHeader(),
+                      const LocationSelectorHeader(),
                     ],
                   ),
                 ),

@@ -35,14 +35,14 @@ class ApiEndpoints {
       '$baseUrl/cart/remove/$cartItemId';
   static String get removeAllFromCart => '$baseUrl/cart/remove-all';
 
-  static String featuredProductsUrl({int? countryId}) =>
-      '$baseUrl$featuredProducts${countryId != null ? '?country_id=$countryId' : ''}';
-  static String bestSellerProductsUrl({int? countryId}) =>
-      '$baseUrl$bestSellerProducts${countryId != null ? '?country_id=$countryId' : ''}';
-  static String latestProductsUrl({int? countryId}) =>
-      '$baseUrl$latestProducts${countryId != null ? '?country_id=$countryId' : ''}';
-  static String specialOfferProductsUrl({int? countryId}) =>
-      '$baseUrl$specialOfferProducts${countryId != null ? '?country_id=$countryId' : ''}';
+  static String featuredProductsUrl({int? regionId}) =>
+      '$baseUrl$featuredProducts${regionId != null ? '?region_id=$regionId' : ''}';
+  static String bestSellerProductsUrl({int? regionId}) =>
+      '$baseUrl$bestSellerProducts${regionId != null ? '?region_id=$regionId' : ''}';
+  static String latestProductsUrl({int? regionId}) =>
+      '$baseUrl$latestProducts${regionId != null ? '?region_id=$regionId' : ''}';
+  static String specialOfferProductsUrl({int? regionId}) =>
+      '$baseUrl$specialOfferProducts${regionId != null ? '?region_id=$regionId' : ''}';
 
   // Product details endpoint
   static String productDetails(int productId) =>
@@ -91,6 +91,7 @@ class ApiEndpoints {
 
   // Location endpoints
   static String get countries => '$baseUrl/countries';
-  static String cities(int countryId) => '$baseUrl/cities/$countryId';
+  static String get cities => '$baseUrl/cities';
+  static String citiesByCountry(int countryId) => '$baseUrl/cities/$countryId';
   static String regions(int cityId) => '$baseUrl/regions/$cityId';
 }

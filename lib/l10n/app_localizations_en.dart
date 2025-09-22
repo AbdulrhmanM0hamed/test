@@ -513,6 +513,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selectCountry => 'Select Country';
 
   @override
+  String get selectLocation => 'Select Location';
+
+  @override
+  String get selectCity => 'Select City';
+
+  @override
+  String get selectRegion => 'Select Region';
+
+  @override
   String get forgetPassword => 'Forgot Password';
 
   @override

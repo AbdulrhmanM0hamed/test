@@ -513,6 +513,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get selectCountry => 'اختر الدولة';
 
   @override
+  String get selectLocation => 'اختر الموقع';
+
+  @override
+  String get selectCity => 'اختر المدينة';
+
+  @override
+  String get selectRegion => 'اختر المنطقة';
+
+  @override
   String get forgetPassword => 'نسيت كلمة المرور';
 
   @override

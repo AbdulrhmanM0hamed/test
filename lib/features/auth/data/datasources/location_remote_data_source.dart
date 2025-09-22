@@ -61,7 +61,7 @@ class LocationRemoteDataSourceImpl implements LocationRemoteDataSource {
       print(
         '🌐 LocationRemoteDataSource: Calling cities API for country $countryId...',
       );
-      final response = await dioService.get(ApiEndpoints.cities(countryId));
+      final response = await dioService.get(ApiEndpoints.citiesByCountry(countryId));
       print(
         '📡 LocationRemoteDataSource: Cities response status: ${response.statusCode}',
       );

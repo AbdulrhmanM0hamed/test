@@ -190,6 +190,9 @@
   "clearFilters": "Clear Filters",
   "applyFilters": "Apply Filters",
   "selectCountry": "Select Country",
+  "selectLocation": "Select Location",
+  "selectCity": "Select City",
+  "selectRegion": "Select Region",
   
   "forgetPassword": "Forgot Password",
   "forgetPasswordTitle": "Reset Password",
