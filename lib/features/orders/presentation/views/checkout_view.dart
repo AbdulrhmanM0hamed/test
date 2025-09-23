@@ -135,26 +135,25 @@ class _CheckoutViewState extends State<CheckoutView> {
                 // Refresh cart after successful order
                 GlobalCubitService.instance.refreshCartAfterOrder();
 
-                // Use a post frame callback to ensure the dialog shows after the build is complete
+                // Navigate back to home first, then show dialog
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => const BottomNavBar()),
+                  (route) => false,
+                );
+
+                // Show dialog after navigation
                 WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (mounted && context.mounted) {
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (dialogContext) => OrderSuccessDialog(
-                        orderId: state.order.id.toString(),
-                        onContinueShopping: () {
-                          Navigator.of(dialogContext).pop(); // Close dialog
-                          Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                              builder: (context) => const BottomNavBar(),
-                            ),
-                            (route) => false,
-                          );
-                        },
-                      ),
-                    );
-                  }
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (dialogContext) => OrderSuccessDialog(
+                      orderId: state.order.id.toString(),
+                      onTrackOrder: () {
+                        Navigator.of(dialogContext).pop(); // Close dialog
+                        // TODO: Navigate to orders page
+                      },
+                    ),
+                  );
                 });
               } else if (state is CheckoutError) {
                 CustomSnackbar.showError(

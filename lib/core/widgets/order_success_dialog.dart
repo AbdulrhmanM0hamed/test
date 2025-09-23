@@ -7,12 +7,12 @@ import 'package:test/core/utils/common/custom_button.dart';
 
 class OrderSuccessDialog extends StatelessWidget {
   final String orderId;
-  final VoidCallback onContinueShopping;
+  final VoidCallback? onTrackOrder;
 
   const OrderSuccessDialog({
     super.key,
     required this.orderId,
-    required this.onContinueShopping,
+    this.onTrackOrder,
   });
 
   @override
@@ -97,31 +97,38 @@ class OrderSuccessDialog extends StatelessWidget {
 
             const SizedBox(height: 32),
 
-            // Continue Shopping Button
-            CustomButton(
-              text: 'متابعة التسوق',
-              onPressed: onContinueShopping,
-              width: double.infinity,
-              backgroundColor: AppColors.primary,
-              textColor: Colors.white,
-            ),
-
-            const SizedBox(height: 12),
-
-            // Track Order Button (Optional)
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                // TODO: Navigate to orders page
-              },
-              child: Text(
-                'تتبع الطلب',
-                style: getMediumStyle(
-                  fontFamily: FontConstant.cairo,
-                  fontSize: FontSize.size14,
-                  color: AppColors.primary,
+            // Buttons Row
+            Row(
+              children: [
+                // Cancel Button
+                Expanded(
+                  child: CustomButton(
+                    text: 'إلغاء',
+                    onPressed: () => Navigator.of(context).pop(),
+                    backgroundColor: Colors.grey[300]!,
+                    textColor: AppColors.textPrimary,
+                    height: 48,
+                  ),
                 ),
-              ),
+
+                const SizedBox(width: 12),
+
+                // Track Order Button
+                Expanded(
+                  child: CustomButton(
+                    text: 'تتبع الطلب',
+                    onPressed:
+                        onTrackOrder ??
+                        () {
+                          Navigator.of(context).pop();
+                          // TODO: Navigate to orders page
+                        },
+                    backgroundColor: AppColors.primary,
+                    textColor: Colors.white,
+                    height: 48,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -132,15 +139,13 @@ class OrderSuccessDialog extends StatelessWidget {
   static void show(
     BuildContext context, {
     required String orderId,
-    required VoidCallback onContinueShopping,
+    VoidCallback? onTrackOrder,
   }) {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => OrderSuccessDialog(
-        orderId: orderId,
-        onContinueShopping: onContinueShopping,
-      ),
+      builder: (context) =>
+          OrderSuccessDialog(orderId: orderId, onTrackOrder: onTrackOrder),
     );
   }
 }

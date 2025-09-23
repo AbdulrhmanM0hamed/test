@@ -19,7 +19,7 @@ class PromoCodeModel extends PromoCode {
 
   factory PromoCodeModel.fromJson(Map<String, dynamic> json) {
     return PromoCodeModel(
-      id: json['id'] as String,
+      id: json['id'].toString(),
       code: json['code'] as String,
       from: json['from'] as String,
       to: json['to'] as String,
@@ -27,7 +27,7 @@ class PromoCodeModel extends PromoCode {
       numberOfTimesUsed: json['number_of_times_used'] as int,
       dedicatedTo: json['dedicated_to'] as String,
       type: json['type'] as String,
-      status: json['status'] as String,
+      status: json['status'].toString(),
       value: (json['value'] as num).toDouble(),
       adminId: json['admin_id'] as int,
       createdAt: json['created_at'] as String,
