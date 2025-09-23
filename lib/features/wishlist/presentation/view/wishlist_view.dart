@@ -384,7 +384,7 @@ class _WishlistViewState extends State<WishlistView>
             ),
           ),
           content: Text(
-            AppLocalizations.of(context)!.confirmDeletion,
+            AppLocalizations.of(context)!.clearWishlistConfirmation,
             style: getRegularStyle(
               fontSize: FontSize.size14,
               fontFamily: FontConstant.cairo,

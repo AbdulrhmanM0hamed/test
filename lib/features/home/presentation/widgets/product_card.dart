@@ -75,7 +75,7 @@
 //               color: Theme.of(context).cardColor,
 //               boxShadow: [
 //                 BoxShadow(
-//                   color: Colors.black.withOpacity(0.15),
+//                   color: Colors.black.withValues(alpha:0.15),
 //                   blurRadius: 10,
 //                   spreadRadius: 1,
 //                   offset: const Offset(0, 4),
@@ -135,7 +135,7 @@
 //             child: Container(
 //               padding: const EdgeInsets.all(4),
 //               decoration: BoxDecoration(
-//                 color: Colors.white.withOpacity(0.8),
+//                 color: Colors.white.withValues(alpha:0.8),
 //                 shape: BoxShape.circle,
 //               ),
 //               child: Icon(

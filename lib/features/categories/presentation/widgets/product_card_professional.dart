@@ -19,11 +19,7 @@ class ProductCardProfessional extends StatefulWidget {
   final Product product;
   final VoidCallback? onTap;
 
-  const ProductCardProfessional({
-    super.key,
-    required this.product,
-    this.onTap,
-  });
+  const ProductCardProfessional({super.key, required this.product, this.onTap});
 
   @override
   State<ProductCardProfessional> createState() =>
@@ -299,35 +295,41 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
 
             // Use global service for wishlist operations
             if (_isInWishlist) {
-              GlobalCubitService.instance.removeFromWishlist(widget.product.id).then((_) {
-                if (mounted) {
-                  setState(() {
-                    _isInWishlist = false;
-                    _isWishlistLoading = false;
+              GlobalCubitService.instance
+                  .removeFromWishlist(widget.product.id)
+                  .then((_) {
+                    if (mounted) {
+                      setState(() {
+                        _isInWishlist = false;
+                        _isWishlistLoading = false;
+                      });
+                    }
+                  })
+                  .catchError((error) {
+                    if (mounted) {
+                      setState(() {
+                        _isWishlistLoading = false;
+                      });
+                    }
                   });
-                }
-              }).catchError((error) {
-                if (mounted) {
-                  setState(() {
-                    _isWishlistLoading = false;
-                  });
-                }
-              });
             } else {
-              GlobalCubitService.instance.addToWishlist(widget.product.id).then((_) {
-                if (mounted) {
-                  setState(() {
-                    _isInWishlist = true;
-                    _isWishlistLoading = false;
+              GlobalCubitService.instance
+                  .addToWishlist(widget.product.id)
+                  .then((_) {
+                    if (mounted) {
+                      setState(() {
+                        _isInWishlist = true;
+                        _isWishlistLoading = false;
+                      });
+                    }
+                  })
+                  .catchError((error) {
+                    if (mounted) {
+                      setState(() {
+                        _isWishlistLoading = false;
+                      });
+                    }
                   });
-                }
-              }).catchError((error) {
-                if (mounted) {
-                  setState(() {
-                    _isWishlistLoading = false;
-                  });
-                }
-              });
             }
           },
           child: Container(

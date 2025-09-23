@@ -84,7 +84,7 @@ class _ForgetPasswordOtpStepNewState extends State<ForgetPasswordOtpStepNew> {
           width: 100,
           height: 100,
           decoration: BoxDecoration(
-            color: AppColors.primary.withOpacity(0.1),
+            color: AppColors.primary.withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
@@ -138,13 +138,13 @@ class _ForgetPasswordOtpStepNewState extends State<ForgetPasswordOtpStepNew> {
                         ? AppColors.primary
                         : _controllers[index].text.isNotEmpty
                         ? AppColors.primary
-                        : Colors.grey.withOpacity(0.3),
+                        : Colors.grey.withValues(alpha: 0.3),
                     width: 2,
                   ),
                   color: _focusNodes[index].hasFocus
-                      ? AppColors.primary.withOpacity(0.05)
+                      ? AppColors.primary.withValues(alpha: 0.05)
                       : _controllers[index].text.isNotEmpty
-                      ? AppColors.primary.withOpacity(0.1)
+                      ? AppColors.primary.withValues(alpha: 0.1)
                       : Theme.of(context).cardColor,
                 ),
                 child: TextField(

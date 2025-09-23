@@ -38,7 +38,7 @@ class CustomButton extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.centerRight,
           end: Alignment.centerLeft,
-          colors: [backgroundColor!.withOpacity(0.9), backgroundColor!],
+          colors: [backgroundColor!.withValues(alpha: 0.9), backgroundColor!],
         ),
         borderRadius: BorderRadius.circular(16),
       ),

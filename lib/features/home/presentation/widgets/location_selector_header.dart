@@ -529,7 +529,7 @@ class _LocationSelectorBottomSheetState
 
                             // Subtitle
                             Text(
-                              'اختر هذه المدينة',
+                              AppLocalizations.of(context)!.selectThisCity,
                               style: getRegularStyle(
                                 fontFamily: FontConstant.cairo,
                                 fontSize: FontSize.size12,

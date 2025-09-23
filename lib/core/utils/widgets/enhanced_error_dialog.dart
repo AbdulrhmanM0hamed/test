@@ -30,11 +30,9 @@ class EnhancedErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    
+
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
@@ -49,7 +47,7 @@ class EnhancedErrorDialog extends StatelessWidget {
               width: 64,
               height: 64,
               decoration: BoxDecoration(
-                color: _getErrorColor(statusCode).withOpacity(0.1),
+                color: _getErrorColor(statusCode).withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -58,9 +56,9 @@ class EnhancedErrorDialog extends StatelessWidget {
                 color: _getErrorColor(statusCode),
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Title
             Text(
               title,
@@ -71,9 +69,9 @@ class EnhancedErrorDialog extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            
+
             const SizedBox(height: 12),
-            
+
             // Message
             Text(
               message,
@@ -84,7 +82,7 @@ class EnhancedErrorDialog extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            
+
             // Status Code (if available)
             if (statusCode != null) ...[
               const SizedBox(height: 8),
@@ -104,9 +102,9 @@ class EnhancedErrorDialog extends StatelessWidget {
                 ),
               ),
             ],
-            
+
             const SizedBox(height: 24),
-            
+
             // Action Buttons
             Row(
               children: [
@@ -133,7 +131,7 @@ class EnhancedErrorDialog extends StatelessWidget {
                   ),
                   if (showRetry) const SizedBox(width: 12),
                 ],
-                
+
                 if (showRetry)
                   Expanded(
                     child: ElevatedButton(
@@ -159,7 +157,7 @@ class EnhancedErrorDialog extends StatelessWidget {
                       ),
                     ),
                   ),
-                
+
                 if (!showRetry && !showGoBack)
                   Expanded(
                     child: ElevatedButton(
@@ -193,7 +191,7 @@ class EnhancedErrorDialog extends StatelessWidget {
   /// Get appropriate color based on status code
   Color _getErrorColor(int? statusCode) {
     if (statusCode == null) return Colors.red;
-    
+
     if (statusCode >= 400 && statusCode < 500) {
       // Client errors - orange/amber
       return Colors.orange;
@@ -209,7 +207,7 @@ class EnhancedErrorDialog extends StatelessWidget {
   /// Get appropriate icon based on status code
   IconData _getErrorIcon(int? statusCode) {
     if (statusCode == null) return Icons.error_outline;
-    
+
     switch (statusCode) {
       case 401:
       case 403:

@@ -73,7 +73,9 @@ class OrderSuccessDialog extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                'رقم الطلب: #$orderId',
+                AppLocalizations.of(
+                  context,
+                )!.orderId.replaceFirst('%s', orderId),
                 style: getMediumStyle(
                   fontFamily: FontConstant.cairo,
                   fontSize: FontSize.size14,
@@ -86,7 +88,7 @@ class OrderSuccessDialog extends StatelessWidget {
 
             // Success Message
             Text(
-              'سيتم التواصل معك قريباً لتأكيد الطلب وتحديد موعد التوصيل',
+              AppLocalizations.of(context)!.orderConfirmationMessage,
               style: getRegularStyle(
                 fontFamily: FontConstant.cairo,
                 fontSize: FontSize.size14,
@@ -103,7 +105,7 @@ class OrderSuccessDialog extends StatelessWidget {
                 // Cancel Button
                 Expanded(
                   child: CustomButton(
-                    text: 'إلغاء',
+                    text: AppLocalizations.of(context)!.cancel,
                     onPressed: () => Navigator.of(context).pop(),
                     backgroundColor: Colors.grey[300]!,
                     textColor: AppColors.textPrimary,
@@ -116,7 +118,7 @@ class OrderSuccessDialog extends StatelessWidget {
                 // Track Order Button
                 Expanded(
                   child: CustomButton(
-                    text: 'تتبع الطلب',
+                    text: AppLocalizations.of(context)!.trackOrder,
                     onPressed:
                         onTrackOrder ??
                         () {

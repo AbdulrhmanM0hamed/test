@@ -46,6 +46,7 @@ dependencies:
   flutter_native_splash: ^2.4.6
   flutter_svg: ^2.1.0
   get_it: ^8.0.3
+  http: ^1.1.0
   image_picker: ^1.0.4
   intl: any
   otp_pin_field: ^1.2.2

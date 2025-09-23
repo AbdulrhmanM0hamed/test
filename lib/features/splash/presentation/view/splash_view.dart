@@ -4,6 +4,7 @@ import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/core/utils/constant/app_assets.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/services/app_state_service.dart';
+import 'package:test/core/services/app_startup_service.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 
 class SplashView extends StatefulWidget {
@@ -19,10 +20,12 @@ class _SplashViewState extends State<SplashView>
     with SingleTickerProviderStateMixin {
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
+  late AppStartupService _startupService;
 
   @override
   void initState() {
     super.initState();
+    _startupService = AppStartupService.instance;
     _initializeAnimations();
     _startAnimationSequence();
   }
@@ -50,6 +53,9 @@ class _SplashViewState extends State<SplashView>
 
     // Start fade animation
     _fadeController.forward();
+
+    // Start app initialization in background (non-blocking)
+    _startupService.initializeApp();
 
     // Wait for animation to complete then navigate
     await Future.delayed(const Duration(milliseconds: 3000));

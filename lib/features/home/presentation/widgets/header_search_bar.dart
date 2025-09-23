@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test/core/utils/constant/app_assets.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
+import 'package:test/core/widgets/search_bottom_sheet.dart';
+import 'package:test/features/categories/presentation/cubits/products_filter_cubit.dart';
+import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
+import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/l10n/app_localizations.dart';
 
 class HeaderSearchBar extends StatefulWidget {
@@ -13,7 +18,36 @@ class HeaderSearchBar extends StatefulWidget {
 }
 
 class _HeaderSearchBarState extends State<HeaderSearchBar> {
-  final TextEditingController _controller = TextEditingController();
+  late final TextEditingController _controller;
+
+  void _showSearchBottomSheet(BuildContext context) {
+    // Get required dependencies before showing the bottom sheet
+    final productsFilterCubit = context.read<ProductsFilterCubit>();
+    final wishlistCubit = context.read<WishlistCubit>();
+    final cartCubit = context.read<CartCubit>();
+    
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider<ProductsFilterCubit>.value(value: productsFilterCubit),
+            BlocProvider<WishlistCubit>.value(value: wishlistCubit),
+            BlocProvider<CartCubit>.value(value: cartCubit),
+          ],
+          child: const SearchBottomSheet(),
+        );
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
 
   @override
   void dispose() {
@@ -23,66 +57,73 @@ class _HeaderSearchBarState extends State<HeaderSearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.12), // subtle background
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.3),
-          width: 1,
-        ),
-      ),
-      child: TextField(
-        controller: _controller,
-        style: getMediumStyle(
-          fontFamily: FontConstant.cairo,
-          fontSize: FontSize.size14,
-          color: Colors.white,
-        ),
-        cursorColor: Colors.white70,
-        decoration: InputDecoration(
-          hintText: AppLocalizations.of(context)!.searchHint,
-          hintStyle: getMediumStyle(
-            fontFamily: FontConstant.cairo,
-            fontSize: FontSize.size14,
-            color: Colors.white.withValues(alpha: 0.7),
+    return GestureDetector(
+      onTap: () => _showSearchBottomSheet(context),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.12), // subtle background
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.3),
+            width: 1,
           ),
-          prefixIcon: Padding(
-            padding: const EdgeInsets.all(12),
-            child: SvgPicture.asset(
-              AppAssets.searchIcon,
-              width: 18,
-              height: 18,
-              color: Colors.white.withValues(alpha: 0.8),
+        ),
+        child: AbsorbPointer(
+          child: TextField(
+            controller: _controller,
+            style: getMediumStyle(
+              fontFamily: FontConstant.cairo,
+              fontSize: FontSize.size14,
+              color: Colors.white,
             ),
-          ),
-          suffixIcon: Padding(
-            padding: const EdgeInsets.all(12),
-            child: SvgPicture.asset(
-              AppAssets.icon_filter,
-              width: 18,
-              height: 18,
-              colorFilter: ColorFilter.mode(
-                Colors.white.withValues(alpha: 0.8),
-                BlendMode.srcIn,
+            cursorColor: Colors.white70,
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context)!.searchHint,
+              hintStyle: getMediumStyle(
+                fontFamily: FontConstant.cairo,
+                fontSize: FontSize.size14,
+                color: Colors.white.withValues(alpha: 0.7),
+              ),
+              prefixIcon: Padding(
+                padding: const EdgeInsets.all(12),
+                child: SvgPicture.asset(
+                  AppAssets.searchIcon,
+                  width: 18,
+                  height: 18,
+                  color: Colors.white.withValues(alpha: 0.8),
+                ),
+              ),
+              suffixIcon: Padding(
+                padding: const EdgeInsets.all(12),
+                child: SvgPicture.asset(
+                  AppAssets.icon_filter,
+                  width: 18,
+                  height: 18,
+                  colorFilter: ColorFilter.mode(
+                    Colors.white.withValues(alpha: 0.8),
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(
+                  color: Colors.white.withValues(alpha: 0.3),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(
+                  color: Colors.white.withValues(alpha: 0.5),
+                  width: 1.5,
+                ),
+              ),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 14,
               ),
             ),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(
-              color: Colors.white.withValues(alpha: 0.5),
-              width: 1.5,
-            ),
-          ),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 14,
           ),
         ),
       ),

@@ -1236,7 +1236,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get pleaseSelectAddress => 'يرجى اختيار عنوان التوصيل';
 
   @override
-  String get orderPlacedSuccessfully => 'تم تأكيد الطلب بنجاح';
+  String get orderPlacedSuccessfully => 'تم تقديم الطلب بنجاح!';
 
   @override
   String get placeOrder => 'تأكيد الطلب';
@@ -1378,4 +1378,40 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noRegionsAvailable => 'لا توجد مناطق متاحة';
+
+  @override
+  String get orderId => 'رقم الطلب: #%s';
+
+  @override
+  String get orderConfirmationMessage => 'سيتم التواصل معك قريباً لتأكيد الطلب وتحديد موعد التوصيل';
+
+  @override
+  String get trackOrder => 'تتبع الطلب';
+
+  @override
+  String get selectThisCity => 'اختر هذه المدينة';
+
+  @override
+  String get noProductsFound => 'لا توجد منتجات';
+
+  @override
+  String get tryDifferentKeywords => 'جرب كلمات مختلفة أو تصفح الأقسام';
+
+  @override
+  String get connectionClosed => 'فشل الاتصال بالخادم. تأكد من اتصالك بالإنترنت وحاول مرة أخرى';
+
+  @override
+  String get connectionTimeout => 'انتهت مهلة الاتصال. تأكد من سرعة الإنترنت وحاول مرة أخرى';
+
+  @override
+  String get noInternetConnection => 'لا يوجد اتصال بالإنترنت. تحقق من اتصالك وحاول مرة أخرى';
+
+  @override
+  String get serverNotResponding => 'الخادم لا يستجيب. حاول مرة أخرى لاحقاً';
+
+  @override
+  String get requestFailed => 'فشل في إرسال الطلب';
+
+  @override
+  String get responseParsingError => 'خطأ في تحليل الاستجابة من الخادم';
 }

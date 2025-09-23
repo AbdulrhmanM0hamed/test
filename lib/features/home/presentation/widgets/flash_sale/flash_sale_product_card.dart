@@ -91,7 +91,7 @@ class _FlashSaleProductCardState extends State<FlashSaleProductCard>
       borderRadius: BorderRadius.circular(16),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.04),
+          color: Colors.black.withValues(alpha: 0.04),
           blurRadius: 12,
           spreadRadius: 1,
           offset: const Offset(0, 4),
@@ -141,7 +141,7 @@ class _FlashSaleProductCardState extends State<FlashSaleProductCard>
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 2,
             spreadRadius: 0,
             offset: const Offset(0, 1),
@@ -176,7 +176,7 @@ class _FlashSaleProductCardState extends State<FlashSaleProductCard>
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withValues(alpha: 0.2),
               blurRadius: 4,
               spreadRadius: 1,
               offset: const Offset(0, 2),

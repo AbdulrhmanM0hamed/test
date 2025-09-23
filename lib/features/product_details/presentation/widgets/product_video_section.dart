@@ -8,10 +8,7 @@ import '../../../../core/utils/constant/styles_manger.dart';
 class ProductVideoSection extends StatefulWidget {
   final String? videoLink;
 
-  const ProductVideoSection({
-    super.key,
-    required this.videoLink,
-  });
+  const ProductVideoSection({super.key, required this.videoLink});
 
   @override
   State<ProductVideoSection> createState() => _ProductVideoSectionState();
@@ -68,11 +65,10 @@ class _ProductVideoSectionState extends State<ProductVideoSection> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-       
         borderRadius: BorderRadius.circular(16),
         // boxShadow: [
         //   BoxShadow(
-        //     color: Colors.grey.withOpacity(0.1),
+        //     color: Colors.grey.withValues(alpha:0.1),
         //     spreadRadius: 1,
         //     blurRadius: 8,
         //     offset: const Offset(0, 2),
@@ -88,7 +84,6 @@ class _ProductVideoSectionState extends State<ProductVideoSection> {
             child: Row(
               children: [
                 Container(
-                 
                   decoration: BoxDecoration(
                     color: Colors.red.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
@@ -126,7 +121,7 @@ class _ProductVideoSectionState extends State<ProductVideoSection> {
               ],
             ),
           ),
-          
+
           // YouTube Video Player
           AspectRatio(
             aspectRatio: 16 / 9,
@@ -145,13 +140,12 @@ class _ProductVideoSectionState extends State<ProductVideoSection> {
               ),
             ),
           ),
-          
+
           const SizedBox(height: 16),
         ],
       ),
     );
   }
-
 
   String? _extractYouTubeVideoId(String url) {
     try {

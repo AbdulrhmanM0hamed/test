@@ -516,10 +516,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selectLocation => 'Select Location';
 
   @override
-  String get selectCity => 'Select City';
+  String get selectCity => 'Select city';
 
   @override
-  String get selectRegion => 'Select Region';
+  String get selectRegion => 'Select region';
 
   @override
   String get forgetPassword => 'Forgot Password';
@@ -1092,7 +1092,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clientUnauthorized => 'Unauthorized access';
 
   @override
-  String get clientForbidden => 'Access to this resource is forbidden';
+  String get clientForbidden => 'Access forbidden to this resource';
 
   @override
   String get clientNotFound => 'Requested resource not found';
@@ -1119,25 +1119,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clientPreconditionFailed => 'Precondition failed';
 
   @override
-  String get clientPayloadTooLarge => 'Payload too large';
+  String get clientPayloadTooLarge => 'Data size too large';
 
   @override
   String get clientUriTooLong => 'URI too long';
 
   @override
-  String get clientUnsupportedMediaType => 'Unsupported media type';
+  String get clientUnsupportedMediaType => 'Unsupported file type';
 
   @override
-  String get clientRangeNotSatisfiable => 'Range not satisfiable';
+  String get clientRangeNotSatisfiable => 'Requested range not available';
 
   @override
   String get clientExpectationFailed => 'Expectation failed';
 
   @override
-  String get clientTeapot => 'I\'m a teapot (playful error)';
+  String get clientTeapot => 'I\'m a teapot (joke error)';
 
   @override
-  String get clientUnprocessableEntity => 'Unprocessable entity';
+  String get clientUnprocessableEntity => 'Data cannot be processed';
 
   @override
   String get clientLocked => 'Resource locked';
@@ -1146,10 +1146,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clientFailedDependency => 'Failed dependency';
 
   @override
-  String get clientTooEarly => 'Too early';
+  String get clientTooEarly => 'Request too early';
 
   @override
-  String get clientUpgradeRequired => 'Upgrade required';
+  String get clientUpgradeRequired => 'Protocol upgrade required';
 
   @override
   String get clientPreconditionRequired => 'Precondition required';
@@ -1173,7 +1173,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get serverVariantAlsoNegotiates => 'Variant also negotiates';
 
   @override
-  String get serverInsufficientStorage => 'Insufficient storage';
+  String get serverInsufficientStorage => 'Insufficient storage space';
 
   @override
   String get serverLoopDetected => 'Loop detected';
@@ -1236,7 +1236,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pleaseSelectAddress => 'Please select a delivery address';
 
   @override
-  String get orderPlacedSuccessfully => 'Order placed successfully';
+  String get orderPlacedSuccessfully => 'Order Placed Successfully!';
 
   @override
   String get placeOrder => 'Place Order';
@@ -1378,4 +1378,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noRegionsAvailable => 'No regions available';
+
+  @override
+  String get orderId => 'Order ID: #%s';
+
+  @override
+  String get orderConfirmationMessage => 'We will contact you soon to confirm your order and schedule delivery';
+
+  @override
+  String get trackOrder => 'Track Order';
+
+  @override
+  String get selectThisCity => 'Select This City';
+
+  @override
+  String get noProductsFound => 'No products found';
+
+  @override
+  String get tryDifferentKeywords => 'Try different keywords or browse categories';
+
+  @override
+  String get connectionClosed => 'Connection failed. Check your internet connection and try again';
+
+  @override
+  String get connectionTimeout => 'Connection timeout. Check your internet speed and try again';
+
+  @override
+  String get noInternetConnection => 'No internet connection. Check your connection and try again';
+
+  @override
+  String get serverNotResponding => 'Server not responding. Try again later';
+
+  @override
+  String get requestFailed => 'Failed to send request';
+
+  @override
+  String get responseParsingError => 'Error parsing server response';
 }

@@ -16,9 +16,9 @@ import 'package:test/features/cart/presentation/view/cart_view.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/services/app_state_service.dart';
-import 'package:test/core/services/cart_global_service.dart';
 import 'package:test/core/services/global_cubit_service.dart';
 import 'package:test/features/home/presentation/widgets/login_prompt_widget.dart';
+import 'package:test/features/home/presentation/widgets/lazy_tab_wrapper.dart';
 
 class BottomNavBar extends StatefulWidget {
   static const String routeName = '/home';
@@ -59,9 +59,8 @@ class _HomeViewState extends State<BottomNavBar> {
     debugPrint('🔐 BottomNavBar: User logged in: $isLoggedIn');
 
     if (isLoggedIn) {
-      debugPrint('🚀 BottomNavBar: Initializing CartGlobalService...');
-      await CartGlobalService.instance.initialize();
-      debugPrint('✅ BottomNavBar: CartGlobalService initialized');
+      debugPrint('🚀 BottomNavBar: Lazy loading - CartGlobalService will load when needed');
+      // Don't initialize immediately - let it load when user accesses cart/wishlist
     }
   }
 
@@ -76,15 +75,16 @@ class _HomeViewState extends State<BottomNavBar> {
     final isLoggedIn =
         appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
 
-    // Initialize global cubit service first
+    // Initialize global cubit service only if logged in (but don't load data yet)
     if (isLoggedIn) {
       GlobalCubitService.instance.initialize();
       _cartCubit = GlobalCubitService.instance.cartCubit!;
       _wishlistCubit = GlobalCubitService.instance.wishlistCubit!;
-      debugPrint('🌍 BottomNavBar: Using global cubit instances');
+      debugPrint('🌍 BottomNavBar: Using global cubit instances (lazy loading enabled)');
     }
 
     _screens = [
+      // Home tab - always loads immediately
       isLoggedIn
           ? MultiBlocProvider(
               providers: [
@@ -94,19 +94,25 @@ class _HomeViewState extends State<BottomNavBar> {
               child: const HomePage(),
             )
           : const HomePage(),
+      
+      // Categories tab - no auth required, loads immediately
       const CategoriesView(),
-      isLoggedIn
-          ? MultiBlocProvider(
-              providers: [
-                BlocProvider.value(value: _cartCubit),
-                BlocProvider.value(value: _wishlistCubit),
-              ],
-              child: const WishlistView(),
-            )
-          : const LoginPromptWidget(),
-      isLoggedIn
-          ? BlocProvider.value(value: _cartCubit, child: const CartView())
-          : const LoginPromptWidget(),
+      
+      // Wishlist tab - lazy load with auth check
+      LazyTabWrapper(
+        requiresAuth: true,
+        requiresWishlistData: true,
+        child: isLoggedIn ? const WishlistView() : const LoginPromptWidget(),
+      ),
+      
+      // Cart tab - lazy load with auth check
+      LazyTabWrapper(
+        requiresAuth: true,
+        requiresCartData: true,
+        child: isLoggedIn ? const CartView() : const LoginPromptWidget(),
+      ),
+      
+      // Profile tab - no data loading needed
       isLoggedIn ? const ProfileWrapper() : const LoginPromptWidget(),
     ];
   }

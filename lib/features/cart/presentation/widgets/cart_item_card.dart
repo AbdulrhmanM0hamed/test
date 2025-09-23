@@ -202,7 +202,9 @@ class _CartItemCardState extends State<CartItemCard>
 
         // Stock Status
         Text(
-          widget.cartItem.availabilityText,
+          widget.cartItem.isAvailable
+              ? AppLocalizations.of(context)!.available
+              : AppLocalizations.of(context)!.notAvailable,
           style: getMediumStyle(
             fontSize: FontSize.size11,
             fontFamily: FontConstant.cairo,

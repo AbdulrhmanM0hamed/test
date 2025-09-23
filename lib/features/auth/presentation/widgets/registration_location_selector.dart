@@ -76,7 +76,7 @@ class RegistrationLocationSelector extends StatelessWidget {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 2),
                 ),
@@ -118,7 +118,7 @@ class RegistrationLocationSelector extends StatelessWidget {
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -172,20 +172,20 @@ class RegistrationLocationSelector extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               gradient: LinearGradient(
                 colors: [
-                  Colors.red.withOpacity(0.05),
-                  Colors.red.withOpacity(0.02),
+                  Colors.red.withValues(alpha: 0.05),
+                  Colors.red.withValues(alpha: 0.02),
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
-              border: Border.all(color: Colors.red.withOpacity(0.2)),
+              border: Border.all(color: Colors.red.withValues(alpha: 0.2)),
             ),
             child: Column(
               children: [
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.red.withOpacity(0.1),
+                    color: Colors.red.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(50),
                   ),
                   child: Icon(
@@ -215,7 +215,7 @@ class RegistrationLocationSelector extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton.icon(
-              onPressed: () => context.read<LocationCubit>().getCountries(),
+                  onPressed: () => context.read<LocationCubit>().getCountries(),
                   icon: Icon(Icons.refresh, size: 18),
                   label: Text(
                     AppLocalizations.of(context)!.retry,
@@ -252,20 +252,22 @@ class RegistrationLocationSelector extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               gradient: LinearGradient(
                 colors: [
-                  AppColors.primary.withOpacity(0.05),
-                  AppColors.primary.withOpacity(0.02),
+                  AppColors.primary.withValues(alpha: 0.05),
+                  AppColors.primary.withValues(alpha: 0.02),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+              border: Border.all(
+                color: AppColors.primary.withValues(alpha: 0.3),
+              ),
             ),
             child: Column(
               children: [
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.1),
+                    color: AppColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(50),
                   ),
                   child: Icon(Icons.public, color: AppColors.primary, size: 32),
@@ -327,8 +329,8 @@ class RegistrationLocationSelector extends StatelessWidget {
               gradient: isSelected
                   ? LinearGradient(
                       colors: [
-                        AppColors.primary.withOpacity(0.1),
-                        AppColors.primary.withOpacity(0.05),
+                        AppColors.primary.withValues(alpha: 0.1),
+                        AppColors.primary.withValues(alpha: 0.05),
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -338,8 +340,8 @@ class RegistrationLocationSelector extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   color: isSelected
-                      ? AppColors.primary.withOpacity(0.2)
-                      : Colors.black.withOpacity(0.05),
+                      ? AppColors.primary.withValues(alpha: 0.2)
+                      : Colors.black.withValues(alpha: 0.05),
                   blurRadius: isSelected ? 8 : 4,
                   offset: const Offset(0, 2),
                 ),
@@ -526,7 +528,7 @@ class RegistrationLocationSelector extends StatelessWidget {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),

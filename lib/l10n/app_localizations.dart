@@ -1112,13 +1112,13 @@ abstract class AppLocalizations {
   /// No description provided for @selectCity.
   ///
   /// In en, this message translates to:
-  /// **'Select City'**
+  /// **'Select city'**
   String get selectCity;
 
   /// No description provided for @selectRegion.
   ///
   /// In en, this message translates to:
-  /// **'Select Region'**
+  /// **'Select region'**
   String get selectRegion;
 
   /// No description provided for @forgetPassword.
@@ -2264,7 +2264,7 @@ abstract class AppLocalizations {
   /// No description provided for @clientForbidden.
   ///
   /// In en, this message translates to:
-  /// **'Access to this resource is forbidden'**
+  /// **'Access forbidden to this resource'**
   String get clientForbidden;
 
   /// No description provided for @clientNotFound.
@@ -2318,7 +2318,7 @@ abstract class AppLocalizations {
   /// No description provided for @clientPayloadTooLarge.
   ///
   /// In en, this message translates to:
-  /// **'Payload too large'**
+  /// **'Data size too large'**
   String get clientPayloadTooLarge;
 
   /// No description provided for @clientUriTooLong.
@@ -2330,13 +2330,13 @@ abstract class AppLocalizations {
   /// No description provided for @clientUnsupportedMediaType.
   ///
   /// In en, this message translates to:
-  /// **'Unsupported media type'**
+  /// **'Unsupported file type'**
   String get clientUnsupportedMediaType;
 
   /// No description provided for @clientRangeNotSatisfiable.
   ///
   /// In en, this message translates to:
-  /// **'Range not satisfiable'**
+  /// **'Requested range not available'**
   String get clientRangeNotSatisfiable;
 
   /// No description provided for @clientExpectationFailed.
@@ -2348,13 +2348,13 @@ abstract class AppLocalizations {
   /// No description provided for @clientTeapot.
   ///
   /// In en, this message translates to:
-  /// **'I\'m a teapot (playful error)'**
+  /// **'I\'m a teapot (joke error)'**
   String get clientTeapot;
 
   /// No description provided for @clientUnprocessableEntity.
   ///
   /// In en, this message translates to:
-  /// **'Unprocessable entity'**
+  /// **'Data cannot be processed'**
   String get clientUnprocessableEntity;
 
   /// No description provided for @clientLocked.
@@ -2372,13 +2372,13 @@ abstract class AppLocalizations {
   /// No description provided for @clientTooEarly.
   ///
   /// In en, this message translates to:
-  /// **'Too early'**
+  /// **'Request too early'**
   String get clientTooEarly;
 
   /// No description provided for @clientUpgradeRequired.
   ///
   /// In en, this message translates to:
-  /// **'Upgrade required'**
+  /// **'Protocol upgrade required'**
   String get clientUpgradeRequired;
 
   /// No description provided for @clientPreconditionRequired.
@@ -2426,7 +2426,7 @@ abstract class AppLocalizations {
   /// No description provided for @serverInsufficientStorage.
   ///
   /// In en, this message translates to:
-  /// **'Insufficient storage'**
+  /// **'Insufficient storage space'**
   String get serverInsufficientStorage;
 
   /// No description provided for @serverLoopDetected.
@@ -2552,7 +2552,7 @@ abstract class AppLocalizations {
   /// No description provided for @orderPlacedSuccessfully.
   ///
   /// In en, this message translates to:
-  /// **'Order placed successfully'**
+  /// **'Order Placed Successfully!'**
   String get orderPlacedSuccessfully;
 
   /// No description provided for @placeOrder.
@@ -2836,6 +2836,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No regions available'**
   String get noRegionsAvailable;
+
+  /// No description provided for @orderId.
+  ///
+  /// In en, this message translates to:
+  /// **'Order ID: #%s'**
+  String get orderId;
+
+  /// No description provided for @orderConfirmationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'We will contact you soon to confirm your order and schedule delivery'**
+  String get orderConfirmationMessage;
+
+  /// No description provided for @trackOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Track Order'**
+  String get trackOrder;
+
+  /// No description provided for @selectThisCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Select This City'**
+  String get selectThisCity;
+
+  /// No description provided for @noProductsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No products found'**
+  String get noProductsFound;
+
+  /// No description provided for @tryDifferentKeywords.
+  ///
+  /// In en, this message translates to:
+  /// **'Try different keywords or browse categories'**
+  String get tryDifferentKeywords;
+
+  /// No description provided for @connectionClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection failed. Check your internet connection and try again'**
+  String get connectionClosed;
+
+  /// No description provided for @connectionTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection timeout. Check your internet speed and try again'**
+  String get connectionTimeout;
+
+  /// No description provided for @noInternetConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Check your connection and try again'**
+  String get noInternetConnection;
+
+  /// No description provided for @serverNotResponding.
+  ///
+  /// In en, this message translates to:
+  /// **'Server not responding. Try again later'**
+  String get serverNotResponding;
+
+  /// No description provided for @requestFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to send request'**
+  String get requestFailed;
+
+  /// No description provided for @responseParsingError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error parsing server response'**
+  String get responseParsingError;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

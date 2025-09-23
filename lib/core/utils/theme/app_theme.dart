@@ -35,7 +35,7 @@ class AppTheme {
       error: AppColors.error,
     ),
     cardColor: Colors.white,
-    shadowColor: Colors.black.withOpacity(0.04),
+    shadowColor: Colors.black.withValues(alpha: 0.04),
     dividerColor: Colors.grey.shade200,
     extensions: [CustomColors.light],
   );
@@ -63,7 +63,7 @@ class AppTheme {
       error: AppColors.error,
     ),
     cardColor: const Color(0xFF2A2A2A),
-    shadowColor: Colors.black.withOpacity(0.2),
+    shadowColor: Colors.black.withValues(alpha: 0.2),
     dividerColor: Colors.grey.shade800,
     extensions: [CustomColors.dark],
   );
@@ -87,7 +87,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
   });
 
   static final light = CustomColors(
-    cardHeaderBg: AppColors.primary.withOpacity(0.04),
+    cardHeaderBg: AppColors.primary.withValues(alpha: 0.04),
     cardContentBg: Colors.white,
     textPrimary: Colors.black87,
     textSecondary: Colors.black54,
@@ -96,7 +96,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
   );
 
   static final dark = CustomColors(
-    cardHeaderBg: AppColors.primary.withOpacity(0.15),
+    cardHeaderBg: AppColors.primary.withValues(alpha: 0.15),
     cardContentBg: const Color(0xFF2A2A2A),
     textPrimary: Colors.white,
     textSecondary: Colors.white70,

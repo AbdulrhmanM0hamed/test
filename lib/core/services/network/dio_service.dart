@@ -349,11 +349,9 @@ class DioService {
 
       // For other errors, use server message if available
       if (serverMessage != null && serverMessage.isNotEmpty) {
-        message = serverMessage;
-        errors = responseData['errors'] as Map<String, dynamic>?;
         return ApiException(
-          message: message,
-          errors: errors,
+          message: serverMessage,
+          errors: responseData['errors'] as Map<String, dynamic>?,
           statusCode: statusCode,
         );
       }
@@ -382,7 +380,33 @@ class DioService {
         message = localizations?.requestCancelled ?? 'تم إلغاء الطلب';
         break;
       case DioExceptionType.unknown:
-        message = localizations?.unknownNetworkError ?? 'خطأ شبكة غير معروف';
+        // Handle specific connection errors that fall under "unknown"
+        final errorString = error.toString().toLowerCase();
+        if (errorString.contains('connection closed') ||
+            errorString.contains('connection reset') ||
+            errorString.contains('connection refused') ||
+            errorString.contains('httpexception')) {
+          message =
+              localizations?.connectionClosed ??
+              'فشل الاتصال بالخادم. تأكد من اتصالك بالإنترنت وحاول مرة أخرى';
+        } else if (errorString.contains('timeout') ||
+            errorString.contains('timed out')) {
+          message =
+              localizations?.connectionTimeout ??
+              'انتهت مهلة الاتصال. تأكد من سرعة الإنترنت وحاول مرة أخرى';
+        } else if (errorString.contains('socket') ||
+            errorString.contains('network unreachable')) {
+          message =
+              localizations?.noInternetConnection ??
+              'لا يوجد اتصال بالإنترنت. تحقق من اتصالك وحاول مرة أخرى';
+        } else if (errorString.contains('host lookup failed') ||
+            errorString.contains('dns')) {
+          message =
+              localizations?.serverNotResponding ??
+              'الخادم لا يستجيب. حاول مرة أخرى لاحقاً';
+        } else {
+          message = localizations?.unknownNetworkError ?? 'خطأ شبكة غير معروف';
+        }
         break;
     }
 

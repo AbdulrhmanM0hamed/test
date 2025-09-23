@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/services/language_service.dart';
+import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
+import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:test/features/categories/presentation/cubits/products_filter_cubit.dart';
 import 'package:test/core/utils/constant/app_assets.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
@@ -27,7 +32,6 @@ class GreetingHeader extends StatefulWidget {
 }
 
 class _GreetingHeaderState extends State<GreetingHeader> {
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -99,8 +103,21 @@ class _GreetingHeaderState extends State<GreetingHeader> {
 
             const SizedBox(height: 20),
 
-            // Search Bar integrated in header
-            const HeaderSearchBar(),
+            // Search Bar with required providers
+            MultiBlocProvider(
+              providers: [
+                BlocProvider<ProductsFilterCubit>.value(
+                  value: DependencyInjection.getIt<ProductsFilterCubit>(),
+                ),
+                BlocProvider<WishlistCubit>.value(
+                  value: DependencyInjection.getIt<WishlistCubit>(),
+                ),
+                BlocProvider<CartCubit>.value(
+                  value: DependencyInjection.getIt<CartCubit>(),
+                ),
+              ],
+              child: const HeaderSearchBar(),
+            ),
           ],
         ),
       ),
@@ -124,7 +141,6 @@ class _GreetingHeaderState extends State<GreetingHeader> {
       ),
     );
   }
-
 
   Widget _buildLanguageSwitch() {
     return Consumer<LanguageService>(
@@ -491,6 +507,4 @@ class _GreetingHeaderState extends State<GreetingHeader> {
 
     return '$greeting ${widget.username}';
   }
-
 }
-

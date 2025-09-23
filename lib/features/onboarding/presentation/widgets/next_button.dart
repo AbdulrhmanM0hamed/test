@@ -29,7 +29,7 @@ class NextButton extends StatelessWidget {
         child: InkWell(
           onTap: onPressed,
           customBorder: const CircleBorder(),
-          splashColor: Colors.white.withOpacity(0.3),
+          splashColor: Colors.white.withValues(alpha: 0.3),
           child: Center(
             child: Icon(
               // إظهار علامة الصح في الشاشة الأخيرة أو السهم في الشاشات الأخرى

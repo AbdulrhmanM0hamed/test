@@ -8,6 +8,8 @@ import 'package:test/core/services/app_state_service.dart';
 import 'package:test/core/services/language_service.dart';
 import 'package:test/core/services/country_service.dart';
 import 'package:test/core/services/location_service.dart';
+import 'package:test/core/services/network_service.dart';
+import 'package:test/core/services/app_startup_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:test/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:test/features/auth/data/repositories/auth_repository_impl.dart';
@@ -179,34 +181,43 @@ class DependencyInjection {
   static GetMainCategoriesUseCase? _getMainCategoriesUseCase;
 
   static Future<void> init() async {
+    // Initialize SharedPreferences first
     final sharedPreferences = await SharedPreferences.getInstance();
+    getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
 
-    // Initialize services in correct order
+    // Initialize core services
     _tokenStorageService = TokenStorageService(sharedPreferences);
-    _appStateService = AppStateService(sharedPreferences);
-    _languageService = LanguageService();
+    getIt.registerLazySingleton<TokenStorageService>(
+      () => _tokenStorageService!,
+    );
 
-    // Register LanguageService first before CountryService needs it
-    getIt.registerSingleton<LanguageService>(_languageService!);
+    _appStateService = AppStateService(sharedPreferences);
+    getIt.registerLazySingleton<AppStateService>(() => _appStateService!);
+
+    _languageService = LanguageService();
+    getIt.registerLazySingleton<LanguageService>(() => _languageService!);
 
     _dataRefreshService = DataRefreshService(_languageService!);
-    _countryService = CountryService.instance;
+    getIt.registerLazySingleton<DataRefreshService>(() => _dataRefreshService!);
 
-    // Initialize network info
-    final connectivity = Connectivity();
-    final networkInfo = NetworkInfoImpl(connectivity);
-    getIt.registerSingleton<NetworkInfo>(networkInfo);
+    _countryService = CountryService.instance;
+    getIt.registerLazySingleton<CountryService>(() => _countryService!);
+
+    // Initialize network services
+    getIt.registerLazySingleton<Connectivity>(() => Connectivity());
+    getIt.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(getIt()));
 
     // Initialize dio service
     _dioService = DioService.instance;
     _dioService!.setTokenStorageService(_tokenStorageService!);
-    
+
     // Register DioService immediately after creation
     getIt.registerSingleton<DioService>(_dioService!);
 
     // Initialize LocationService after DioService is registered
     LocationService.init(_languageService!, _dioService!);
     _locationService = LocationService.instance;
+    getIt.registerLazySingleton<LocationService>(() => _locationService!);
 
     // Initialize data source
     _authRemoteDataSource = AuthRemoteDataSourceImpl(dioService: _dioService!);
@@ -319,18 +330,13 @@ class DependencyInjection {
     );
     _mainCategoryRepository = MainCategoryRepositoryImpl(
       remoteDataSource: _mainCategoryRemoteDataSource!,
-      networkInfo: networkInfo,
+      networkInfo: getIt(),
     );
     _getMainCategoriesUseCase = GetMainCategoriesUseCase(
       repository: _mainCategoryRepository!,
     );
 
-    // Register with GetIt (LanguageService already registered above)
-    getIt.registerSingleton<TokenStorageService>(_tokenStorageService!);
-    getIt.registerSingleton<AppStateService>(_appStateService!);
-    getIt.registerSingleton<DataRefreshService>(_dataRefreshService!);
-    getIt.registerSingleton<CountryService>(_countryService!);
-    getIt.registerSingleton<LocationService>(_locationService!);
+    // Register with GetIt (Services already registered above as LazySingleton)
     getIt.registerLazySingleton<AuthRemoteDataSource>(
       () => AuthRemoteDataSourceImpl(dioService: getIt()),
     );
@@ -435,7 +441,9 @@ class DependencyInjection {
     );
     // Main Categories singletons
     getIt.registerSingleton<MainCategoryRepository>(_mainCategoryRepository!);
-    getIt.registerSingleton<GetMainCategoriesUseCase>(_getMainCategoriesUseCase!);
+    getIt.registerSingleton<GetMainCategoriesUseCase>(
+      _getMainCategoriesUseCase!,
+    );
 
     // Register FCM Service
     // getIt.registerSingleton<FCMService>(FCMService());
@@ -635,14 +643,11 @@ class DependencyInjection {
       ),
     );
     getIt.registerFactory<PromoCodeCubit>(
-      () => PromoCodeCubit(
-        checkPromoCodeUseCase: getIt<CheckPromoCodeUseCase>(),
-      ),
+      () =>
+          PromoCodeCubit(checkPromoCodeUseCase: getIt<CheckPromoCodeUseCase>()),
     );
     getIt.registerFactory<CheckoutCubit>(
-      () => CheckoutCubit(
-        checkoutUseCase: getIt<CheckoutUseCase>(),
-      ),
+      () => CheckoutCubit(checkoutUseCase: getIt<CheckoutUseCase>()),
     );
   }
 

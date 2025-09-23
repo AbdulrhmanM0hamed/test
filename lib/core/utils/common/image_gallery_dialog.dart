@@ -60,7 +60,9 @@ class _ImageGalleryDialogState extends State<ImageGalleryDialog> {
                 },
                 itemBuilder: (context, index) {
                   return PhotoView(
-                    imageProvider: CachedNetworkImageProvider(widget.images[index]),
+                    imageProvider: CachedNetworkImageProvider(
+                      widget.images[index],
+                    ),
                     minScale: PhotoViewComputedScale.contained,
                     maxScale: PhotoViewComputedScale.covered * 2.5,
                     backgroundDecoration: const BoxDecoration(
@@ -85,7 +87,7 @@ class _ImageGalleryDialogState extends State<ImageGalleryDialog> {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Colors.black.withOpacity(0.7),
+                        Colors.black.withValues(alpha: 0.7),
                         Colors.transparent,
                       ],
                     ),
@@ -128,7 +130,7 @@ class _ImageGalleryDialogState extends State<ImageGalleryDialog> {
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
                       colors: [
-                        Colors.black.withOpacity(0.7),
+                        Colors.black.withValues(alpha: 0.7),
                         Colors.transparent,
                       ],
                     ),
@@ -166,9 +168,8 @@ class _ImageGalleryDialogState extends State<ImageGalleryDialog> {
                             child: CachedNetworkImage(
                               imageUrl: widget.images[index],
                               fit: BoxFit.cover,
-                              placeholder: (context, url) => Container(
-                                color: Colors.grey[300],
-                              ),
+                              placeholder: (context, url) =>
+                                  Container(color: Colors.grey[300]),
                             ),
                           ),
                         ),
@@ -183,4 +184,4 @@ class _ImageGalleryDialogState extends State<ImageGalleryDialog> {
       ),
     );
   }
-} 
+}

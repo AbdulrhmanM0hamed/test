@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test/core/models/api_response.dart';
 import 'package:test/core/services/data_refresh_service.dart';
 import 'package:test/core/services/location_service.dart';
 import 'package:test/features/categories/domain/entities/product_filter.dart';
@@ -201,11 +202,36 @@ class ProductsFilterCubit extends Cubit<ProductsFilterState> {
         );
       }
     } catch (e) {
+      String errorMessage;
+
+      if (e is ApiException) {
+        errorMessage = e.message;
+      } else {
+        // Handle specific network errors
+        final errorString = e.toString().toLowerCase();
+        if (errorString.contains('connection closed') ||
+            errorString.contains('connection reset') ||
+            errorString.contains('connection refused')) {
+          errorMessage =
+              'فشل الاتصال بالخادم. تأكد من اتصالك بالإنترنت وحاول مرة أخرى';
+        } else if (errorString.contains('timeout') ||
+            errorString.contains('timed out')) {
+          errorMessage =
+              'انتهت مهلة الاتصال. تأكد من سرعة الإنترنت وحاول مرة أخرى';
+        } else if (errorString.contains('no internet') ||
+            errorString.contains('network unreachable')) {
+          errorMessage =
+              'لا يوجد اتصال بالإنترنت. تحقق من اتصالك وحاول مرة أخرى';
+        } else {
+          errorMessage = 'حدث خطأ في تحميل المنتجات. حاول مرة أخرى';
+        }
+      }
+
       emit(
         state.copyWith(
           isLoading: false,
           isLoadingMore: false,
-          error: 'حدث خطأ في تحميل المنتجات',
+          error: errorMessage,
         ),
       );
     }

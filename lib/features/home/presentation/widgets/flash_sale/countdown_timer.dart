@@ -24,7 +24,7 @@ class CountdownTimer extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.09),
+            color: Colors.grey.withValues(alpha: 0.09),
             blurRadius: 0,
             spreadRadius: 0,
             offset: const Offset(0, 2),

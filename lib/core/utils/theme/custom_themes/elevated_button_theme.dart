@@ -10,7 +10,7 @@ class TElevatedButtonTheme {
       foregroundColor: Colors.white,
       backgroundColor: AppColors.primary,
       disabledForegroundColor: Colors.grey,
-      disabledBackgroundColor: Colors.grey.withOpacity(0.1),
+      disabledBackgroundColor: Colors.grey.withValues(alpha: 0.1),
       side: const BorderSide(color: AppColors.primary),
       padding: const EdgeInsets.symmetric(vertical: 18),
       textStyle: const TextStyle(
@@ -29,7 +29,7 @@ class TElevatedButtonTheme {
       foregroundColor: Colors.white,
       backgroundColor: AppColors.primary,
       disabledForegroundColor: Colors.grey,
-      disabledBackgroundColor: Colors.grey.withOpacity(0.1),
+      disabledBackgroundColor: Colors.grey.withValues(alpha: 0.1),
       side: const BorderSide(color: AppColors.primary),
       padding: const EdgeInsets.symmetric(vertical: 18),
       textStyle: const TextStyle(
