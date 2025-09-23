@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/core/utils/common/custom_button.dart';
-import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
@@ -539,14 +538,9 @@ class CheckoutBottomSheet extends StatelessWidget {
               height: 50,
               child: CustomButton(
                 onPressed: () {
-                  // TODO: Navigate to checkout page
                   Navigator.pop(context);
-                  CustomSnackbar.showSuccess(
-                    context: context,
-                    message: 'الانتقال إلى صفحة الدفع...',
-                  );
+                  _navigateToCheckout(context);
                 },
-
                 text: 'المتابعة للدفع',
               ),
             ),
@@ -598,5 +592,9 @@ class CheckoutBottomSheet extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _navigateToCheckout(BuildContext context) {
+    Navigator.pushNamed(context, '/checkout');
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/core/widgets/order_success_dialog.dart';
-import 'package:test/features/home/presentation/view/bottom_nav_bar.dart';
 import 'package:test/l10n/app_localizations.dart';
 import 'package:test/core/services/global_cubit_service.dart';
 import '../cubit/checkout_cubit.dart';
@@ -135,11 +134,8 @@ class _CheckoutViewState extends State<CheckoutView> {
                 // Refresh cart after successful order
                 GlobalCubitService.instance.refreshCartAfterOrder();
 
-                // Navigate back to home first, then show dialog
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => const BottomNavBar()),
-                  (route) => false,
-                );
+                // Go back to previous page (don't create new route)
+                Navigator.of(context).pop();
 
                 // Show dialog after navigation
                 WidgetsBinding.instance.addPostFrameCallback((_) {
