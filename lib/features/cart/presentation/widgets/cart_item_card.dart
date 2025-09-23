@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/features/cart/presentation/cubit/cart_state.dart';
+import 'package:test/features/product_details/presentation/view/product_details_view.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/utils/constant/app_assets.dart';
 import '../../../../core/utils/constant/font_manger.dart';
@@ -83,34 +84,43 @@ class _CartItemCardState extends State<CartItemCard>
         position: _slideAnimation,
         child: ScaleTransition(
           scale: _scaleAnimation,
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.08),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                  spreadRadius: 0,
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  // Product Image
-                  _buildProductImage(),
-                  const SizedBox(width: 16),
-
-                  // Product Details
-                  Expanded(child: _buildProductDetails()),
-
-                  // Actions Column
-                  _buildActionsColumn(),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                ProductDetailsView.routeName,
+                arguments: widget.cartItem.product.id,
+              );
+            },
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.08),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                    spreadRadius: 0,
+                  ),
                 ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    // Product Image
+                    _buildProductImage(),
+                    const SizedBox(width: 16),
+
+                    // Product Details
+                    Expanded(child: _buildProductDetails()),
+
+                    // Actions Column
+                    _buildActionsColumn(),
+                  ],
+                ),
               ),
             ),
           ),

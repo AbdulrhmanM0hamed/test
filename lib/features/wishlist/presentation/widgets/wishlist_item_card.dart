@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/core/services/global_cubit_service.dart';
+import 'package:test/features/product_details/presentation/view/product_details_view.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/utils/constant/app_assets.dart';
 import '../../../../core/utils/constant/font_manger.dart';
@@ -67,6 +68,11 @@ class _WishlistItemCardState extends State<WishlistItemCard>
         widget.onTap?.call();
       }
     });
+    Navigator.pushNamed(
+      context,
+      ProductDetailsView.routeName,
+      arguments: widget.item.product.id,
+    );
   }
 
   @override
