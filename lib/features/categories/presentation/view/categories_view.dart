@@ -12,6 +12,7 @@ import 'package:test/features/categories/presentation/cubit/department_cubit.dar
 import 'package:test/features/categories/presentation/cubit/department_state.dart';
 import 'package:test/features/categories/presentation/cubits/products_filter_cubit.dart';
 import 'package:test/features/categories/presentation/cubits/products_filter_state.dart';
+import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/core/services/global_cubit_service.dart';
 import 'package:test/features/categories/presentation/widgets/products_grid_widget.dart';
@@ -62,8 +63,14 @@ class _CategoriesViewState extends State<CategoriesView> {
               DependencyInjection.getIt.get<ProductsFilterCubit>(),
         ),
         BlocProvider.value(
-          value: GlobalCubitService.instance.wishlistCubit ?? 
-                 DependencyInjection.getIt.get<WishlistCubit>(),
+          value:
+              GlobalCubitService.instance.wishlistCubit ??
+              DependencyInjection.getIt.get<WishlistCubit>(),
+        ),
+        BlocProvider.value(
+          value:
+              GlobalCubitService.instance.cartCubit ??
+              DependencyInjection.getIt.get<CartCubit>(),
         ),
       ],
       child: Builder(

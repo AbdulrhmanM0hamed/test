@@ -493,8 +493,13 @@ class _HomeProductCardState extends State<HomeProductCard>
                 builder: (context, eventSnapshot) {
                   return StatefulBuilder(
                     builder: (context, setState) {
-                      // Calculate current quantity in cart and available quantity
-                      final currentQuantity = widget.product.quantityInCart;
+                      // Get real-time quantity from cart service instead of static product data
+                      final currentCart =
+                          CartGlobalService.instance.currentCart;
+                      final cartItem = currentCart?.getItemByProductId(
+                        widget.product.id,
+                      );
+                      final currentQuantity = cartItem?.quantity ?? 0;
                       // Use the minimum of limitation and countOfAvailable to respect both constraints
                       final maxAllowed = widget.product.limitation > 0
                           ? (widget.product.limitation <
@@ -520,16 +525,31 @@ class _HomeProductCardState extends State<HomeProductCard>
 
                                   try {
                                     debugPrint(
-                                      '🛒 HomeProductCard: Adding product ${widget.product.id} to cart with quantity ${currentQuantity + 1}',
+                                      '🛒 HomeProductCard: ${isInCart ? 'Updating' : 'Adding'} product ${widget.product.id} to cart with quantity ${currentQuantity + 1}',
                                     );
 
-                                    // Use global service for cart operations
-                                    await GlobalCubitService.instance.addToCart(
-                                      productId: widget.product.id,
-                                      productSizeColorId:
-                                          widget.product.productSizeColorId!,
-                                      quantity: currentQuantity + 1,
-                                    );
+                                    if (isInCart && cartItem != null) {
+                                      // Product is already in cart, update quantity
+                                      await GlobalCubitService.instance
+                                          .updateCartItemQuantity(
+                                            cartItemId: cartItem.id,
+                                            productId: widget.product.id,
+                                            productSizeColorId: widget
+                                                .product
+                                                .productSizeColorId!,
+                                            newQuantity: currentQuantity + 1,
+                                          );
+                                    } else {
+                                      // Product not in cart, add it for the first time
+                                      await GlobalCubitService.instance
+                                          .addToCart(
+                                            productId: widget.product.id,
+                                            productSizeColorId: widget
+                                                .product
+                                                .productSizeColorId!,
+                                            quantity: 1,
+                                          );
+                                    }
                                   } catch (e) {
                                     CustomSnackbar.showError(
                                       context: context,

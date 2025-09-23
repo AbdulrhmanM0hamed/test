@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test/core/utils/widgets/custom_snackbar.dart';
+import 'package:test/core/services/global_cubit_service.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/utils/constant/app_assets.dart';
 import '../../../../core/utils/constant/font_manger.dart';
@@ -27,6 +29,7 @@ class _WishlistItemCardState extends State<WishlistItemCard>
   late Animation<Offset> _slideAnimation;
   late Animation<double> _fadeAnimation;
   bool _isPressed = false;
+  bool _isAddingToCart = false;
 
   @override
   void initState() {
@@ -357,32 +360,78 @@ class _WishlistItemCardState extends State<WishlistItemCard>
           // Add to cart button (if available)
           if (widget.item.product.isAvailable)
             GestureDetector(
-              onTap: () {
-                // TODO: Implement add to cart functionality
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      '${AppLocalizations.of(context)!.productAddedToCart}: ${widget.item.product.name}',
-                    ),
-                    backgroundColor: Colors.green,
-                    duration: const Duration(seconds: 2),
-                  ),
-                );
-              },
+              onTap: (_isAddingToCart || !widget.item.product.isAvailable)
+                  ? null
+                  : () async {
+                      if (widget.item.product.productSizeColorId > 0) {
+                        setState(() {
+                          _isAddingToCart = true;
+                        });
+
+                        try {
+                          debugPrint(
+                            '🛒 WishlistItemCard: Adding product ${widget.item.product.id} to cart',
+                          );
+
+                          // Use global service for cart operations
+                          await GlobalCubitService.instance.addToCart(
+                            productId: widget.item.product.id,
+                            productSizeColorId:
+                                widget.item.product.productSizeColorId,
+                            quantity: 1,
+                          );
+                        } catch (e) {
+                          CustomSnackbar.showError(
+                            context: context,
+                            message: AppLocalizations.of(
+                              context,
+                            )!.failedToAddToCart,
+                          );
+                        } finally {
+                          setState(() {
+                            _isAddingToCart = false;
+                          });
+                        }
+                      } else {
+                        CustomSnackbar.showWarning(
+                          context: context,
+                          message: AppLocalizations.of(
+                            context,
+                          )!.incompleteProductInfo,
+                        );
+                      }
+                    },
               child: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
+                  color: widget.item.product.isAvailable
+                      ? AppColors.primary.withValues(alpha: 0.1)
+                      : Colors.grey.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: AppColors.primary.withValues(alpha: 0.3),
+                    color: widget.item.product.isAvailable
+                        ? AppColors.primary.withValues(alpha: 0.3)
+                        : Colors.grey.withValues(alpha: 0.3),
                   ),
                 ),
-                child: Icon(
-                  Icons.shopping_cart_outlined,
-                  color: AppColors.primary,
-                  size: 20,
-                ),
+                child: _isAddingToCart
+                    ? SizedBox(
+                        width: 12,
+                        height: 12,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            AppColors.primary,
+                          ),
+                        ),
+                      )
+                    : Icon(
+                        Icons.shopping_cart_outlined,
+                        color: widget.item.product.isAvailable
+                            ? AppColors.primary
+                            : Colors.grey,
+                        size: 20,
+                      ),
               ),
             ),
         ],

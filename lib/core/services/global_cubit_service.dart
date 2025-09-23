@@ -1,5 +1,6 @@
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:test/features/cart/presentation/cubit/cart_state.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/core/services/app_state_service.dart';
 
@@ -87,6 +88,35 @@ class GlobalCubitService {
       await _cartCubit!.getCart();
       print('✅ GlobalCubitService: Product added and cart refreshed');
     }
+  }
+
+  /// Update cart item quantity (for products already in cart)
+  Future<void> updateCartItemQuantity({
+    required int cartItemId,
+    required int productId,
+    required int productSizeColorId,
+    required int newQuantity,
+  }) async {
+    if (_cartCubit != null) {
+      print('🛒 GlobalCubitService: Updating cart item $cartItemId quantity to $newQuantity');
+      await _cartCubit!.updateCartItemQuantity(
+        cartItemId: cartItemId,
+        newQuantity: newQuantity,
+        productId: productId,
+        productSizeColorId: productSizeColorId,
+      );
+      print('✅ GlobalCubitService: Cart item quantity updated');
+    }
+  }
+
+  /// Get cart item by product ID (helper method)
+  int? getCartItemIdByProductId(int productId) {
+    if (_cartCubit != null && _cartCubit!.state is CartLoaded) {
+      final cart = (_cartCubit!.state as CartLoaded).cart;
+      final cartItem = cart.getItemByProductId(productId);
+      return cartItem?.id;
+    }
+    return null;
   }
 
   /// Add item to wishlist and refresh
