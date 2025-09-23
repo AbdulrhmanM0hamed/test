@@ -15,7 +15,6 @@ import '../widgets/product_image_gallery.dart';
 import '../widgets/product_info_section.dart';
 import '../widgets/product_reviews_section.dart';
 import '../widgets/product_video_section.dart';
-import '../widgets/add_review_section.dart';
 import '../widgets/cart_floating_button.dart';
 
 class ProductDetailsView extends StatefulWidget {
@@ -228,17 +227,14 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
                 ProductVideoSection(videoLink: product.videoLink),
 
               // Reviews section
-              if (product.userReviews.isNotEmpty)
-                ProductReviewsSection(reviews: product.userReviews),
-
-              // Add review section
-              AddReviewSection(
+              ProductReviewsSection(
+                reviews: product.userReviews,
                 productId: product.id,
                 onReviewAdded: () {
-                  // TODO: Refresh reviews after adding new review
+                  // Refresh product details to get updated reviews
+                  context.read<ProductDetailsCubit>().getProductDetails(product.id);
                 },
               ),
-
               const SizedBox(height: 100), // Space for floating cart
             ],
           ),

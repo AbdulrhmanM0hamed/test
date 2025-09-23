@@ -81,6 +81,56 @@ class FormValidators {
     return null;
   }
 
+  /// Validates product review text
+  static String? validateReviewText(String? value, BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    if (value == null || value.trim().isEmpty) {
+      return l10n.pleaseWriteReview;
+    }
+
+    final cleanValue = value.trim();
+
+    // Check minimum length
+    if (cleanValue.length < _ValidationConstants.minReviewLength) {
+      return l10n.reviewMinLength.replaceFirst(
+        '%d',
+        _ValidationConstants.minReviewLength.toString(),
+      );
+    }
+
+    // Check maximum length
+    if (cleanValue.length > _ValidationConstants.maxReviewLength) {
+      return l10n.reviewMaxLength.replaceFirst(
+        '%d',
+        _ValidationConstants.maxReviewLength.toString(),
+      );
+    }
+
+    // Check if contains only spaces
+    if (_containsOnlySpaces(cleanValue)) {
+      return l10n.reviewOnlySpaces;
+    }
+
+    // Check for inappropriate content
+    if (_containsInappropriateContent(cleanValue)) {
+      return l10n.reviewInappropriateContent;
+    }
+
+    return null;
+  }
+
+  /// Validates star rating
+  static String? validateStarRating(int? rating, BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    if (rating == null || rating <= 0 || rating > 5) {
+      return l10n.pleaseSelectRating;
+    }
+
+    return null;
+  }
+
   /// Validates full name
   static String? validateFullName(String? value, BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -140,16 +190,22 @@ class FormValidators {
     return RegExp(r'^[+]?[0-9]{10,15}$').hasMatch(phone);
   }
 
-  // static int _calculatePasswordStrength(String password) {
-  //   int strength = 0;
+  /// Checks if the text contains only spaces or whitespace characters
+  static bool _containsOnlySpaces(String text) {
+    return text.trim().isEmpty || RegExp(r'^\s+$').hasMatch(text);
+  }
 
-  //   if (password.contains(RegExp(r'[A-Z]'))) strength++;
-  //   if (password.contains(RegExp(r'[a-z]'))) strength++;
-  //   if (password.contains(RegExp(r'[0-9]'))) strength++;
-  //   if (password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) strength++;
+  /// Checks if the text contains inappropriate content
+  static bool _containsInappropriateContent(String text) {
+    // Basic inappropriate content filter
+    final inappropriateWords = [
+      'spam', 'fake', 'scam', 'hate', 'offensive',
+      // Add more words as needed based on your requirements
+    ];
 
-  //   return strength;
-  // }
+    final lowerText = text.toLowerCase();
+    return inappropriateWords.any((word) => lowerText.contains(word));
+  }
 }
 
 /// Constants for validation rules
@@ -159,4 +215,6 @@ class _ValidationConstants {
   static const int maxEmailLength = 125;
   static const int minNameLength = 2;
   static const int maxNameLength = 50;
+  static const int minReviewLength = 10;
+  static const int maxReviewLength = 500;
 }

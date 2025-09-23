@@ -981,6 +981,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get minQuantityReached => 'Minimum quantity is 1';
 
   @override
+  String get rating => 'Rating';
+
+  @override
+  String get reviewText => 'Review Text';
+
+  @override
+  String get writeYourReview => 'Write your review here...';
+
+  @override
+  String get pleaseSelectRating => 'Please select a rating';
+
+  @override
+  String get pleaseWriteReview => 'Please write a review';
+
+  @override
+  String get reviewMinLength => 'Review must be at least %d characters';
+
+  @override
+  String get reviewMaxLength => 'Review must be less than %d characters';
+
+  @override
+  String get reviewOnlySpaces => 'Review cannot contain only spaces';
+
+  @override
+  String get reviewInappropriateContent => 'Review contains inappropriate content';
+
+  @override
   String get wishlistEmpty => 'Wishlist is Empty';
 
   @override

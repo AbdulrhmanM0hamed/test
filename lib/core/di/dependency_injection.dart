@@ -23,6 +23,7 @@ import 'package:test/features/auth/domain/usecases/check_otp_usecase.dart';
 import 'package:test/features/auth/domain/usecases/change_password_usecase.dart';
 import 'package:test/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:test/features/auth/presentation/cubit/forget_password_cubit.dart';
+import 'package:test/features/product_details/domain/usecases/get_product_details_usecase.dart';
 import 'package:test/features/profile/data/datasources/profile_remote_data_source.dart';
 import 'package:test/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:test/features/profile/domain/repositories/profile_repository.dart';
@@ -69,11 +70,15 @@ import 'package:test/features/home/presentation/cubits/best_seller_products/best
 import 'package:test/features/home/presentation/cubits/latest_products/latest_products_cubit.dart';
 import 'package:test/features/home/presentation/cubits/special_offer_products/special_offer_products_cubit.dart';
 // Product details feature imports
-import 'package:test/features/product_details/data/datasources/product_details_remote_data_source.dart';
-import 'package:test/features/product_details/data/repositories/product_details_repository_impl.dart';
-import 'package:test/features/product_details/domain/repositories/product_details_repository.dart';
-import 'package:test/features/product_details/domain/usecases/get_product_details_usecase.dart';
-import 'package:test/features/product_details/presentation/cubit/product_details_cubit.dart';
+import '../../features/product_details/data/datasources/product_details_remote_data_source.dart';
+import '../../features/product_details/data/repositories/product_details_repository_impl.dart';
+import '../../features/product_details/domain/repositories/product_details_repository.dart';
+import '../../features/product_details/presentation/cubit/product_details_cubit.dart';
+import '../../features/product_details/data/datasources/product_review_remote_data_source.dart';
+import '../../features/product_details/data/repositories/product_review_repository_impl.dart';
+import '../../features/product_details/domain/repositories/product_review_repository.dart';
+import '../../features/product_details/domain/usecases/submit_product_review_use_case.dart';
+import '../../features/product_details/presentation/cubit/product_review_cubit.dart';
 // Wishlist feature imports
 import 'package:test/features/wishlist/data/datasources/wishlist_remote_data_source.dart';
 import 'package:test/features/wishlist/data/repositories/wishlist_repository_impl.dart';
@@ -532,6 +537,25 @@ class DependencyInjection {
     // Product Details Cubit
     getIt.registerFactory<ProductDetailsCubit>(
       () => ProductDetailsCubit(getIt<GetProductDetailsUseCase>()),
+    );
+
+    // Product Review dependencies
+    getIt.registerLazySingleton<ProductReviewRemoteDataSource>(
+      () => ProductReviewRemoteDataSourceImpl(getIt()),
+    );
+
+    getIt.registerLazySingleton<ProductReviewRepository>(
+      () => ProductReviewRepositoryImpl(
+        getIt<ProductReviewRemoteDataSource>(),
+      ),
+    );
+
+    getIt.registerLazySingleton<SubmitProductReviewUseCase>(
+      () => SubmitProductReviewUseCase(getIt()),
+    );
+
+    getIt.registerFactory<ProductReviewCubit>(
+      () => ProductReviewCubit(getIt()),
     );
 
     // Products Filter Cubit

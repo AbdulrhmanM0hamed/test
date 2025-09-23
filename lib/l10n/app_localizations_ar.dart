@@ -357,7 +357,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get watchVideo => 'شاهد الفيديو';
 
   @override
-  String get addReview => 'إضافة تقييم';
+  String get addReview => 'إضافة مراجعة';
 
   @override
   String get rateProduct => 'قيم هذا المنتج';
@@ -369,13 +369,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get reviewHint => 'شارك تجربتك مع هذا المنتج...';
 
   @override
-  String get submitReview => 'إرسال التقييم';
+  String get submitReview => 'إرسال المراجعة';
 
   @override
-  String get veryPoor => 'سيء جداً';
+  String get veryPoor => 'ضعيف جداً';
 
   @override
-  String get poor => 'سيء';
+  String get poor => 'ضعيف';
 
   @override
   String get average => 'متوسط';
@@ -924,7 +924,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get serverError => 'خطأ في الخادم';
 
   @override
-  String get unknownError => 'حدث خطأ غير متوقع';
+  String get unknownError => 'حدث خطأ غير معروف';
 
   @override
   String get pleaseCheckConnection => 'يرجى التحقق من اتصال الإنترنت';
@@ -979,6 +979,33 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get minQuantityReached => 'الحد الأدنى للكمية هو 1';
+
+  @override
+  String get rating => 'التقييم';
+
+  @override
+  String get reviewText => 'نص المراجعة';
+
+  @override
+  String get writeYourReview => 'اكتب مراجعتك هنا...';
+
+  @override
+  String get pleaseSelectRating => 'يرجى اختيار التقييم';
+
+  @override
+  String get pleaseWriteReview => 'يرجى كتابة المراجعة';
+
+  @override
+  String get reviewMinLength => 'المراجعة يجب أن تكون على الأقل %d أحرف';
+
+  @override
+  String get reviewMaxLength => 'المراجعة يجب أن تكون أقل من %d حرف';
+
+  @override
+  String get reviewOnlySpaces => 'المراجعة لا يمكن أن تحتوي على مسافات فقط';
+
+  @override
+  String get reviewInappropriateContent => 'المراجعة تحتوي على محتوى غير مناسب';
 
   @override
   String get wishlistEmpty => 'المفضلة فارغة';

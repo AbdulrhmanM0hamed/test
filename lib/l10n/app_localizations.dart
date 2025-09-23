@@ -2039,6 +2039,60 @@ abstract class AppLocalizations {
   /// **'Minimum quantity is 1'**
   String get minQuantityReached;
 
+  /// No description provided for @rating.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating'**
+  String get rating;
+
+  /// No description provided for @reviewText.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Text'**
+  String get reviewText;
+
+  /// No description provided for @writeYourReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Write your review here...'**
+  String get writeYourReview;
+
+  /// No description provided for @pleaseSelectRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a rating'**
+  String get pleaseSelectRating;
+
+  /// No description provided for @pleaseWriteReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Please write a review'**
+  String get pleaseWriteReview;
+
+  /// No description provided for @reviewMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Review must be at least %d characters'**
+  String get reviewMinLength;
+
+  /// No description provided for @reviewMaxLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Review must be less than %d characters'**
+  String get reviewMaxLength;
+
+  /// No description provided for @reviewOnlySpaces.
+  ///
+  /// In en, this message translates to:
+  /// **'Review cannot contain only spaces'**
+  String get reviewOnlySpaces;
+
+  /// No description provided for @reviewInappropriateContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Review contains inappropriate content'**
+  String get reviewInappropriateContent;
+
   /// No description provided for @wishlistEmpty.
   ///
   /// In en, this message translates to:

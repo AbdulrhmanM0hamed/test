@@ -63,7 +63,7 @@ class ProductInfoSection extends StatelessWidget {
             ),
             const SizedBox(height: 12),
           ],
-      
+
           // Product name
           Text(
             product.name,
@@ -74,9 +74,9 @@ class ProductInfoSection extends StatelessWidget {
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
           ),
-      
+
           const SizedBox(height: 16),
-      
+
           // Rating and reviews
           Row(
             children: [
@@ -102,7 +102,7 @@ class ProductInfoSection extends StatelessWidget {
               ),
               const SizedBox(width: 4),
               Text(
-                '(${product.numOfUserReview} تقييم)',
+                '(${product.numOfUserReview} ${AppLocalizations.of(context)!.reviews})',
                 style: getMediumStyle(
                   fontSize: FontSize.size12,
                   fontFamily: FontConstant.cairo,
@@ -127,14 +127,14 @@ class ProductInfoSection extends StatelessWidget {
               ),
             ],
           ),
-      
+
           const SizedBox(height: 20),
-      
+
           // Price section
           _buildPriceSection(context),
-      
+
           const SizedBox(height: 20),
-      
+
           // Stock and sales info
           Row(
             children: [
@@ -160,15 +160,15 @@ class ProductInfoSection extends StatelessWidget {
               ),
             ],
           ),
-      
+
           const SizedBox(height: 24),
-      
+
           // Color/Size selection
-          if (product.productSizeColor.isNotEmpty) ...[
-            _buildVariantsSection(context),
-            const SizedBox(height: 24),
-          ],
-      
+          // if (product.productSizeColor.isNotEmpty) ...[
+          //   _buildVariantsSection(context),
+          //   const SizedBox(height: 24),
+          // ],
+
           // Add to cart section
           AddToCartSection(product: product),
         ],
@@ -268,84 +268,83 @@ class ProductInfoSection extends StatelessWidget {
     );
   }
 
-  Widget _buildVariantsSection(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          AppLocalizations.of(context)!.colors,
-          style: getBoldStyle(
-            fontSize: FontSize.size16,
-            fontFamily: FontConstant.cairo,
+  // Widget _buildVariantsSection(BuildContext context) {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Text(
+  //         AppLocalizations.of(context)!.colors,
+  //         style: getBoldStyle(
+  //           fontSize: FontSize.size16,
+  //           fontFamily: FontConstant.cairo,
+  //         ),
+  //       ),
+  //       const SizedBox(height: 12),
+  //       // Wrap(
+  //       //   spacing: 12,
+  //       //   runSpacing: 8,
+  //       //   children: product.productSizeColor.map((variant) {
+  //       //     return _buildColorOption(variant);
+  //       //   }).toList(),
+  //       // ),
+  //     ],
+  //   );
+  // }
 
-          ),
-        ),
-        const SizedBox(height: 12),
-        Wrap(
-          spacing: 12,
-          runSpacing: 8,
-          children: product.productSizeColor.map((variant) {
-            return _buildColorOption(variant);
-          }).toList(),
-        ),
-      ],
-    );
-  }
+  // Widget _buildColorOption(ProductSizeColor variant) {
+  //   final isSelected = false; // TODO: Implement selection logic
 
-  Widget _buildColorOption(ProductSizeColor variant) {
-    final isSelected = false; // TODO: Implement selection logic
-
-    return GestureDetector(
-      onTap: () {
-        // TODO: Handle color selection
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected ? AppColors.primary : Colors.grey[300]!,
-            width: 2,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (variant.colorCode != null) ...[
-              Container(
-                width: 20,
-                height: 20,
-                decoration: BoxDecoration(
-                  color: Color(
-                    int.parse(variant.colorCode!.replaceFirst('#', '0xFF')),
-                  ),
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.grey[300]!, width: 1),
-                ),
-              ),
-              const SizedBox(width: 8),
-            ],
-            Text(
-              variant.color ?? 'غير محدد',
-              style: getSemiBoldStyle(
-                fontSize: FontSize.size14,
-                fontFamily: FontConstant.cairo,
-                color: isSelected ? Colors.white : Colors.black,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              '(${variant.stock})',
-              style: getMediumStyle(
-                fontSize: FontSize.size12,
-                fontFamily: FontConstant.cairo,
-                color: isSelected ? Colors.white70 : Colors.grey[600],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  //   return GestureDetector(
+  //     onTap: () {
+  //       // TODO: Handle color selection
+  //     },
+  //     child: Container(
+  //       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+  //       decoration: BoxDecoration(
+  //         color: isSelected ? AppColors.primary : Colors.white,
+  //         borderRadius: BorderRadius.circular(12),
+  //         border: Border.all(
+  //           color: isSelected ? AppColors.primary : Colors.grey[300]!,
+  //           width: 2,
+  //         ),
+  //       ),
+  //       child: Row(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: [
+  //           if (variant.colorCode != null) ...[
+  //             Container(
+  //               width: 20,
+  //               height: 20,
+  //               decoration: BoxDecoration(
+  //                 color: Color(
+  //                   int.parse(variant.colorCode!.replaceFirst('#', '0xFF')),
+  //                 ),
+  //                 shape: BoxShape.circle,
+  //                 border: Border.all(color: Colors.grey[300]!, width: 1),
+  //               ),
+  //             ),
+  //             const SizedBox(width: 8),
+  //           ],
+  //           Text(
+  //             variant.color ?? 'غير محدد',
+  //             style: getSemiBoldStyle(
+  //               fontSize: FontSize.size14,
+  //               fontFamily: FontConstant.cairo,
+  //               color: isSelected ? Colors.white : Colors.black,
+  //             ),
+  //           ),
+  //           const SizedBox(width: 8),
+  //           Text(
+  //             '(${variant.stock})',
+  //             style: getMediumStyle(
+  //               fontSize: FontSize.size12,
+  //               fontFamily: FontConstant.cairo,
+  //               color: isSelected ? Colors.white70 : Colors.grey[600],
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 }

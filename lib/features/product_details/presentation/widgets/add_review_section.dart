@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import '../../../../core/utils/common/custom_button.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
@@ -36,7 +37,6 @@ class _AddReviewSectionState extends State<AddReviewSection> {
       margin: const EdgeInsets.symmetric(horizontal: 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-      
         borderRadius: BorderRadius.circular(20),
         // boxShadow: [
         //   BoxShadow(
@@ -63,7 +63,6 @@ class _AddReviewSectionState extends State<AddReviewSection> {
                 style: getBoldStyle(
                   fontSize: FontSize.size18,
                   fontFamily: FontConstant.cairo,
-                 
                 ),
               ),
             ],
@@ -79,10 +78,9 @@ class _AddReviewSectionState extends State<AddReviewSection> {
             ),
           ),
           const SizedBox(height: 12),
-          
+
           Row(
             children: List.generate(5, (index) {
-
               return GestureDetector(
                 onTap: () {
                   setState(() {
@@ -93,14 +91,16 @@ class _AddReviewSectionState extends State<AddReviewSection> {
                   padding: const EdgeInsets.only(right: 4),
                   child: Icon(
                     index < _selectedRating ? Icons.star : Icons.star_border,
-                    color: index < _selectedRating ? Colors.amber : Colors.grey[400],
+                    color: index < _selectedRating
+                        ? Colors.amber
+                        : Colors.grey[400],
                     size: 32,
                   ),
                 ),
               );
             }),
           ),
-          
+
           if (_selectedRating > 0) ...[
             const SizedBox(height: 8),
             Text(
@@ -121,11 +121,10 @@ class _AddReviewSectionState extends State<AddReviewSection> {
             style: getSemiBoldStyle(
               fontSize: FontSize.size16,
               fontFamily: FontConstant.cairo,
-            
             ),
           ),
           const SizedBox(height: 12),
-          
+
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
@@ -147,7 +146,6 @@ class _AddReviewSectionState extends State<AddReviewSection> {
               style: getMediumStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
-                
               ),
             ),
           ),
@@ -159,16 +157,16 @@ class _AddReviewSectionState extends State<AddReviewSection> {
             text: AppLocalizations.of(context)!.submitReview,
             onPressed: _canSubmit() ? _submitReview : null,
             isLoading: _isSubmitting,
-            backgroundColor: _canSubmit() ? AppColors.primary : Colors.grey,
+            backgroundColor: _canSubmit()
+                ? AppColors.primary
+                : AppColors.secondary,
             height: 50,
-            prefix: _isSubmitting ? null : Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: Icon(
-                Icons.send,
-                size: 20,
-                color: Colors.white,
-              ),
-            ),
+            prefix: _isSubmitting
+                ? null
+                : Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Icon(Icons.send, size: 20, color: Colors.white),
+                  ),
           ),
         ],
       ),
@@ -176,9 +174,9 @@ class _AddReviewSectionState extends State<AddReviewSection> {
   }
 
   bool _canSubmit() {
-    return _selectedRating > 0 && 
-           _reviewController.text.trim().isNotEmpty && 
-           !_isSubmitting;
+    return _selectedRating > 0 &&
+        _reviewController.text.trim().isNotEmpty &&
+        !_isSubmitting;
   }
 
   String _getRatingText(int rating) {
@@ -209,55 +207,11 @@ class _AddReviewSectionState extends State<AddReviewSection> {
     try {
       // TODO: Implement API call to submit review
       await Future.delayed(const Duration(seconds: 2)); // Simulate API call
-      
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(context)!.reviewSubmitted,
-              style: getMediumStyle(
-                fontSize: FontSize.size14,
-                fontFamily: FontConstant.cairo,
-                color: Colors.white,
-              ),
-            ),
-            backgroundColor: Colors.green,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            margin: const EdgeInsets.all(16),
-          ),
-        );
-
-        // Clear form
-        _reviewController.clear();
-        setState(() {
-          _selectedRating = 0;
-        });
-
-        // Notify parent widget
-        widget.onReviewAdded?.call();
-      }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(context)!.reviewSubmissionError,
-              style: getMediumStyle(
-                fontSize: FontSize.size14,
-                fontFamily: FontConstant.cairo,
-                color: Colors.white,
-              ),
-            ),
-            backgroundColor: Colors.red,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            margin: const EdgeInsets.all(16),
-          ),
+        CustomSnackbar.showError(
+          context: context,
+          message: AppLocalizations.of(context)!.reviewSubmissionError,
         );
       }
     } finally {

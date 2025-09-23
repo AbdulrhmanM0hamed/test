@@ -16,6 +16,8 @@ class ApiEndpoints {
   static String get mainCategories => '$baseUrl/main-categories';
   static String productsByDepartment(String departmentName) =>
       '$baseUrl/products-by-department/$departmentName';
+  static String productReview(int productId) =>
+      '$baseUrl/product-review/$productId';
 
   // Home page products endpoints
   static const String featuredProducts = '/featured-products';
