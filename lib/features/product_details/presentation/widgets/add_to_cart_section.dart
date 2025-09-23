@@ -11,7 +11,6 @@ import '../../../../core/services/global_cubit_service.dart';
 import '../../../cart/presentation/cubit/cart_cubit.dart';
 import '../../../cart/presentation/cubit/cart_state.dart';
 import '../../domain/entities/product_details.dart';
-import 'cart_floating_button.dart';
 
 class AddToCartSection extends StatefulWidget {
   final ProductDetails product;
@@ -270,19 +269,4 @@ class _AddToCartSectionState extends State<AddToCartSection> {
   //     icon: Icons.flash_on_outlined,
   //   );
   // }
-
-  void _showCartBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: GlobalCubitService.instance.cartCubit!),
-          BlocProvider.value(value: GlobalCubitService.instance.wishlistCubit!),
-        ],
-        child: const CartBottomSheet(),
-      ),
-    );
-  }
 }

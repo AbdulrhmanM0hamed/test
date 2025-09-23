@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/l10n/app_localizations.dart';
 
 import '../../../../core/di/dependency_injection.dart';
-import '../../../../core/utils/common/custom_dialog_button.dart';
+import '../../../../core/utils/common/custom_button.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
@@ -13,16 +13,19 @@ import '../../domain/entities/product_details.dart';
 import '../cubit/product_review_cubit.dart';
 import '../cubit/product_review_state.dart';
 import 'add_review_dialog.dart';
+import 'all_reviews_bottom_sheet.dart';
 
 class ProductReviewsSection extends StatelessWidget {
   final List<UserReview> reviews;
   final int productId;
+  final String productName;
   final VoidCallback? onReviewAdded;
 
   const ProductReviewsSection({
     super.key,
     required this.reviews,
     required this.productId,
+    required this.productName,
     this.onReviewAdded,
   });
 
@@ -68,11 +71,10 @@ class ProductReviewsSection extends StatelessWidget {
           // Add Review Button
           SizedBox(
             width: double.infinity,
-            child: CustomDialogButton(
+            child: CustomButton(
               text: AppLocalizations.of(context)!.addReview,
               onPressed: () => _showAddReviewDialog(context),
               backgroundColor: AppColors.primary,
-              textColor: Colors.white,
             ),
           ),
           const SizedBox(height: 20),
@@ -90,9 +92,7 @@ class ProductReviewsSection extends StatelessWidget {
             const SizedBox(height: 20),
             Center(
               child: TextButton(
-                onPressed: () {
-                  // TODO: Navigate to all reviews page
-                },
+                onPressed: () => _showAllReviewsBottomSheet(context),
                 style: TextButton.styleFrom(
                   foregroundColor: AppColors.primary,
                   padding: const EdgeInsets.symmetric(
@@ -225,6 +225,16 @@ class ProductReviewsSection extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  void _showAllReviewsBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) =>
+          AllReviewsBottomSheet(reviews: reviews, productName: productName),
     );
   }
 }

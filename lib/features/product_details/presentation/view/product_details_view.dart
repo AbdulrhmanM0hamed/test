@@ -230,6 +230,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
               ProductReviewsSection(
                 reviews: product.userReviews,
                 productId: product.id,
+                productName: product.name,
                 onReviewAdded: () {
                   // Refresh product details to get updated reviews
                   context.read<ProductDetailsCubit>().getProductDetails(product.id);

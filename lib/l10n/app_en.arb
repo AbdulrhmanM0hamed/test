@@ -597,5 +597,9 @@
   "noInternetConnection": "No internet connection. Check your connection and try again",
   "serverNotResponding": "Server not responding. Try again later",
   "requestFailed": "Failed to send request",
-  "responseParsingError": "Error parsing server response"
+  "responseParsingError": "Error parsing server response",
+  
+  "noReviewsYet": "No reviews yet",
+  "beFirstToReview": "Be the first to review this product",
+  "viewAllReviews": "View All Reviews"
 }
