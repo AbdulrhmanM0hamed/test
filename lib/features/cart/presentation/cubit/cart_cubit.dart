@@ -126,12 +126,12 @@ class CartCubit extends Cubit<CartState> {
     // If we're in a loaded state, we can optimize by updating the UI immediately
     if (state is CartLoaded) {
       final currentState = state as CartLoaded;
-      emit(CartItemUpdating(cartItemId, newQuantity));
-      
+      emit(CartItemUpdating(cartItemId, newQuantity, currentState.cart));
+
       try {
         // First remove the item
         await removeFromCartUseCase(cartItemId);
-        
+
         // Then add it back with the new quantity
         final request = AddToCartRequest(
           items: [
@@ -144,7 +144,7 @@ class CartCubit extends Cubit<CartState> {
         );
 
         final result = await addToCartUseCase(request);
-        
+
         result.fold(
           (failure) {
             // If there's an error, revert to the previous state
@@ -152,8 +152,8 @@ class CartCubit extends Cubit<CartState> {
             emit(CartError(failure.message));
           },
           (_) {
-            // On success, refresh the cart to get the latest state
-            getCart();
+            // On success, get fresh cart data without showing loading state
+            _refreshCartSilently();
           },
         );
       } catch (e) {
@@ -170,6 +170,18 @@ class CartCubit extends Cubit<CartState> {
         quantity: newQuantity,
       );
     }
+  }
+
+  Future<void> _refreshCartSilently() async {
+    final result = await getCartUseCase();
+
+    result.fold((failure) => emit(CartError(failure.message)), (cart) {
+      if (cart.isEmpty) {
+        emit(CartEmpty());
+      } else {
+        emit(CartLoaded(cart));
+      }
+    });
   }
 
   @override

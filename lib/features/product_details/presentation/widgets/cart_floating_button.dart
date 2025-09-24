@@ -148,7 +148,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                 child: Row(
                   children: [
                     Text(
-                      'السلة',
+                      AppLocalizations.of(context)!.cart,
                       style: getBoldStyle(
                         fontSize: FontSize.size20,
                         fontFamily: FontConstant.cairo,
@@ -201,7 +201,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
               onPressed: () {
                 GlobalCubitService.instance.cartCubit?.getCart();
               },
-              child: Text('إعادة المحاولة'),
+              child: Text(AppLocalizations.of(context)!.retry),
             ),
           ],
         ),
@@ -232,7 +232,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
           ),
           const SizedBox(height: 24),
           Text(
-            'السلة فارغة',
+            AppLocalizations.of(context)!.cartEmpty,
             style: getBoldStyle(
               fontSize: FontSize.size20,
               fontFamily: FontConstant.cairo,
@@ -241,7 +241,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
           ),
           const SizedBox(height: 12),
           Text(
-            'أضف منتجات لتظهر هنا',
+            AppLocalizations.of(context)!.cartEmptyMessage,
             style: getMediumStyle(
               fontSize: FontSize.size14,
               fontFamily: FontConstant.cairo,
@@ -261,7 +261,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
               ),
             ),
             child: Text(
-              'ابدأ التسوق',
+              AppLocalizations.of(context)!.startShopping,
               style: getBoldStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
@@ -328,7 +328,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'المجموع الفرعي',
+                AppLocalizations.of(context)!.subTotal,
                 style: getMediumStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
@@ -336,7 +336,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                 ),
               ),
               Text(
-                '${state.cart.totalProductPrice} ج.م',
+                '${state.cart.totalProductPrice} ${AppLocalizations.of(context)!.currency}',
                 style: getBoldStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
@@ -352,7 +352,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'الضرائب',
+                AppLocalizations.of(context)!.taxes,
                 style: getMediumStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
@@ -360,7 +360,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                 ),
               ),
               Text(
-                '${state.cart.totalTaxAmount} ج.م',
+                '${state.cart.totalTaxAmount} ${AppLocalizations.of(context)!.currency}',
                 style: getBoldStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
@@ -376,7 +376,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'الإجمالي',
+                AppLocalizations.of(context)!.total,
                 style: getBoldStyle(
                   fontSize: FontSize.size16,
                   fontFamily: FontConstant.cairo,
@@ -384,7 +384,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                 ),
               ),
               Text(
-                '${state.cart.totalPrice} ج.م',
+                '${state.cart.totalPrice} ${AppLocalizations.of(context)!.currency}',
                 style: getBoldStyle(
                   fontSize: FontSize.size18,
                   fontFamily: FontConstant.cairo,
@@ -413,7 +413,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                 elevation: 2,
               ),
               child: Text(
-                'إتمام الطلب',
+                AppLocalizations.of(context)!.checkout,
                 style: getBoldStyle(
                   fontSize: FontSize.size16,
                   fontFamily: FontConstant.cairo,
@@ -493,7 +493,7 @@ class CheckoutBottomSheet extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'ملخص الطلب',
+                    AppLocalizations.of(context)!.orderSummary,
                     style: getBoldStyle(
                       fontSize: FontSize.size16,
                       fontFamily: FontConstant.cairo,
@@ -505,18 +505,18 @@ class CheckoutBottomSheet extends StatelessWidget {
                   // Order details
                   _buildSummaryRow(
                     context,
-                    'عدد المنتجات',
+                    AppLocalizations.of(context)!.numberOfProducts,
                     '${cart.totalQuantity}',
                   ),
                   _buildSummaryRow(
                     context,
-                    'المجموع الفرعي',
-                    '${cart.totalProductPrice} ${AppLocalizations.of(context)!.egp}',
+                    AppLocalizations.of(context)!.subTotal,
+                    '${cart.totalProductPrice} ${AppLocalizations.of(context)!.currency}',
                   ),
                   _buildSummaryRow(
                     context,
-                    'الضريبة',
-                    '${cart.totalTaxAmount} ${AppLocalizations.of(context)!.egp}',
+                    AppLocalizations.of(context)!.taxes,
+                    '${cart.totalTaxAmount} ${AppLocalizations.of(context)!.currency}',
                   ),
                   const Divider(thickness: 1),
                   _buildSummaryRow(
@@ -541,7 +541,7 @@ class CheckoutBottomSheet extends StatelessWidget {
                   Navigator.pop(context);
                   _navigateToCheckout(context);
                 },
-                text: 'المتابعة للدفع',
+                text: AppLocalizations.of(context)!.checkout,
               ),
             ),
           ),

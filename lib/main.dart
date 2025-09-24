@@ -17,16 +17,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // Initialize dependency injection
   await DependencyInjection.init();
-  
+
   // Initialize CountryService
   await DependencyInjection.getIt.get<CountryService>().initialize();
-  
+
   // Initialize LocationService
   await DependencyInjection.getIt.get<LocationService>().initialize();
 
@@ -48,9 +46,11 @@ class MyApp extends StatelessWidget {
     // Get initial route based on app state
     final appStateService = DependencyInjection.getIt.get<AppStateService>();
     final initialRoute = '/splash';
-    
+
     print(' App: Initial route determined as: $initialRoute');
-    print(' App: Onboarding completed: ${appStateService.isOnboardingCompleted()}');
+    print(
+      ' App: Onboarding completed: ${appStateService.isOnboardingCompleted()}',
+    );
 
     return MultiProvider(
       providers: [
@@ -69,9 +69,9 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             title: 'Sobieh Coffee',
             debugShowCheckedModeBanner: false,
-            themeMode: ThemeMode.system,
+            themeMode: ThemeMode.light,
             theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
+
             locale: languageService.currentLocale,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,6 +29,7 @@ class SearchBarWidget extends StatefulWidget {
 
 class _SearchBarWidgetState extends State<SearchBarWidget> {
   late TextEditingController _searchController;
+  Timer? _debounceTimer;
 
   @override
   void initState() {
@@ -38,16 +40,27 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
 
   @override
   void dispose() {
+    _debounceTimer?.cancel();
     _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
     super.dispose();
   }
 
   void _onSearchChanged() {
-    if (widget.onSearchChanged != null) {
-      widget.onSearchChanged!(_searchController.text);
-    }
-    context.read<ProductsFilterCubit>().updateKeyword(_searchController.text);
+    final query = _searchController.text.trim();
+    
+    // Cancel previous timer if it exists
+    _debounceTimer?.cancel();
+
+    // Set up new timer for debounced search
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      // Call the callback function if provided
+      if (widget.onSearchChanged != null) {
+        widget.onSearchChanged!(query);
+      }
+      // Update the filter cubit with the search query after debounce delay
+      context.read<ProductsFilterCubit>().updateKeyword(query);
+    });
   }
 
   void _showFilterBottomSheet(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,6 +29,7 @@ class _SearchBottomSheetState extends State<SearchBottomSheet>
   late Animation<double> _slideAnimation;
   late Animation<double> _fadeAnimation;
   bool _isSearching = false;
+  Timer? _debounceTimer;
 
   @override
   void initState() {
@@ -53,6 +55,7 @@ class _SearchBottomSheetState extends State<SearchBottomSheet>
 
   @override
   void dispose() {
+    _debounceTimer?.cancel();
     _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
     _animationController.dispose();
@@ -65,11 +68,18 @@ class _SearchBottomSheetState extends State<SearchBottomSheet>
       _isSearching = query.isNotEmpty;
     });
 
-    // Update the filter cubit with the search query
-    context.read<ProductsFilterCubit>().updateKeyword(query);
+    // Cancel previous timer if it exists
+    _debounceTimer?.cancel();
+
+    // Set up new timer for debounced search
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      // Update the filter cubit with the search query after debounce delay
+      context.read<ProductsFilterCubit>().updateKeyword(query);
+    });
   }
 
   void _clearSearch() {
+    _debounceTimer?.cancel();
     _searchController.clear();
     context.read<ProductsFilterCubit>().updateKeyword('');
   }

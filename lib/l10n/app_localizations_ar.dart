@@ -1441,4 +1441,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get responseParsingError => 'خطأ في تحليل الاستجابة من الخادم';
+
+  @override
+  String get numberOfProducts => 'عدد المنتجات';
 }

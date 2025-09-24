@@ -2962,6 +2962,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error parsing server response'**
   String get responseParsingError;
+
+  /// No description provided for @numberOfProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of Products'**
+  String get numberOfProducts;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

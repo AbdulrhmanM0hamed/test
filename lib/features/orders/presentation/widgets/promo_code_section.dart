@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
+import 'package:test/core/utils/common/custom_button.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
@@ -207,31 +208,12 @@ class _PromoCodeSectionState extends State<PromoCodeSection> {
               final isLoading = state is PromoCodeLoading;
 
               return SizedBox(
-                height: 56,
-                child: ElevatedButton(
+                height: 55,
+                width: 80,
+                child: CustomButton(
                   onPressed: isLoading ? null : _applyPromoCode,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                  ),
-                  child: isLoading
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CustomProgressIndicator(),
-                        )
-                      : Text(
-                          AppLocalizations.of(context)!.apply,
-                          style: getMediumStyle(
-                            fontSize: FontSize.size14,
-                            fontFamily: FontConstant.cairo,
-                            color: Colors.white,
-                          ),
-                        ),
+                  text: AppLocalizations.of(context)!.apply,
+                  isLoading: isLoading,
                 ),
               );
             },

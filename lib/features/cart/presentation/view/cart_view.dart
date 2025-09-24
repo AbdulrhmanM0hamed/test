@@ -11,7 +11,6 @@ import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/features/cart/presentation/cubit/cart_state.dart';
 import 'package:test/features/cart/presentation/widgets/cart_item_card.dart';
 import 'package:test/features/home/presentation/view/bottom_nav_bar.dart';
-import 'package:test/features/orders/presentation/views/checkout_view.dart';
 import 'package:test/l10n/app_localizations.dart';
 
 class CartView extends StatefulWidget {
@@ -71,6 +70,8 @@ class _CartViewState extends State<CartView>
                 ? _buildEmptyState(context)
                 : state is CartLoaded
                 ? _buildLoadedState(context, state)
+                : state is CartItemUpdating
+                ? _buildLoadedStateFromUpdating(context, state)
                 : state is CartError
                 ? _buildErrorState(context, state)
                 : _buildLoadingState(),
@@ -211,6 +212,40 @@ class _CartViewState extends State<CartView>
     );
   }
 
+  Widget _buildLoadedStateFromUpdating(BuildContext context, CartItemUpdating state) {
+    // Use the cart data from the updating state to avoid showing loading
+    return Column(
+      children: [
+        // Cart Items List
+        Expanded(
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            itemCount: state.cart.items.length,
+            itemBuilder: (context, index) {
+              final cartItem = state.cart.items[index];
+              return CartItemCard(
+                cartItem: cartItem,
+                onRemove: () =>
+                    context.read<CartCubit>().removeFromCart(cartItem.id),
+                onQuantityChanged: (newQuantity) {
+                  context.read<CartCubit>().updateCartItemQuantity(
+                    cartItemId: cartItem.id,
+                    newQuantity: newQuantity,
+                    productId: cartItem.product.id,
+                    productSizeColorId: cartItem.productSizeColorId,
+                  );
+                },
+              );
+            },
+          ),
+        ),
+
+        // Cart Summary - create a CartLoaded state to reuse the existing method
+        _buildCartSummary(context, CartLoaded(state.cart)),
+      ],
+    );
+  }
+
   Widget _buildCartSummary(BuildContext context, CartLoaded state) {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -304,7 +339,6 @@ class _CartViewState extends State<CartView>
               onPressed: () {
                 Navigator.pushNamed(context, '/checkout');
 
-                // TODO: Navigate to checkout
               },
 
               text: AppLocalizations.of(context)!.completeOrder,

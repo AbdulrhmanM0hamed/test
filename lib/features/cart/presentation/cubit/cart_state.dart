@@ -73,11 +73,12 @@ class CartItemRemoved extends CartState {
 class CartItemUpdating extends CartState {
   final int cartItemId;
   final int newQuantity;
+  final Cart cart;
 
-  const CartItemUpdating(this.cartItemId, this.newQuantity);
+  const CartItemUpdating(this.cartItemId, this.newQuantity, this.cart);
 
   @override
-  List<Object?> get props => [cartItemId, newQuantity];
+  List<Object?> get props => [cartItemId, newQuantity, cart];
 }
 
 class CartClearing extends CartState {}

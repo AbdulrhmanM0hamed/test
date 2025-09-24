@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,16 +31,20 @@ class CartItemCard extends StatefulWidget {
 }
 
 class _CartItemCardState extends State<CartItemCard>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   late Animation<Offset> _slideAnimation;
   bool _isRemoving = false;
   bool _isUpdating = false;
+  late int _localQuantity;
+  Timer? _debounceTimer;
 
   @override
   void initState() {
     super.initState();
+    _localQuantity = widget.cartItem.quantity;
+
     _controller = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
@@ -60,8 +65,32 @@ class _CartItemCardState extends State<CartItemCard>
 
   @override
   void dispose() {
+    _debounceTimer?.cancel();
     _controller.dispose();
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(CartItemCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Update local quantity if the cart item quantity changed from external source
+    if (oldWidget.cartItem.quantity != widget.cartItem.quantity &&
+        !_isUpdating) {
+      setState(() {
+        _localQuantity = widget.cartItem.quantity;
+      });
+    }
+  }
+
+  void _updateQuantityWithDebounce(int newQuantity) {
+    setState(() {
+      _localQuantity = newQuantity;
+    });
+
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 800), () {
+      widget.onQuantityChanged?.call(newQuantity);
+    });
   }
 
   void _handleRemove() async {
@@ -317,7 +346,7 @@ class _CartItemCardState extends State<CartItemCard>
         cartState is CartItemUpdating &&
         cartState.cartItemId == widget.cartItem.id;
 
-    final currentQuantity = widget.cartItem.quantity;
+    final currentQuantity = _localQuantity;
     final maxAllowed = widget.cartItem.product.limitation > 0
         ? (widget.cartItem.product.limitation < widget.cartItem.countOfAvailable
               ? widget.cartItem.product.limitation
@@ -373,8 +402,7 @@ class _CartItemCardState extends State<CartItemCard>
                 _buildQuantityButton(
                   icon: Icons.remove,
                   onPressed: canDecrease
-                      ? () =>
-                            widget.onQuantityChanged?.call(currentQuantity - 1)
+                      ? () => _updateQuantityWithDebounce(currentQuantity - 1)
                       : null,
                   isDisabled: !canDecrease,
                 ),
@@ -402,8 +430,7 @@ class _CartItemCardState extends State<CartItemCard>
                 _buildQuantityButton(
                   icon: Icons.add,
                   onPressed: canIncrease
-                      ? () =>
-                            widget.onQuantityChanged?.call(currentQuantity + 1)
+                      ? () => _updateQuantityWithDebounce(currentQuantity + 1)
                       : null,
                   isDisabled: !canIncrease,
                 ),

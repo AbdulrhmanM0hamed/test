@@ -1441,4 +1441,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get responseParsingError => 'Error parsing server response';
+
+  @override
+  String get numberOfProducts => 'Number of Products';
 }

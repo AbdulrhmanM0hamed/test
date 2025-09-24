@@ -304,7 +304,7 @@ class _CategoriesViewState extends State<CategoriesView> {
               decoration: BoxDecoration(
                 color: isSelected
                     ? AppColors.primary.withValues(alpha: 0.1)
-                    : Colors.white,
+                    : Theme.of(context).cardTheme.color,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: isSelected
@@ -368,14 +368,16 @@ class _CategoriesViewState extends State<CategoriesView> {
                             ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 6),
                   // اسم القسم
                   Text(
                     department.name,
                     style: getSemiBoldStyle(
-                      fontSize: FontSize.size12,
+                      fontSize: FontSize.size13,
                       fontFamily: FontConstant.cairo,
-                      color: isSelected ? AppColors.primary : Colors.grey[700]!,
+                      color: isSelected
+                          ? AppColors.primary.withValues(alpha: 0.7)
+                          : Colors.grey.withValues(alpha: 0.5),
                     ),
                     textAlign: TextAlign.center,
                     maxLines: 1,
