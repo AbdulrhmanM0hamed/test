@@ -16,14 +16,11 @@ class OfflineWishlistItemCard extends StatefulWidget {
   final Map<String, dynamic> product;
   final VoidCallback? onTap;
 
-  const OfflineWishlistItemCard({
-    super.key,
-    required this.product,
-    this.onTap,
-  });
+  const OfflineWishlistItemCard({super.key, required this.product, this.onTap});
 
   @override
-  State<OfflineWishlistItemCard> createState() => _OfflineWishlistItemCardState();
+  State<OfflineWishlistItemCard> createState() =>
+      _OfflineWishlistItemCardState();
 }
 
 class _OfflineWishlistItemCardState extends State<OfflineWishlistItemCard>
@@ -120,88 +117,95 @@ class _OfflineWishlistItemCardState extends State<OfflineWishlistItemCard>
     final productImage = widget.product['image'] as String? ?? '';
     final isAvailable = (widget.product['countOfAvailable'] as int? ?? 0) > 0;
     final isBest = widget.product['isBest'] as bool? ?? false;
+    final productId = widget.product['id'] ?? 0;
 
-    return Container(
-      width: 120,
-      height: 120,
-      margin: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: const Color.fromARGB(255, 240, 233, 211),
-      ),
-      child: Stack(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: CachedNetworkImage(
-              imageUrl: productImage,
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.contain,
-              placeholder: (context, url) =>
-                  const Center(child: CustomProgressIndicator()),
-              errorWidget: (context, url, error) => Container(
-                color: Colors.grey[200],
-                child: Icon(
-                  Icons.image_not_supported_outlined,
-                  color: Colors.grey[400],
-                  size: 40,
-                ),
-              ),
-            ),
-          ),
-          // Status badge
-          if (isBest)
-            Positioned(
-              top: 8,
-              right: 8,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                decoration: BoxDecoration(
-                  color: AppColors.secondary,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  AppLocalizations.of(context)!.bestSellers,
-                  style: getBoldStyle(
-                    fontSize: FontSize.size9,
-                    fontFamily: FontConstant.cairo,
-                    color: AppColors.white,
+    return Hero(
+      tag: 'offline_wishlist_product_$productId',
+      child: Container(
+        width: 120,
+        height: 120,
+        margin: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: const Color.fromARGB(255, 240, 233, 211),
+        ),
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: CachedNetworkImage(
+                imageUrl: productImage,
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.contain,
+                placeholder: (context, url) =>
+                    const Center(child: CustomProgressIndicator()),
+                errorWidget: (context, url, error) => Container(
+                  color: Colors.grey[200],
+                  child: Icon(
+                    Icons.image_not_supported_outlined,
+                    color: Colors.grey[400],
+                    size: 40,
                   ),
                 ),
               ),
             ),
-          // Stock indicator
-          if (!isAvailable)
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Colors.black.withValues(alpha: 0.6),
+            // Status badge
+            if (isBest)
+              Positioned(
+                top: 8,
+                right: 8,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 3,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.secondary,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    AppLocalizations.of(context)!.bestSellers,
+                    style: getBoldStyle(
+                      fontSize: FontSize.size9,
+                      fontFamily: FontConstant.cairo,
+                      color: AppColors.white,
+                    ),
+                  ),
                 ),
-                child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context)!.outOfStock,
-                      style: getBoldStyle(
-                        fontSize: FontSize.size10,
-                        fontFamily: FontConstant.cairo,
-                        color: Colors.white,
+              ),
+            // Stock indicator
+            if (!isAvailable)
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.black.withValues(alpha: 0.6),
+                  ),
+                  child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        AppLocalizations.of(context)!.outOfStock,
+                        style: getBoldStyle(
+                          fontSize: FontSize.size10,
+                          fontFamily: FontConstant.cairo,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -356,7 +360,9 @@ class _OfflineWishlistItemCardState extends State<OfflineWishlistItemCard>
           // Remove from wishlist button
           GestureDetector(
             onTap: () async {
-              await HybridWishlistService.instance.removeFromWishlist(productId);
+              await HybridWishlistService.instance.removeFromWishlist(
+                productId,
+              );
               CustomSnackbar.showWarning(
                 context: context,
                 message: 'تم حذف المنتج من المفضلة',
@@ -400,7 +406,8 @@ class _OfflineWishlistItemCardState extends State<OfflineWishlistItemCard>
                         // Show success snackbar
                         CustomSnackbar.showSuccess(
                           context: context,
-                          message: AppLocalizations.of(context)!.addedToCart +
+                          message:
+                              AppLocalizations.of(context)!.addedToCart +
                               ' ${widget.product['name']}' +
                               ' ${AppLocalizations.of(context)!.toCart}',
                         );
@@ -443,9 +450,7 @@ class _OfflineWishlistItemCardState extends State<OfflineWishlistItemCard>
                       )
                     : Icon(
                         Icons.shopping_cart_outlined,
-                        color: isAvailable
-                            ? AppColors.primary
-                            : Colors.grey,
+                        color: isAvailable ? AppColors.primary : Colors.grey,
                         size: 20,
                       ),
               ),
