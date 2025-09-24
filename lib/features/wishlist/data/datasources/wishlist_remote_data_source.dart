@@ -57,22 +57,22 @@ class WishlistRemoteDataSourceImpl implements WishlistRemoteDataSource {
   @override
   Future<Map<String, dynamic>> removeAllFromWishlist() async {
     try {
-      print('🗑️ WishlistRemoteDataSource: Starting removeAllFromWishlist');
-      print('🌐 API Endpoint: ${ApiEndpoints.removeAllFromWishlist}');
+      //print('🗑️ WishlistRemoteDataSource: Starting removeAllFromWishlist');
+      //print('🌐 API Endpoint: ${ApiEndpoints.removeAllFromWishlist}');
 
       final response = await _dioService.delete(
         ApiEndpoints.removeAllFromWishlist,
       );
 
-      print('✅ WishlistRemoteDataSource: removeAllFromWishlist success');
-      print('📊 Response status: ${response.statusCode}');
-      print('📋 Response data: ${response.data}');
+      //print('✅ WishlistRemoteDataSource: removeAllFromWishlist success');
+      //print('📊 Response status: ${response.statusCode}');
+      //print('📋 Response data: ${response.data}');
 
       return response.data;
     } catch (e) {
-      print('❌ WishlistRemoteDataSource: removeAllFromWishlist failed');
-      print('🔥 Error: $e');
-      print('📍 Error type: ${e.runtimeType}');
+      //print('❌ WishlistRemoteDataSource: removeAllFromWishlist failed');
+      //print('🔥 Error: $e');
+      //print('📍 Error type: ${e.runtimeType}');
       rethrow;
     }
   }

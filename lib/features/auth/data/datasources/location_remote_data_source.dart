@@ -18,39 +18,33 @@ class LocationRemoteDataSourceImpl implements LocationRemoteDataSource {
   @override
   Future<List<CountryModel>> getCountries() async {
     try {
-      print('🌐 LocationRemoteDataSource: Calling API...');
+      //print('🌐 LocationRemoteDataSource: Calling API...');
       final response = await dioService.get(ApiEndpoints.countries);
-      print(
-        '📡 LocationRemoteDataSource: Response status: ${response.statusCode}',
-      );
+      //print('📡 LocationRemoteDataSource: Response status: ${response.statusCode}');
 
       if (response.statusCode == 200) {
         final data = response.data['data'] as List;
-        print(
-          '📦 LocationRemoteDataSource: Received ${data.length} countries from API',
-        );
+        //print('📦 LocationRemoteDataSource: Received ${data.length} countries from API');
 
         final countries = data.map((json) {
-          print('🔍 Parsing country JSON: $json');
+          //print('🔍 Parsing country JSON: $json');
           try {
             final country = CountryModel.fromJson(json);
-            print('✅ Successfully parsed: ${country.titleAr}');
+            //print('✅ Successfully parsed: ${country.titleAr}');
             return country;
           } catch (e) {
-            print('❌ Error parsing country: $e');
+            //print('❌ Error parsing country: $e');
             rethrow;
           }
         }).toList();
 
-        print(
-          '✅ LocationRemoteDataSource: Successfully parsed ${countries.length} countries',
-        );
+        //print('✅ LocationRemoteDataSource: Successfully parsed ${countries.length} countries');
         return countries;
       } else {
         throw Exception('Failed to load countries');
       }
     } catch (e) {
-      print('❌ LocationRemoteDataSource: Error fetching countries: $e');
+      //print('❌ LocationRemoteDataSource: Error fetching countries: $e');
       throw Exception('Error fetching countries: $e');
     }
   }
@@ -58,41 +52,35 @@ class LocationRemoteDataSourceImpl implements LocationRemoteDataSource {
   @override
   Future<List<CityModel>> getCities(int countryId) async {
     try {
-      print(
-        '🌐 LocationRemoteDataSource: Calling cities API for country $countryId...',
+      //print('🌐 LocationRemoteDataSource: Calling cities API for country $countryId...');
+      final response = await dioService.get(
+        ApiEndpoints.citiesByCountry(countryId),
       );
-      final response = await dioService.get(ApiEndpoints.citiesByCountry(countryId));
-      print(
-        '📡 LocationRemoteDataSource: Cities response status: ${response.statusCode}',
-      );
+      //print('📡 LocationRemoteDataSource: Cities response status: ${response.statusCode}');
 
       if (response.statusCode == 200) {
         final data = response.data['data'] as List;
-        print(
-          '📦 LocationRemoteDataSource: Received ${data.length} cities from API',
-        );
+        //print('📦 LocationRemoteDataSource: Received ${data.length} cities from API');
 
         final cities = data.map((json) {
-          print('🔍 Parsing city JSON: $json');
+          //print('🔍 Parsing city JSON: $json');
           try {
             final city = CityModel.fromJson(json);
-            print('✅ Successfully parsed city: ${city.titleAr}');
+            //print('✅ Successfully parsed city: ${city.titleAr}');
             return city;
           } catch (e) {
-            print('❌ Error parsing city: $e');
+            //print('❌ Error parsing city: $e');
             rethrow;
           }
         }).toList();
 
-        print(
-          '✅ LocationRemoteDataSource: Successfully parsed ${cities.length} cities',
-        );
+        //print('✅ LocationRemoteDataSource: Successfully parsed ${cities.length} cities');
         return cities;
       } else {
         throw Exception('Failed to load cities');
       }
     } catch (e) {
-      print('❌ LocationRemoteDataSource: Error fetching cities: $e');
+      //print('❌ LocationRemoteDataSource: Error fetching cities: $e');
       throw Exception('Error fetching cities: $e');
     }
   }

@@ -73,16 +73,16 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
         page: filter.page,
       );
 
-      print('🌐 API URL: $url');
-      print('🔍 Filter Parameters: ${filter.toJson()}');
+      //print('🌐 API URL: $url');
+      //print('🔍 Filter Parameters: ${filter.toJson()}');
 
       final response = await dioService.get(url);
 
-      print('📡 API Response Status: ${response.statusCode}');
+      //print('📡 API Response Status: ${response.statusCode}');
 
       if (response.statusCode == 200) {
         final productsResponse = ProductsResponseModel.fromJson(response.data);
-        print('✅ Successfully loaded ${productsResponse.data.length} products');
+        //print('✅ Successfully loaded ${productsResponse.data.length} products');
 
         return ApiResponse.success(
           data: productsResponse,
@@ -95,7 +95,7 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
         );
       }
     } catch (e) {
-      print('🚨 Network Error: $e');
+      //print('🚨 Network Error: $e');
       return ApiResponse.error(
         message: 'Network error: ${e.toString()}',
         statusCode: 500,

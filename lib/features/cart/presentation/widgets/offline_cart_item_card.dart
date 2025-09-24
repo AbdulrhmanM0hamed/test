@@ -127,7 +127,12 @@ class _OfflineCartItemCardState extends State<OfflineCartItemCard>
     );
   }
 
-  Widget _buildProductDetails(BuildContext context, String productName, double realPrice, double star) {
+  Widget _buildProductDetails(
+    BuildContext context,
+    String productName,
+    double realPrice,
+    double star,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -340,14 +345,15 @@ class _OfflineCartItemCardState extends State<OfflineCartItemCard>
   @override
   Widget build(BuildContext context) {
     try {
-      print('Building OfflineCartItemCard with data: ${widget.cartItem}');
-      
+      //print('Building OfflineCartItemCard with data: ${widget.cartItem}');
+
       // Extract product data safely
-      final productData = widget.cartItem['product'] as Map<String, dynamic>? ?? {};
+      final productData =
+          widget.cartItem['product'] as Map<String, dynamic>? ?? {};
       final productName = productData['name']?.toString() ?? 'Unknown Product';
       final productImage = productData['image']?.toString() ?? '';
       final productId = productData['id']?.toString() ?? '';
-      
+
       // Handle price parsing more safely
       double realPrice = 0.0;
       if (productData['realPrice'] != null) {
@@ -355,12 +361,14 @@ class _OfflineCartItemCardState extends State<OfflineCartItemCard>
       } else if (productData['price'] != null) {
         realPrice = double.tryParse(productData['price'].toString()) ?? 0.0;
       } else if (productData['originalPrice'] != null) {
-        realPrice = double.tryParse(productData['originalPrice'].toString()) ?? 0.0;
+        realPrice =
+            double.tryParse(productData['originalPrice'].toString()) ?? 0.0;
       }
-      
-      final star = double.tryParse(productData['star']?.toString() ?? '0') ?? 0.0;
-      
-      print('Parsed data - Name: $productName, Price: $realPrice, Quantity: $_localQuantity');
+
+      final star =
+          double.tryParse(productData['star']?.toString() ?? '0') ?? 0.0;
+
+      //print('Parsed data - Name: $productName, Price: $realPrice, Quantity: $_localQuantity');
 
       return SlideTransition(
         position: _slideAnimation,
@@ -393,7 +401,14 @@ class _OfflineCartItemCardState extends State<OfflineCartItemCard>
                     const SizedBox(width: 16),
 
                     // Product Details
-                    Expanded(child: _buildProductDetails(context, productName, realPrice, star)),
+                    Expanded(
+                      child: _buildProductDetails(
+                        context,
+                        productName,
+                        realPrice,
+                        star,
+                      ),
+                    ),
 
                     // Actions Column
                     _buildActionsColumn(context),
@@ -405,7 +420,7 @@ class _OfflineCartItemCardState extends State<OfflineCartItemCard>
         ),
       );
     } catch (e) {
-      debugPrint('🛒 OfflineCartItemCard: Error parsing cart item: $e');
+      // //debugprint('🛒 OfflineCartItemCard: Error parsing cart item: $e');
       return Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(12),

@@ -39,7 +39,7 @@ class HomeProductsRemoteDataSourceImpl implements HomeProductsRemoteDataSource {
           )
           .toList();
     } catch (e) {
-      print('Error in getFeaturedProducts: $e');
+      //print('Error in getFeaturedProducts: $e');
       return [];
     }
   }
@@ -67,7 +67,7 @@ class HomeProductsRemoteDataSourceImpl implements HomeProductsRemoteDataSource {
           )
           .toList();
     } catch (e) {
-      print('Error in getBestSellerProducts: $e');
+      //print('Error in getBestSellerProducts: $e');
       return [];
     }
   }
@@ -95,7 +95,7 @@ class HomeProductsRemoteDataSourceImpl implements HomeProductsRemoteDataSource {
           )
           .toList();
     } catch (e) {
-      print('Error in getLatestProducts: $e');
+      //print('Error in getLatestProducts: $e');
       return [];
     }
   }
@@ -109,26 +109,24 @@ class HomeProductsRemoteDataSourceImpl implements HomeProductsRemoteDataSource {
         ApiEndpoints.specialOfferProductsUrl(regionId: regionId),
       );
 
-      print('Special Offer Response type: ${response.runtimeType}');
+      //print('Special Offer Response type: ${response.runtimeType}');
 
       // Extract data from Response object
       final Map<String, dynamic> responseData =
           response.data as Map<String, dynamic>;
-      print(
-        'Special Offer Response data: ${responseData.toString().substring(0, 200)}...',
-      );
+      //print('Special Offer Response data: ${responseData.toString().substring(0, 200)}...');
 
       final Map<String, dynamic>? dataSection =
           responseData['data'] as Map<String, dynamic>?;
 
       if (dataSection == null) {
-        print('Data section is null');
+        //print('Data section is null');
         return [];
       }
 
       final List<dynamic> productsJson =
           dataSection['data'] as List<dynamic>? ?? [];
-      print('Special Offer Products JSON count: ${productsJson.length}');
+      //print('Special Offer Products JSON count: ${productsJson.length}');
 
       final products = productsJson
           .map(
@@ -136,10 +134,10 @@ class HomeProductsRemoteDataSourceImpl implements HomeProductsRemoteDataSource {
           )
           .toList();
 
-      print('Special Offer Products parsed count: ${products.length}');
+      //print('Special Offer Products parsed count: ${products.length}');
       return products;
     } catch (e) {
-      print('Error in getSpecialOfferProducts: $e');
+      //print('Error in getSpecialOfferProducts: $e');
       return [];
     }
   }

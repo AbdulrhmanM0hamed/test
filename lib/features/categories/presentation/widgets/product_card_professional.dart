@@ -42,7 +42,7 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
 
     // Initialize wishlist state from product data
     _isInWishlist = widget.product.isFavorite;
-    print(
+    (
       '🔍 ProductCardProfessional: Product ${widget.product.id} - isFavorite: ${widget.product.isFavorite}, _isInWishlist: $_isInWishlist',
     );
 
@@ -62,21 +62,23 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
     _controller.forward();
-    
+
     // Check actual wishlist state from HybridWishlistService
     _checkWishlistState();
-    
+
     // Listen to HybridWishlistService changes for automatic UI updates
     HybridWishlistService.instance.addListener(_onWishlistChanged);
   }
 
   Future<void> _checkWishlistState() async {
-    final isInWishlist = await HybridWishlistService.instance.isInWishlist(widget.product.id);
+    final isInWishlist = await HybridWishlistService.instance.isInWishlist(
+      widget.product.id,
+    );
     if (mounted && isInWishlist != _isInWishlist) {
       setState(() {
         _isInWishlist = isInWishlist;
       });
-      print('🔄 ProductCardProfessional: Updated wishlist state for product ${widget.product.id}: $_isInWishlist');
+      ('🔄 ProductCardProfessional: Updated wishlist state for product ${widget.product.id}: $_isInWishlist');
     }
   }
 
@@ -306,9 +308,9 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
             // Prevent multiple taps while this product is loading
             if (_isWishlistLoading) return;
 
-            debugPrint(
-              '❤️ ProductCardProfessional: ${_isInWishlist ? 'Removing' : 'Adding'} product ${widget.product.id} ${_isInWishlist ? 'from' : 'to'} wishlist',
-            );
+            // debug(
+            //   '❤️ ProductCardProfessional: ${_isInWishlist ? 'Removing' : 'Adding'} product ${widget.product.id} ${_isInWishlist ? 'from' : 'to'} wishlist',
+            // );
 
             // Set loading state for this specific product
             setState(() {
@@ -577,9 +579,9 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
                                         ' ${AppLocalizations.of(context)!.toCart}',
                                   );
 
-                                  debugPrint(
-                                    '✅ CategoryProductCard: Product added successfully',
-                                  );
+                                  // debug(
+                                  //   '✅ CategoryProductCard: Product added successfully',
+                                  // );
                                 } catch (e) {
                                   CustomSnackbar.showError(
                                     context: context,

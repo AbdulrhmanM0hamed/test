@@ -165,7 +165,7 @@ class _ProductVideoSectionState extends State<ProductVideoSection> {
 
       return null;
     } catch (e) {
-      print('Error extracting YouTube video ID: $e');
+      //print('Error extracting YouTube video ID: $e');
       return null;
     }
   }

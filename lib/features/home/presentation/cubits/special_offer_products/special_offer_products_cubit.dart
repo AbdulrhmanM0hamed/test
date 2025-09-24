@@ -10,26 +10,25 @@ class SpecialOfferProductsCubit extends Cubit<SpecialOfferProductsState> {
   SpecialOfferProductsCubit({
     required this.getSpecialOfferProductsUseCase,
     this.dataRefreshService,
-  })
-      : super(SpecialOfferProductsInitial()) {
+  }) : super(SpecialOfferProductsInitial()) {
     dataRefreshService?.registerRefreshCallback(_refreshData);
   }
 
   Future<void> getSpecialOfferProducts() async {
     if (isClosed) return;
-    
+
     try {
-      print('SpecialOfferProductsCubit: Loading special offer products...');
+      //print('SpecialOfferProductsCubit: Loading special offer products...');
       emit(SpecialOfferProductsLoading());
       final products = await getSpecialOfferProductsUseCase();
-      
+
       if (!isClosed) {
-        print('SpecialOfferProductsCubit: Loaded ${products.length} products');
+        //print('SpecialOfferProductsCubit: Loaded ${products.length} products');
         emit(SpecialOfferProductsLoaded(products: products));
       }
     } catch (e) {
       if (!isClosed) {
-        print('SpecialOfferProductsCubit: Error loading products: $e');
+        //print('SpecialOfferProductsCubit: Error loading products: $e');
         emit(SpecialOfferProductsError(message: e.toString()));
       }
     }

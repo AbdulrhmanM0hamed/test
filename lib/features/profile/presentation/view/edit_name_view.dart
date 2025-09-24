@@ -35,9 +35,7 @@ class _EditNameViewState extends State<EditNameView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final cubit = context.read<ProfileCubit>();
       if (cubit.state is ProfileInitial) {
-        print(
-          'DEBUG: ProfileCubit is in ProfileInitial state, loading profile...',
-        );
+        //print('DEBUG: ProfileCubit is in ProfileInitial state, loading profile...');
         cubit.getProfile();
       }
     });
@@ -174,20 +172,18 @@ class _EditNameViewState extends State<EditNameView> {
   }
 
   void _updateName() {
-    print('DEBUG: _updateName called');
+    //print('DEBUG: _updateName called');
 
     if (!_formKey.currentState!.validate()) {
-      print('DEBUG: Form validation failed');
+      //print('DEBUG: Form validation failed');
       return;
     }
 
     final newName = _nameController.text.trim();
-    print(
-      'DEBUG: New name: "$newName", Old name: "${widget.userProfile.name}"',
-    );
+    //print('DEBUG: New name: "$newName", Old name: "${widget.userProfile.name}"');
 
     if (newName == widget.userProfile.name) {
-      print('DEBUG: Name unchanged, showing warning');
+      //print('DEBUG: Name unchanged, showing warning');
       CustomSnackbar.showWarning(
         context: context,
         message: context.l10n.nameNotChanged,
@@ -206,8 +202,8 @@ class _EditNameViewState extends State<EditNameView> {
       confirmPassword: null,
     );
 
-    print('DEBUG: Created UpdateProfileRequest with name: "${request.name}"');
-    print('DEBUG: Calling ProfileCubit.updateProfileNew');
+    //print('DEBUG: Created UpdateProfileRequest with name: "${request.name}"');
+    //print('DEBUG: Calling ProfileCubit.updateProfileNew');
 
     context.read<ProfileCubit>().updateProfileNew(request);
   }

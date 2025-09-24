@@ -83,7 +83,7 @@ class AuthCubit extends Cubit<AuthState> {
         try {
           await OfflineSyncService.instance.syncOfflineDataToServer();
         } catch (e) {
-          print('🔄 Failed to sync offline data after login: $e');
+          //print('🔄 Failed to sync offline data after login: $e');
           // Don't fail the login process if sync fails
         }
       } else {
@@ -100,25 +100,25 @@ class AuthCubit extends Cubit<AuthState> {
         }
       }
     } catch (e) {
-      print('🔍 LOGIN EXCEPTION: $e');
-      print('🔍 EXCEPTION TYPE: ${e.runtimeType}');
+      //print('🔍 LOGIN EXCEPTION: $e');
+      //print('🔍 EXCEPTION TYPE: ${e.runtimeType}');
 
       final errorMessage = ErrorHandler.extractErrorMessage(e);
-      print('🔍 EXTRACTED ERROR MESSAGE: $errorMessage');
+      //print('🔍 EXTRACTED ERROR MESSAGE: $errorMessage');
 
       // Check if it's an ApiException or DioException with 401 status and Not Verified message
       if (e is DioException && e.response?.statusCode == 401) {
-        print('🔍 DIO EXCEPTION 401 DETECTED');
+        //print('🔍 DIO EXCEPTION 401 DETECTED');
         final responseData = e.response?.data;
-        print('🔍 RESPONSE DATA: $responseData');
+        //print('🔍 RESPONSE DATA: $responseData');
 
         if (responseData is Map<String, dynamic>) {
           final message = responseData['message'] ?? '';
-          print('🔍 MESSAGE FROM RESPONSE: $message');
+          //print('🔍 MESSAGE FROM RESPONSE: $message');
 
           if (message == 'Not Verified' ||
               message.toLowerCase().contains('not verified')) {
-            print('🔍 EMITTING EmailNotVerified STATE');
+            //print('🔍 EMITTING EmailNotVerified STATE');
             emit(EmailNotVerified(email, message));
             return;
           }
@@ -128,10 +128,10 @@ class AuthCubit extends Cubit<AuthState> {
       // Check if error message indicates Not Verified (for ApiException or other types)
       if (errorMessage == 'Not Verified' ||
           errorMessage.toLowerCase().contains('not verified')) {
-        print('🔍 EMITTING EmailNotVerified FROM MESSAGE CHECK');
+        //print('🔍 EMITTING EmailNotVerified FROM MESSAGE CHECK');
         emit(EmailNotVerified(email, errorMessage));
       } else {
-        print('🔍 EMITTING AuthError');
+        //print('🔍 EMITTING AuthError');
         emit(AuthError(errorMessage));
       }
     }
@@ -188,19 +188,19 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> resendVerificationEmail(String email) async {
-    print('🔍 RESENDING VERIFICATION EMAIL TO: $email');
+    //print('🔍 RESENDING VERIFICATION EMAIL TO: $email');
     emit(AuthLoading());
 
     try {
       final response = await resendVerificationEmailUseCase(email);
-      print('🔍 RESEND EMAIL RESPONSE: $response');
+      //print('🔍 RESEND EMAIL RESPONSE: $response');
       emit(
         VerificationEmailSentSuccess(
           response['message'] ?? 'Verification email sent successfully',
         ),
       );
     } catch (e) {
-      print('🔍 RESEND EMAIL ERROR: $e');
+      //print('🔍 RESEND EMAIL ERROR: $e');
       final errorMessage = ErrorHandler.extractErrorMessage(e);
       emit(AuthError(errorMessage));
     }

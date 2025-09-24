@@ -32,7 +32,7 @@ class GlobalCubitService {
         ..getMyWishlist();
       _isInitialized = true;
 
-      print('🌍 GlobalCubitService: Initialized with shared cubit instances');
+      //print('🌍 GlobalCubitService: Initialized with shared cubit instances');
     } else if (_isInitialized) {
       // Reset if user logged out
       reset();
@@ -42,7 +42,7 @@ class GlobalCubitService {
   /// Get the shared cart cubit instance
   CartCubit? get cartCubit {
     if (!_isInitialized) {
-      print('⚠️ GlobalCubitService: Not initialized, call initialize() first');
+      //print('⚠️ GlobalCubitService: Not initialized, call initialize() first');
     }
     return _cartCubit;
   }
@@ -50,7 +50,7 @@ class GlobalCubitService {
   /// Get the shared wishlist cubit instance
   WishlistCubit? get wishlistCubit {
     if (!_isInitialized) {
-      print('⚠️ GlobalCubitService: Not initialized, call initialize() first');
+      //print('⚠️ GlobalCubitService: Not initialized, call initialize() first');
     }
     return _wishlistCubit;
   }
@@ -63,12 +63,12 @@ class GlobalCubitService {
     _cartCubit = null;
     _wishlistCubit = null;
     _isInitialized = false;
-    print('🔄 GlobalCubitService: Reset completed');
+    //print('🔄 GlobalCubitService: Reset completed');
   }
 
   /// Force reinitialize after login (ensures fresh cubit instances)
   void forceReinitialize() {
-    print('🔄 GlobalCubitService: Force reinitializing...');
+    //print('🔄 GlobalCubitService: Force reinitializing...');
     _isInitialized = false;
     initialize();
   }
@@ -76,12 +76,12 @@ class GlobalCubitService {
   /// Refresh both cart and wishlist
   Future<void> refreshAll() async {
     if (_isInitialized) {
-      print('🔄 GlobalCubitService: Refreshing cart and wishlist...');
+      //print('🔄 GlobalCubitService: Refreshing cart and wishlist...');
       await Future.wait([
         if (_cartCubit != null) _cartCubit!.getCart(),
         if (_wishlistCubit != null) _wishlistCubit!.getMyWishlist(),
       ]);
-      print('✅ GlobalCubitService: Refresh completed');
+      //print('✅ GlobalCubitService: Refresh completed');
     }
   }
 
@@ -92,7 +92,7 @@ class GlobalCubitService {
     required int quantity,
   }) async {
     if (_cartCubit != null) {
-      print('🛒 GlobalCubitService: Adding product $productId to cart');
+      //print('🛒 GlobalCubitService: Adding product $productId to cart');
       await _cartCubit!.addToCart(
         productId: productId,
         productSizeColorId: productSizeColorId,
@@ -100,7 +100,7 @@ class GlobalCubitService {
       );
       // Auto refresh after adding
       await _cartCubit!.getCart();
-      print('✅ GlobalCubitService: Product added and cart refreshed');
+      //print('✅ GlobalCubitService: Product added and cart refreshed');
     }
   }
 
@@ -111,9 +111,7 @@ class GlobalCubitService {
     required int quantity,
   }) async {
     if (_cartCubit != null) {
-      print(
-        '🛒 GlobalCubitService: Adding product $productId to cart silently',
-      );
+      //print('🛒 GlobalCubitService: Adding product $productId to cart silently');
       // Use the use case directly to bypass state emissions that trigger snackbars
       final addToCartUseCase = DependencyInjection.getIt
           .get<AddToCartUseCase>();
@@ -139,22 +137,16 @@ class GlobalCubitService {
   /// Add item to wishlist silently (without triggering snackbar states) - used during sync
   Future<void> addToWishlistSilently({required int productId}) async {
     if (_wishlistCubit != null) {
-      print(
-        '❤️ GlobalCubitService: Adding product $productId to wishlist silently',
-      );
+      //print('❤️ GlobalCubitService: Adding product $productId to wishlist silently',);
       // Use the use case directly to bypass state emissions that trigger snackbars
       final addToWishlistUseCase = DependencyInjection.getIt
           .get<AddToWishlistUseCase>();
 
       try {
         await addToWishlistUseCase(productId);
-        print(
-          '✅ GlobalCubitService: Product $productId added to wishlist silently',
-        );
+        //print('✅ GlobalCubitService: Product $productId added to wishlist silently');
       } catch (e) {
-        print(
-          '❌ GlobalCubitService: Failed to add product $productId to wishlist silently: $e',
-        );
+        //print('❌ GlobalCubitService: Failed to add product $productId to wishlist silently: $e');
         throw Exception('Failed to add to wishlist: $e');
       }
     }
@@ -168,16 +160,14 @@ class GlobalCubitService {
     required int newQuantity,
   }) async {
     if (_cartCubit != null) {
-      print(
-        '🛒 GlobalCubitService: Updating cart item $cartItemId quantity to $newQuantity',
-      );
+      //print('🛒 GlobalCubitService: Updating cart item $cartItemId quantity to $newQuantity');
       await _cartCubit!.updateCartItemQuantity(
         cartItemId: cartItemId,
         newQuantity: newQuantity,
         productId: productId,
         productSizeColorId: productSizeColorId,
       );
-      print('✅ GlobalCubitService: Cart item quantity updated');
+      //print('✅ GlobalCubitService: Cart item quantity updated');
     }
   }
 
@@ -194,33 +184,31 @@ class GlobalCubitService {
   /// Add item to wishlist and refresh
   Future<void> addToWishlist(int productId) async {
     if (_wishlistCubit != null) {
-      print('❤️ GlobalCubitService: Adding product $productId to wishlist');
+      //print('❤️ GlobalCubitService: Adding product $productId to wishlist');
       await _wishlistCubit!.addToWishlist(productId);
       // Auto refresh after adding
       await _wishlistCubit!.getMyWishlist();
-      print('✅ GlobalCubitService: Product added to wishlist and refreshed');
+      //print('✅ GlobalCubitService: Product added to wishlist and refreshed');
     }
   }
 
   /// Remove item from wishlist and refresh
   Future<void> removeFromWishlist(int productId) async {
     if (_wishlistCubit != null) {
-      print('💔 GlobalCubitService: Removing product $productId from wishlist');
+      //print('💔 GlobalCubitService: Removing product $productId from wishlist');
       await _wishlistCubit!.removeFromWishlist(productId);
       // Auto refresh after removing
       await _wishlistCubit!.getMyWishlist();
-      print(
-        '✅ GlobalCubitService: Product removed from wishlist and refreshed',
-      );
+      //print('✅ GlobalCubitService: Product removed from wishlist and refreshed');
     }
   }
 
   /// Refresh cart after successful order (to clear it)
   Future<void> refreshCartAfterOrder() async {
     if (_cartCubit != null) {
-      print('🛒 GlobalCubitService: Refreshing cart after successful order');
+      //print('🛒 GlobalCubitService: Refreshing cart after successful order');
       await _cartCubit!.getCart();
-      print('✅ GlobalCubitService: Cart refreshed after order');
+      //print('✅ GlobalCubitService: Cart refreshed after order');
     }
   }
 }

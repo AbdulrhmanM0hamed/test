@@ -74,29 +74,25 @@ class DioService {
           options.headers['lang'] = language;
 
           if (kDebugMode) {
-            print('🚀 REQUEST: ${options.method} ${options.uri}');
-            print('📤 DATA: ${options.data}');
-            print('🔑 HEADERS: ${options.headers}');
+            //print('🚀 REQUEST: ${options.method} ${options.uri}');
+            //print('📤 DATA: ${options.data}');
+            //print('🔑 HEADERS: ${options.headers}');
           }
           handler.next(options);
         },
         onResponse: (response, handler) {
           if (kDebugMode) {
-            print(
-              '✅ RESPONSE: ${response.statusCode} ${response.requestOptions.uri}',
-            );
-            print('📥 DATA: ${response.data}');
+            //print('✅ RESPONSE: ${response.statusCode} ${response.requestOptions.uri}');
+            //print('📥 DATA: ${response.data}');
           }
           handler.next(response);
         },
         onError: (error, handler) async {
           if (kDebugMode) {
-            print(
-              '❌ ERROR: ${error.requestOptions.method} ${error.requestOptions.uri}',
-            );
-            print('💥 MESSAGE: ${error.message}');
-            print('📊 STATUS: ${error.response?.statusCode}');
-            print('📥 DATA: ${error.response?.data}');
+            //print('❌ ERROR: ${error.requestOptions.method} ${error.requestOptions.uri}');
+            //print('💥 MESSAGE: ${error.message}');
+            //print('📊 STATUS: ${error.response?.statusCode}');
+            //print('📥 DATA: ${error.response?.data}');
           }
 
           // Handle token refresh for 401 errors
@@ -111,7 +107,7 @@ class DioService {
               // Check if token should be refreshed
               if (_tokenStorageService!.shouldRefreshToken ||
                   _tokenStorageService!.isTokenExpired) {
-                print('🔄 Attempting to refresh token...');
+                //print('🔄 Attempting to refresh token...');
 
                 final refreshData = await _authRepository!.refreshToken();
                 final newToken = refreshData['access_token'] as String;
@@ -123,7 +119,7 @@ class DioService {
                   expiresIn: expiresIn,
                 );
 
-                print('✅ Token refreshed successfully');
+                //print('✅ Token refreshed successfully');
 
                 // Retry the original request with new token
                 final options = error.requestOptions;
@@ -135,7 +131,7 @@ class DioService {
                 return;
               }
             } catch (refreshError) {
-              print('❌ Token refresh failed: $refreshError');
+              //print('❌ Token refresh failed: $refreshError');
               _isRefreshing = false;
 
               // Clear tokens and redirect to login
@@ -694,7 +690,7 @@ class DioService {
     _isRefreshing = true;
 
     try {
-      print('🔄 Proactively refreshing token...');
+      //print('🔄 Proactively refreshing token...');
 
       final refreshData = await _authRepository!.refreshToken();
       final newToken = refreshData['access_token'] as String;
@@ -706,9 +702,9 @@ class DioService {
         expiresIn: expiresIn,
       );
 
-      print('✅ Token refreshed proactively');
+      //print('✅ Token refreshed proactively');
     } catch (e) {
-      print('❌ Proactive token refresh failed: $e');
+      //print('❌ Proactive token refresh failed: $e');
       // Don't clear tokens here, let the 401 handler deal with it
     } finally {
       _isRefreshing = false;

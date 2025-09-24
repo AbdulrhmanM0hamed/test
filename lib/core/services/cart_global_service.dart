@@ -13,9 +13,12 @@ class CartGlobalService {
   static CartGlobalService get instance => _instance;
 
   // Stream controllers for real-time updates
-  final StreamController<Cart?> _cartStreamController = StreamController<Cart?>.broadcast();
-  final StreamController<int> _cartCountStreamController = StreamController<int>.broadcast();
-  final StreamController<CartEvent> _cartEventController = StreamController<CartEvent>.broadcast();
+  final StreamController<Cart?> _cartStreamController =
+      StreamController<Cart?>.broadcast();
+  final StreamController<int> _cartCountStreamController =
+      StreamController<int>.broadcast();
+  final StreamController<CartEvent> _cartEventController =
+      StreamController<CartEvent>.broadcast();
 
   // Current cart data
   Cart? _currentCart;
@@ -33,60 +36,60 @@ class CartGlobalService {
   // Initialize the service
   Future<void> initialize() async {
     try {
-      debugPrint('🔧 CartGlobalService: Starting initialization...');
+      //debugprint('🔧 CartGlobalService: Starting initialization...');
       final cartCubit = DependencyInjection.getIt<CartCubit>();
-      
+
       // Listen to cart cubit changes
-      debugPrint('👂 CartGlobalService: Setting up stream listener...');
+      //debugprint('👂 CartGlobalService: Setting up stream listener...');
       cartCubit.stream.listen((state) {
-        debugPrint('📨 CartGlobalService: Received state from CartCubit: ${state.runtimeType}');
+        //debugprint('📨 CartGlobalService: Received state from CartCubit: ${state.runtimeType}');
         _handleCartStateChange(state);
       });
 
       // Load initial cart data
-      debugPrint('📦 CartGlobalService: Loading initial cart data...');
+      //debugprint('📦 CartGlobalService: Loading initial cart data...');
       await cartCubit.getCart();
-      debugPrint('✅ CartGlobalService: Initialization completed');
+      //debugprint('✅ CartGlobalService: Initialization completed');
     } catch (e) {
-      debugPrint('❌ CartGlobalService initialization error: $e');
+      //debugprint('❌ CartGlobalService initialization error: $e');
     }
   }
 
   // Force refresh cart and update UI immediately
   Future<void> forceRefreshAndUpdate() async {
     try {
-      debugPrint('🔄 CartGlobalService: Force refreshing cart...');
+      //debugprint('🔄 CartGlobalService: Force refreshing cart...');
       final cartCubit = DependencyInjection.getIt<CartCubit>();
       await cartCubit.getCart();
     } catch (e) {
-      debugPrint('❌ CartGlobalService force refresh error: $e');
+      //debugprint('❌ CartGlobalService force refresh error: $e');
     }
   }
 
   // Handle cart state changes from cubit
   void _handleCartStateChange(CartState state) {
-    debugPrint('🔄 CartGlobalService: Handling state change: ${state.runtimeType}');
-    
+    //debugprint('🔄 CartGlobalService: Handling state change: ${state.runtimeType}');
+
     if (state is CartLoaded) {
-      debugPrint('📦 CartGlobalService: Cart loaded with ${state.cart.totalQuantity} items');
+      //debugprint('📦 CartGlobalService: Cart loaded with ${state.cart.totalQuantity} items');
       _updateCart(state.cart);
       _broadcastEvent(CartEvent.loaded);
     } else if (state is CartEmpty) {
-      debugPrint('🛒 CartGlobalService: Cart is empty');
+      //debugprint('🛒 CartGlobalService: Cart is empty');
       _updateCart(null);
       _broadcastEvent(CartEvent.cleared);
     } else if (state is CartItemAdded) {
-      debugPrint('➕ CartGlobalService: Item added to cart');
+      //debugprint('➕ CartGlobalService: Item added to cart');
       _broadcastEvent(CartEvent.itemAdded);
       // CartCubit already calls getCart() after adding, so we don't need to refresh here
       // The CartLoaded state will be emitted automatically and handled above
     } else if (state is CartItemRemoved) {
-      debugPrint('➖ CartGlobalService: Item removed from cart');
+      //debugprint('➖ CartGlobalService: Item removed from cart');
       _broadcastEvent(CartEvent.itemRemoved);
       // CartCubit already calls getCart() after removing, so we don't need to refresh here
       // The CartLoaded state will be emitted automatically and handled above
     } else if (state is CartCleared) {
-      debugPrint('🗑️ CartGlobalService: Cart cleared');
+      //debugprint('🗑️ CartGlobalService: Cart cleared');
       _updateCart(null);
       _broadcastEvent(CartEvent.cleared);
     }
@@ -96,14 +99,14 @@ class CartGlobalService {
   void _updateCart(Cart? cart) {
     _currentCart = cart;
     _currentCount = cart?.totalQuantity ?? 0;
-    
-    debugPrint('🔢 CartGlobalService: Updating cart count to $_currentCount');
-    
+
+    //debugprint('🔢 CartGlobalService: Updating cart count to $_currentCount');
+
     // Broadcast updates
     _cartStreamController.add(_currentCart);
     _cartCountStreamController.add(_currentCount);
-    
-    debugPrint('📡 CartGlobalService: Broadcasted cart updates');
+
+    //debugprint('📡 CartGlobalService: Broadcasted cart updates');
   }
 
   // Broadcast cart events
@@ -114,11 +117,13 @@ class CartGlobalService {
   // Force refresh cart from server
   Future<void> _refreshCart() async {
     try {
-      await Future.delayed(const Duration(milliseconds: 100)); // Small delay to ensure API call completes
+      await Future.delayed(
+        const Duration(milliseconds: 100),
+      ); // Small delay to ensure API call completes
       final cartCubit = DependencyInjection.getIt<CartCubit>();
       await cartCubit.getCart();
     } catch (e) {
-      debugPrint('Cart refresh error: $e');
+      //debugprint('Cart refresh error: $e');
     }
   }
 
@@ -140,39 +145,39 @@ class CartGlobalService {
         productSizeColorId: productSizeColorId,
         quantity: quantity,
       );
-      
+
       // Force immediate refresh and update
       await _forceRefreshCart();
     } catch (e) {
-      debugPrint('Add to cart error: $e');
+      //debugprint('Add to cart error: $e');
     }
   }
 
   // Private method to force refresh cart and update streams immediately
   Future<void> _forceRefreshCart() async {
     try {
-      debugPrint('🔄 CartGlobalService: Force refreshing cart data...');
+      //debugprint('🔄 CartGlobalService: Force refreshing cart data...');
       final cartCubit = DependencyInjection.getIt<CartCubit>();
-      
+
       // Get fresh cart data
       await cartCubit.getCart();
-      
+
       // Wait a bit for the state to be emitted
       await Future.delayed(const Duration(milliseconds: 200));
-      
+
       // If state handling didn't work, manually get the current state
       final currentState = cartCubit.state;
       if (currentState is CartLoaded) {
-        debugPrint('📦 CartGlobalService: Manually updating from current state');
+        //debugprint('📦 CartGlobalService: Manually updating from current state');
         _updateCart(currentState.cart);
         _broadcastEvent(CartEvent.loaded);
       } else if (currentState is CartEmpty) {
-        debugPrint('🛒 CartGlobalService: Manually updating - cart is empty');
+        //debugprint('🛒 CartGlobalService: Manually updating - cart is empty');
         _updateCart(null);
         _broadcastEvent(CartEvent.cleared);
       }
     } catch (e) {
-      debugPrint('❌ CartGlobalService force refresh error: $e');
+      //debugprint('❌ CartGlobalService force refresh error: $e');
     }
   }
 
@@ -182,7 +187,7 @@ class CartGlobalService {
       final cartCubit = DependencyInjection.getIt<CartCubit>();
       await cartCubit.removeFromCart(cartItemId);
     } catch (e) {
-      debugPrint('Remove from cart error: $e');
+      //debugprint('Remove from cart error: $e');
     }
   }
 
@@ -192,7 +197,7 @@ class CartGlobalService {
       final cartCubit = DependencyInjection.getIt<CartCubit>();
       await cartCubit.removeAllFromCart();
     } catch (e) {
-      debugPrint('Clear cart error: $e');
+      //debugprint('Clear cart error: $e');
     }
   }
 
@@ -205,10 +210,4 @@ class CartGlobalService {
 }
 
 // Cart events enum
-enum CartEvent {
-  loaded,
-  itemAdded,
-  itemRemoved,
-  cleared,
-  error,
-}
+enum CartEvent { loaded, itemAdded, itemRemoved, cleared, error }

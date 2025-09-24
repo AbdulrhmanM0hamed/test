@@ -26,48 +26,49 @@ class NetworkResult {
 class NetworkService {
   static NetworkService? _instance;
   static NetworkService get instance => _instance ??= NetworkService._();
-  
+
   NetworkService._();
 
   final Connectivity _connectivity = Connectivity();
   StreamSubscription<ConnectivityResult>? _connectivitySubscription;
-  
+
   // Stream controller for network status changes
-  final StreamController<NetworkResult> _networkStatusController = 
+  final StreamController<NetworkResult> _networkStatusController =
       StreamController<NetworkResult>.broadcast();
-  
-  Stream<NetworkResult> get networkStatusStream => _networkStatusController.stream;
-  
+
+  Stream<NetworkResult> get networkStatusStream =>
+      _networkStatusController.stream;
+
   NetworkResult? _lastResult;
   NetworkResult? get lastResult => _lastResult;
 
   /// Initialize network monitoring
   Future<void> initialize() async {
-    print('🌐 NetworkService: Initializing...');
-    
+    //print('🌐 NetworkService: Initializing...');
+
     // Check initial connectivity
     final initialResult = await checkNetworkStatus();
     _lastResult = initialResult;
     _networkStatusController.add(initialResult);
-    
+
     // Listen for connectivity changes
-    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(
-      (ConnectivityResult result) async {
-        print('🔄 NetworkService: Connectivity changed: $result');
-        final networkResult = await checkNetworkStatus();
-        _lastResult = networkResult;
-        _networkStatusController.add(networkResult);
-      },
-    );
-    
-    print('✅ NetworkService: Initialized successfully');
+    _connectivitySubscription = _connectivity.onConnectivityChanged.listen((
+      ConnectivityResult result,
+    ) async {
+      //print('🔄 NetworkService: Connectivity changed: $result');
+      final networkResult = await checkNetworkStatus();
+      _lastResult = networkResult;
+      _networkStatusController.add(networkResult);
+    });
+
+    //print('✅ NetworkService: Initialized successfully');
   }
 
   /// Check current network status with quality assessment
   Future<NetworkResult> checkNetworkStatus() async {
     try {
       final connectivityResult = await _connectivity.checkConnectivity();
-      
+
       if (connectivityResult == ConnectivityResult.none) {
         return const NetworkResult(
           isConnected: false,
@@ -89,9 +90,9 @@ class NetworkService {
 
       // Test actual internet connectivity and quality
       final qualityResult = await _testNetworkQuality();
-      
+
       String message = _getNetworkMessage(networkType, qualityResult.quality);
-      
+
       return NetworkResult(
         isConnected: true,
         type: networkType,
@@ -99,9 +100,8 @@ class NetworkService {
         pingMs: qualityResult.pingMs,
         message: message,
       );
-      
     } catch (e) {
-      print('❌ NetworkService: Error checking network: $e');
+      //print('❌ NetworkService: Error checking network: $e');
       return const NetworkResult(
         isConnected: false,
         type: NetworkType.none,
@@ -115,15 +115,16 @@ class NetworkService {
   Future<({NetworkQuality quality, int? pingMs})> _testNetworkQuality() async {
     try {
       final stopwatch = Stopwatch()..start();
-      
+
       // Test with Google's DNS (reliable and fast)
-      final result = await InternetAddress.lookup('google.com')
-          .timeout(const Duration(seconds: 5));
-      
+      final result = await InternetAddress.lookup(
+        'google.com',
+      ).timeout(const Duration(seconds: 5));
+
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         stopwatch.stop();
         final pingMs = stopwatch.elapsedMilliseconds;
-        
+
         // Determine quality based on response time
         NetworkQuality quality;
         if (pingMs < 100) {
@@ -133,14 +134,14 @@ class NetworkService {
         } else {
           quality = NetworkQuality.poor;
         }
-        
-        print('🏓 NetworkService: Ping test completed in ${pingMs}ms - Quality: $quality');
+
+        //print('🏓 NetworkService: Ping test completed in ${pingMs}ms - Quality: $quality');
         return (quality: quality, pingMs: pingMs);
       }
     } catch (e) {
-      print('🚨 NetworkService: Ping test failed: $e');
+      //print('🚨 NetworkService: Ping test failed: $e');
     }
-    
+
     // Fallback: try HTTP request test
     return await _testHttpConnection();
   }
@@ -149,15 +150,17 @@ class NetworkService {
   Future<({NetworkQuality quality, int? pingMs})> _testHttpConnection() async {
     try {
       final stopwatch = Stopwatch()..start();
-      
-      final response = await http.get(
-        Uri.parse('https://www.google.com'),
-        headers: {'User-Agent': 'NetworkTest/1.0'},
-      ).timeout(const Duration(seconds: 8));
-      
+
+      final response = await http
+          .get(
+            Uri.parse('https://www.google.com'),
+            headers: {'User-Agent': 'NetworkTest/1.0'},
+          )
+          .timeout(const Duration(seconds: 8));
+
       stopwatch.stop();
       final responseTime = stopwatch.elapsedMilliseconds;
-      
+
       if (response.statusCode == 200) {
         NetworkQuality quality;
         if (responseTime < 500) {
@@ -167,14 +170,14 @@ class NetworkService {
         } else {
           quality = NetworkQuality.poor;
         }
-        
-        print('🌐 NetworkService: HTTP test completed in ${responseTime}ms - Quality: $quality');
+
+        //print('🌐 NetworkService: HTTP test completed in ${responseTime}ms - Quality: $quality');
         return (quality: quality, pingMs: responseTime);
       }
     } catch (e) {
-      print('🚨 NetworkService: HTTP test failed: $e');
+      //print('🚨 NetworkService: HTTP test failed: $e');
     }
-    
+
     return (quality: NetworkQuality.offline, pingMs: null);
   }
 
@@ -213,7 +216,7 @@ class NetworkService {
       final connectivityResult = await _connectivity.checkConnectivity();
       return connectivityResult != ConnectivityResult.none;
     } catch (e) {
-      print('❌ NetworkService: Quick connectivity check failed: $e');
+      //print('❌ NetworkService: Quick connectivity check failed: $e');
       return false;
     }
   }
@@ -221,13 +224,14 @@ class NetworkService {
   /// Test if we can reach our API server
   Future<bool> canReachApiServer(String baseUrl) async {
     try {
-      final response = await http.head(
-        Uri.parse(baseUrl),
-      ).timeout(const Duration(seconds: 5));
-      
-      return response.statusCode < 500; // Accept any response except server errors
+      final response = await http
+          .head(Uri.parse(baseUrl))
+          .timeout(const Duration(seconds: 5));
+
+      return response.statusCode <
+          500; // Accept any response except server errors
     } catch (e) {
-      print('🚨 NetworkService: Cannot reach API server: $e');
+      //print('🚨 NetworkService: Cannot reach API server: $e');
       return false;
     }
   }
@@ -236,6 +240,6 @@ class NetworkService {
   void dispose() {
     _connectivitySubscription?.cancel();
     _networkStatusController.close();
-    print('🗑️ NetworkService: Disposed');
+    //print('🗑️ NetworkService: Disposed');
   }
 }

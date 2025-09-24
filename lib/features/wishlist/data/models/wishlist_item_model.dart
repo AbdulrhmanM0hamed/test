@@ -8,12 +8,12 @@ class WishlistItemModel extends WishlistItem {
   });
 
   factory WishlistItemModel.fromJson(Map<String, dynamic> json) {
-    print('🔍 Parsing WishlistItem: $json');
-    
+    //print('🔍 Parsing WishlistItem: $json');
+
     // Handle different possible structures
     Map<String, dynamic> wishlistProductData = {};
     Map<String, dynamic> productData = {};
-    
+
     if (json.containsKey('wishlist_product')) {
       wishlistProductData = json['wishlist_product'] ?? {};
     } else if (json.containsKey('product')) {
@@ -21,14 +21,14 @@ class WishlistItemModel extends WishlistItem {
       wishlistProductData = json['product'] ?? {};
       productData = json['product'] ?? {};
     }
-    
+
     if (json.containsKey('product') && json['product'] is Map) {
       productData = json['product'] ?? {};
     } else {
       // If no separate product summary, use the main product data
       productData = wishlistProductData;
     }
-    
+
     return WishlistItemModel(
       id: json['id'] ?? 0,
       wishlistProduct: WishlistProductModel.fromJson(wishlistProductData),
@@ -91,12 +91,16 @@ class WishlistProductModel extends WishlistProduct {
       brandName: json['brand_name'] ?? '',
       brandSlug: json['brand_slug'] ?? '',
       brandLogo: json['brand_logo'] ?? '',
-      productSizeColor: (json['product_size_color'] as List<dynamic>?)
-          ?.map((item) => ProductSizeColorModel.fromJson(item))
-          .toList() ?? [],
-      tags: (json['tags'] as List<dynamic>?)
-          ?.map((tag) => tag.toString())
-          .toList() ?? [],
+      productSizeColor:
+          (json['product_size_color'] as List<dynamic>?)
+              ?.map((item) => ProductSizeColorModel.fromJson(item))
+              .toList() ??
+          [],
+      tags:
+          (json['tags'] as List<dynamic>?)
+              ?.map((tag) => tag.toString())
+              .toList() ??
+          [],
     );
   }
 
@@ -241,14 +245,11 @@ class WishlistProductSummaryModel extends WishlistProductSummary {
 }
 
 class WishlistResponseModel extends WishlistResponse {
-  const WishlistResponseModel({
-    required super.count,
-    required super.wishlist,
-  });
+  const WishlistResponseModel({required super.count, required super.wishlist});
 
   factory WishlistResponseModel.fromJson(Map<String, dynamic> json) {
-    print('🔍 Parsing WishlistResponse JSON: $json');
-    
+    //print('🔍 Parsing WishlistResponse JSON: $json');
+
     // Handle different response structures
     Map<String, dynamic> data;
     if (json.containsKey('data')) {
@@ -256,9 +257,9 @@ class WishlistResponseModel extends WishlistResponse {
     } else {
       data = json;
     }
-    
-    print('🔍 Data section: $data');
-    
+
+    //print('🔍 Data section: $data');
+
     // Try different possible keys for wishlist items
     List<dynamic> wishlistData = [];
     if (data.containsKey('wishlist')) {
@@ -270,23 +271,23 @@ class WishlistResponseModel extends WishlistResponse {
     } else if (json is List) {
       wishlistData = json as List<dynamic>;
     }
-    
-    print('🔍 Wishlist items count: ${wishlistData.length}');
-    
+
+    //print('🔍 Wishlist items count: ${wishlistData.length}');
+
     final wishlistItems = wishlistData
         .map((item) {
           try {
             return WishlistItemModel.fromJson(item);
           } catch (e) {
-            print('⚠️ Error parsing wishlist item: $e');
-            print('⚠️ Item data: $item');
+            //print('⚠️ Error parsing wishlist item: $e');
+            //print('⚠️ Item data: $item');
             return null;
           }
         })
         .where((item) => item != null)
         .cast<WishlistItemModel>()
         .toList();
-    
+
     return WishlistResponseModel(
       count: data['count'] ?? wishlistItems.length,
       wishlist: wishlistItems,

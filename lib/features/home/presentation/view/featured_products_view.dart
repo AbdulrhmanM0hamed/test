@@ -20,27 +20,29 @@ class FeaturedProductsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appStateService = DependencyInjection.getIt<AppStateService>();
-    final isLoggedIn = appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
-    
+    final isLoggedIn =
+        appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+
     // Try to get existing cubits from parent context (bottom nav bar)
     WishlistCubit? existingWishlistCubit;
     CartCubit? existingCartCubit;
-    
+
     if (isLoggedIn) {
       try {
         existingWishlistCubit = context.read<WishlistCubit>();
         existingCartCubit = context.read<CartCubit>();
-        debugPrint('🔗 FeaturedProductsView: Using existing cubits from parent context');
+        //debugprint('🔗 FeaturedProductsView: Using existing cubits from parent context');
       } catch (e) {
-        debugPrint('⚠️ FeaturedProductsView: No existing cubits found, creating new ones');
+        //debugprint('⚠️ FeaturedProductsView: No existing cubits found, creating new ones');
       }
     }
-    
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (context) =>
-              DependencyInjection.getIt<FeaturedProductsCubit>()..getFeaturedProducts(),
+              DependencyInjection.getIt<FeaturedProductsCubit>()
+                ..getFeaturedProducts(),
         ),
         if (isLoggedIn) ...[
           if (existingWishlistCubit != null)
@@ -86,18 +88,20 @@ class FeaturedProductsView extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   child: GridView.builder(
                     physics: const AlwaysScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.65,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.65,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                        ),
                     itemCount: products.length,
                     itemBuilder: (context, index) {
                       final product = products[index];
                       return HomeProductCard(
                         product: product,
-                        onTap: () => _navigateToProductDetails(context, product),
+                        onTap: () =>
+                            _navigateToProductDetails(context, product),
                       );
                     },
                   ),
@@ -117,18 +121,11 @@ class FeaturedProductsView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.error_outline,
-            size: 64,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.error_outline, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
             message,
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 16,
-            ),
+            style: TextStyle(color: Colors.grey[600], fontSize: 16),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
@@ -148,18 +145,11 @@ class FeaturedProductsView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.star_outline,
-            size: 64,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.star_outline, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
             AppLocalizations.of(context)!.noFeaturedAvailable,
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 16,
-            ),
+            style: TextStyle(color: Colors.grey[600], fontSize: 16),
             textAlign: TextAlign.center,
           ),
         ],
@@ -168,10 +158,6 @@ class FeaturedProductsView extends StatelessWidget {
   }
 
   void _navigateToProductDetails(BuildContext context, HomeProduct product) {
-    Navigator.pushNamed(
-      context,
-      '/product-details',
-      arguments: product.id,
-    );
+    Navigator.pushNamed(context, '/product-details', arguments: product.id);
   }
 }

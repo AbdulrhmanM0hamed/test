@@ -17,7 +17,7 @@ class OfflineSyncService {
 
   // Sync offline data to server after login
   Future<void> syncOfflineDataToServer() async {
-    debugPrint('🔄 OfflineSyncService: Starting offline data sync...');
+    //debugprint('🔄 OfflineSyncService: Starting offline data sync...');
 
     try {
       // Force reinitialize GlobalCubitService to ensure fresh cubit instances
@@ -47,9 +47,9 @@ class OfflineSyncService {
       // Additional delay to ensure all operations complete before UI refresh
       await Future.delayed(const Duration(milliseconds: 500));
 
-      debugPrint('✅ OfflineSyncService: Sync completed successfully');
+      //debugprint('✅ OfflineSyncService: Sync completed successfully');
     } catch (e) {
-      debugPrint('❌ OfflineSyncService: Sync failed: $e');
+      //debugprint('❌ OfflineSyncService: Sync failed: $e');
       rethrow; // Re-throw to handle in auth_cubit
     }
   }
@@ -60,13 +60,11 @@ class OfflineSyncService {
         .getCartItemsForSync();
 
     if (offlineCartItems.isEmpty) {
-      debugPrint('🛒 OfflineSyncService: No offline cart items to sync');
+      //debugprint('🛒 OfflineSyncService: No offline cart items to sync');
       return;
     }
 
-    debugPrint(
-      '🛒 OfflineSyncService: Syncing ${offlineCartItems.length} cart items...',
-    );
+    //debugprint('🛒 OfflineSyncService: Syncing ${offlineCartItems.length} cart items...');
 
     // Add each offline cart item to server cart silently
     for (final item in offlineCartItems) {
@@ -76,29 +74,23 @@ class OfflineSyncService {
           productSizeColorId: item['productSizeColorId'] as int,
           quantity: item['quantity'] as int,
         );
-        debugPrint(
-          '✅ OfflineSyncService: Synced cart item ${item['productId']}',
-        );
+        //debugprint('✅ OfflineSyncService: Synced cart item ${item['productId']}');
       } catch (e) {
-        debugPrint(
-          '❌ OfflineSyncService: Failed to sync cart item ${item['productId']}: $e',
-        );
+        //debugprint('❌ OfflineSyncService: Failed to sync cart item ${item['productId']}: $e');
       }
     }
 
     // Clear offline cart after successful sync
     await OfflineCartService.instance.clearCart();
-    debugPrint('🛒 OfflineSyncService: Offline cart cleared after sync');
+    //debugprint('🛒 OfflineSyncService: Offline cart cleared after sync');
 
     // Notify HybridCartService to update badges
     try {
       final hybridCartService = HybridCartService.instance;
       hybridCartService.notifyListeners();
-      debugPrint('🔄 OfflineSyncService: HybridCartService notified');
+      //debugprint('🔄 OfflineSyncService: HybridCartService notified');
     } catch (e) {
-      debugPrint(
-        '⚠️ OfflineSyncService: Failed to notify HybridCartService: $e',
-      );
+      //debugprint('⚠️ OfflineSyncService: Failed to notify HybridCartService: $e');
     }
   }
 
@@ -108,29 +100,27 @@ class OfflineSyncService {
         .getWishlistProductIdsForSync();
 
     if (offlineWishlistIds.isEmpty) {
-      debugPrint('❤️ OfflineSyncService: No offline wishlist items to sync');
+      //debugprint('❤️ OfflineSyncService: No offline wishlist items to sync');
       return;
     }
 
-    debugPrint(
-      '❤️ OfflineSyncService: Syncing ${offlineWishlistIds.length} wishlist items...',
-    );
+    //debugprint('❤️ OfflineSyncService: Syncing ${offlineWishlistIds.length} wishlist items...');
 
     // Add each offline wishlist item to server wishlist silently (without snackbars)
     for (final productId in offlineWishlistIds) {
       try {
-        await GlobalCubitService.instance.addToWishlistSilently(productId: productId);
-        debugPrint('✅ OfflineSyncService: Synced wishlist item $productId silently');
-      } catch (e) {
-        debugPrint(
-          '❌ OfflineSyncService: Failed to sync wishlist item $productId: $e',
+        await GlobalCubitService.instance.addToWishlistSilently(
+          productId: productId,
         );
+        //debugprint('✅ OfflineSyncService: Synced wishlist item $productId silently');
+      } catch (e) {
+        //debugprint('❌ OfflineSyncService: Failed to sync wishlist item $productId: $e');
       }
     }
 
     // Clear offline wishlist after successful sync
     await OfflineWishlistService.instance.clearWishlist();
-    debugPrint('❤️ OfflineSyncService: Offline wishlist cleared after sync');
+    //debugprint('❤️ OfflineSyncService: Offline wishlist cleared after sync');
   }
 
   // Get offline data summary for display

@@ -82,25 +82,23 @@ class _LoginViewState extends State<LoginView> {
         builder: (context) => Scaffold(
           body: BlocConsumer<AuthCubit, AuthState>(
             listener: (context, state) {
-              print('🔍 LOGIN VIEW STATE CHANGE: ${state.runtimeType}');
+              //print('🔍 LOGIN VIEW STATE CHANGE: ${state.runtimeType}');
 
               if (state is AuthSuccess) {
-                print('🔍 AuthSuccess received');
+                //print('🔍 AuthSuccess received');
                 CustomSnackbar.showSuccess(
                   context: context,
                   message: state.message,
                 );
                 Navigator.pushReplacementNamed(context, BottomNavBar.routeName);
               } else if (state is AuthError) {
-                print('🔍 AuthError received: ${state.message}');
+                //print('🔍 AuthError received: ${state.message}');
                 CustomSnackbar.showError(
                   context: context,
                   message: state.message,
                 );
               } else if (state is EmailNotVerified) {
-                print(
-                  '🔍 EmailNotVerified received: ${state.email} - ${state.message}',
-                );
+                //print('🔍 EmailNotVerified received: ${state.email} - ${state.message}');
 
                 // Automatically resend verification email
                 context.read<AuthCubit>().resendVerificationEmail(state.email);
@@ -261,7 +259,7 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 );
               } else if (state is VerificationEmailSentSuccess) {
-                print('🔍 VerificationEmailSentSuccess received');
+                //print('🔍 VerificationEmailSentSuccess received');
                 CustomSnackbar.showSuccess(
                   context: context,
                   message: state.message,

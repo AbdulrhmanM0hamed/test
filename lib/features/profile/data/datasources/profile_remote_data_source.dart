@@ -60,7 +60,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<void> updateProfileImage(String imagePath) async {
-    print('DEBUG: updateProfileImage called with path: $imagePath');
+    //print('DEBUG: updateProfileImage called with path: $imagePath');
 
     // Create FormData for file upload
     final formData = FormData.fromMap({
@@ -70,15 +70,15 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       ),
     });
 
-    print('DEBUG: FormData created, making POST request');
+    //print('DEBUG: FormData created, making POST request');
 
     final response = await dioService.post(
       ApiEndpoints.updateProfile,
       data: formData,
     );
 
-    print('DEBUG: Response status: ${response.statusCode}');
-    print('DEBUG: Response data: ${response.data}');
+    //print('DEBUG: Response status: ${response.statusCode}');
+    //print('DEBUG: Response data: ${response.data}');
 
     if (response.statusCode != 200) {
       throw Exception(
@@ -91,17 +91,16 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Future<UserProfileModel> updateProfileFromRequest(
     UpdateProfileRequest request,
   ) async {
-    print('DEBUG: ProfileRemoteDataSource.updateProfileFromRequest called');
+    //print('DEBUG: ProfileRemoteDataSource.updateProfileFromRequest called');
 
     // Check if this is an image-only update
-    if (request.primaryImage != null && 
-        request.name == null && 
-        request.phone == null && 
+    if (request.primaryImage != null &&
+        request.name == null &&
+        request.phone == null &&
         request.birthDate == null &&
         request.oldPassword == null) {
-      
-      print('DEBUG: Image-only update detected');
-      
+      //print('DEBUG: Image-only update detected');
+
       // Create FormData for file upload
       final formData = FormData.fromMap({
         'primary_image': await MultipartFile.fromFile(
@@ -110,21 +109,23 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         ),
       });
 
-      print('DEBUG: FormData created for image upload');
-      
+      //print('DEBUG: FormData created for image upload');
+
       final response = await dioService.post(
         ApiEndpoints.updateProfile,
         data: formData,
       );
 
-      print('DEBUG: Image upload response status: ${response.statusCode}');
-      print('DEBUG: Image upload response data: ${response.data}');
+      //print('DEBUG: Image upload response status: ${response.statusCode}');
+      //print('DEBUG: Image upload response data: ${response.data}');
 
       if (response.statusCode == 200) {
         final responseData = response.data['data'];
         return UserProfileModel.fromJson(responseData);
       } else {
-        throw Exception('Failed to update profile image: ${response.statusMessage}');
+        throw Exception(
+          'Failed to update profile image: ${response.statusMessage}',
+        );
       }
     }
 
@@ -140,27 +141,27 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       data['new_password_confirmation'] = request.confirmPassword;
     }
 
-    print('DEBUG: Request data: $data');
-    print('DEBUG: Making POST request to ${ApiEndpoints.updateProfile}');
+    //print('DEBUG: Request data: $data');
+    //print('DEBUG: Making POST request to ${ApiEndpoints.updateProfile}');
 
     try {
       final response = await dioService.post(
         ApiEndpoints.updateProfile,
         data: data,
       );
-      print('DEBUG: Response status: ${response.statusCode}');
-      print('DEBUG: Response data: ${response.data}');
+      //print('DEBUG: Response status: ${response.statusCode}');
+      //print('DEBUG: Response data: ${response.data}');
 
       if (response.statusCode == 200) {
         final responseData = response.data['data'];
-        print('DEBUG: Parsing response data to UserProfileModel');
+        //print('DEBUG: Parsing response data to UserProfileModel');
         return UserProfileModel.fromJson(responseData);
       } else {
-        print('DEBUG: Request failed with status: ${response.statusCode}');
+        //print('DEBUG: Request failed with status: ${response.statusCode}');
         throw Exception('Failed to update profile: ${response.statusMessage}');
       }
     } catch (e) {
-      print('DEBUG: Exception in updateProfileFromRequest: $e');
+      //print('DEBUG: Exception in updateProfileFromRequest: $e');
       rethrow;
     }
   }

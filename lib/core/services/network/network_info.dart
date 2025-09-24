@@ -19,8 +19,8 @@ class NetworkInfoImpl implements NetworkInfo {
     } catch (e, stackTrace) {
       // In case of connectivity check error, we assume there's a connection
       // to avoid app disruption when the plugin isn't available
-      print('Connectivity check error: $e');
-      print('Stack trace: $stackTrace');
+      //print('Connectivity check error: $e');
+      //print('Stack trace: $stackTrace');
       return true;
     }
   }
@@ -29,8 +29,8 @@ class NetworkInfoImpl implements NetworkInfo {
   Stream<ConnectivityResult> get onConnectivityChanged {
     // Return the stream and handle any potential errors
     return connectivity.onConnectivityChanged.handleError((error, stackTrace) {
-      print('Connectivity stream error: $error');
-      print('Stack trace: $stackTrace');
+      //print('Connectivity stream error: $error');
+      //print('Stack trace: $stackTrace');
       // Return a fallback connectivity result - assuming connected
       return ConnectivityResult.wifi;
     });

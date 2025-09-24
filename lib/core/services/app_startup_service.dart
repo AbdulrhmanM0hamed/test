@@ -11,7 +11,7 @@ enum StartupPhase {
   loadingEssentials,
   loadingUserData,
   completed,
-  error
+  error,
 }
 
 class StartupProgress {
@@ -45,7 +45,7 @@ class StartupProgress {
 class AppStartupService extends ChangeNotifier {
   static AppStartupService? _instance;
   static AppStartupService get instance => _instance ??= AppStartupService._();
-  
+
   AppStartupService._();
 
   StartupProgress _progress = const StartupProgress(
@@ -61,17 +61,19 @@ class AppStartupService extends ChangeNotifier {
   void _updateProgress(StartupProgress newProgress) {
     _progress = newProgress;
     notifyListeners();
-    print('🚀 AppStartup: ${newProgress.phase.name} - ${newProgress.message} (${(newProgress.progress * 100).toInt()}%)');
+    //print('🚀 AppStartup: ${newProgress.phase.name} - ${newProgress.message} (${(newProgress.progress * 100).toInt()}%)');
   }
 
   /// Start the app initialization process
   Future<String> initializeApp() async {
     try {
-      _updateProgress(const StartupProgress(
-        phase: StartupPhase.initializing,
-        message: 'بدء تشغيل التطبيق...',
-        progress: 0.1,
-      ));
+      _updateProgress(
+        const StartupProgress(
+          phase: StartupPhase.initializing,
+          message: 'بدء تشغيل التطبيق...',
+          progress: 0.1,
+        ),
+      );
 
       // Phase 1: Check network connectivity
       await _checkNetworkConnectivity();
@@ -83,25 +85,28 @@ class AppStartupService extends ChangeNotifier {
       await _loadUserData();
 
       // Phase 4: Complete startup
-      _updateProgress(const StartupProgress(
-        phase: StartupPhase.completed,
-        message: 'تم تحضير التطبيق بنجاح',
-        progress: 1.0,
-      ));
+      _updateProgress(
+        const StartupProgress(
+          phase: StartupPhase.completed,
+          message: 'تم تحضير التطبيق بنجاح',
+          progress: 1.0,
+        ),
+      );
 
       // Determine next route
       final appStateService = DependencyInjection.getIt.get<AppStateService>();
       return appStateService.getInitialRoute();
-
     } catch (e) {
-      print('❌ AppStartup: Initialization failed: $e');
-      _updateProgress(StartupProgress(
-        phase: StartupPhase.error,
-        message: 'حدث خطأ أثناء تحضير التطبيق',
-        progress: 0.0,
-        error: e.toString(),
-      ));
-      
+      //print('❌ AppStartup: Initialization failed: $e');
+      _updateProgress(
+        StartupProgress(
+          phase: StartupPhase.error,
+          message: 'حدث خطأ أثناء تحضير التطبيق',
+          progress: 0.0,
+          error: e.toString(),
+        ),
+      );
+
       // Even if startup fails, still navigate to home
       final appStateService = DependencyInjection.getIt.get<AppStateService>();
       return appStateService.getInitialRoute();
@@ -110,68 +115,81 @@ class AppStartupService extends ChangeNotifier {
 
   /// Phase 1: Check network connectivity
   Future<void> _checkNetworkConnectivity() async {
-    _updateProgress(const StartupProgress(
-      phase: StartupPhase.checkingNetwork,
-      message: 'فحص الاتصال بالإنترنت...',
-      progress: 0.2,
-    ));
+    _updateProgress(
+      const StartupProgress(
+        phase: StartupPhase.checkingNetwork,
+        message: 'فحص الاتصال بالإنترنت...',
+        progress: 0.2,
+      ),
+    );
 
     try {
       final networkService = NetworkService.instance;
       await networkService.initialize();
-      
+
       final networkResult = await networkService.checkNetworkStatus();
-      
+
       if (networkResult.isConnected) {
-        _updateProgress(StartupProgress(
-          phase: StartupPhase.checkingNetwork,
-          message: networkResult.message,
-          progress: 0.3,
-        ));
-        
+        _updateProgress(
+          StartupProgress(
+            phase: StartupPhase.checkingNetwork,
+            message: networkResult.message,
+            progress: 0.3,
+          ),
+        );
+
         // Small delay to show network status
         await Future.delayed(const Duration(milliseconds: 800));
       } else {
-        _updateProgress(const StartupProgress(
-          phase: StartupPhase.checkingNetwork,
-          message: 'لا يوجد اتصال - سيتم تشغيل التطبيق في وضع عدم الاتصال',
-          progress: 0.3,
-        ));
-        
+        _updateProgress(
+          const StartupProgress(
+            phase: StartupPhase.checkingNetwork,
+            message: 'لا يوجد اتصال - سيتم تشغيل التطبيق في وضع عدم الاتصال',
+            progress: 0.3,
+          ),
+        );
+
         await Future.delayed(const Duration(milliseconds: 1200));
       }
     } catch (e) {
-      print('⚠️ AppStartup: Network check failed: $e');
-      _updateProgress(const StartupProgress(
-        phase: StartupPhase.checkingNetwork,
-        message: 'تعذر فحص الاتصال - المتابعة بدون اتصال',
-        progress: 0.3,
-      ));
-      
+      //print('⚠️ AppStartup: Network check failed: $e');
+      _updateProgress(
+        const StartupProgress(
+          phase: StartupPhase.checkingNetwork,
+          message: 'تعذر فحص الاتصال - المتابعة بدون اتصال',
+          progress: 0.3,
+        ),
+      );
+
       await Future.delayed(const Duration(milliseconds: 800));
     }
   }
 
   /// Phase 2: Load essential services
   Future<void> _loadEssentialServices() async {
-    _updateProgress(const StartupProgress(
-      phase: StartupPhase.loadingEssentials,
-      message: 'تحميل الخدمات الأساسية...',
-      progress: 0.4,
-    ));
+    _updateProgress(
+      const StartupProgress(
+        phase: StartupPhase.loadingEssentials,
+        message: 'تحميل الخدمات الأساسية...',
+        progress: 0.4,
+      ),
+    );
 
     try {
       // Initialize essential services that don't require network
-      await Future.delayed(const Duration(milliseconds: 500)); // Simulate loading time
-      
-      _updateProgress(const StartupProgress(
-        phase: StartupPhase.loadingEssentials,
-        message: 'تم تحميل الخدمات الأساسية',
-        progress: 0.6,
-      ));
-      
+      await Future.delayed(
+        const Duration(milliseconds: 500),
+      ); // Simulate loading time
+
+      _updateProgress(
+        const StartupProgress(
+          phase: StartupPhase.loadingEssentials,
+          message: 'تم تحميل الخدمات الأساسية',
+          progress: 0.6,
+        ),
+      );
     } catch (e) {
-      print('⚠️ AppStartup: Essential services loading failed: $e');
+      //print('⚠️ AppStartup: Essential services loading failed: $e');
       // Continue anyway
     }
   }
@@ -179,51 +197,61 @@ class AppStartupService extends ChangeNotifier {
   /// Phase 3: Load user-specific data (only if logged in and connected)
   Future<void> _loadUserData() async {
     final appStateService = DependencyInjection.getIt.get<AppStateService>();
-    final isLoggedIn = appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
-    
+    final isLoggedIn =
+        appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+
     if (!isLoggedIn) {
-      _updateProgress(const StartupProgress(
-        phase: StartupPhase.loadingUserData,
-        message: 'جاهز للاستخدام',
-        progress: 0.9,
-      ));
+      _updateProgress(
+        const StartupProgress(
+          phase: StartupPhase.loadingUserData,
+          message: 'جاهز للاستخدام',
+          progress: 0.9,
+        ),
+      );
       return;
     }
 
-    _updateProgress(const StartupProgress(
-      phase: StartupPhase.loadingUserData,
-      message: 'تحميل بيانات المستخدم...',
-      progress: 0.7,
-    ));
+    _updateProgress(
+      const StartupProgress(
+        phase: StartupPhase.loadingUserData,
+        message: 'تحميل بيانات المستخدم...',
+        progress: 0.7,
+      ),
+    );
 
     try {
       final networkService = NetworkService.instance;
       final isConnected = await networkService.isConnected();
-      
+
       if (isConnected) {
         // Initialize global services for logged-in users
         await _initializeUserServices();
-        
-        _updateProgress(const StartupProgress(
-          phase: StartupPhase.loadingUserData,
-          message: 'تم تحميل بيانات المستخدم',
-          progress: 0.9,
-        ));
+
+        _updateProgress(
+          const StartupProgress(
+            phase: StartupPhase.loadingUserData,
+            message: 'تم تحميل بيانات المستخدم',
+            progress: 0.9,
+          ),
+        );
       } else {
-        _updateProgress(const StartupProgress(
-          phase: StartupPhase.loadingUserData,
-          message: 'سيتم تحميل البيانات عند توفر الاتصال',
-          progress: 0.9,
-        ));
+        _updateProgress(
+          const StartupProgress(
+            phase: StartupPhase.loadingUserData,
+            message: 'سيتم تحميل البيانات عند توفر الاتصال',
+            progress: 0.9,
+          ),
+        );
       }
-      
     } catch (e) {
-      print('⚠️ AppStartup: User data loading failed: $e');
-      _updateProgress(const StartupProgress(
-        phase: StartupPhase.loadingUserData,
-        message: 'سيتم تحميل البيانات لاحقاً',
-        progress: 0.9,
-      ));
+      //print('⚠️ AppStartup: User data loading failed: $e');
+      _updateProgress(
+        const StartupProgress(
+          phase: StartupPhase.loadingUserData,
+          message: 'سيتم تحميل البيانات لاحقاً',
+          progress: 0.9,
+        ),
+      );
     }
   }
 
@@ -232,13 +260,13 @@ class AppStartupService extends ChangeNotifier {
     try {
       // Initialize global cubit service (but don't load data yet)
       GlobalCubitService.instance.initialize();
-      
+
       // Initialize cart global service (but don't load data yet)
       await CartGlobalService.instance.initialize();
-      
-      print('✅ AppStartup: User services initialized (lazy loading enabled)');
+
+      //print('✅ AppStartup: User services initialized (lazy loading enabled)');
     } catch (e) {
-      print('⚠️ AppStartup: User services initialization failed: $e');
+      //print('⚠️ AppStartup: User services initialization failed: $e');
       // Continue anyway
     }
   }

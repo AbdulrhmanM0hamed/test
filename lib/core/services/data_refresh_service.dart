@@ -48,9 +48,7 @@ class DataRefreshService extends ChangeNotifier {
       _isRefreshing = true;
 
       if (kDebugMode) {
-        print(
-          'DataRefreshService: Triggering refresh for ${_refreshCallbacks.length} callbacks',
-        );
+        //print('DataRefreshService: Triggering refresh for ${_refreshCallbacks.length} callbacks',);
       }
 
       // Add small delay to ensure UI has updated
@@ -62,7 +60,7 @@ class DataRefreshService extends ChangeNotifier {
           callback();
         } catch (e) {
           if (kDebugMode) {
-            print('DataRefreshService: Error in refresh callback: $e');
+            //print('DataRefreshService: Error in refresh callback: $e');
           }
         }
       }

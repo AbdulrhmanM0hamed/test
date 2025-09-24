@@ -45,7 +45,8 @@ class _LazyTabWrapperState extends State<LazyTabWrapper> {
     }
 
     final appStateService = DependencyInjection.getIt.get<AppStateService>();
-    final isLoggedIn = appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+    final isLoggedIn =
+        appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
 
     if (!isLoggedIn) {
       setState(() {
@@ -76,7 +77,7 @@ class _LazyTabWrapperState extends State<LazyTabWrapper> {
         try {
           await CartGlobalService.instance.initialize();
         } catch (e) {
-          print('⚠️ LazyTabWrapper: Cart service initialization failed: $e');
+          //print('⚠️ LazyTabWrapper: Cart service initialization failed: $e');
         }
       }
 
@@ -106,9 +107,8 @@ class _LazyTabWrapperState extends State<LazyTabWrapper> {
         _isInitialized = true;
         _isLoading = false;
       });
-
     } catch (e) {
-      print('⚠️ LazyTabWrapper: Initialization failed: $e');
+      //print('⚠️ LazyTabWrapper: Initialization failed: $e');
       // Continue anyway - show the tab even if data loading failed
       setState(() {
         _isInitialized = true;
@@ -129,10 +129,7 @@ class _LazyTabWrapperState extends State<LazyTabWrapper> {
               const SizedBox(height: 20),
               Text(
                 _loadingMessage,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
+                style: const TextStyle(fontSize: 16, color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -144,18 +141,19 @@ class _LazyTabWrapperState extends State<LazyTabWrapper> {
     // Provide the necessary BlocProviders for authenticated tabs
     if (widget.requiresAuth) {
       final appStateService = DependencyInjection.getIt.get<AppStateService>();
-      final isLoggedIn = appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
-      
+      final isLoggedIn =
+          appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+
       if (isLoggedIn) {
         final providers = <BlocProvider>[];
-        
+
         if (widget.requiresCartData) {
           final cartCubit = GlobalCubitService.instance.cartCubit;
           if (cartCubit != null) {
             providers.add(BlocProvider.value(value: cartCubit));
           }
         }
-        
+
         if (widget.requiresWishlistData) {
           final wishlistCubit = GlobalCubitService.instance.wishlistCubit;
           if (wishlistCubit != null) {
@@ -164,10 +162,7 @@ class _LazyTabWrapperState extends State<LazyTabWrapper> {
         }
 
         if (providers.isNotEmpty) {
-          return MultiBlocProvider(
-            providers: providers,
-            child: widget.child,
-          );
+          return MultiBlocProvider(providers: providers, child: widget.child);
         }
       }
     }

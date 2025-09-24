@@ -20,27 +20,29 @@ class SpecialOffersView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appStateService = DependencyInjection.getIt<AppStateService>();
-    final isLoggedIn = appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
-    
+    final isLoggedIn =
+        appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+
     // Try to get existing cubits from parent context (bottom nav bar)
     WishlistCubit? existingWishlistCubit;
     CartCubit? existingCartCubit;
-    
+
     if (isLoggedIn) {
       try {
         existingWishlistCubit = context.read<WishlistCubit>();
         existingCartCubit = context.read<CartCubit>();
-        debugPrint('🔗 SpecialOffersView: Using existing cubits from parent context');
+        //debugprint('🔗 SpecialOffersView: Using existing cubits from parent context');
       } catch (e) {
-        debugPrint('⚠️ SpecialOffersView: No existing cubits found, creating new ones');
+        //debugprint('⚠️ SpecialOffersView: No existing cubits found, creating new ones');
       }
     }
-    
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (context) =>
-              DependencyInjection.getIt<SpecialOfferProductsCubit>()..getSpecialOfferProducts(),
+              DependencyInjection.getIt<SpecialOfferProductsCubit>()
+                ..getSpecialOfferProducts(),
         ),
         if (isLoggedIn) ...[
           if (existingWishlistCubit != null)
@@ -80,24 +82,28 @@ class SpecialOffersView extends StatelessWidget {
 
               return RefreshIndicator(
                 onRefresh: () async {
-                  context.read<SpecialOfferProductsCubit>().getSpecialOfferProducts();
+                  context
+                      .read<SpecialOfferProductsCubit>()
+                      .getSpecialOfferProducts();
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: GridView.builder(
                     physics: const AlwaysScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.65,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.65,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                        ),
                     itemCount: products.length,
                     itemBuilder: (context, index) {
                       final product = products[index];
                       return HomeProductCard(
                         product: product,
-                        onTap: () => _navigateToProductDetails(context, product),
+                        onTap: () =>
+                            _navigateToProductDetails(context, product),
                       );
                     },
                   ),
@@ -117,24 +123,19 @@ class SpecialOffersView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.error_outline,
-            size: 64,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.error_outline, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
             message,
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 16,
-            ),
+            style: TextStyle(color: Colors.grey[600], fontSize: 16),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
-              context.read<SpecialOfferProductsCubit>().getSpecialOfferProducts();
+              context
+                  .read<SpecialOfferProductsCubit>()
+                  .getSpecialOfferProducts();
             },
             child: Text(AppLocalizations.of(context)!.retry),
           ),
@@ -148,18 +149,11 @@ class SpecialOffersView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.local_offer_outlined,
-            size: 64,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.local_offer_outlined, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
             AppLocalizations.of(context)!.noSpecialOffersAvailable,
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 16,
-            ),
+            style: TextStyle(color: Colors.grey[600], fontSize: 16),
             textAlign: TextAlign.center,
           ),
         ],
@@ -168,10 +162,6 @@ class SpecialOffersView extends StatelessWidget {
   }
 
   void _navigateToProductDetails(BuildContext context, HomeProduct product) {
-    Navigator.pushNamed(
-      context,
-      '/product-details',
-      arguments: product.id,
-    );
+    Navigator.pushNamed(context, '/product-details', arguments: product.id);
   }
 }

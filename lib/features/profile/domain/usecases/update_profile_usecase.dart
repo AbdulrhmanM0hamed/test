@@ -8,16 +8,16 @@ class UpdateProfileUseCase {
   UpdateProfileUseCase({required this.repository});
 
   Future<UserProfile> call(UpdateProfileRequest request) async {
-    print('DEBUG: UpdateProfileUseCase.call started');
-    print('DEBUG: Request details - name: ${request.name}, phone: ${request.phone}');
-    
+    //print('DEBUG: UpdateProfileUseCase.call started');
+    //print('DEBUG: Request details - name: ${request.name}, phone: ${request.phone}');
+
     try {
       final result = await repository.updateProfileFromRequest(request);
-      print('DEBUG: UpdateProfileUseCase.call completed successfully');
-      print('DEBUG: Result name: ${result.name}');
+      //print('DEBUG: UpdateProfileUseCase.call completed successfully');
+      //print('DEBUG: Result name: ${result.name}');
       return result;
     } catch (e) {
-      print('DEBUG: UpdateProfileUseCase.call failed with error: $e');
+      //print('DEBUG: UpdateProfileUseCase.call failed with error: $e');
       rethrow;
     }
   }

@@ -7,7 +7,7 @@ import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/core/services/offline_wishlist_service.dart';
 import 'package:test/core/services/hybrid_wishlist_service.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
-import 'package:test/features/wishlist/presentation/widgets/offline_wishlist_item_card.dart';
+import 'package:test/features/wishlist/presentation/widgets/offline_wishlist_item_card.dart' hide Container;
 import 'package:test/l10n/app_localizations.dart';
 
 class OfflineWishlistView extends StatefulWidget {
@@ -38,7 +38,7 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
 
     _animationController.forward();
     _loadWishlistItems();
-    
+
     // Listen to HybridWishlistService changes for automatic UI updates
     HybridWishlistService.instance.addListener(_onWishlistChanged);
   }
@@ -62,7 +62,6 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
 
     try {
       final items = await OfflineWishlistService.instance.getWishlistItems();
-      
 
       setState(() {
         _wishlistItems = items;
@@ -78,8 +77,6 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
       );
     }
   }
-
-
 
   Future<void> _clearWishlist() async {
     try {
@@ -288,12 +285,13 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
               itemCount: _wishlistItems.length,
               itemBuilder: (context, index) {
                 final wishlistItem = _wishlistItems[index];
-                final productData = wishlistItem['product'] as Map<String, dynamic>;
+                final productData =
+                    wishlistItem['product'] as Map<String, dynamic>;
                 return OfflineWishlistItemCard(
                   product: productData,
                   onTap: () {
                     // TODO: Navigate to product details
-                    debugPrint('Navigate to product: ${productData['id']}');
+                    //debugprint('Navigate to product: ${productData['id']}');
                   },
                 );
               },
@@ -303,8 +301,6 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
       ),
     );
   }
-
-
 
   void _showClearWishlistDialog() {
     showDialog(

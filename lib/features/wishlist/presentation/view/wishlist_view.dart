@@ -6,7 +6,7 @@ import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
-import 'package:test/features/wishlist/presentation/widgets/wishlist_item_card.dart';
+import 'package:test/features/wishlist/presentation/widgets/wishlist_item_card.dart' hide Container;
 import 'package:test/features/home/presentation/view/bottom_nav_bar.dart';
 import 'package:test/l10n/app_localizations.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';

@@ -169,7 +169,7 @@ class ProductsFilterCubit extends Cubit<ProductsFilterState> {
         regionId = locationService.selectedRegion?.id;
       } catch (e) {
         // LocationService not initialized, continue without region filter
-        print('⚠️ LocationService not available: $e');
+        //print('⚠️ LocationService not available: $e');
       }
 
       // Create filter with current region ID

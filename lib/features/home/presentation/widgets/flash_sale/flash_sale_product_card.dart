@@ -79,7 +79,7 @@ class _FlashSaleProductCardState extends State<FlashSaleProductCard>
           _isPressed = false;
         });
         // التنقل إلى صفحة تفاصيل المنتج
-        print('تم النقر على المنتج: ${widget.product.title}');
+        //print('تم النقر على المنتج: ${widget.product.title}');
       }
     });
   }

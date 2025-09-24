@@ -31,13 +31,9 @@ class LatestProductsView extends StatelessWidget {
       try {
         existingWishlistCubit = context.read<WishlistCubit>();
         existingCartCubit = context.read<CartCubit>();
-        debugPrint(
-          '🔗 LatestProductsView: Using existing cubits from parent context',
-        );
+        //  debugPrint('🔗 LatestProductsView: Using existing cubits from parent context');
       } catch (e) {
-        debugPrint(
-          '⚠️ LatestProductsView: No existing cubits found, creating new ones',
-        );
+        //    debugPrint('⚠️ LatestProductsView: No existing cubits found, creating new ones');
       }
     }
 

@@ -108,7 +108,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       // تحديث البروفايل من السيرفر للحصول على أحدث البيانات
       if (!isClosed) await getProfile();
-      
+
       // إرسال حالة نجاح تحديث الصورة
       if (!isClosed) emit(ProfileImageUpdated(currentProfile));
     } catch (e) {
@@ -118,17 +118,13 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   Future<void> updateProfileNew(UpdateProfileRequest request) async {
-    print('DEBUG: ProfileCubit.updateProfileNew called');
-    print(
-      'DEBUG: Request - name: ${request.name}, phone: ${request.phone}, birthDate: ${request.birthDate}',
-    );
-    print(
-      'DEBUG: Request - oldPassword: ${request.oldPassword != null ? "***" : "null"}',
-    );
+    //print('DEBUG: ProfileCubit.updateProfileNew called');
+    //print('DEBUG: Request - name: ${request.name}, phone: ${request.phone}, birthDate: ${request.birthDate}');
+    //print('DEBUG: Request - oldPassword: ${request.oldPassword != null ? "***" : "null"}');
 
     try {
       final currentState = state;
-      print('DEBUG: Current state: ${currentState.runtimeType}');
+      //print('DEBUG: Current state: ${currentState.runtimeType}');
 
       // بدء حالة التحديث فوراً
       UserProfile currentProfile;
@@ -140,40 +136,40 @@ class ProfileCubit extends Cubit<ProfileState> {
         currentProfile = currentState.currentProfile;
       } else {
         // إذا لم يكن البروفايل محمل، نحمله أولاً
-        print('DEBUG: Profile not loaded, loading first...');
+        //print('DEBUG: Profile not loaded, loading first...');
         await getProfile();
 
         if (state is! ProfileLoaded) {
-          print('DEBUG: Failed to load profile, cannot update');
+          //print('DEBUG: Failed to load profile, cannot update');
           return;
         }
         currentProfile = (state as ProfileLoaded).userProfile;
       }
 
-      print('DEBUG: Profile loaded, proceeding with update');
+      //print('DEBUG: Profile loaded, proceeding with update');
       if (!isClosed) emit(ProfileUpdating(currentProfile));
 
-      print('DEBUG: Calling updateProfileUseCase');
+      //print('DEBUG: Calling updateProfileUseCase');
       final updatedProfile = await updateProfileUseCase(request);
-      print('DEBUG: UpdateProfileUseCase completed successfully');
-      print('DEBUG: Updated profile name: ${updatedProfile.name}');
+      //print('DEBUG: UpdateProfileUseCase completed successfully');
+      //print('DEBUG: Updated profile name: ${updatedProfile.name}');
 
-      print('DEBUG: Emitting ProfileUpdated');
+      //print('DEBUG: Emitting ProfileUpdated');
       if (!isClosed) emit(ProfileUpdated(updatedProfile));
 
-      print('DEBUG: Refreshing profile from server to get latest data');
+      //print('DEBUG: Refreshing profile from server to get latest data');
       if (!isClosed) await getProfile();
     } catch (e) {
-      print('DEBUG: Exception caught in updateProfileNew: $e');
-      print('DEBUG: Exception type: ${e.runtimeType}');
+      //print('DEBUG: Exception caught in updateProfileNew: $e');
+      //print('DEBUG: Exception type: ${e.runtimeType}');
 
       if (e is ApiException) {
         String errorMessage = e.getFirstErrorMessage();
-        print('DEBUG: ApiException error message: $errorMessage');
+        //print('DEBUG: ApiException error message: $errorMessage');
         if (!isClosed) emit(ProfileError(errorMessage));
       } else {
         final errorMessage = ErrorHandler.extractErrorMessage(e);
-        print('DEBUG: General error message: $errorMessage');
+        //print('DEBUG: General error message: $errorMessage');
         if (!isClosed) emit(ProfileError(errorMessage));
       }
     }

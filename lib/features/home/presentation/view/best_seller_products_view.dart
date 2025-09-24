@@ -20,22 +20,23 @@ class BestSellerProductsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appStateService = DependencyInjection.getIt<AppStateService>();
-    final isLoggedIn = appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
-    
+    final isLoggedIn =
+        appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+
     // Try to get existing cubits from parent context (bottom nav bar)
     WishlistCubit? existingWishlistCubit;
     CartCubit? existingCartCubit;
-    
+
     if (isLoggedIn) {
       try {
         existingWishlistCubit = context.read<WishlistCubit>();
         existingCartCubit = context.read<CartCubit>();
-        debugPrint('🔗 BestSellerProductsView: Using existing cubits from parent context');
+        //debugprint('🔗 BestSellerProductsView: Using existing cubits from parent context');
       } catch (e) {
-        debugPrint('⚠️ BestSellerProductsView: No existing cubits found, creating new ones');
+        //debugprint('⚠️ BestSellerProductsView: No existing cubits found, creating new ones');
       }
     }
-    
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(

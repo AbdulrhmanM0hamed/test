@@ -47,10 +47,10 @@ class MyApp extends StatelessWidget {
     final appStateService = DependencyInjection.getIt.get<AppStateService>();
     final initialRoute = '/splash';
 
-    print(' App: Initial route determined as: $initialRoute');
-    print(
-      ' App: Onboarding completed: ${appStateService.isOnboardingCompleted()}',
-    );
+    //print(' App: Initial route determined as: $initialRoute');
+    //print(
+    // ' App: Onboarding completed: ${appStateService.isOnboardingCompleted()}',
+    //);
 
     return MultiProvider(
       providers: [

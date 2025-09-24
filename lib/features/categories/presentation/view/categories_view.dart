@@ -253,9 +253,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                         return ProductsGridWidget(
                           products: state.products,
                           onProductTap: (product) {
-                            print(
-                              '🔍 Categories: Product tapped: ${product.name}',
-                            );
+                            //print('🔍 Categories: Product tapped: ${product.name}');
                             Navigator.pushNamed(
                               context,
                               '/product-details',

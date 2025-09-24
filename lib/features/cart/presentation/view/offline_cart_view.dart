@@ -67,17 +67,31 @@ class _OfflineCartViewState extends State<OfflineCartView>
       final items = await OfflineCartService.instance.getCartItems();
 
       // Debug: Print cart items structure
-      debugPrint('🛒 OfflineCartView: Loaded ${items.length} cart items');
+      //debugprint('🛒 OfflineCartView: Loaded ${items.length} cart items');
       for (int i = 0; i < items.length; i++) {
-        debugPrint('🛒 Item $i: ${items[i]}');
+        //debugprint('🛒 Item $i: ${items[i]}');
+      }
+
+      // Calculate total price
+      double totalPrice = 0.0;
+      for (var item in items) {
+        final product = item['product'] as Map<String, dynamic>?;
+        final quantity = item['quantity'] as int? ?? 1;
+
+        if (product != null) {
+          final priceStr = product['price'] as String? ?? '0';
+          final price = double.tryParse(priceStr) ?? 0.0;
+          totalPrice += price * quantity;
+        }
       }
 
       setState(() {
         _cartItems = items;
+        _totalPrice = totalPrice;
         _isLoading = false;
       });
     } catch (e) {
-      debugPrint('🛒 OfflineCartView: Error loading cart items: $e');
+      //debugprint('🛒 OfflineCartView: Error loading cart items: $e');
       setState(() {
         _isLoading = false;
       });
