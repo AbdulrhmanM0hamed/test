@@ -3,6 +3,7 @@ import 'offline_cart_service.dart';
 import 'offline_wishlist_service.dart';
 import 'global_cubit_service.dart';
 import 'hybrid_cart_service.dart';
+import 'hybrid_wishlist_service.dart';
 
 class OfflineSyncService {
   static OfflineSyncService? _instance;
@@ -39,6 +40,9 @@ class OfflineSyncService {
 
       // Notify HybridCartService to update badges
       HybridCartService.instance.notifyListeners();
+
+      // Notify HybridWishlistService to update badges
+      HybridWishlistService.instance.notifyListeners();
 
       // Additional delay to ensure all operations complete before UI refresh
       await Future.delayed(const Duration(milliseconds: 500));
@@ -112,11 +116,11 @@ class OfflineSyncService {
       '❤️ OfflineSyncService: Syncing ${offlineWishlistIds.length} wishlist items...',
     );
 
-    // Add each offline wishlist item to server wishlist
+    // Add each offline wishlist item to server wishlist silently (without snackbars)
     for (final productId in offlineWishlistIds) {
       try {
-        await GlobalCubitService.instance.addToWishlist(productId);
-        debugPrint('✅ OfflineSyncService: Synced wishlist item $productId');
+        await GlobalCubitService.instance.addToWishlistSilently(productId: productId);
+        debugPrint('✅ OfflineSyncService: Synced wishlist item $productId silently');
       } catch (e) {
         debugPrint(
           '❌ OfflineSyncService: Failed to sync wishlist item $productId: $e',

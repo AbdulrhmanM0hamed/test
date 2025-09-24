@@ -5,10 +5,8 @@ import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/core/services/offline_wishlist_service.dart';
-import 'package:test/core/services/hybrid_cart_service.dart';
 import 'package:test/core/services/hybrid_wishlist_service.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
-import 'package:test/features/home/domain/entities/home_product.dart';
 import 'package:test/features/wishlist/presentation/widgets/offline_wishlist_item_card.dart';
 import 'package:test/l10n/app_localizations.dart';
 
@@ -20,11 +18,11 @@ class OfflineWishlistView extends StatefulWidget {
 }
 
 class _OfflineWishlistViewState extends State<OfflineWishlistView>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
+    with TickerProviderStateMixin {
   List<Map<String, dynamic>> _wishlistItems = [];
   bool _isLoading = true;
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
 
   @override
   void initState() {
@@ -40,12 +38,21 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
 
     _animationController.forward();
     _loadWishlistItems();
+    
+    // Listen to HybridWishlistService changes for automatic UI updates
+    HybridWishlistService.instance.addListener(_onWishlistChanged);
   }
 
   @override
   void dispose() {
     _animationController.dispose();
+    HybridWishlistService.instance.removeListener(_onWishlistChanged);
     super.dispose();
+  }
+
+  void _onWishlistChanged() {
+    // Reload wishlist items when HybridWishlistService notifies changes
+    _loadWishlistItems();
   }
 
   Future<void> _loadWishlistItems() async {
@@ -71,81 +78,7 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
     }
   }
 
-  Future<void> _removeFromWishlist(int productId) async {
-    try {
-      await OfflineWishlistService.instance.removeFromWishlist(productId);
-      await _loadWishlistItems(); // Refresh the wishlist
 
-      // Notify hybrid service to update badges
-      HybridWishlistService.instance.notifyListeners();
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Item removed from wishlist',
-              style: const TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Colors.green,
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Failed to remove item from wishlist: ${e.toString()}',
-              style: const TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
-  }
-
-  Future<void> _addToCart(Map<String, dynamic> product) async {
-    try {
-      await HybridCartService.instance.addToCart(
-        product: product,
-        productSizeColorId: 1, // Default size/color for offline
-        quantity: 1,
-      );
-
-      // Remove the item from wishlist after adding to cart
-      await _removeFromWishlist(product['id']);
-
-      // Notify hybrid services to update badges
-      HybridCartService.instance.notifyListeners();
-      HybridWishlistService.instance.notifyListeners();
-
-      if (mounted) {
-        // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(context)!.productAddedToCart,
-              style: const TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Colors.green,
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              '${AppLocalizations.of(context)!.failedToAddToCart}: ${e.toString()}',
-              style: const TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
-  }
 
   Future<void> _clearWishlist() async {
     try {
@@ -199,9 +132,11 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
         actions: [
           if (_wishlistItems.isNotEmpty)
             IconButton(
+              icon: Icon(Icons.delete_sweep, color: Colors.red, size: 24),
               onPressed: () => _showClearWishlistDialog(),
-              icon: Icon(Icons.delete_outline, color: Colors.red),
+              tooltip: AppLocalizations.of(context)!.clearAll,
             ),
+          const SizedBox(width: 8),
         ],
       ),
       body: FadeTransition(
@@ -220,32 +155,59 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.favorite_outline, size: 80, color: Colors.grey[400]),
-          const SizedBox(height: 16),
-          Text(
-            'Your wishlist is empty',
-            style: getSemiBoldStyle(
-              fontSize: FontSize.size18,
-              fontFamily: FontConstant.cairo,
-              color: Colors.grey[600],
+          Container(
+            padding: const EdgeInsets.all(32),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.favorite_border,
+              size: 80,
+              color: AppColors.primary.withValues(alpha: 0.7),
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 24),
           Text(
-            'Add items to your wishlist to see them here',
-            style: getMediumStyle(
-              fontSize: FontSize.size14,
+            AppLocalizations.of(context)!.wishlistEmpty,
+            style: getBoldStyle(
+              fontSize: FontSize.size20,
               fontFamily: FontConstant.cairo,
-              color: Colors.grey[500],
+              color: Theme.of(context).textTheme.titleLarge?.color,
             ),
-            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Text(
+              AppLocalizations.of(context)!.wishlistEmptyDescription,
+              textAlign: TextAlign.center,
+              style: getRegularStyle(
+                fontSize: FontSize.size14,
+                fontFamily: FontConstant.cairo,
+                color: Colors.grey[600],
+              ),
+            ),
           ),
           const SizedBox(height: 32),
-          CustomButton(
-            text: 'Continue Shopping',
-            onPressed: () => Navigator.of(context).pop(),
-            backgroundColor: AppColors.primary,
-            textColor: Colors.white,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 64),
+            child: CustomButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              text: AppLocalizations.of(context)!.browseProducts,
+              backgroundColor: AppColors.primary,
+              height: 56,
+              prefix: Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  Icons.shopping_bag_outlined,
+                  size: 24,
+                  color: Colors.white,
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -253,168 +215,95 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
   }
 
   Widget _buildWishlistContent() {
-    return Column(
-      children: [
-        // Login prompt for offline users
-        Container(
-          margin: const EdgeInsets.all(16),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: AppColors.primary.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.primary.withOpacity(0.3)),
-          ),
-          child: Row(
-            children: [
-              Icon(Icons.info_outline, color: AppColors.primary, size: 20),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  'Login to sync your wishlist across devices',
-                  style: getMediumStyle(
-                    fontSize: FontSize.size12,
-                    fontFamily: FontConstant.cairo,
-                    color: AppColors.primary,
+    return RefreshIndicator(
+      onRefresh: () async {
+        await _loadWishlistItems();
+      },
+      color: AppColors.primary,
+      child: Column(
+        children: [
+          // Header with count
+          Container(
+            width: double.infinity,
+            margin: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.primary.withValues(alpha: 0.1),
+                  AppColors.primary.withValues(alpha: 0.01),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: AppColors.primary.withValues(alpha: 0.2),
+              ),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(Icons.favorite, color: AppColors.error, size: 24),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.addProductsToWishlist,
+                        style: getBoldStyle(
+                          fontSize: FontSize.size16,
+                          fontFamily: FontConstant.cairo,
+                          color: AppColors.secondary,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${_wishlistItems.length} ${AppLocalizations.of(context)!.productsInWishlist}',
+                        style: getMediumStyle(
+                          fontSize: FontSize.size13,
+                          fontFamily: FontConstant.cairo,
+                          color: Colors.grey[650],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-
-        // Wishlist items grid
-        Expanded(
-          child: GridView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.75,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-            ),
-            itemCount: _wishlistItems.length,
-            itemBuilder: (context, index) {
-              final wishlistItem = _wishlistItems[index];
-              return OfflineWishlistItemCard(
-                product: wishlistItem,
-                onRemove: () => _removeFromWishlist(wishlistItem['id']),
-                onAddToCart: () => _addToCart(wishlistItem),
-              );
-            },
-          ),
-        ),
-
-        // Bottom action bar
-        if (_wishlistItems.isNotEmpty) _buildBottomActionBar(),
-      ],
-    );
-  }
-
-  Widget _buildBottomActionBar() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        child: Row(
-          children: [
-            Expanded(
-              child: CustomButton(
-                text: 'Add All to Cart',
-                onPressed: () => _addAllToCart(),
-                backgroundColor: AppColors.primary,
-                textColor: Colors.white,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: CustomButton(
-                text: 'Login to Sync',
-                onPressed: () => _showLoginPrompt(),
-                backgroundColor: Colors.transparent,
-                textColor: AppColors.primary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Future<void> _addAllToCart() async {
-    try {
-      for (final item in _wishlistItems) {
-        await _addToCart(item);
-      }
-      CustomSnackbar.showSuccess(
-        context: context,
-        message: 'All items added to cart',
-      );
-    } catch (e) {
-      CustomSnackbar.showError(
-        context: context,
-        message: 'Failed to add some items to cart',
-      );
-    }
-  }
-
-  void _showLoginPrompt() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          'Login Required',
-          style: getBoldStyle(
-            fontSize: FontSize.size16,
-            fontFamily: FontConstant.cairo,
-          ),
-        ),
-        content: Text(
-          'Please login to sync your wishlist across devices and access more features.',
-          style: getMediumStyle(
-            fontSize: FontSize.size14,
-            fontFamily: FontConstant.cairo,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(
-              'Cancel',
-              style: getMediumStyle(
-                fontSize: FontSize.size14,
-                fontFamily: FontConstant.cairo,
-                color: Colors.grey[600],
-              ),
+              ],
             ),
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              // Navigate to login screen - you can implement this based on your routing
-              // Navigator.pushNamed(context, '/login');
-            },
-            child: Text(
-              'Login',
-              style: getBoldStyle(
-                fontSize: FontSize.size14,
-                fontFamily: FontConstant.cairo,
-                color: AppColors.primary,
-              ),
+
+          // Wishlist items
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.only(bottom: 16),
+              itemCount: _wishlistItems.length,
+              itemBuilder: (context, index) {
+                final wishlistItem = _wishlistItems[index];
+                final productData = wishlistItem['product'] as Map<String, dynamic>;
+                return OfflineWishlistItemCard(
+                  product: productData,
+                  onTap: () {
+                    // TODO: Navigate to product details
+                    debugPrint('Navigate to product: ${productData['id']}');
+                  },
+                );
+              },
             ),
           ),
         ],
       ),
     );
   }
+
+
 
   void _showClearWishlistDialog() {
     showDialog(

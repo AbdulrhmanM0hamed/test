@@ -60,12 +60,34 @@ class _HomeProductCardState extends State<HomeProductCard>
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
     _controller.forward();
+    
+    // Check actual wishlist state from HybridWishlistService
+    _checkWishlistState();
+    
+    // Listen to HybridWishlistService changes for automatic UI updates
+    HybridWishlistService.instance.addListener(_onWishlistChanged);
+  }
+
+  Future<void> _checkWishlistState() async {
+    final isInWishlist = await HybridWishlistService.instance.isInWishlist(widget.product.id);
+    if (mounted && isInWishlist != _isInWishlist) {
+      setState(() {
+        _isInWishlist = isInWishlist;
+      });
+      print('🔄 HomeProductCard: Updated wishlist state for product ${widget.product.id}: $_isInWishlist');
+    }
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    HybridWishlistService.instance.removeListener(_onWishlistChanged);
     super.dispose();
+  }
+
+  void _onWishlistChanged() {
+    // Check wishlist state when HybridWishlistService notifies changes
+    _checkWishlistState();
   }
 
   void _handleTap() {

@@ -1,10 +1,11 @@
 import 'package:test/core/di/dependency_injection.dart';
+import 'package:test/features/cart/domain/usecases/add_to_cart_usecase.dart';
 import 'package:test/features/cart/domain/entities/add_to_cart_request.dart';
+import 'package:test/features/wishlist/domain/usecases/add_to_wishlist_use_case.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/features/cart/presentation/cubit/cart_state.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/core/services/app_state_service.dart';
-import 'package:test/features/cart/domain/usecases/add_to_cart_usecase.dart';
 
 /// Global singleton service to manage shared cubit instances across the app
 class GlobalCubitService {
@@ -132,6 +133,30 @@ class GlobalCubitService {
         (message) =>
             print('✅ GlobalCubitService: Product $productId added silently'),
       );
+    }
+  }
+
+  /// Add item to wishlist silently (without triggering snackbar states) - used during sync
+  Future<void> addToWishlistSilently({required int productId}) async {
+    if (_wishlistCubit != null) {
+      print(
+        '❤️ GlobalCubitService: Adding product $productId to wishlist silently',
+      );
+      // Use the use case directly to bypass state emissions that trigger snackbars
+      final addToWishlistUseCase = DependencyInjection.getIt
+          .get<AddToWishlistUseCase>();
+
+      try {
+        await addToWishlistUseCase(productId);
+        print(
+          '✅ GlobalCubitService: Product $productId added to wishlist silently',
+        );
+      } catch (e) {
+        print(
+          '❌ GlobalCubitService: Failed to add product $productId to wishlist silently: $e',
+        );
+        throw Exception('Failed to add to wishlist: $e');
+      }
     }
   }
 

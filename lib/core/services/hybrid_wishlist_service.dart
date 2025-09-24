@@ -1,27 +1,33 @@
-import 'package:flutter/foundation.dart';
-import 'auth_state_service.dart';
-import 'offline_wishlist_service.dart';
-import 'global_cubit_service.dart';
-import '../../features/home/domain/entities/home_product.dart';
+import 'package:flutter/material.dart';
+import 'package:test/features/home/domain/entities/home_product.dart';
+import 'package:test/features/categories/domain/entities/product.dart';
+import 'package:test/core/services/offline_wishlist_service.dart';
+import 'package:test/core/services/global_cubit_service.dart';
+import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 
 class HybridWishlistService extends ChangeNotifier {
   static HybridWishlistService? _instance;
-  
+
   static HybridWishlistService get instance {
     _instance ??= HybridWishlistService._internal();
     return _instance!;
   }
-  
-  HybridWishlistService._internal() {
-    // Listen to auth state changes
-    AuthStateService.instance.addListener(_onAuthStateChanged);
-  }
 
-  void _onAuthStateChanged() {
+  late bool _isLoggedIn;
+
+  HybridWishlistService._internal() {
+    _isLoggedIn = false; // Default to offline mode
     notifyListeners();
   }
 
-  bool get _isLoggedIn => AuthStateService.instance.isLoggedIn;
+
+  // Update login state from external sources
+  void updateLoginState(bool isLoggedIn) {
+    if (_isLoggedIn != isLoggedIn) {
+      _isLoggedIn = isLoggedIn;
+      notifyListeners();
+    }
+  }
 
   // Add to wishlist - handles both online and offline
   Future<void> addToWishlist(HomeProduct product) async {
@@ -50,7 +56,7 @@ class HybridWishlistService extends ChangeNotifier {
   // Toggle wishlist
   Future<bool> toggleWishlist(HomeProduct product) async {
     final isInWishlist = await this.isInWishlist(product.id);
-    
+
     if (isInWishlist) {
       await removeFromWishlist(product.id);
       return false;
@@ -63,7 +69,7 @@ class HybridWishlistService extends ChangeNotifier {
   // Toggle wishlist by product ID only (for cases where we don't have full product data)
   Future<bool> toggleWishlistByProductId(int productId) async {
     final isInWishlist = await this.isInWishlist(productId);
-    
+
     if (isInWishlist) {
       await removeFromWishlist(productId);
       return false;
@@ -100,12 +106,58 @@ class HybridWishlistService extends ChangeNotifier {
     }
   }
 
+  // Toggle wishlist for Product entity (from categories)
+  Future<bool> toggleWishlistForProduct(Product product) async {
+    final isInWishlist = await this.isInWishlist(product.id);
+
+    if (isInWishlist) {
+      await removeFromWishlist(product.id);
+      return false;
+    } else {
+      // Convert Product to HomeProduct for consistent storage
+      final homeProduct = HomeProduct(
+        id: product.id,
+        name: product.name,
+        image: product.image,
+        price: product.realPrice.toString(),
+        originalPrice:
+            product.fakePrice?.toString() ?? product.realPrice.toString(),
+        star: product.star.round().toDouble(),
+        reviewCount: product.numOfUserReview,
+        isFavorite: product.isFav,
+        isBest: product.isBest,
+        isFeatured: false,
+        isLatest: false,
+        isSpecialOffer: product.discount > 0,
+        limitation: product.limitation,
+        countOfAvailable: product.countOfAvailable,
+        quantityInCart: product.quantityInCart ?? 0,
+        brandName: product.brandName,
+        brandLogo: product.brandLogo,
+        productSizeColorId: product.productSizeColorId,
+      );
+
+      if (!_isLoggedIn) {
+        await addToWishlist(homeProduct);
+      } else {
+        await GlobalCubitService.instance.addToWishlist(product.id);
+      }
+      return true;
+    }
+  }
+
   // Check if product is in wishlist
   Future<bool> isInWishlist(int productId) async {
     if (_isLoggedIn) {
-      // Check server wishlist - this would need to be implemented in GlobalCubitService
-      // For now, we'll use the product's isFavorite property
-      return false; // TODO: Implement server-side check
+      // Check server wishlist using WishlistCubit
+      final wishlistCubit = GlobalCubitService.instance.wishlistCubit;
+      if (wishlistCubit != null && wishlistCubit.state is WishlistLoaded) {
+        final wishlistState = wishlistCubit.state as WishlistLoaded;
+        return wishlistState.wishlistResponse.wishlist.any(
+          (item) => item.product.id == productId,
+        );
+      }
+      return false;
     } else {
       // Check local wishlist
       return await OfflineWishlistService.instance.isInWishlist(productId);
@@ -116,7 +168,12 @@ class HybridWishlistService extends ChangeNotifier {
   Future<int> getWishlistItemCount() async {
     if (_isLoggedIn) {
       // Get from server wishlist
-      return 0; // TODO: Implement server-side count
+      final wishlistCubit = GlobalCubitService.instance.wishlistCubit;
+      if (wishlistCubit != null && wishlistCubit.state is WishlistLoaded) {
+        final wishlistState = wishlistCubit.state as WishlistLoaded;
+        return wishlistState.wishlistResponse.count;
+      }
+      return 0;
     } else {
       // Get from local wishlist
       return await OfflineWishlistService.instance.getWishlistItemCount();
@@ -126,7 +183,11 @@ class HybridWishlistService extends ChangeNotifier {
   // Clear wishlist
   Future<void> clearWishlist() async {
     if (_isLoggedIn) {
-      // Clear server wishlist - TODO: Implement in GlobalCubitService
+      // Clear server wishlist
+      final wishlistCubit = GlobalCubitService.instance.wishlistCubit;
+      if (wishlistCubit != null) {
+        await wishlistCubit.removeAllFromWishlist();
+      }
     } else {
       // Clear local wishlist
       await OfflineWishlistService.instance.clearWishlist();
@@ -136,7 +197,7 @@ class HybridWishlistService extends ChangeNotifier {
 
   @override
   void dispose() {
-    AuthStateService.instance.removeListener(_onAuthStateChanged);
+    // Clean up resources
     super.dispose();
   }
 }
