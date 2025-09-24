@@ -7,80 +7,86 @@ import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/services/global_cubit_service.dart';
+import '../../../../core/services/hybrid_cart_service.dart';
 import '../../../cart/presentation/cubit/cart_cubit.dart';
 import '../../../cart/presentation/cubit/cart_state.dart';
 import '../../../cart/domain/entities/cart.dart';
 import '../../../cart/presentation/widgets/cart_item_card.dart';
+import '../../../cart/presentation/view/offline_cart_view.dart';
 
 class CartFloatingButton extends StatelessWidget {
   const CartFloatingButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CartCubit, CartState>(
-      builder: (context, cartState) {
-        int cartCount = 0;
-        if (cartState is CartLoaded) {
-          cartCount = cartState.cart.totalQuantity;
-        }
+    return ListenableBuilder(
+      listenable: HybridCartService.instance,
+      builder: (context, child) {
+        return FutureBuilder<int>(
+          future: HybridCartService.instance.getCartItemCount(),
+          initialData: 0,
+          builder: (context, snapshot) {
+            int cartCount = snapshot.data ?? 0;
 
-        return Container(
-          margin: const EdgeInsets.only(bottom: 20),
-          child: FloatingActionButton.extended(
-            onPressed: () {
-              _showCartBottomSheet(context);
-            },
-            backgroundColor: AppColors.primary,
-            foregroundColor: Colors.white,
-            elevation: 8,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25),
-            ),
-            label: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Stack(
+            return Container(
+              margin: const EdgeInsets.only(bottom: 20),
+              child: FloatingActionButton.extended(
+                onPressed: () {
+                  _showCartBottomSheet(context);
+                },
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                elevation: 8,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                label: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.shopping_cart_outlined, size: 24),
-                    if (cartCount > 0)
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          constraints: const BoxConstraints(
-                            minWidth: 16,
-                            minHeight: 16,
-                          ),
-                          child: Text(
-                            cartCount > 99 ? '99+' : cartCount.toString(),
-                            style: getBoldStyle(
-                              fontSize: FontSize.size10,
-                              fontFamily: FontConstant.cairo,
-                              color: Colors.white,
+                    Stack(
+                      children: [
+                        const Icon(Icons.shopping_cart_outlined, size: 24),
+                        if (cartCount > 0)
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: AppColors.error,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              constraints: const BoxConstraints(
+                                minWidth: 16,
+                                minHeight: 16,
+                              ),
+                              child: Text(
+                                cartCount.toString(),
+                                style: getBoldStyle(
+                                  fontSize: FontSize.size10,
+                                  fontFamily: FontConstant.cairo,
+                                  color: Colors.white,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
-                            textAlign: TextAlign.center,
                           ),
-                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      AppLocalizations.of(context)!.cart,
+                      style: getSemiBoldStyle(
+                        fontSize: FontSize.size14,
+                        fontFamily: FontConstant.cairo,
+                        color: Colors.white,
                       ),
+                    ),
                   ],
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  AppLocalizations.of(context)!.cart,
-                  style: getSemiBoldStyle(
-                    fontSize: FontSize.size14,
-                    fontFamily: FontConstant.cairo,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
@@ -91,13 +97,34 @@ class CartFloatingButton extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: GlobalCubitService.instance.cartCubit!),
-          BlocProvider.value(value: GlobalCubitService.instance.wishlistCubit!),
-        ],
-        child: const CartBottomSheet(),
-      ),
+      builder: (context) {
+        final cartCubit = GlobalCubitService.instance.cartCubit;
+        final wishlistCubit = GlobalCubitService.instance.wishlistCubit;
+        
+        if (cartCubit != null && wishlistCubit != null) {
+          // User is logged in - use online cart
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: cartCubit),
+              BlocProvider.value(value: wishlistCubit),
+            ],
+            child: const CartBottomSheet(),
+          );
+        } else {
+          // User is offline - show offline cart as bottom sheet
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.8,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            child: const OfflineCartView(),
+          );
+        }
+      },
     );
   }
 }

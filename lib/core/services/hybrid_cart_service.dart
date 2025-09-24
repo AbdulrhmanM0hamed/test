@@ -3,16 +3,17 @@ import 'auth_state_service.dart';
 import 'offline_cart_service.dart';
 import 'global_cubit_service.dart';
 import '../../features/home/domain/entities/home_product.dart';
+import '../../features/product_details/domain/entities/product_details.dart';
 import '../../features/cart/presentation/cubit/cart_state.dart';
 
 class HybridCartService extends ChangeNotifier {
   static HybridCartService? _instance;
-  
+
   static HybridCartService get instance {
     _instance ??= HybridCartService._internal();
     return _instance!;
   }
-  
+
   HybridCartService._internal() {
     // Listen to auth state changes
     AuthStateService.instance.addListener(_onAuthStateChanged);
@@ -26,23 +27,56 @@ class HybridCartService extends ChangeNotifier {
 
   // Add to cart - handles both online and offline
   Future<void> addToCart({
-    dynamic product, // Can be HomeProduct or Map<String, dynamic>
+    dynamic
+    product, // Can be HomeProduct, ProductDetails or Map<String, dynamic>
     required int productSizeColorId,
     int quantity = 1,
   }) async {
     if (_isLoggedIn) {
       // Use server-based cart
-      final productId = product is HomeProduct ? product.id : product['id'] as int;
+      int productId;
+      if (product is HomeProduct) {
+        productId = product.id;
+      } else if (product is ProductDetails) {
+        productId = product.id;
+      } else {
+        productId = product['id'] as int;
+      }
+
       await GlobalCubitService.instance.addToCart(
         productId: productId,
         productSizeColorId: productSizeColorId,
         quantity: quantity,
       );
     } else {
-      // Use local cart - convert map to HomeProduct if needed
+      // Use local cart - convert to HomeProduct if needed
       HomeProduct homeProduct;
       if (product is HomeProduct) {
         homeProduct = product;
+      } else if (product is ProductDetails) {
+        // Convert ProductDetails to HomeProduct
+        homeProduct = HomeProduct(
+          id: product.id,
+          name: product.name,
+          image: product.image,
+          price: product.productSizeColor.first.realPrice,
+          originalPrice:
+              product.productSizeColor.first.fakePrice ??
+              product.productSizeColor.first.realPrice,
+          star: product.star,
+          reviewCount: product.numOfUserReview,
+          isFavorite: false,
+          isBest: false,
+          isFeatured: false,
+          isLatest: false,
+          isSpecialOffer: product.productSizeColor.first.fakePrice != null,
+          limitation: product.limitation,
+          countOfAvailable: product.countOfAvailable,
+          quantityInCart: 0,
+          brandName: product.brandName,
+          brandLogo: product.brandLogo,
+          productSizeColorId: productSizeColorId,
+        );
       } else {
         // Convert map to HomeProduct
         final productMap = product as Map<String, dynamic>;
@@ -51,7 +85,11 @@ class HybridCartService extends ChangeNotifier {
           name: productMap['name'] as String,
           image: productMap['image'] as String,
           price: productMap['price'] as String,
-          originalPrice: (productMap['originalPrice'] ?? productMap['oldPrice'] ?? productMap['price']) as String,
+          originalPrice:
+              (productMap['originalPrice'] ??
+                      productMap['oldPrice'] ??
+                      productMap['price'])
+                  as String,
           star: 0,
           reviewCount: 0,
           isFavorite: true,
@@ -67,7 +105,7 @@ class HybridCartService extends ChangeNotifier {
           productSizeColorId: null,
         );
       }
-      
+
       await OfflineCartService.instance.addToCart(
         product: homeProduct,
         productSizeColorId: productSizeColorId,
@@ -144,7 +182,9 @@ class HybridCartService extends ChangeNotifier {
   }) async {
     if (_isLoggedIn) {
       // Check server cart
-      final cartItemId = GlobalCubitService.instance.getCartItemIdByProductId(productId);
+      final cartItemId = GlobalCubitService.instance.getCartItemIdByProductId(
+        productId,
+      );
       return cartItemId != null;
     } else {
       // Check local cart

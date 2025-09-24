@@ -20,7 +20,6 @@ class HybridWishlistService extends ChangeNotifier {
     notifyListeners();
   }
 
-
   // Update login state from external sources
   void updateLoginState(bool isLoggedIn) {
     if (_isLoggedIn != isLoggedIn) {

@@ -133,22 +133,35 @@ class _OfflineWishlistItemCardState extends State<OfflineWishlistItemCard>
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: CachedNetworkImage(
-                imageUrl: productImage,
-                width: double.infinity,
-                height: double.infinity,
-                fit: BoxFit.contain,
-                placeholder: (context, url) =>
-                    const Center(child: CustomProgressIndicator()),
-                errorWidget: (context, url, error) => Container(
-                  color: Colors.grey[200],
-                  child: Icon(
-                    Icons.image_not_supported_outlined,
-                    color: Colors.grey[400],
-                    size: 40,
-                  ),
-                ),
-              ),
+              child: productImage.isNotEmpty
+                  ? CachedNetworkImage(
+                      imageUrl: productImage,
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.contain,
+                      placeholder: (context, url) =>
+                          const Center(child: CustomProgressIndicator()),
+                      errorWidget: (context, url, error) => Container(
+                        color: Colors.grey[200],
+                        child: const Center(
+                          child: Icon(
+                            Icons.image_not_supported,
+                            color: Colors.grey,
+                            size: 40,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      color: Colors.grey[200],
+                      child: Center(
+                        child: Icon(
+                          Icons.image_not_supported_outlined,
+                          color: Colors.grey[400],
+                          size: 40,
+                        ),
+                      ),
+                    ),
             ),
             // Status badge
             if (isBest)

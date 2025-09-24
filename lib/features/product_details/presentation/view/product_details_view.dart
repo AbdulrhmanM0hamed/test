@@ -6,10 +6,12 @@ import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/services/global_cubit_service.dart';
+import '../../../../core/services/hybrid_wishlist_service.dart';
 import '../../../../core/di/dependency_injection.dart';
 import '../../../cart/presentation/cubit/cart_cubit.dart';
 import '../../../wishlist/presentation/cubit/wishlist_cubit.dart';
 import '../../domain/entities/product_details.dart';
+import '../../../categories/domain/entities/product.dart';
 import '../cubit/product_details_cubit.dart';
 import '../widgets/product_image_gallery.dart';
 import '../widgets/product_info_section.dart';
@@ -70,13 +72,56 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
     });
 
     try {
-      if (isCurrentlyInWishlist) {
-        await GlobalCubitService.instance.removeFromWishlist(productId);
+      // Get the product details from the cubit state instead of route arguments
+      final state = context.read<ProductDetailsCubit>().state;
+      if (state is ProductDetailsLoaded) {
+        final product = state.productDetails;
+        // Convert ProductDetails to Product entity for the service
+        final firstSizeColor = product.productSizeColor.first;
+        final realPrice = double.tryParse(firstSizeColor.realPrice) ?? 0.0;
+        final fakePrice = firstSizeColor.fakePrice != null
+            ? double.tryParse(firstSizeColor.fakePrice!)
+            : null;
+        final discount = firstSizeColor.discount != null
+            ? int.tryParse(firstSizeColor.discount!) ?? 0
+            : 0;
+
+        final productEntity = Product(
+          id: product.id,
+          name: product.name,
+          slug: product.slug,
+          description: product.summary,
+          image: product.image,
+          realPrice: realPrice,
+          fakePrice: fakePrice,
+          discount: discount,
+          star: product.star,
+          numOfUserReview: product.numOfUserReview,
+          stock: product.stock,
+          isFav: firstSizeColor.isFav == "1",
+          isBest: firstSizeColor.isBest,
+          brandName: product.brandName,
+          brandLogo: product.brandLogo,
+          limitation: product.limitation,
+          countOfAvailable: product.countOfAvailable,
+          countOfReviews: product.numOfUserReview,
+          currency: AppLocalizations.of(context)!.currency,
+          quantityInCart: firstSizeColor.quantityInCart,
+          productSizeColorId: firstSizeColor.id,
+        );
+
+
+        await HybridWishlistService.instance.toggleWishlistForProduct(
+          productEntity,
+        );
       } else {
-        await GlobalCubitService.instance.addToWishlist(productId);
+        // Fallback to ID-only method
+        await HybridWishlistService.instance.toggleWishlistByProductId(
+          productId,
+        );
       }
     } catch (error) {
-      // Error handling is done in the GlobalCubitService
+      // Error handling is done in the HybridWishlistService
       print('Error toggling wishlist: $error');
     } finally {
       if (mounted) {
@@ -233,7 +278,9 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
                 productName: product.name,
                 onReviewAdded: () {
                   // Refresh product details to get updated reviews
-                  context.read<ProductDetailsCubit>().getProductDetails(product.id);
+                  context.read<ProductDetailsCubit>().getProductDetails(
+                    product.id,
+                  );
                 },
               ),
               const SizedBox(height: 100), // Space for floating cart
@@ -282,52 +329,55 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
       ),
       centerTitle: true,
       actions: [
-        BlocBuilder<WishlistCubit, WishlistState>(
-          builder: (context, wishlistState) {
-            // Check if product is in wishlist
-            bool isInWishlist = false;
-            if (wishlistState is WishlistLoaded) {
-              isInWishlist = wishlistState.wishlistResponse.wishlist.any(
-                (item) => item.product.id == product.id,
-              );
-            }
+        ListenableBuilder(
+          listenable: HybridWishlistService.instance,
+          builder: (context, child) {
+            return FutureBuilder<bool>(
+              future: HybridWishlistService.instance.isInWishlist(product.id),
+              initialData: false,
+              builder: (context, futureSnapshot) {
+                bool isInWishlist = futureSnapshot.data ?? false;
 
-            return IconButton(
-              onPressed: _isWishlistLoading
-                  ? null
-                  : () => _toggleWishlist(product.id, isInWishlist),
-              icon: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: isInWishlist
-                      ? AppColors.primary.withValues(alpha: 0.1)
-                      : null,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.primary.withValues(alpha: 0.08),
-                      blurRadius: 1,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: _isWishlistLoading
-                    ? SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            isInWishlist ? AppColors.error : Colors.grey,
-                          ),
+                return IconButton(
+                  onPressed: _isWishlistLoading
+                      ? null
+                      : () => _toggleWishlist(product.id, isInWishlist),
+                  icon: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: isInWishlist
+                          ? AppColors.primary.withValues(alpha: 0.1)
+                          : null,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
                         ),
-                      )
-                    : Icon(
-                        isInWishlist ? Icons.favorite : Icons.favorite_border,
-                        color: isInWishlist ? AppColors.error : null,
-                        size: 20,
-                      ),
-              ),
+                      ],
+                    ),
+                    child: _isWishlistLoading
+                        ? SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                AppColors.primary,
+                              ),
+                            ),
+                          )
+                        : Icon(
+                            isInWishlist
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: isInWishlist ? AppColors.error : null,
+                            size: 20,
+                          ),
+                  ),
+                );
+              },
             );
           },
         ),

@@ -13,31 +13,40 @@ class OfflineWishlistService {
   
   OfflineWishlistService._internal();
 
-  // Add item to offline wishlist
+  // Add product to wishlist
   Future<void> addToWishlist(HomeProduct product) async {
     final prefs = await SharedPreferences.getInstance();
     final wishlistItems = await getWishlistItems();
     
-    // Check if item already exists
-    final exists = wishlistItems.any((item) => item['productId'] == product.id);
+    // Check if product already exists
+    final existingIndex = wishlistItems.indexWhere((item) => item['productId'] == product.id);
+    if (existingIndex != -1) return;
     
-    if (!exists) {
-      wishlistItems.add({
-        'productId': product.id,
-        'product': {
-          'id': product.id,
-          'name': product.name,
-          'image': product.image,
-          'price': product.price,
-          'originalPrice': product.originalPrice,
-          'limitation': product.limitation,
-          'countOfAvailable': product.countOfAvailable,
-        },
-        'addedAt': DateTime.now().toIso8601String(),
-      });
-      
-      await prefs.setString(_wishlistKey, jsonEncode(wishlistItems));
-    }
+    // Add new item with complete product data
+    final wishlistItem = {
+      'productId': product.id,
+      'addedAt': DateTime.now().toIso8601String(),
+      'product': {
+        'id': product.id,
+        'name': product.name,
+        'image': product.image,
+        'price': product.price,
+        'originalPrice': product.originalPrice,
+        'star': product.star,
+        'reviewCount': product.reviewCount,
+        'brandName': product.brandName,
+        'brandLogo': product.brandLogo,
+        'isBest': product.isBest,
+        'isSpecialOffer': product.isSpecialOffer,
+        'hasDiscount': product.originalPrice != product.price,
+        'fakePrice': product.originalPrice != product.price ? product.originalPrice : null,
+        'oldPrice': product.originalPrice != product.price ? product.originalPrice : null,
+        'countOfAvailable': product.countOfAvailable,
+      },
+    };
+    
+    wishlistItems.add(wishlistItem);
+    await prefs.setString(_wishlistKey, jsonEncode(wishlistItems));
   }
 
   // Remove item from offline wishlist

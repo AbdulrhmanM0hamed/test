@@ -62,6 +62,7 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
 
     try {
       final items = await OfflineWishlistService.instance.getWishlistItems();
+      
 
       setState(() {
         _wishlistItems = items;

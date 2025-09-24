@@ -7,7 +7,7 @@ import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/l10n/app_localizations.dart';
-import '../../../../core/services/global_cubit_service.dart';
+import '../../../../core/services/hybrid_cart_service.dart';
 import '../../../cart/presentation/cubit/cart_cubit.dart';
 import '../../../cart/presentation/cubit/cart_state.dart';
 import '../../domain/entities/product_details.dart';
@@ -233,8 +233,8 @@ class _AddToCartSectionState extends State<AddToCartSection> {
       final productSizeColorId =
           _selectedVariant?.id ?? widget.product.productSizeColor.first.id;
 
-      await GlobalCubitService.instance.addToCart(
-        productId: widget.product.id,
+      await HybridCartService.instance.addToCart(
+        product: widget.product,
         productSizeColorId: productSizeColorId,
         quantity: _quantity,
       );
