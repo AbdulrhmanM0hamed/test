@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/core/utils/constant/app_assets.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/services/app_state_service.dart';

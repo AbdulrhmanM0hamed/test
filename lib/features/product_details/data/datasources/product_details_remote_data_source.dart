@@ -40,7 +40,7 @@ class ProductDetailsRemoteDataSourceImpl
                 response.data['message'] ??
                 'Product details retrieved successfully',
           );
-        } catch (e, stackTrace) {
+        } catch (e) {
           //print('🔍 ProductDetailsRemoteDataSource: Detailed error: $e');
           //print('🔍 ProductDetailsRemoteDataSource: Stack trace: $stackTrace');
           //print('🔍 ProductDetailsRemoteDataSource: Raw JSON keys: ${response.data['data']?.keys}');

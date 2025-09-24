@@ -8,8 +8,6 @@ import 'package:test/core/services/app_state_service.dart';
 import 'package:test/core/services/language_service.dart';
 import 'package:test/core/services/country_service.dart';
 import 'package:test/core/services/location_service.dart';
-import 'package:test/core/services/network_service.dart';
-import 'package:test/core/services/app_startup_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:test/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:test/features/auth/data/repositories/auth_repository_impl.dart';

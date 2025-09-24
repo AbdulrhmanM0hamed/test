@@ -62,7 +62,10 @@ class _ServicesSearchBarState extends State<CustomSearchBar> {
                       AppAssets.searchIcon,
                       width: 18,
                       height: 18,
-                      color: AppColors.grey,
+                      colorFilter: ColorFilter.mode(
+                        AppColors.grey,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
                   suffixIcon: Padding(
@@ -71,7 +74,10 @@ class _ServicesSearchBarState extends State<CustomSearchBar> {
                       AppAssets.icon_filter,
                       width: 18,
                       height: 18,
-                      color: AppColors.grey,
+                      colorFilter: ColorFilter.mode(
+                        AppColors.grey,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16),

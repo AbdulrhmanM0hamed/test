@@ -201,10 +201,7 @@ class _WishlistItemCardState extends State<WishlistItemCard>
   }
 
   Widget _buildProductDetails() {
-    final selectedVariant =
-        widget.item.wishlistProduct.productSizeColor.isNotEmpty
-        ? widget.item.wishlistProduct.productSizeColor.first
-        : null;
+ 
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),

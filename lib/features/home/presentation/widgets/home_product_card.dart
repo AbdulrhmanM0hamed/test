@@ -543,11 +543,9 @@ class _HomeProductCardState extends State<HomeProductCard>
                                     CustomSnackbar.showSuccess(
                                       context: context,
                                       message:
-                                          AppLocalizations.of(
+                                          '${AppLocalizations.of(
                                             context,
-                                          )!.addedToCart +
-                                          ' ${widget.product.name}' +
-                                          ' ${AppLocalizations.of(context)!.toCart}',
+                                          )!.addedToCart} ${widget.product.name} ${AppLocalizations.of(context)!.toCart}',
                                     );
                                   } catch (e) {
                                     CustomSnackbar.showError(

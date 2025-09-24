@@ -16,7 +16,7 @@ class NetworkInfoImpl implements NetworkInfo {
     try {
       final result = await connectivity.checkConnectivity();
       return result != ConnectivityResult.none;
-    } catch (e, stackTrace) {
+    } catch (e) {
       // In case of connectivity check error, we assume there's a connection
       // to avoid app disruption when the plugin isn't available
       //print('Connectivity check error: $e');

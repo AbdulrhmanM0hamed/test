@@ -25,7 +25,7 @@ class _HeaderSearchBarState extends State<HeaderSearchBar> {
     final productsFilterCubit = context.read<ProductsFilterCubit>();
     final wishlistCubit = context.read<WishlistCubit>();
     final cartCubit = context.read<CartCubit>();
-    
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -90,7 +90,10 @@ class _HeaderSearchBarState extends State<HeaderSearchBar> {
                   AppAssets.searchIcon,
                   width: 18,
                   height: 18,
-                  color: Colors.white.withValues(alpha: 0.8),
+                  colorFilter: ColorFilter.mode(
+                    Colors.white.withValues(alpha: 0.8),
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
               suffixIcon: Padding(

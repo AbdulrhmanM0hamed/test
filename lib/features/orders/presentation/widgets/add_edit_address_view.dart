@@ -64,31 +64,27 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
     );
 
     // Find matching city and region in LocationService
-    if (address.city != null) {
-      final matchingCity = locationService.cities.isNotEmpty
-          ? locationService.cities.firstWhere(
-              (city) => city.id == address.city!.id,
-              orElse: () => locationService.cities.first,
-            )
-          : null;
+    final matchingCity = locationService.cities.isNotEmpty
+        ? locationService.cities.firstWhere(
+            (city) => city.id == address.city.id,
+            orElse: () => locationService.cities.first,
+          )
+        : null;
 
-      if (matchingCity != null) {
-        locationService.selectCity(matchingCity).then((_) {
-          if (address.region != null) {
-            final matchingRegion = locationService.regions.isNotEmpty
-                ? locationService.regions.firstWhere(
-                    (region) => region.id == address.region!.id,
-                    orElse: () => locationService.regions.first,
-                  )
-                : null;
-            if (matchingRegion != null) {
-              locationService.selectRegion(matchingRegion);
-            }
-          }
-        });
-      }
+    if (matchingCity != null) {
+      locationService.selectCity(matchingCity).then((_) {
+        final matchingRegion = locationService.regions.isNotEmpty
+            ? locationService.regions.firstWhere(
+                (region) => region.id == address.region.id,
+                orElse: () => locationService.regions.first,
+              )
+            : null;
+        if (matchingRegion != null) {
+          locationService.selectRegion(matchingRegion);
+        }
+            });
     }
-  }
+    }
 
   @override
   void dispose() {
@@ -274,11 +270,9 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
               builder: (context, languageService, child) {
                 return _buildLocationSelector(
                   label: AppLocalizations.of(context)!.city,
-                  value: locationService.selectedCity != null
-                      ? locationService.selectedCity!.getLocalizedTitle(
+                  value: locationService.selectedCity?.getLocalizedTitle(
                           languageService.isArabic,
-                        )
-                      : null,
+                        ),
                   onTap: () => _showCitySelector(locationService),
                   isLoading: locationService.isLoadingCities,
                 );
@@ -292,11 +286,9 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
               builder: (context, languageService, child) {
                 return _buildLocationSelector(
                   label: AppLocalizations.of(context)!.region,
-                  value: locationService.selectedRegion != null
-                      ? locationService.selectedRegion!.getLocalizedTitle(
+                  value: locationService.selectedRegion?.getLocalizedTitle(
                           languageService.isArabic,
-                        )
-                      : null,
+                        ),
                   onTap: locationService.selectedCity != null
                       ? () => _showRegionSelector(locationService)
                       : null,
@@ -499,7 +491,7 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
         context.read<AddressesCubit>().addAddress(address);
       } else {
         context.read<AddressesCubit>().updateAddress(
-          widget.address!.id!,
+          widget.address!.id,
           address,
         );
       }

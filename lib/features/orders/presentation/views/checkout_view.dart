@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/core/widgets/order_success_dialog.dart';
 import 'package:test/l10n/app_localizations.dart';

@@ -25,7 +25,7 @@ class AddReviewDialog extends StatefulWidget {
 class _AddReviewDialogState extends State<AddReviewDialog> {
   final TextEditingController _reviewController = TextEditingController();
   int _selectedStars = 0;
-  bool _isSubmitting = false;
+  final bool _isSubmitting = false;
 
   @override
   void dispose() {

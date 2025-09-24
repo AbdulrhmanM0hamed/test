@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import '../di/dependency_injection.dart';
 import '../../features/cart/domain/entities/cart.dart';
 import '../../features/cart/presentation/cubit/cart_cubit.dart';

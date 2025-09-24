@@ -65,7 +65,7 @@ class CartProduct {
   
   bool get isAvailable => stock > 0;
   
-  String get discountText => hasDiscount ? '${discount}%' : '';
+  String get discountText => hasDiscount ? '$discount%' : '';
 }
 
 class CartTax {

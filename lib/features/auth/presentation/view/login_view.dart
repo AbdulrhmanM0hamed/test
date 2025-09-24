@@ -13,7 +13,6 @@ import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/features/auth/presentation/view/forget_password_view_new.dart';
 import 'package:test/features/auth/presentation/view/register_view.dart';
-import 'package:test/features/auth/presentation/widgets/social_auth_button.dart';
 import 'package:test/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:test/features/auth/presentation/cubit/auth_state.dart';
 import 'package:test/features/home/presentation/view/bottom_nav_bar.dart';

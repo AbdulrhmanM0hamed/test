@@ -572,11 +572,9 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
                                   CustomSnackbar.showSuccess(
                                     context: context,
                                     message:
-                                        AppLocalizations.of(
+                                        '${AppLocalizations.of(
                                           context,
-                                        )!.addedToCart +
-                                        ' ${widget.product.name}' +
-                                        ' ${AppLocalizations.of(context)!.toCart}',
+                                        )!.addedToCart} ${widget.product.name} ${AppLocalizations.of(context)!.toCart}',
                                   );
 
                                   // debug(

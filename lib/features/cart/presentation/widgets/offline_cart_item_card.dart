@@ -32,7 +32,7 @@ class _OfflineCartItemCardState extends State<OfflineCartItemCard>
   late Animation<double> _scaleAnimation;
   late Animation<Offset> _slideAnimation;
   bool _isRemoving = false;
-  bool _isUpdating = false;
+  final bool _isUpdating = false;
   late int _localQuantity;
   Timer? _debounceTimer;
 
@@ -430,9 +430,9 @@ class _OfflineCartItemCardState extends State<OfflineCartItemCard>
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.red.withOpacity(0.1),
+          color: Colors.red.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.red.withOpacity(0.3)),
+          border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
         ),
         child: Row(
           children: [

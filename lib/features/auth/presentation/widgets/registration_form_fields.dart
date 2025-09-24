@@ -3,7 +3,6 @@ import 'package:test/core/utils/common/custom_text_field.dart';
 import 'package:test/core/utils/common/password_field.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
-import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/core/utils/validators/form_validators_clean.dart';
 import 'package:test/l10n/app_localizations.dart';
 

@@ -420,9 +420,7 @@ class _OfflineWishlistItemCardState extends State<OfflineWishlistItemCard>
                         CustomSnackbar.showSuccess(
                           context: context,
                           message:
-                              AppLocalizations.of(context)!.addedToCart +
-                              ' ${widget.product['name']}' +
-                              ' ${AppLocalizations.of(context)!.toCart}',
+                              '${AppLocalizations.of(context)!.addedToCart} ${widget.product['name']} ${AppLocalizations.of(context)!.toCart}',
                         );
                       } catch (e) {
                         CustomSnackbar.showError(

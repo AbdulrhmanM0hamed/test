@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import '../../../../core/models/api_response.dart';
 import '../../../../core/services/network/dio_service.dart';
 import '../../../../core/utils/constant/api_endpoints.dart';
-import '../../../../core/error/exceptions.dart';
 import '../models/address_model.dart';
 
 abstract class AddressesRemoteDataSource {

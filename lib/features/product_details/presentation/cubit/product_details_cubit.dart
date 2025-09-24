@@ -23,10 +23,11 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
         emit(ProductDetailsError(response.message));
       }
     } catch (e) {
-      if (!isClosed)
+      if (!isClosed) {
         emit(
           ProductDetailsError('An unexpected error occurred: ${e.toString()}'),
         );
+      }
     }
   }
 

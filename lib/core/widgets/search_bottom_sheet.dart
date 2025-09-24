@@ -8,7 +8,7 @@ import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/core/utils/animations/custom_animations.dart';
-import 'package:test/features/categories/presentation/widgets/product_card_professional.dart' hide SizedBox, Row;
+import 'package:test/features/categories/presentation/widgets/product_card_professional.dart';
 import 'package:test/features/categories/presentation/cubits/products_filter_cubit.dart';
 import 'package:test/features/categories/presentation/cubits/products_filter_state.dart';
 import 'package:test/features/categories/domain/entities/product.dart';
@@ -222,7 +222,10 @@ class _SearchBottomSheetState extends State<SearchBottomSheet>
                 AppAssets.searchIcon,
                 width: 18,
                 height: 18,
-                color: Colors.white.withValues(alpha: 0.8),
+                colorFilter: ColorFilter.mode(
+                  Colors.white.withValues(alpha: 0.8),
+                  BlendMode.srcIn,
+                ),
               ),
             ),
             suffixIcon: _isSearching

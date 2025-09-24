@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
-import '../../../../core/models/api_response.dart';
 import '../../domain/repositories/product_review_repository.dart';
 import '../datasources/product_review_remote_data_source.dart';
 
@@ -23,9 +22,9 @@ class ProductReviewRepositoryImpl implements ProductReviewRepository {
       );
 
       if (response.success) {
-        return Right(response.message ?? 'Review submitted successfully');
+        return Right(response.message);
       } else {
-        return Left(ServerFailure(message: response.message ?? 'Failed to submit review'));
+        return Left(ServerFailure(message: response.message));
       }
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
