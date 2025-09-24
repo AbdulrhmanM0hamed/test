@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/features/home/presentation/cubit/slider_cubit.dart';
 import 'package:test/features/home/presentation/cubit/slider_state.dart';
 import 'package:test/features/home/presentation/widgets/offers_slider.dart';
+import 'package:test/features/home/presentation/widgets/offers_slider_shimmer.dart';
 
 class OffersSection extends StatelessWidget {
   const OffersSection({super.key});
@@ -23,12 +24,7 @@ class OffersSection extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             if (state is SliderLoading)
-              const SizedBox(
-                height: 180,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              )
+              const OffersSliderShimmer()
             else if (state is SliderLoaded)
               OffersSlider(sliders: state.sliders)
             else if (state is SliderError)
