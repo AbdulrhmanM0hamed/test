@@ -872,7 +872,7 @@ abstract class AppLocalizations {
   /// No description provided for @toCart.
   ///
   /// In en, this message translates to:
-  /// **'to cart'**
+  /// **'to Cart'**
   String get toCart;
 
   /// No description provided for @productDetails.

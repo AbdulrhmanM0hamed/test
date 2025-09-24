@@ -212,7 +212,10 @@ class _CartViewState extends State<CartView>
     );
   }
 
-  Widget _buildLoadedStateFromUpdating(BuildContext context, CartItemUpdating state) {
+  Widget _buildLoadedStateFromUpdating(
+    BuildContext context,
+    CartItemUpdating state,
+  ) {
     // Use the cart data from the updating state to avoid showing loading
     return Column(
       children: [
@@ -338,7 +341,6 @@ class _CartViewState extends State<CartView>
             child: CustomButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/checkout');
-
               },
 
               text: AppLocalizations.of(context)!.completeOrder,
@@ -392,12 +394,12 @@ class _CartViewState extends State<CartView>
   }
 
   void _handleStateChanges(BuildContext context, CartState state) {
-    if (state is CartItemAdded) {
-      CustomSnackbar.showSuccess(context: context, message: state.message);
-    } else if (state is CartItemRemoved) {
+    // Only show snackbars for cart operations that happen within CartView
+    // Don't show snackbars for CartItemAdded as it's handled by the component that triggered the action
+    if (state is CartItemRemoved) {
       CustomSnackbar.showWarning(context: context, message: state.message);
     } else if (state is CartCleared) {
-      CustomSnackbar.showInfo(context: context, message: state.message);
+      CustomSnackbar.showSuccess(context: context, message: state.message);
     } else if (state is CartError) {
       CustomSnackbar.showError(context: context, message: state.message);
     }

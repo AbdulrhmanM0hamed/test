@@ -598,7 +598,7 @@
   "serverNotResponding": "Server not responding. Try again later",
   "requestFailed": "Failed to send request",
   "responseParsingError": "Error parsing server response",
-  
+  "toCart": "to Cart",
   "noReviewsYet": "No reviews yet",
   "beFirstToReview": "Be the first to review this product",
   "viewAllReviews": "View All Reviews",

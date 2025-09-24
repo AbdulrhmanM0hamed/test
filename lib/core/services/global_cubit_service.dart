@@ -1,8 +1,10 @@
 import 'package:test/core/di/dependency_injection.dart';
+import 'package:test/features/cart/domain/entities/add_to_cart_request.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/features/cart/presentation/cubit/cart_state.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/core/services/app_state_service.dart';
+import 'package:test/features/cart/domain/usecases/add_to_cart_usecase.dart';
 
 /// Global singleton service to manage shared cubit instances across the app
 class GlobalCubitService {
@@ -18,17 +20,21 @@ class GlobalCubitService {
 
   /// Initialize the global cubits (should be called once from bottom nav bar)
   void initialize() {
-    if (_isInitialized) return;
-    
     final appStateService = DependencyInjection.getIt<AppStateService>();
-    final isLoggedIn = appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
-    
+    final isLoggedIn =
+        appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+
     if (isLoggedIn) {
+      // Always reinitialize to ensure fresh cubit instances after login
       _cartCubit = DependencyInjection.getIt<CartCubit>()..getCart();
-      _wishlistCubit = DependencyInjection.getIt<WishlistCubit>()..getMyWishlist();
+      _wishlistCubit = DependencyInjection.getIt<WishlistCubit>()
+        ..getMyWishlist();
       _isInitialized = true;
-      
+
       print('🌍 GlobalCubitService: Initialized with shared cubit instances');
+    } else if (_isInitialized) {
+      // Reset if user logged out
+      reset();
     }
   }
 
@@ -57,6 +63,13 @@ class GlobalCubitService {
     _wishlistCubit = null;
     _isInitialized = false;
     print('🔄 GlobalCubitService: Reset completed');
+  }
+
+  /// Force reinitialize after login (ensures fresh cubit instances)
+  void forceReinitialize() {
+    print('🔄 GlobalCubitService: Force reinitializing...');
+    _isInitialized = false;
+    initialize();
   }
 
   /// Refresh both cart and wishlist
@@ -90,6 +103,38 @@ class GlobalCubitService {
     }
   }
 
+  /// Add item to cart silently (without triggering snackbar states) - used during sync
+  Future<void> addToCartSilently({
+    required int productId,
+    required int productSizeColorId,
+    required int quantity,
+  }) async {
+    if (_cartCubit != null) {
+      print(
+        '🛒 GlobalCubitService: Adding product $productId to cart silently',
+      );
+      // Use the use case directly to bypass state emissions that trigger snackbars
+      final addToCartUseCase = DependencyInjection.getIt
+          .get<AddToCartUseCase>();
+      final request = AddToCartRequest(
+        items: [
+          CartItemRequest(
+            productId: productId,
+            productSizeColorId: productSizeColorId,
+            quantity: quantity,
+          ),
+        ],
+      );
+
+      final result = await addToCartUseCase(request);
+      result.fold(
+        (failure) => throw Exception(failure.message),
+        (message) =>
+            print('✅ GlobalCubitService: Product $productId added silently'),
+      );
+    }
+  }
+
   /// Update cart item quantity (for products already in cart)
   Future<void> updateCartItemQuantity({
     required int cartItemId,
@@ -98,7 +143,9 @@ class GlobalCubitService {
     required int newQuantity,
   }) async {
     if (_cartCubit != null) {
-      print('🛒 GlobalCubitService: Updating cart item $cartItemId quantity to $newQuantity');
+      print(
+        '🛒 GlobalCubitService: Updating cart item $cartItemId quantity to $newQuantity',
+      );
       await _cartCubit!.updateCartItemQuantity(
         cartItemId: cartItemId,
         newQuantity: newQuantity,
@@ -137,7 +184,9 @@ class GlobalCubitService {
       await _wishlistCubit!.removeFromWishlist(productId);
       // Auto refresh after removing
       await _wishlistCubit!.getMyWishlist();
-      print('✅ GlobalCubitService: Product removed from wishlist and refreshed');
+      print(
+        '✅ GlobalCubitService: Product removed from wishlist and refreshed',
+      );
     }
   }
 

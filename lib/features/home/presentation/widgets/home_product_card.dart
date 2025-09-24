@@ -4,8 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
-import 'package:test/core/services/cart_global_service.dart';
-import 'package:test/core/services/global_cubit_service.dart';
+import 'package:test/core/services/hybrid_cart_service.dart';
+import 'package:test/core/services/hybrid_wishlist_service.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/utils/constant/app_assets.dart';
 import '../../../../core/utils/constant/font_manger.dart';
@@ -283,44 +283,28 @@ class _HomeProductCardState extends State<HomeProductCard>
               _isWishlistLoading = true;
             });
 
-            // Use global service for wishlist operations
-            if (_isInWishlist) {
-              GlobalCubitService.instance
-                  .removeFromWishlist(widget.product.id)
-                  .then((_) {
-                    if (mounted) {
-                      setState(() {
-                        _isInWishlist = false;
-                        _isWishlistLoading = false;
-                      });
-                    }
-                  })
-                  .catchError((error) {
-                    if (mounted) {
-                      setState(() {
-                        _isWishlistLoading = false;
-                      });
-                    }
-                  });
-            } else {
-              GlobalCubitService.instance
-                  .addToWishlist(widget.product.id)
-                  .then((_) {
-                    if (mounted) {
-                      setState(() {
-                        _isInWishlist = true;
-                        _isWishlistLoading = false;
-                      });
-                    }
-                  })
-                  .catchError((error) {
-                    if (mounted) {
-                      setState(() {
-                        _isWishlistLoading = false;
-                      });
-                    }
-                  });
-            }
+            // Use hybrid service for wishlist operations (works for both online and offline)
+            HybridWishlistService.instance
+                .toggleWishlist(widget.product)
+                .then((_) {
+                  if (mounted) {
+                    setState(() {
+                      _isInWishlist = !_isInWishlist;
+                      _isWishlistLoading = false;
+                    });
+                  }
+                })
+                .catchError((error) {
+                  if (mounted) {
+                    setState(() {
+                      _isWishlistLoading = false;
+                    });
+                    CustomSnackbar.showError(
+                      context: context,
+                      message: error.toString(),
+                    );
+                  }
+                });
           },
           child: Container(
             padding: const EdgeInsets.all(6),
@@ -488,18 +472,15 @@ class _HomeProductCardState extends State<HomeProductCard>
               ),
 
               // Add to Cart Button with Visual Indicator
-              StreamBuilder<CartEvent>(
-                stream: CartGlobalService.instance.cartEventStream,
-                builder: (context, eventSnapshot) {
+              FutureBuilder<int>(
+                future: HybridCartService.instance.getProductQuantity(
+                  productId: widget.product.id,
+                  productSizeColorId: widget.product.productSizeColorId ?? 0,
+                ),
+                builder: (context, quantitySnapshot) {
                   return StatefulBuilder(
                     builder: (context, setState) {
-                      // Get real-time quantity from cart service instead of static product data
-                      final currentCart =
-                          CartGlobalService.instance.currentCart;
-                      final cartItem = currentCart?.getItemByProductId(
-                        widget.product.id,
-                      );
-                      final currentQuantity = cartItem?.quantity ?? 0;
+                      final currentQuantity = quantitySnapshot.data ?? 0;
                       // Use the minimum of limitation and countOfAvailable to respect both constraints
                       final maxAllowed = widget.product.limitation > 0
                           ? (widget.product.limitation <
@@ -528,28 +509,24 @@ class _HomeProductCardState extends State<HomeProductCard>
                                       '🛒 HomeProductCard: ${isInCart ? 'Updating' : 'Adding'} product ${widget.product.id} to cart with quantity ${currentQuantity + 1}',
                                     );
 
-                                    if (isInCart && cartItem != null) {
-                                      // Product is already in cart, update quantity
-                                      await GlobalCubitService.instance
-                                          .updateCartItemQuantity(
-                                            cartItemId: cartItem.id,
-                                            productId: widget.product.id,
-                                            productSizeColorId: widget
-                                                .product
-                                                .productSizeColorId!,
-                                            newQuantity: currentQuantity + 1,
-                                          );
-                                    } else {
-                                      // Product not in cart, add it for the first time
-                                      await GlobalCubitService.instance
-                                          .addToCart(
-                                            productId: widget.product.id,
-                                            productSizeColorId: widget
-                                                .product
-                                                .productSizeColorId!,
-                                            quantity: 1,
-                                          );
-                                    }
+                                    // Use hybrid service for cart operations (works for both online and offline)
+                                    await HybridCartService.instance.addToCart(
+                                      product: widget.product,
+                                      productSizeColorId:
+                                          widget.product.productSizeColorId!,
+                                      quantity: 1,
+                                    );
+
+                                    // Show success snackbar for both logged in and guest users
+                                    CustomSnackbar.showSuccess(
+                                      context: context,
+                                      message:
+                                          AppLocalizations.of(
+                                            context,
+                                          )!.addedToCart +
+                                          ' ${widget.product.name}' +
+                                          ' ${AppLocalizations.of(context)!.toCart}',
+                                    );
                                   } catch (e) {
                                     CustomSnackbar.showError(
                                       context: context,

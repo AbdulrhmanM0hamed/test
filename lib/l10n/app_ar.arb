@@ -331,6 +331,7 @@
   "tapToLoadCountries": "اضغط لتحميل الدول المتاحة",
   "numberOfProducts": "عدد المنتجات",
   "cartEmpty": "السلة فارغة",
+  "toCart": "إلى السلة",
   "cartEmptyMessage": "لا توجد منتجات في سلة التسوق",
   "startShopping": "ابدأ التسوق",
   "clearAll": "حذف الكل",

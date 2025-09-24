@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:test/features/cart/presentation/cubit/cart_state.dart';
 import 'package:test/features/profile/presentation/view/profile_wrapper.dart';
 import 'package:test/l10n/app_localizations.dart';
@@ -11,12 +12,16 @@ import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/features/home/presentation/view/home_page.dart';
 import 'package:test/features/categories/presentation/view/categories_view.dart';
 import 'package:test/features/wishlist/presentation/view/wishlist_view.dart';
+import 'package:test/features/wishlist/presentation/view/offline_wishlist_view.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/features/cart/presentation/view/cart_view.dart';
+import 'package:test/features/cart/presentation/view/offline_cart_view.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/services/app_state_service.dart';
 import 'package:test/core/services/global_cubit_service.dart';
+import 'package:test/core/services/offline_cart_service.dart';
+import 'package:test/core/services/offline_wishlist_service.dart';
 import 'package:test/features/home/presentation/widgets/login_prompt_widget.dart';
 import 'package:test/features/home/presentation/widgets/lazy_tab_wrapper.dart';
 
@@ -32,13 +37,21 @@ class BottomNavBar extends StatefulWidget {
   static void navigateToHome() {
     _HomeViewState._instance?._onNavItemTapped(0);
   }
+
+  // Static method to force refresh after login
+  static void forceRefreshAfterLogin() {
+    _HomeViewState._instance?._forceRefreshAfterLogin();
+  }
 }
 
 class _HomeViewState extends State<BottomNavBar> {
   int _selectedIndex = 0;
-  late final List<Widget> _screens;
-  late CartCubit _cartCubit;
-  late WishlistCubit _wishlistCubit;
+  List<Widget> _screens = [];
+  CartCubit? _cartCubit;
+  WishlistCubit? _wishlistCubit;
+  late AppStateService _appStateService;
+  bool _lastLoginState = false;
+  Timer? _loginStateTimer;
 
   // Static reference to allow access from other widgets
   static _HomeViewState? _instance;
@@ -47,8 +60,46 @@ class _HomeViewState extends State<BottomNavBar> {
   void initState() {
     super.initState();
     _instance = this;
+    _appStateService = DependencyInjection.getIt.get<AppStateService>();
+    _lastLoginState =
+        _appStateService.isLoggedIn() && !_appStateService.hasLoggedOut();
     _initializeScreens();
     _initializeCartGlobalService();
+
+    // Start periodic check for login state changes
+    _startLoginStateMonitoring();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Check if login state has changed and reinitialize if needed
+    final appStateService = DependencyInjection.getIt.get<AppStateService>();
+    final isLoggedIn =
+        appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+
+    // If login state changed, reinitialize screens
+    if (_shouldReinitialize(isLoggedIn)) {
+      debugPrint(
+        '🔄 BottomNavBar: Login state changed, reinitializing screens',
+      );
+      // Add a small delay to ensure GlobalCubitService is properly initialized
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted) {
+          _initializeScreens();
+          // Force a rebuild to ensure UI updates with new cubit instances
+          setState(() {});
+        }
+      });
+    }
+  }
+
+  bool _shouldReinitialize(bool currentLoginState) {
+    // Check if we have global cubits initialized but user is not logged in
+    // or if we don't have global cubits but user is logged in
+    final hasGlobalCubits = GlobalCubitService.instance.cartCubit != null;
+    return (hasGlobalCubits && !currentLoginState) ||
+        (!hasGlobalCubits && currentLoginState);
   }
 
   Future<void> _initializeCartGlobalService() async {
@@ -59,13 +110,40 @@ class _HomeViewState extends State<BottomNavBar> {
     debugPrint('🔐 BottomNavBar: User logged in: $isLoggedIn');
 
     if (isLoggedIn) {
-      debugPrint('🚀 BottomNavBar: Lazy loading - CartGlobalService will load when needed');
+      debugPrint(
+        '🚀 BottomNavBar: Lazy loading - CartGlobalService will load when needed',
+      );
       // Don't initialize immediately - let it load when user accesses cart/wishlist
     }
   }
 
+  void _startLoginStateMonitoring() {
+    _loginStateTimer = Timer.periodic(const Duration(milliseconds: 500), (
+      timer,
+    ) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+
+      final currentLoginState =
+          _appStateService.isLoggedIn() && !_appStateService.hasLoggedOut();
+      if (currentLoginState != _lastLoginState) {
+        debugPrint(
+          '🔄 BottomNavBar: Login state changed from $_lastLoginState to $currentLoginState',
+        );
+        _lastLoginState = currentLoginState;
+
+        // Reinitialize screens with fresh cubit instances
+        _initializeScreens();
+        setState(() {});
+      }
+    });
+  }
+
   @override
   void dispose() {
+    _loginStateTimer?.cancel();
     _instance = null;
     super.dispose();
   }
@@ -78,40 +156,47 @@ class _HomeViewState extends State<BottomNavBar> {
     // Initialize global cubit service only if logged in (but don't load data yet)
     if (isLoggedIn) {
       GlobalCubitService.instance.initialize();
-      _cartCubit = GlobalCubitService.instance.cartCubit!;
-      _wishlistCubit = GlobalCubitService.instance.wishlistCubit!;
-      debugPrint('🌍 BottomNavBar: Using global cubit instances (lazy loading enabled)');
+      // Always get fresh cubit references from GlobalCubitService
+      _cartCubit = GlobalCubitService.instance.cartCubit;
+      _wishlistCubit = GlobalCubitService.instance.wishlistCubit;
+      debugPrint(
+        '🌍 BottomNavBar: Using global cubit instances (lazy loading enabled)',
+      );
+    } else {
+      // Clear global cubits if user logged out
+      if (GlobalCubitService.instance.cartCubit != null) {
+        debugPrint(
+          '🧹 BottomNavBar: Clearing global cubits for logged out user',
+        );
+        GlobalCubitService.instance.reset();
+      }
+      _cartCubit = null;
+      _wishlistCubit = null;
     }
 
     _screens = [
       // Home tab - always loads immediately
-      isLoggedIn
-          ? MultiBlocProvider(
-              providers: [
-                BlocProvider.value(value: _cartCubit),
-                BlocProvider.value(value: _wishlistCubit),
-              ],
-              child: const HomePage(),
-            )
-          : const HomePage(),
-      
+      const HomePage(),
+
       // Categories tab - no auth required, loads immediately
       const CategoriesView(),
-      
+
       // Wishlist tab - lazy load with auth check
       LazyTabWrapper(
-        requiresAuth: true,
-        requiresWishlistData: true,
-        child: isLoggedIn ? const WishlistView() : const LoginPromptWidget(),
+        requiresAuth: false, // Allow offline wishlist access
+        requiresWishlistData:
+            isLoggedIn, // Only require wishlist data for logged-in users
+        child: isLoggedIn ? const WishlistView() : const OfflineWishlistView(),
       ),
-      
+
       // Cart tab - lazy load with auth check
       LazyTabWrapper(
-        requiresAuth: true,
-        requiresCartData: true,
-        child: isLoggedIn ? const CartView() : const LoginPromptWidget(),
+        requiresAuth: false, // Allow offline cart access
+        requiresCartData:
+            isLoggedIn, // Only require cart data for logged-in users
+        child: isLoggedIn ? const CartView() : const OfflineCartView(),
       ),
-      
+
       // Profile tab - no data loading needed
       isLoggedIn ? const ProfileWrapper() : const LoginPromptWidget(),
     ];
@@ -123,29 +208,48 @@ class _HomeViewState extends State<BottomNavBar> {
     });
   }
 
+  void _forceRefreshAfterLogin() {
+    debugPrint('🔄 BottomNavBar: Force refreshing after login...');
+    if (mounted) {
+      // Force reinitialize screens with fresh cubit instances
+      _initializeScreens();
+      // Force a complete rebuild
+      setState(() {});
+      debugPrint('✅ BottomNavBar: Force refresh completed');
+    } else {
+      debugPrint('⚠️ BottomNavBar: Widget not mounted, skipping refresh');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final appStateService = DependencyInjection.getIt.get<AppStateService>();
     final isLoggedIn =
         appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
 
+    // Get fresh cubit references from GlobalCubitService if logged in
+    final cartCubit = isLoggedIn ? GlobalCubitService.instance.cartCubit : null;
+    final wishlistCubit = isLoggedIn
+        ? GlobalCubitService.instance.wishlistCubit
+        : null;
+
     return Scaffold(
-      body: isLoggedIn
+      body: isLoggedIn && cartCubit != null && wishlistCubit != null
           ? MultiBlocProvider(
               providers: [
-                BlocProvider.value(value: _cartCubit),
-                BlocProvider.value(value: _wishlistCubit),
+                BlocProvider.value(value: cartCubit),
+                BlocProvider.value(value: wishlistCubit),
               ],
               child: IndexedStack(index: _selectedIndex, children: _screens),
             )
           : IndexedStack(index: _selectedIndex, children: _screens),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-        child: isLoggedIn
+        child: isLoggedIn && cartCubit != null && wishlistCubit != null
             ? MultiBlocProvider(
                 providers: [
-                  BlocProvider.value(value: _cartCubit),
-                  BlocProvider.value(value: _wishlistCubit),
+                  BlocProvider.value(value: cartCubit),
+                  BlocProvider.value(value: wishlistCubit),
                 ],
                 child: _buildCustomBottomNavBar(),
               )
@@ -323,53 +427,38 @@ class _HomeViewState extends State<BottomNavBar> {
               ),
             ],
           ),
-          // Wishlist Badge
-          if (isLoggedIn)
-            Positioned(
-              right: 8,
-              top: -2,
-              child: BlocBuilder<WishlistCubit, WishlistState>(
-                builder: (context, state) {
-                  int itemCount = 0;
-                  if (state is WishlistLoaded) {
-                    itemCount = state.wishlistResponse.count;
-                  }
-                  debugPrint(
-                    '❤️ BottomNavBar Badge: Wishlist state: ${state.runtimeType}, count: $itemCount',
-                  );
-                  if (itemCount > 0) {
-                    return Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.2),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      constraints: const BoxConstraints(
-                        minWidth: 18,
-                        minHeight: 18,
-                      ),
-                      child: Text(
-                        itemCount > 99 ? '99+' : itemCount.toString(),
-                        style: getBoldStyle(
-                          fontSize: FontSize.size10,
-                          fontFamily: FontConstant.cairo,
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    );
-                  }
-                  return const SizedBox.shrink();
-                },
-              ),
-            ),
+          // Wishlist Badge - works for both logged in and offline users
+          Positioned(
+            right: 8,
+            top: -2,
+            child: isLoggedIn && _wishlistCubit != null
+                ? BlocBuilder<WishlistCubit, WishlistState>(
+                    builder: (context, state) {
+                      int itemCount = 0;
+                      if (state is WishlistLoaded) {
+                        itemCount = state.wishlistResponse.count;
+                      }
+                      debugPrint(
+                        '❤️ BottomNavBar Badge: Wishlist state: ${state.runtimeType}, count: $itemCount',
+                      );
+                      if (itemCount > 0) {
+                        return _buildBadge(itemCount);
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  )
+                : FutureBuilder<int>(
+                    future: OfflineWishlistService.instance
+                        .getWishlistItemCount(),
+                    builder: (context, snapshot) {
+                      final itemCount = snapshot.data ?? 0;
+                      if (itemCount > 0) {
+                        return _buildBadge(itemCount);
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+          ),
         ],
       ),
     );
@@ -417,54 +506,65 @@ class _HomeViewState extends State<BottomNavBar> {
               ),
             ],
           ),
-          // Cart Badge
-          if (isLoggedIn)
-            Positioned(
-              right: 8,
-              top: -2,
-              child: BlocBuilder<CartCubit, CartState>(
-                builder: (context, state) {
-                  int itemCount = 0;
-                  if (state is CartLoaded) {
-                    itemCount = state.cart.totalQuantity;
-                  }
-                  debugPrint(
-                    '🔢 BottomNavBar Badge: Cart state: ${state.runtimeType}, count: $itemCount',
-                  );
-                  if (itemCount > 0) {
-                    return Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.2),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      constraints: const BoxConstraints(
-                        minWidth: 18,
-                        minHeight: 18,
-                      ),
-                      child: Text(
-                        itemCount > 99 ? '99+' : itemCount.toString(),
-                        style: getBoldStyle(
-                          fontSize: FontSize.size10,
-                          fontFamily: FontConstant.cairo,
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    );
-                  }
-                  return const SizedBox.shrink();
-                },
-              ),
-            ),
+          // Cart Badge - works for both logged in and offline users
+          Positioned(
+            right: 8,
+            top: -2,
+            child: isLoggedIn && _cartCubit != null
+                ? BlocBuilder<CartCubit, CartState>(
+                    builder: (context, state) {
+                      int itemCount = 0;
+                      if (state is CartLoaded) {
+                        itemCount = state.cart.totalQuantity;
+                      }
+                      debugPrint(
+                        '🛒 BottomNavBar Badge: Cart state: ${state.runtimeType}, count: $itemCount',
+                      );
+                      if (itemCount > 0) {
+                        return _buildBadge(itemCount);
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  )
+                : FutureBuilder<int>(
+                    future: OfflineCartService.instance.getCartItemCount(),
+                    builder: (context, snapshot) {
+                      final itemCount = snapshot.data ?? 0;
+                      if (itemCount > 0) {
+                        return _buildBadge(itemCount);
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildBadge(int itemCount) {
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: Colors.red,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.2),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
+      child: Text(
+        itemCount > 99 ? '99+' : itemCount.toString(),
+        style: getBoldStyle(
+          fontSize: FontSize.size10,
+          fontFamily: FontConstant.cairo,
+          color: Colors.white,
+        ),
+        textAlign: TextAlign.center,
       ),
     );
   }

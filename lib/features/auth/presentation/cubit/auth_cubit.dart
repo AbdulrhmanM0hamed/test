@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/services/token_storage_service.dart';
 import 'package:test/core/services/app_state_service.dart';
+import 'package:test/core/services/auth_state_service.dart';
 import 'package:test/core/utils/error/error_handler.dart';
 import 'package:test/features/auth/domain/entities/login_request.dart';
 import 'package:test/features/auth/domain/usecases/login_usecase.dart';
@@ -9,6 +10,7 @@ import 'package:test/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:test/features/auth/domain/usecases/refresh_token_usecase.dart';
 import 'package:test/features/auth/domain/usecases/resend_verification_email_usecase.dart';
 import 'package:test/features/auth/presentation/cubit/auth_state.dart';
+import 'package:test/core/services/offline_sync_service.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final LoginUseCase loginUseCase;
@@ -72,7 +74,18 @@ class AuthCubit extends Cubit<AuthState> {
           password: password,
         );
 
+        // Update AuthStateService to reflect login state
+        await AuthStateService.instance.login();
+
         emit(AuthSuccess(user, message: response.message));
+
+        // Sync offline data to server after successful login and state emission
+        try {
+          await OfflineSyncService.instance.syncOfflineDataToServer();
+        } catch (e) {
+          print('🔄 Failed to sync offline data after login: $e');
+          // Don't fail the login process if sync fails
+        }
       } else {
         String errorMessage =
             response.getFirstErrorMessage() ?? response.message;
@@ -133,6 +146,9 @@ class AuthCubit extends Cubit<AuthState> {
 
       // Clear stored tokens
       await tokenStorageService.clearAll();
+
+      // Update AuthStateService to reflect logout state
+      await AuthStateService.instance.logout();
 
       // Handle app state for logout
       await appStateService.handleLogout();
