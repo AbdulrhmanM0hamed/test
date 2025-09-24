@@ -8,6 +8,7 @@ import 'package:test/core/services/offline_wishlist_service.dart';
 import 'package:test/core/services/hybrid_wishlist_service.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/features/wishlist/presentation/widgets/offline_wishlist_item_card.dart' hide Container;
+import 'package:test/features/home/presentation/view/bottom_nav_bar.dart';
 import 'package:test/l10n/app_localizations.dart';
 
 class OfflineWishlistView extends StatefulWidget {
@@ -87,26 +88,16 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
       HybridWishlistService.instance.notifyListeners();
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Wishlist cleared successfully',
-              style: const TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Colors.green,
-          ),
+        CustomSnackbar.showSuccess(
+          context: context,
+          message: AppLocalizations.of(context)!.wishlistCleared,
         );
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Failed to clear wishlist: ${e.toString()}',
-              style: const TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Colors.red,
-          ),
+        CustomSnackbar.showError(
+          context: context,
+          message: '${AppLocalizations.of(context)!.failedToClearWishlist}: ${e.toString()}',
         );
       }
     }
@@ -117,16 +108,18 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        surfaceTintColor: Colors.transparent,
+        automaticallyImplyLeading: false,
         title: Text(
           AppLocalizations.of(context)!.favorite,
           style: getBoldStyle(
             fontSize: FontSize.size20,
             fontFamily: FontConstant.cairo,
-            color: Theme.of(context).textTheme.displayLarge?.color,
+            color: Theme.of(context).textTheme.titleLarge?.color,
           ),
         ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
         actions: [
           if (_wishlistItems.isNotEmpty)
             IconButton(
@@ -192,7 +185,8 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
             padding: const EdgeInsets.symmetric(horizontal: 64),
             child: CustomButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                // Navigate to home tab using static method
+                BottomNavBar.navigateToHome();
               },
               text: AppLocalizations.of(context)!.browseProducts,
               backgroundColor: AppColors.primary,
@@ -305,49 +299,51 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
   void _showClearWishlistDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          'Clear Wishlist',
-          style: getBoldStyle(
-            fontSize: FontSize.size16,
-            fontFamily: FontConstant.cairo,
-          ),
-        ),
-        content: Text(
-          'Are you sure you want to remove all items from your wishlist?',
-          style: getMediumStyle(
-            fontSize: FontSize.size14,
-            fontFamily: FontConstant.cairo,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(
-              'Cancel',
-              style: getMediumStyle(
-                fontSize: FontSize.size14,
-                fontFamily: FontConstant.cairo,
-                color: Colors.grey[600],
-              ),
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text(
+            AppLocalizations.of(context)!.confirmDeletion,
+            style: getBoldStyle(
+              fontSize: FontSize.size18,
+              fontFamily: FontConstant.cairo,
             ),
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              _clearWishlist();
-            },
-            child: Text(
-              'Clear',
-              style: getBoldStyle(
-                fontSize: FontSize.size14,
-                fontFamily: FontConstant.cairo,
-                color: Colors.red,
-              ),
+          content: Text(
+            AppLocalizations.of(context)!.clearWishlistConfirmation,
+            style: getRegularStyle(
+              fontSize: FontSize.size14,
+              fontFamily: FontConstant.cairo,
             ),
           ),
-        ],
-      ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(
+                AppLocalizations.of(context)!.cancel,
+                style: getMediumStyle(
+                  fontSize: FontSize.size14,
+                  fontFamily: FontConstant.cairo,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+                _clearWishlist();
+              },
+              child: Text(
+                AppLocalizations.of(context)!.clearWishlist,
+                style: getBoldStyle(
+                  fontSize: FontSize.size14,
+                  fontFamily: FontConstant.cairo,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

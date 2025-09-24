@@ -1444,4 +1444,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get numberOfProducts => 'عدد المنتجات';
+
+  @override
+  String get loginToSyncCart => ' قم بتسجيل الدخول لتمكين الطلب';
+
+  @override
+  String get continueAsGuest => 'الدخول كزائر';
+
+  @override
+  String get guestLogin => 'دخول زائر';
+
+  @override
+  String get guestLoginDescription => 'تصفح المنتجات دون إنشاء حساب';
 }

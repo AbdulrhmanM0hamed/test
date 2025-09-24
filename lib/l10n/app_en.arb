@@ -602,5 +602,9 @@
   "noReviewsYet": "No reviews yet",
   "beFirstToReview": "Be the first to review this product",
   "viewAllReviews": "View All Reviews",
-  "numberOfProducts": "Number of Products"
+  "numberOfProducts": "Number of Products",
+  "loginToSyncCart": "Login to sync your cart and complete your purchase",
+  "continueAsGuest": "Continue as Guest",
+  "guestLogin": "Guest Login",
+  "guestLoginDescription": "Browse products without creating an account"
 }

@@ -7,6 +7,7 @@ import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/core/utils/constant/app_assets.dart';
+import 'package:test/features/product_details/presentation/view/product_details_view.dart';
 import 'package:test/l10n/app_localizations.dart';
 
 class OfflineCartItemCard extends StatefulWidget {
@@ -376,10 +377,14 @@ class _OfflineCartItemCardState extends State<OfflineCartItemCard>
           scale: _scaleAnimation,
           child: GestureDetector(
             onTap: () {
-              // Navigate to product details if needed
+              Navigator.pushNamed(
+                context,
+                ProductDetailsView.routeName,
+                arguments: widget.cartItem['product']['id'],
+              );
             },
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
               decoration: BoxDecoration(
                 color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(16),

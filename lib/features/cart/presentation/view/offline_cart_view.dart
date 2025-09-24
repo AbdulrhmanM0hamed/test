@@ -9,6 +9,7 @@ import 'package:test/core/services/hybrid_cart_service.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/features/auth/presentation/view/login_view.dart';
 import 'package:test/features/cart/presentation/widgets/offline_cart_item_card.dart';
+import 'package:test/features/home/presentation/view/bottom_nav_bar.dart';
 import 'package:test/l10n/app_localizations.dart';
 
 class OfflineCartView extends StatefulWidget {
@@ -187,29 +188,37 @@ class _OfflineCartViewState extends State<OfflineCartView>
     }
   }
 
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
+    return AppBar(
+      elevation: 0,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      surfaceTintColor: Colors.transparent,
+      automaticallyImplyLeading: false,
+      title: Text(
+        AppLocalizations.of(context)!.cartTitle,
+        style: getBoldStyle(
+          fontSize: FontSize.size20,
+          fontFamily: FontConstant.cairo,
+          color: Theme.of(context).textTheme.titleLarge?.color,
+        ),
+      ),
+      actions: [
+        if (_cartItems.isNotEmpty)
+          IconButton(
+            icon: Icon(Icons.delete_sweep, color: Colors.red, size: 24),
+            onPressed: () => _showClearCartDialog(),
+            tooltip: AppLocalizations.of(context)!.clearAll,
+          ),
+        const SizedBox(width: 8),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text(
-          AppLocalizations.of(context)!.cart,
-          style: getBoldStyle(
-            fontSize: FontSize.size20,
-            fontFamily: FontConstant.cairo,
-            color: Theme.of(context).textTheme.displayLarge?.color,
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: [
-          if (_cartItems.isNotEmpty)
-            IconButton(
-              onPressed: () => _showClearCartDialog(),
-              icon: Icon(Icons.delete_outline, color: Colors.red),
-            ),
-        ],
-      ),
+      appBar: _buildAppBar(context),
       body: FadeTransition(
         opacity: _fadeAnimation,
         child: _isLoading
@@ -226,32 +235,56 @@ class _OfflineCartViewState extends State<OfflineCartView>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.shopping_cart_outlined, size: 80, color: Colors.grey[400]),
-          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(32),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.shopping_cart_outlined,
+              size: 80,
+              color: AppColors.primary.withValues(alpha: 0.7),
+            ),
+          ),
+          const SizedBox(height: 24),
           Text(
-            'Your cart is empty',
-            style: getSemiBoldStyle(
-              fontSize: FontSize.size18,
+            AppLocalizations.of(context)!.cartEmpty,
+            style: getBoldStyle(
+              fontSize: FontSize.size20,
               fontFamily: FontConstant.cairo,
               color: Colors.grey[600],
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           Text(
-            'Add items to your cart to see them here',
+            AppLocalizations.of(context)!.cartEmptyMessage,
             style: getMediumStyle(
               fontSize: FontSize.size14,
               fontFamily: FontConstant.cairo,
               color: Colors.grey[500],
             ),
-            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 32),
-          CustomButton(
-            text: 'Continue Shopping',
-            onPressed: () => Navigator.of(context).pop(),
-            backgroundColor: AppColors.primary,
-            textColor: Colors.white,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 64),
+            child: CustomButton(
+              onPressed: () {
+                BottomNavBar.navigateToHome();
+              },
+
+              text: AppLocalizations.of(context)!.startShopping,
+              backgroundColor: AppColors.primary,
+              height: 56,
+              prefix: Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  Icons.shopping_cart_outlined,
+                  size: 24,
+                  color: Colors.white,
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -276,7 +309,7 @@ class _OfflineCartViewState extends State<OfflineCartView>
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'Login to sync your cart and complete your purchase',
+                  AppLocalizations.of(context)!.loginToSyncCart,
                   style: getMediumStyle(
                     fontSize: FontSize.size12,
                     fontFamily: FontConstant.cairo,
@@ -319,51 +352,99 @@ class _OfflineCartViewState extends State<OfflineCartView>
 
   Widget _buildCartSummary() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 10,
             offset: const Offset(0, -2),
           ),
         ],
       ),
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  AppLocalizations.of(context)!.total,
-                  style: getBoldStyle(
-                    fontSize: FontSize.size18,
-                    fontFamily: FontConstant.cairo,
-                    color: Theme.of(context).textTheme.bodyLarge?.color,
-                  ),
+      child: Column(
+        children: [
+          // Summary Details
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.subTotal,
+                style: getMediumStyle(
+                  fontSize: FontSize.size14,
+                  fontFamily: FontConstant.cairo,
+                  color: Colors.grey[650],
                 ),
-                Text(
-                  '${_totalPrice.toStringAsFixed(0)} ${AppLocalizations.of(context)!.currency}',
-                  style: getBoldStyle(
-                    fontSize: FontSize.size18,
-                    fontFamily: FontConstant.cairo,
-                    color: AppColors.primary,
-                  ),
+              ),
+              Text(
+                '${_totalPrice.toStringAsFixed(0)} ${AppLocalizations.of(context)!.currency}',
+                style: getBoldStyle(
+                  fontSize: FontSize.size14,
+                  fontFamily: FontConstant.cairo,
                 ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            CustomButton(
-              text: 'Login to Checkout',
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 8),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.taxes,
+                style: getMediumStyle(
+                  fontSize: FontSize.size14,
+                  fontFamily: FontConstant.cairo,
+                  color: Colors.grey[650],
+                ),
+              ),
+              Text(
+                '0${AppLocalizations.of(context)!.currency}',
+                style: getBoldStyle(
+                  fontSize: FontSize.size14,
+                  fontFamily: FontConstant.cairo,
+                ),
+              ),
+            ],
+          ),
+
+          const Divider(height: 24),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.total,
+                style: getBoldStyle(
+                  fontSize: FontSize.size16,
+                  fontFamily: FontConstant.cairo,
+                ),
+              ),
+              Text(
+                '${_totalPrice.toStringAsFixed(0)} ${AppLocalizations.of(context)!.currency}',
+                style: getBoldStyle(
+                  fontSize: FontSize.size18,
+                  fontFamily: FontConstant.cairo,
+                  color: AppColors.primary,
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 20),
+
+          // Checkout Button
+          SizedBox(
+            width: double.infinity,
+            child: CustomButton(
               onPressed: () => _showLoginPrompt(),
-              backgroundColor: AppColors.primary,
-              textColor: Colors.white,
+              text: AppLocalizations.of(context)!.completeOrder,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -373,14 +454,14 @@ class _OfflineCartViewState extends State<OfflineCartView>
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          'Login Required',
+          AppLocalizations.of(context)!.completeOrder,
           style: getBoldStyle(
             fontSize: FontSize.size16,
             fontFamily: FontConstant.cairo,
           ),
         ),
         content: Text(
-          'Please login to complete your purchase and sync your cart.',
+          AppLocalizations.of(context)!.loginToSyncCart,
           style: getMediumStyle(
             fontSize: FontSize.size14,
             fontFamily: FontConstant.cairo,
@@ -390,7 +471,7 @@ class _OfflineCartViewState extends State<OfflineCartView>
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: Text(
-              'Cancel',
+              AppLocalizations.of(context)!.cancel,
               style: getMediumStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
@@ -401,11 +482,9 @@ class _OfflineCartViewState extends State<OfflineCartView>
           TextButton(
             onPressed: () {
               Navigator.pushNamed(context, LoginView.routeName);
-              // Navigate to login screen - you can implement this based on your routing
-              // Navigator.pushNamed(context, '/login');
             },
             child: Text(
-              'Login',
+              AppLocalizations.of(context)!.login,
               style: getBoldStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
@@ -423,14 +502,14 @@ class _OfflineCartViewState extends State<OfflineCartView>
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          'Clear Cart',
+          AppLocalizations.of(context)!.clearCart,
           style: getBoldStyle(
             fontSize: FontSize.size16,
             fontFamily: FontConstant.cairo,
           ),
         ),
         content: Text(
-          'Are you sure you want to remove all items from your cart?',
+          AppLocalizations.of(context)!.clearCartConfirmation,
           style: getMediumStyle(
             fontSize: FontSize.size14,
             fontFamily: FontConstant.cairo,
@@ -440,7 +519,7 @@ class _OfflineCartViewState extends State<OfflineCartView>
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: Text(
-              'Cancel',
+              AppLocalizations.of(context)!.cancel,
               style: getMediumStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,
@@ -454,7 +533,7 @@ class _OfflineCartViewState extends State<OfflineCartView>
               _clearCart();
             },
             child: Text(
-              'Clear',
+              AppLocalizations.of(context)!.clearAll,
               style: getBoldStyle(
                 fontSize: FontSize.size14,
                 fontFamily: FontConstant.cairo,

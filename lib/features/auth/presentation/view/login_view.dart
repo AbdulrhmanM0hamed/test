@@ -457,30 +457,90 @@ class _LoginViewState extends State<LoginView> {
                               const SizedBox(height: 24),
 
                               // Social Logins
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SocialAuthButton(
-                                    iconPath: AppAssets.applIcon,
-                                    onPressed: () {
-                                      // Implement Apple login
-                                    },
+                              // Row(
+                              //   mainAxisAlignment: MainAxisAlignment.center,
+                              //   children: [
+                              //     SocialAuthButton(
+                              //       iconPath: AppAssets.applIcon,
+                              //       onPressed: () {
+                              //         // Implement Apple login
+                              //       },
+                              //     ),
+                              //     const SizedBox(width: 16),
+                              //     SocialAuthButton(
+                              //       iconPath: AppAssets.facebookIcon,
+                              //       onPressed: () {
+                              //         // Implement Facebook login
+                              //       },
+                              //     ),
+                              //     const SizedBox(width: 16),
+                              //     SocialAuthButton(
+                              //       iconPath: AppAssets.googleIcon,
+                              //       onPressed: () {
+                              //         // Implement Google login
+                              //       },
+                              //     ),
+                              //   ],
+                              // ),
+
+                              // Guest Login Button
+                              Container(
+                                width: double.infinity,
+                                height: 56,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.grey[300]!,
+                                      Colors.grey[400]!,
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
                                   ),
-                                  const SizedBox(width: 16),
-                                  SocialAuthButton(
-                                    iconPath: AppAssets.facebookIcon,
-                                    onPressed: () {
-                                      // Implement Facebook login
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withValues(alpha: 0.3),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(16),
+                                    onTap: () {
+                                      Navigator.pushReplacementNamed(
+                                        context,
+                                        BottomNavBar.routeName,
+                                      );
                                     },
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.person_outline,
+                                            color: Colors.grey[700],
+                                            size: 24,
+                                          ),
+                                          const SizedBox(width: 12),
+                                          Text(
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.continueAsGuest,
+                                            style: getBoldStyle(
+                                              fontSize: FontSize.size16,
+                                              fontFamily: FontConstant.cairo,
+                                              color: Colors.grey[700],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                  const SizedBox(width: 16),
-                                  SocialAuthButton(
-                                    iconPath: AppAssets.googleIcon,
-                                    onPressed: () {
-                                      // Implement Google login
-                                    },
-                                  ),
-                                ],
+                                ),
                               ),
 
                               const SizedBox(height: 16),

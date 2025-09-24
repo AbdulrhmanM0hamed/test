@@ -1444,4 +1444,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get numberOfProducts => 'Number of Products';
+
+  @override
+  String get loginToSyncCart => 'Login to sync your cart and complete your purchase';
+
+  @override
+  String get continueAsGuest => 'Continue as Guest';
+
+  @override
+  String get guestLogin => 'Guest Login';
+
+  @override
+  String get guestLoginDescription => 'Browse products without creating an account';
 }

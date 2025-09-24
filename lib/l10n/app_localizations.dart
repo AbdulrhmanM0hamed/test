@@ -2968,6 +2968,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Number of Products'**
   String get numberOfProducts;
+
+  /// No description provided for @loginToSyncCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Login to sync your cart and complete your purchase'**
+  String get loginToSyncCart;
+
+  /// No description provided for @continueAsGuest.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue as Guest'**
+  String get continueAsGuest;
+
+  /// No description provided for @guestLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest Login'**
+  String get guestLogin;
+
+  /// No description provided for @guestLoginDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse products without creating an account'**
+  String get guestLoginDescription;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
