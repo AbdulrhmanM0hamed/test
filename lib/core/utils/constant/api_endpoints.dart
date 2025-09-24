@@ -91,6 +91,9 @@ class ApiEndpoints {
     return '$baseUrl/get-all-products${queryString.isNotEmpty ? '?$queryString' : ''}';
   }
 
+  // Sliders endpoint
+  static String get sliders => '$baseUrl/sliders';
+
   // Location endpoints
   static String get countries => '$baseUrl/countries';
   static String get cities => '$baseUrl/cities';

@@ -103,6 +103,12 @@ import 'package:test/features/home/data/repositories/main_category_repository_im
 import 'package:test/features/home/domain/repositories/main_category_repository.dart';
 import 'package:test/features/home/domain/usecases/get_main_categories_usecase.dart';
 import 'package:test/features/home/presentation/cubit/main_category_cubit.dart';
+// Slider feature imports
+import 'package:test/features/home/data/datasources/slider_remote_data_source.dart';
+import 'package:test/features/home/data/repositories/slider_repository_impl.dart';
+import 'package:test/features/home/domain/repositories/slider_repository.dart';
+import 'package:test/features/home/domain/usecases/get_sliders_use_case.dart';
+import 'package:test/features/home/presentation/cubit/slider_cubit.dart';
 // Orders feature imports
 import 'package:test/features/orders/data/datasources/addresses_remote_data_source.dart';
 import 'package:test/features/orders/data/datasources/promo_code_remote_data_source.dart';
@@ -174,6 +180,10 @@ class DependencyInjection {
   static GetBestSellerProductsUseCase? _getBestSellerProductsUseCase;
   static GetLatestProductsUseCase? _getLatestProductsUseCase;
   static GetSpecialOfferProductsUseCase? _getSpecialOfferProductsUseCase;
+  // Slider feature
+  static SliderRemoteDataSource? _sliderRemoteDataSource;
+  static SliderRepository? _sliderRepository;
+  static GetSlidersUseCase? _getSlidersUseCase;
 
   // Product details feature
   static ProductDetailsRemoteDataSource? _productDetailsRemoteDataSource;
@@ -318,6 +328,18 @@ class DependencyInjection {
       repository: _homeProductsRepository!,
     );
 
+    // Initialize Slider dependencies
+    _sliderRemoteDataSource = SliderRemoteDataSourceImpl(
+      dioService: _dioService!,
+    );
+    _sliderRepository = SliderRepositoryImpl(
+      remoteDataSource: _sliderRemoteDataSource!,
+      networkInfo: getIt<NetworkInfo>(),
+    );
+    _getSlidersUseCase = GetSlidersUseCase(
+      repository: _sliderRepository!,
+    );
+
     // Initialize Product Details dependencies
     _productDetailsRemoteDataSource = ProductDetailsRemoteDataSourceImpl(
       _dioService!,
@@ -437,6 +459,10 @@ class DependencyInjection {
     getIt.registerSingleton<GetSpecialOfferProductsUseCase>(
       _getSpecialOfferProductsUseCase!,
     );
+
+    // Slider singletons
+    getIt.registerSingleton<SliderRepository>(_sliderRepository!);
+    getIt.registerSingleton<GetSlidersUseCase>(_getSlidersUseCase!);
     // Product Details singletons
     getIt.registerSingleton<ProductDetailsRepository>(
       _productDetailsRepository!,
@@ -601,6 +627,14 @@ class DependencyInjection {
     getIt.registerFactory<MainCategoryCubit>(
       () => MainCategoryCubit(
         getMainCategoriesUseCase: getIt<GetMainCategoriesUseCase>(),
+        dataRefreshService: getIt<DataRefreshService>(),
+      ),
+    );
+
+    // Slider Cubit
+    getIt.registerFactory<SliderCubit>(
+      () => SliderCubit(
+        getSlidersUseCase: getIt<GetSlidersUseCase>(),
         dataRefreshService: getIt<DataRefreshService>(),
       ),
     );

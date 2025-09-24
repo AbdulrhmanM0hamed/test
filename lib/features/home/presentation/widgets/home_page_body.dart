@@ -15,6 +15,7 @@ import '../cubits/best_seller_products/best_seller_products_cubit.dart';
 import '../cubits/latest_products/latest_products_cubit.dart';
 import '../cubits/special_offer_products/special_offer_products_cubit.dart';
 import 'package:test/features/home/presentation/cubit/main_category_cubit.dart';
+import 'package:test/features/home/presentation/cubit/slider_cubit.dart';
 
 class HomePageBody extends StatelessWidget {
   const HomePageBody({super.key});
@@ -56,6 +57,10 @@ class HomePageBody extends StatelessWidget {
               DependencyInjection.getIt<MainCategoryCubit>()
                 ..getMainCategories(),
         ),
+        BlocProvider<SliderCubit>(
+          create: (context) =>
+              DependencyInjection.getIt<SliderCubit>()..getSliders(),
+        ),
       ],
       child: Column(
         children: [
@@ -86,6 +91,7 @@ class HomePageBody extends StatelessWidget {
                         .read<SpecialOfferProductsCubit>()
                         .getSpecialOfferProducts();
                     innerContext.read<MainCategoryCubit>().getMainCategories();
+                    innerContext.read<SliderCubit>().getSliders();
                   },
                   child: CustomScrollView(
                     physics: const BouncingScrollPhysics(),
