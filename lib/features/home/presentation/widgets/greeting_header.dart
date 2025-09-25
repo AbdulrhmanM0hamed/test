@@ -7,6 +7,8 @@ import 'package:test/core/services/language_service.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/features/categories/presentation/cubits/products_filter_cubit.dart';
+import 'package:test/features/profile/presentation/cubit/profile_cubit.dart';
+import 'package:test/features/profile/presentation/cubit/profile_state.dart';
 import 'package:test/core/utils/constant/app_assets.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
@@ -16,13 +18,11 @@ import 'header_search_bar.dart';
 import 'location_selector_header.dart';
 
 class GreetingHeader extends StatefulWidget {
-  final String username;
   final String location;
   final int notificationCount;
 
   const GreetingHeader({
     super.key,
-    required this.username,
     required this.location,
     required this.notificationCount,
   });
@@ -74,13 +74,23 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        _getGreeting(context),
-                        style: getBoldStyle(
-                          fontFamily: FontConstant.cairo,
-                          fontSize: FontSize.size18,
-                          color: Colors.white,
-                        ),
+                      BlocBuilder<ProfileCubit, ProfileState>(
+                        builder: (context, state) {
+                          String username = 'المستخدم'; // Default fallback
+                          
+                          if (state is ProfileLoaded) {
+                            username = state.userProfile.displayName;
+                          }
+                          
+                          return Text(
+                            _getGreeting(context, username),
+                            style: getBoldStyle(
+                              fontFamily: FontConstant.cairo,
+                              fontSize: FontSize.size18,
+                              color: Colors.white,
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(height: 8),
                       const LocationSelectorHeader(),
@@ -493,7 +503,7 @@ class _GreetingHeaderState extends State<GreetingHeader> {
     );
   }
 
-  String _getGreeting(BuildContext context) {
+  String _getGreeting(BuildContext context, String username) {
     final hour = DateTime.now().hour;
     String greeting;
 
@@ -505,6 +515,6 @@ class _GreetingHeaderState extends State<GreetingHeader> {
       greeting = AppLocalizations.of(context)!.goodEvening;
     }
 
-    return '$greeting ${widget.username}';
+    return '$greeting $username';
   }
 }

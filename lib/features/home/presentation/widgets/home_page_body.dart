@@ -9,24 +9,24 @@ import 'package:test/features/home/presentation/widgets/home%20sections/featured
 import 'package:test/features/home/presentation/widgets/home%20sections/best_seller_products_section.dart';
 import 'package:test/features/home/presentation/widgets/home%20sections/latest_products_section.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
+import 'package:test/features/profile/presentation/cubit/profile_cubit.dart';
 import '../cubits/featured_products/featured_products_cubit.dart';
 import '../cubits/best_seller_products/best_seller_products_cubit.dart';
 import '../cubits/latest_products/latest_products_cubit.dart';
 import '../cubits/special_offer_products/special_offer_products_cubit.dart';
 import 'package:test/features/home/presentation/cubit/main_category_cubit.dart';
 import 'package:test/features/home/presentation/cubit/slider_cubit.dart';
-
 class HomePageBody extends StatelessWidget {
   const HomePageBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Get user name from preferences or state management
-    final String username =
-        'User'; // Replace with actual username from user state
-
     return MultiBlocProvider(
       providers: [
+        // Provide ProfileCubit
+        BlocProvider<ProfileCubit>(
+          create: (context) => DependencyInjection.getIt<ProfileCubit>()..getProfile(),
+        ),
         // Provide WishlistCubit
         BlocProvider<WishlistCubit>(
           create: (context) => DependencyInjection.getIt<WishlistCubit>(),
@@ -65,7 +65,6 @@ class HomePageBody extends StatelessWidget {
         children: [
           // Greeting and Notification Header
           GreetingHeader(
-            username: username,
             location: 'Dubai, UAE', // This would come from user location state
             notificationCount: 6,
           ),
@@ -77,6 +76,7 @@ class HomePageBody extends StatelessWidget {
                 return RefreshIndicator(
                   onRefresh: () async {
                     // Trigger refresh on each cubit using inner context (inside providers scope)
+                    innerContext.read<ProfileCubit>().getProfile();
                     innerContext
                         .read<FeaturedProductsCubit>()
                         .getFeaturedProducts();
