@@ -32,10 +32,13 @@ class _CategoriesViewState extends State<CategoriesView> {
   int? mainCategoryId;
   String? categoryName;
   bool _hasAppliedFilter = false;
+  final ScrollController _scrollController = ScrollController();
+  bool _scrollListenerAdded = false;
 
   @override
   void initState() {
     super.initState();
+
     // Extract navigation arguments after the first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final args =
@@ -47,6 +50,12 @@ class _CategoriesViewState extends State<CategoriesView> {
         });
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -75,6 +84,27 @@ class _CategoriesViewState extends State<CategoriesView> {
       ],
       child: Builder(
         builder: (context) {
+          // Setup scroll listener with access to ProductsFilterCubit
+          if (!_scrollListenerAdded) {
+            _scrollListenerAdded = true;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _scrollController.addListener(() {
+                if (!mounted || !_scrollController.hasClients) return;
+                
+                final pixels = _scrollController.position.pixels;
+                final maxExtent = _scrollController.position.maxScrollExtent;
+                final threshold = maxExtent - 200;
+
+                print('🔄 Scroll: pixels=$pixels, maxExtent=$maxExtent, threshold=$threshold');
+
+                if (pixels >= threshold) {
+                  print('🎯 Categories: Scroll threshold reached, calling loadMore');
+                  context.read<ProductsFilterCubit>().loadMore();
+                }
+              });
+            });
+          }
+
           // Apply the main category filter after providers are available (only once)
           if (mainCategoryId != null && !_hasAppliedFilter) {
             _hasAppliedFilter = true;
@@ -253,6 +283,8 @@ class _CategoriesViewState extends State<CategoriesView> {
 
                         return ProductsGridWidget(
                           products: state.products,
+                          isLoadingMore: state.isLoadingMore,
+                          scrollController: _scrollController,
                           onProductTap: (product) {
                             //print('🔍 Categories: Product tapped: ${product.name}');
                             Navigator.pushNamed(
