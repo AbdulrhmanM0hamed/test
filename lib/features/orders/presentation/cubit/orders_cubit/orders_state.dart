@@ -53,3 +53,24 @@ class OrderDetailsError extends OrdersState {
   @override
   List<Object?> get props => [message];
 }
+
+// Order Action States (Cancel/Return)
+class OrderActionLoading extends OrdersState {}
+
+class OrderActionSuccess extends OrdersState {
+  final String message;
+
+  const OrderActionSuccess({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class OrderActionError extends OrdersState {
+  final String message;
+
+  const OrderActionError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

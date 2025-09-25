@@ -8,4 +8,6 @@ abstract class OrdersRepository {
   Future<Either<Failure, OrderEntity>> checkout(OrderEntity order);
   Future<Either<Failure, List<OrderItem>>> getMyOrders();
   Future<Either<Failure, OrderDetails>> getOrderDetails(int orderId);
+  Future<Either<Failure, String>> cancelOrder(int orderId);
+  Future<Either<Failure, String>> returnOrder(int orderId);
 }

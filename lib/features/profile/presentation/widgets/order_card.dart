@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../orders/domain/entities/order_item.dart';
 import '../../../orders/domain/entities/order_status.dart';
+import '../../../orders/domain/entities/order_actions_helper.dart';
+import '../../../orders/presentation/cubit/orders_cubit/orders_cubit.dart';
+import '../../../orders/presentation/widgets/order_action_dialog.dart';
 
 class OrderCard extends StatelessWidget {
   final OrderItem order;
@@ -15,8 +19,10 @@ class OrderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isArabic = AppLocalizations.of(context)?.localeName == 'ar';
     final orderStatus = OrderStatus.fromString(order.status);
-    final statusColor = orderStatus?.color ?? OrderStatus.getColorFromHex(order.statusColor);
-    final statusText = orderStatus?.getLocalizedName(isArabic == true) ?? order.status;
+    final statusColor =
+        orderStatus?.color ?? OrderStatus.getColorFromHex(order.statusColor);
+    final statusText =
+        orderStatus?.getLocalizedName(isArabic == true) ?? order.status;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -172,36 +178,126 @@ class OrderCard extends StatelessWidget {
 
                 const SizedBox(height: 16),
 
-                // View details button
-                Row(
-                  children: [
-                    const Spacer(),
-                    TextButton.icon(
-                      onPressed: onTap,
-                      icon: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 16,
-                        color: AppColors.primary,
-                      ),
-                      label: Text(
-                        AppLocalizations.of(context)!.viewDetails,
-                        style: getSemiBoldStyle(
-                          fontSize: FontSize.size14,
-                          fontFamily: FontConstant.cairo,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
+                // Action buttons and view details
+                _buildActionButtons(context, isArabic == true),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButtons(BuildContext context, bool isArabic) {
+    final canCancel = OrderActionsHelper.canCancelOrder(order.status);
+    final canReturn = OrderActionsHelper.canReturnOrder(order.status);
+
+    return Column(
+        children: [
+          // Action buttons row
+          if (canCancel || canReturn) ...[
+            Row(
+              children: [
+                // Cancel button
+                if (canCancel) ...[
+                  Expanded(
+                    child: _buildActionButton(
+                      context: context,
+                      text: OrderActionsHelper.getCancelButtonText(isArabic),
+                      icon: Icons.cancel_outlined,
+                      color: Colors.red[600]!,
+                      onPressed: () => _showCancelDialog(context, isArabic),
                     ),
-                  ],
+                  ),
+                  if (canReturn) const SizedBox(width: 12),
+                ],
+
+                // Return button
+                if (canReturn)
+                  Expanded(
+                    child: _buildActionButton(
+                      context: context,
+                      text: OrderActionsHelper.getReturnButtonText(isArabic),
+                      icon: Icons.assignment_return_outlined,
+                      color: Colors.orange[600]!,
+                      onPressed: () => _showReturnDialog(context, isArabic),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 12),
+          ],
+
+          // View details button
+          Row(
+            children: [
+              const Spacer(),
+              TextButton.icon(
+                onPressed: onTap,
+                icon: Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: AppColors.primary,
+                ),
+                label: Text(
+                  AppLocalizations.of(context)!.viewDetails,
+                  style: getSemiBoldStyle(
+                    fontSize: FontSize.size14,
+                    fontFamily: FontConstant.cairo,
+                    color: AppColors.primary,
+                  ),
+                ),
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+    );
+  }
+
+  Widget _buildActionButton({
+    required BuildContext context,
+    required String text,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onPressed,
+  }) {
+    return Container(
+      height: 40,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onPressed,
+          borderRadius: BorderRadius.circular(10),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, size: 16, color: color),
+                const SizedBox(width: 6),
+                Flexible(
+                  child: Text(
+                    text,
+                    style: getMediumStyle(
+                      fontSize: FontSize.size12,
+                      fontFamily: FontConstant.cairo,
+                      color: color,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),
@@ -211,4 +307,25 @@ class OrderCard extends StatelessWidget {
     );
   }
 
+  void _showCancelDialog(BuildContext context, bool isArabic) {
+    OrderActionDialog.showCancelDialog(
+      context: context,
+      title: OrderActionsHelper.getCancelDialogTitle(isArabic),
+      message: OrderActionsHelper.getCancelDialogMessage(isArabic),
+      confirmText: isArabic ? 'نعم، إلغاء' : 'Yes, Cancel',
+      cancelText: isArabic ? 'تراجع' : 'Go Back',
+      onConfirm: () => context.read<OrdersCubit>().cancelOrder(order.id),
+    );
+  }
+
+  void _showReturnDialog(BuildContext context, bool isArabic) {
+    OrderActionDialog.showReturnDialog(
+      context: context,
+      title: OrderActionsHelper.getReturnDialogTitle(isArabic),
+      message: OrderActionsHelper.getReturnDialogMessage(isArabic),
+      confirmText: isArabic ? 'نعم، طلب الإرجاع' : 'Yes, Request Return',
+      cancelText: isArabic ? 'تراجع' : 'Go Back',
+      onConfirm: () => context.read<OrdersCubit>().returnOrder(order.id),
+    );
+  }
 }

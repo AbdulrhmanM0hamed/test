@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
+import 'package:test/core/utils/common/custom_app_bar.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
@@ -10,6 +11,8 @@ import 'package:test/features/orders/presentation/cubit/orders_cubit/orders_stat
 import 'package:test/l10n/app_localizations.dart';
 import '../../../orders/domain/entities/order_details.dart';
 import '../../../orders/domain/entities/order_status.dart';
+import '../../../orders/domain/entities/order_actions_helper.dart';
+import '../../../orders/presentation/widgets/order_action_dialog.dart';
 import '../widgets/order_product_item_card.dart';
 
 class OrderDetailsView extends StatefulWidget {
@@ -51,32 +54,45 @@ class _OrderDetailsViewState extends State<OrderDetailsView>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        surfaceTintColor: Colors.transparent,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Theme.of(context).iconTheme.color,
-          ),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          AppLocalizations.of(context)!.orderDetails,
-          style: getBoldStyle(
-            fontSize: FontSize.size20,
-            fontFamily: FontConstant.cairo,
-            color: Theme.of(context).textTheme.titleLarge?.color,
-          ),
-        ),
-        centerTitle: true,
-      ),
+      appBar: CustomAppBar(title: AppLocalizations.of(context)!.orderDetails),
       body: FadeTransition(
         opacity: _fadeAnimation,
         child: BlocConsumer<OrdersCubit, OrdersState>(
           listener: (context, state) {
             if (state is OrderDetailsError) {
+              CustomSnackbar.showError(
+                context: context,
+                message: state.message,
+              );
+            } else if (state is OrderActionSuccess) {
+              final isArabic = AppLocalizations.of(context)?.localeName == 'ar';
+
+              // Determine the appropriate success message based on the action type
+              String successMessage;
+              if (state.message.toLowerCase().contains('cancel') ||
+                  state.message.contains('إلغاء') ||
+                  state.message.contains('ألغي')) {
+                successMessage = OrderActionsHelper.getCancelSuccessMessage(
+                  isArabic == true,
+                );
+              } else if (state.message.toLowerCase().contains('return') ||
+                  state.message.contains('إرجاع') ||
+                  state.message.contains('ارجاع')) {
+                successMessage = OrderActionsHelper.getReturnSuccessMessage(
+                  isArabic == true,
+                );
+              } else {
+                // Fallback to server message
+                successMessage = state.message;
+              }
+
+              CustomSnackbar.showSuccess(
+                context: context,
+                message: successMessage,
+              );
+              // Refresh order details
+              context.read<OrdersCubit>().getOrderDetails(widget.orderId);
+            } else if (state is OrderActionError) {
               CustomSnackbar.showError(
                 context: context,
                 message: state.message,
@@ -133,6 +149,11 @@ class _OrderDetailsViewState extends State<OrderDetailsView>
 
           // Order Summary Card
           _buildOrderSummaryCard(context, orderDetails),
+
+          const SizedBox(height: 16),
+
+          // Action buttons
+          _buildActionButtons(context, orderDetails),
         ],
       ),
     );
@@ -594,6 +615,155 @@ class _OrderDetailsViewState extends State<OrderDetailsView>
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildActionButtons(BuildContext context, OrderDetails orderDetails) {
+    final isArabic = AppLocalizations.of(context)?.localeName == 'ar';
+    final canCancel = OrderActionsHelper.canCancelOrder(orderDetails.status);
+    final canReturn = OrderActionsHelper.canReturnOrder(orderDetails.status);
+
+    if (!canCancel && !canReturn) {
+      return const SizedBox.shrink();
+    }
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.1), width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            isArabic == true ? 'إجراءات الطلب' : 'Order Actions',
+            style: getBoldStyle(
+              fontSize: FontSize.size16,
+              fontFamily: FontConstant.cairo,
+              color: Theme.of(context).textTheme.titleLarge?.color,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              // Cancel button
+              if (canCancel) ...[
+                Expanded(
+                  child: _buildActionButton(
+                    context: context,
+                    text: OrderActionsHelper.getCancelButtonText(
+                      isArabic == true,
+                    ),
+                    icon: Icons.cancel_outlined,
+                    color: Colors.red[600]!,
+                    onPressed: () => _showCancelDialog(
+                      context,
+                      isArabic == true,
+                      orderDetails.id,
+                    ),
+                  ),
+                ),
+                if (canReturn) const SizedBox(width: 12),
+              ],
+
+              // Return button
+              if (canReturn)
+                Expanded(
+                  child: _buildActionButton(
+                    context: context,
+                    text: OrderActionsHelper.getReturnButtonText(
+                      isArabic == true,
+                    ),
+                    icon: Icons.assignment_return_outlined,
+                    color: Colors.orange[600]!,
+                    onPressed: () => _showReturnDialog(
+                      context,
+                      isArabic == true,
+                      orderDetails.id,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionButton({
+    required BuildContext context,
+    required String text,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onPressed,
+  }) {
+    return Container(
+      height: 48,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onPressed,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, size: 20, color: color),
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Text(
+                    text,
+                    style: getMediumStyle(
+                      fontSize: FontSize.size14,
+                      fontFamily: FontConstant.cairo,
+                      color: color,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showCancelDialog(BuildContext context, bool isArabic, int orderId) {
+    OrderActionDialog.showCancelDialog(
+      context: context,
+      title: OrderActionsHelper.getCancelDialogTitle(isArabic),
+      message: OrderActionsHelper.getCancelDialogMessage(isArabic),
+      confirmText: isArabic ? 'نعم، إلغاء' : 'Yes, Cancel',
+      cancelText: isArabic ? 'تراجع' : 'Go Back',
+      onConfirm: () => context.read<OrdersCubit>().cancelOrder(orderId),
+    );
+  }
+
+  void _showReturnDialog(BuildContext context, bool isArabic, int orderId) {
+    OrderActionDialog.showReturnDialog(
+      context: context,
+      title: OrderActionsHelper.getReturnDialogTitle(isArabic),
+      message: OrderActionsHelper.getReturnDialogMessage(isArabic),
+      confirmText: isArabic ? 'نعم، طلب الإرجاع' : 'Yes, Request Return',
+      cancelText: isArabic ? 'تراجع' : 'Go Back',
+      onConfirm: () => context.read<OrdersCubit>().returnOrder(orderId),
     );
   }
 }

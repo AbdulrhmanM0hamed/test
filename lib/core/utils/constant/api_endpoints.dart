@@ -107,4 +107,6 @@ class ApiEndpoints {
   static String get checkout => '$baseUrl/order/checkout';
   static String get myOrders => '$baseUrl/my-orders';
   static String orderDetails(int orderId) => '$baseUrl/order-details/$orderId';
+  static String cancelOrder(int orderId) => '$baseUrl/cancel-order/$orderId';
+  static String returnOrder(int orderId) => '$baseUrl/return-order/$orderId';
 }

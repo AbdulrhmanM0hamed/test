@@ -76,4 +76,32 @@ class OrdersRepositoryImpl implements OrdersRepository {
       return Left(NetworkFailure(message: 'No internet connection'));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> cancelOrder(int orderId) async {
+    if (await networkInfo.isConnected) {
+      final response = await remoteDataSource.cancelOrder(orderId);
+      if (response.success) {
+        return Right(response.message);
+      } else {
+        return Left(ServerFailure(message: response.message));
+      }
+    } else {
+      return Left(NetworkFailure(message: 'No internet connection'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> returnOrder(int orderId) async {
+    if (await networkInfo.isConnected) {
+      final response = await remoteDataSource.returnOrder(orderId);
+      if (response.success) {
+        return Right(response.message);
+      } else {
+        return Left(ServerFailure(message: response.message));
+      }
+    } else {
+      return Left(NetworkFailure(message: 'No internet connection'));
+    }
+  }
 }

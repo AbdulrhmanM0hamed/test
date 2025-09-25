@@ -125,6 +125,8 @@ import 'package:test/features/orders/domain/usecases/check_promo_code_usecase.da
 import 'package:test/features/orders/domain/usecases/checkout_usecase.dart';
 import 'package:test/features/orders/domain/usecases/get_my_orders_usecase.dart';
 import 'package:test/features/orders/domain/usecases/get_order_details_usecase.dart';
+import 'package:test/features/orders/domain/usecases/cancel_order_usecase.dart';
+import 'package:test/features/orders/domain/usecases/return_order_usecase.dart';
 import 'package:test/features/orders/presentation/cubit/addresses_cubit/addresses_cubit.dart';
 import 'package:test/features/orders/presentation/cubit/promo_code_cubit/promo_code_cubit.dart';
 import 'package:test/features/orders/presentation/cubit/checkout_cubit/checkout_cubit.dart';
@@ -697,6 +699,12 @@ class DependencyInjection {
     getIt.registerLazySingleton<GetOrderDetailsUseCase>(
       () => GetOrderDetailsUseCase(getIt<OrdersRepository>()),
     );
+    getIt.registerLazySingleton<CancelOrderUseCase>(
+      () => CancelOrderUseCase(getIt<OrdersRepository>()),
+    );
+    getIt.registerLazySingleton<ReturnOrderUseCase>(
+      () => ReturnOrderUseCase(getIt<OrdersRepository>()),
+    );
 
     // Cubits
     getIt.registerFactory<AddressesCubit>(
@@ -718,6 +726,8 @@ class DependencyInjection {
       () => OrdersCubit(
         getMyOrdersUseCase: getIt<GetMyOrdersUseCase>(),
         getOrderDetailsUseCase: getIt<GetOrderDetailsUseCase>(),
+        cancelOrderUseCase: getIt<CancelOrderUseCase>(),
+        returnOrderUseCase: getIt<ReturnOrderUseCase>(),
       ),
     );
   }

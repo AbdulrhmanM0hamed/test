@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
+import 'package:test/core/utils/common/custom_app_bar.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/features/orders/presentation/cubit/orders_cubit/orders_cubit.dart';
 import 'package:test/features/orders/presentation/cubit/orders_cubit/orders_state.dart';
+import 'package:test/features/orders/domain/entities/order_actions_helper.dart';
 import 'package:test/l10n/app_localizations.dart';
-import '../../../orders/domain/entities/order_status.dart';
 import '../widgets/order_card.dart';
 
 class MyOrdersView extends StatefulWidget {
@@ -50,38 +51,45 @@ class _MyOrdersViewState extends State<MyOrdersView>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        surfaceTintColor: Colors.transparent,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Theme.of(context).iconTheme.color,
-          ),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          AppLocalizations.of(context)!.myOrders,
-          style: getBoldStyle(
-            fontSize: FontSize.size20,
-            fontFamily: FontConstant.cairo,
-            color: Theme.of(context).textTheme.titleLarge?.color,
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: FadeTransition(
-        opacity: _fadeAnimation,
-        child: BlocConsumer<OrdersCubit, OrdersState>(
-          listener: (context, state) {
-            if (state is OrdersError) {
-              CustomSnackbar.showError(
-                context: context,
-                message: state.message,
+      appBar: CustomAppBar(title: AppLocalizations.of(context)!.myOrders),
+      body: BlocListener<OrdersCubit, OrdersState>(
+        listenWhen: (previous, current) {
+          return current is OrderActionSuccess || current is OrderActionError;
+        },
+        listener: (context, state) {
+          if (state is OrderActionSuccess) {
+            final isArabic = AppLocalizations.of(context)?.localeName == 'ar';
+
+            // Determine the appropriate success message based on the action type
+            String successMessage;
+            if (state.message.toLowerCase().contains('cancel') ||
+                state.message.contains('إلغاء') ||
+                state.message.contains('ألغي')) {
+              successMessage = OrderActionsHelper.getCancelSuccessMessage(
+                isArabic == true,
               );
+            } else if (state.message.toLowerCase().contains('return') ||
+                state.message.contains('إرجاع') ||
+                state.message.contains('ارجاع')) {
+              successMessage = OrderActionsHelper.getReturnSuccessMessage(
+                isArabic == true,
+              );
+            } else {
+              // Fallback to server message
+              successMessage = state.message;
             }
-          },
+
+            CustomSnackbar.showSuccess(
+              context: context,
+              message: successMessage,
+            );
+            // Refresh orders list
+            context.read<OrdersCubit>().getMyOrders();
+          } else if (state is OrderActionError) {
+            CustomSnackbar.showError(context: context, message: state.message);
+          }
+        },
+        child: BlocBuilder<OrdersCubit, OrdersState>(
           builder: (context, state) {
             if (state is OrdersLoading) {
               return _buildLoadingState();
