@@ -314,9 +314,9 @@ class _CategoriesViewState extends State<CategoriesView> {
                   BoxShadow(
                     color: isSelected
                         ? AppColors.primary.withValues(alpha: 0.2)
-                        : Colors.grey.withValues(alpha: 0.1),
-                    blurRadius: isSelected ? 8 : 4,
-                    offset: const Offset(0, 2),
+                        : Colors.white,
+                    blurRadius: isSelected ? 8 : 9,
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
