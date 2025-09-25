@@ -426,7 +426,7 @@
   "noBestSellerAvailable": "No best seller products available currently",
   "noFeaturedAvailable": "No featured products available currently",
   "noSpecialOffersAvailable": "No special offers available currently",
-
+  
   "networkConnectionTimeout": "Network connection timeout",
   "networkConnectionError": "No internet connection",
   "serverInternalError": "Internal server error",
@@ -606,5 +606,29 @@
   "loginToSyncCart": "Login to sync your cart and complete your purchase",
   "continueAsGuest": "Continue as Guest",
   "guestLogin": "Guest Login",
-  "guestLoginDescription": "Browse products without creating an account"
+  
+  "myOrders": "My Orders",
+  "noOrdersYet": "No orders yet",
+  "noOrdersMessage": "Looks like you haven’t placed any orders yet. Start shopping to discover our amazing products!",
+  "startShopping": "Start Shopping",
+  "orderHistory": "Order History",
+  "totalOrders": "Total Orders",
+  "error": "Something went wrong",
+  "retry": "Retry",
+  "loadingOrders": "Loading your orders...",
+    "orderNumber": "Order Number",
+  "totalAmount": "Total Amount",
+  "refunded": "Refunded",
+  "viewDetails": "View Details",
+  
+  "guestLoginDescription": "Browse products without creating an account",
+  "viewAllReviews": "View All Reviews",
+  "loadingOrderDetails": "Loading Order Details",
+  "orderItems": "Order Items",
+  "customerInformation": "Customer Information",
+  "orderDate": "Order Date",
+  "orderDetails": "Order Details",
+  "includesTaxes": "includesTaxes",
+  "unitPrice": "unitPrice",
+  "taxItems": "taxItems"
 }

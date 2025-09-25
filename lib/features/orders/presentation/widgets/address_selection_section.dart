@@ -5,7 +5,7 @@ import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../cubit/addresses_cubit.dart';
+import '../cubit/addresses_cubit/addresses_cubit.dart';
 import '../../domain/entities/address.dart';
 
 class AddressSelectionSection extends StatelessWidget {

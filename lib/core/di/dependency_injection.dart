@@ -123,9 +123,12 @@ import 'package:test/features/orders/domain/usecases/update_address_usecase.dart
 import 'package:test/features/orders/domain/usecases/delete_address_usecase.dart';
 import 'package:test/features/orders/domain/usecases/check_promo_code_usecase.dart';
 import 'package:test/features/orders/domain/usecases/checkout_usecase.dart';
-import 'package:test/features/orders/presentation/cubit/addresses_cubit.dart';
-import 'package:test/features/orders/presentation/cubit/promo_code_cubit.dart';
-import 'package:test/features/orders/presentation/cubit/checkout_cubit.dart';
+import 'package:test/features/orders/domain/usecases/get_my_orders_usecase.dart';
+import 'package:test/features/orders/domain/usecases/get_order_details_usecase.dart';
+import 'package:test/features/orders/presentation/cubit/addresses_cubit/addresses_cubit.dart';
+import 'package:test/features/orders/presentation/cubit/promo_code_cubit/promo_code_cubit.dart';
+import 'package:test/features/orders/presentation/cubit/checkout_cubit/checkout_cubit.dart';
+import 'package:test/features/orders/presentation/cubit/orders_cubit/orders_cubit.dart';
 
 class DependencyInjection {
   static final GetIt getIt = GetIt.instance;
@@ -688,6 +691,12 @@ class DependencyInjection {
     getIt.registerLazySingleton<CheckoutUseCase>(
       () => CheckoutUseCase(getIt<OrdersRepository>()),
     );
+    getIt.registerLazySingleton<GetMyOrdersUseCase>(
+      () => GetMyOrdersUseCase(getIt<OrdersRepository>()),
+    );
+    getIt.registerLazySingleton<GetOrderDetailsUseCase>(
+      () => GetOrderDetailsUseCase(getIt<OrdersRepository>()),
+    );
 
     // Cubits
     getIt.registerFactory<AddressesCubit>(
@@ -704,6 +713,12 @@ class DependencyInjection {
     );
     getIt.registerFactory<CheckoutCubit>(
       () => CheckoutCubit(checkoutUseCase: getIt<CheckoutUseCase>()),
+    );
+    getIt.registerFactory<OrdersCubit>(
+      () => OrdersCubit(
+        getMyOrdersUseCase: getIt<GetMyOrdersUseCase>(),
+        getOrderDetailsUseCase: getIt<GetOrderDetailsUseCase>(),
+      ),
     );
   }
 

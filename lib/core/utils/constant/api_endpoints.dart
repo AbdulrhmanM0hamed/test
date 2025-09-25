@@ -105,4 +105,6 @@ class ApiEndpoints {
   static String addressById(int addressId) => '$baseUrl/addresses/$addressId';
   static String get checkPromo => '$baseUrl/check-promo';
   static String get checkout => '$baseUrl/order/checkout';
+  static String get myOrders => '$baseUrl/my-orders';
+  static String orderDetails(int orderId) => '$baseUrl/order-details/$orderId';
 }

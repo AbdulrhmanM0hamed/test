@@ -1455,5 +1455,59 @@ class AppLocalizationsAr extends AppLocalizations {
   String get guestLogin => 'دخول زائر';
 
   @override
+  String get myOrders => 'طلباتي';
+
+  @override
+  String get noOrdersYet => 'لا توجد طلبات بعد';
+
+  @override
+  String get noOrdersMessage => 'يبدو أنك لم تقم بأي طلب حتى الآن. ابدأ التسوق لاكتشاف منتجاتنا المميزة!';
+
+  @override
+  String get orderHistory => 'سجل الطلبات';
+
+  @override
+  String get totalOrders => 'إجمالي الطلبات';
+
+  @override
+  String get loadingOrders => 'جاري تحميل طلباتك...';
+
+  @override
+  String get orderNumber => 'رقم الطلب';
+
+  @override
+  String get totalAmount => 'إجمالي المبلغ';
+
+  @override
+  String get refunded => 'تم الاسترجاع';
+
+  @override
+  String get viewDetails => 'عرض التفاصيل';
+
+  @override
   String get guestLoginDescription => 'تصفح المنتجات دون إنشاء حساب';
+
+  @override
+  String get loadingOrderDetails => 'تحميل تفاصيل الطلب';
+
+  @override
+  String get orderItems => 'عناصر الطلب';
+
+  @override
+  String get customerInformation => 'معلومات العميل';
+
+  @override
+  String get orderDate => 'تاريخ الطلب';
+
+  @override
+  String get orderDetails => 'تفاصيل الطلب';
+
+  @override
+  String get includesTaxes => 'شاملة الضريبة';
+
+  @override
+  String get unitPrice => 'السعر';
+
+  @override
+  String get taxItems => 'عناصر ضريبية';
 }

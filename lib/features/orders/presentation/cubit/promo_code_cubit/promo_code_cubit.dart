@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../domain/entities/promo_code.dart';
-import '../../domain/usecases/check_promo_code_usecase.dart';
+import '../../../domain/entities/promo_code.dart';
+import '../../../domain/usecases/check_promo_code_usecase.dart';
 
 part 'promo_code_state.dart';
 

@@ -18,13 +18,16 @@ import 'package:test/features/home/presentation/cubits/featured_products/feature
 import 'package:test/features/home/presentation/cubits/best_seller_products/best_seller_products_cubit.dart';
 import 'package:test/features/home/presentation/cubits/special_offer_products/special_offer_products_cubit.dart';
 import 'package:test/features/orders/presentation/views/checkout_view.dart';
-import 'package:test/features/orders/presentation/cubit/checkout_cubit.dart';
-import 'package:test/features/orders/presentation/cubit/addresses_cubit.dart';
-import 'package:test/features/orders/presentation/cubit/promo_code_cubit.dart';
+import 'package:test/features/orders/presentation/cubit/checkout_cubit/checkout_cubit.dart';
+import 'package:test/features/orders/presentation/cubit/addresses_cubit/addresses_cubit.dart';
+import 'package:test/features/orders/presentation/cubit/promo_code_cubit/promo_code_cubit.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/features/orders/presentation/widgets/address_management_view.dart';
 import 'package:test/features/orders/presentation/widgets/add_edit_address_view.dart';
 import 'package:test/features/orders/domain/entities/address.dart';
+import 'package:test/features/orders/presentation/cubit/orders_cubit/orders_cubit.dart';
+import 'package:test/features/profile/presentation/view/my_orders_view.dart';
+import 'package:test/features/profile/presentation/view/order_details_view.dart';
 import '../../../features/splash/presentation/view/splash_view.dart';
 import '../../../features/onboarding/presentation/view/onboarding_view.dart';
 import '../../../features/auth/presentation/view/login_view.dart';
@@ -221,6 +224,33 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
             return cubit;
           },
           child: AddEditAddressView(address: address),
+        ),
+      );
+
+    case MyOrdersView.routeName:
+      //print('🔍 Navigation: Navigating to MyOrdersView');
+      return MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) {
+            final cubit = DependencyInjection.getIt<OrdersCubit>();
+            cubit.getMyOrders();
+            return cubit;
+          },
+          child: const MyOrdersView(),
+        ),
+      );
+
+    case OrderDetailsView.routeName:
+      //print('🔍 Navigation: Navigating to OrderDetailsView');
+      final orderId = settings.arguments as int;
+      return MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) {
+            final cubit = DependencyInjection.getIt<OrdersCubit>();
+            cubit.getOrderDetails(orderId);
+            return cubit;
+          },
+          child: OrderDetailsView(orderId: orderId),
         ),
       );
 

@@ -242,6 +242,12 @@ class _ProfileViewState extends State<ProfileView> {
 
                             // Actions Section
                             ProfileActionButton(
+                              title: AppLocalizations.of(context)!.myOrders,
+                              icon: Icons.shopping_bag_outlined,
+                              onTap: () => _navigateToMyOrders(context),
+                            ),
+
+                            ProfileActionButton(
                               title: AppLocalizations.of(
                                 context,
                               )!.securityAndPrivacy,
@@ -413,6 +419,10 @@ class _ProfileViewState extends State<ProfileView> {
       context: context,
       message: 'استخدم الصفحات المنفصلة لتعديل البيانات',
     );
+  }
+
+  void _navigateToMyOrders(BuildContext context) {
+    Navigator.pushNamed(context, '/my-orders');
   }
 
   void _navigateToChangePassword(

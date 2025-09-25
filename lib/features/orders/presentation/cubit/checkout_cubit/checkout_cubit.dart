@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'dart:io';
-import '../../domain/entities/order.dart';
-import '../../domain/entities/address.dart';
-import '../../domain/entities/promo_code.dart';
-import '../../domain/usecases/checkout_usecase.dart';
+import '../../../domain/entities/order.dart';
+import '../../../domain/entities/address.dart';
+import '../../../domain/entities/promo_code.dart';
+import '../../../domain/usecases/checkout_usecase.dart';
 
 part 'checkout_state.dart';
 

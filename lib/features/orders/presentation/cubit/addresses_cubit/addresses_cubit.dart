@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../domain/entities/address.dart';
-import '../../domain/usecases/get_addresses_usecase.dart';
-import '../../domain/usecases/add_address_usecase.dart';
-import '../../domain/usecases/update_address_usecase.dart';
-import '../../domain/usecases/delete_address_usecase.dart';
+import '../../../domain/entities/address.dart';
+import '../../../domain/usecases/get_addresses_usecase.dart';
+import '../../../domain/usecases/add_address_usecase.dart';
+import '../../../domain/usecases/update_address_usecase.dart';
+import '../../../domain/usecases/delete_address_usecase.dart';
 
 part 'addresses_state.dart';
 

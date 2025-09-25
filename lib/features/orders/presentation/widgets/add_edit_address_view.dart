@@ -13,7 +13,7 @@ import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/services/language_service.dart';
 import '../../../location/domain/entities/city.dart' as LocationCity;
 import '../../domain/entities/address.dart';
-import '../cubit/addresses_cubit.dart';
+import '../cubit/addresses_cubit/addresses_cubit.dart';
 
 class AddEditAddressView extends StatefulWidget {
   final Address? address;

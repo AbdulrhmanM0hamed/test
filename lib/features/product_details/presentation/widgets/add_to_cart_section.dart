@@ -87,7 +87,8 @@ class _AddToCartSectionState extends State<AddToCartSection> {
                               ? '${AppLocalizations.of(context)!.addToCart} ($currentQuantity)'
                               : AppLocalizations.of(context)!.addToCart)
                         : AppLocalizations.of(context)!.outOfStock,
-                    onPressed: (isAvailable && !_isAddingToCart && !_isBuyingNow)
+                    onPressed:
+                        (isAvailable && !_isAddingToCart && !_isBuyingNow)
                         ? _addToCart
                         : null,
                     backgroundColor: isAvailable
@@ -120,19 +121,14 @@ class _AddToCartSectionState extends State<AddToCartSection> {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: MaterialButton(
-                    onPressed: (!_isAddingToCart && !_isBuyingNow) ? _buyNow : null,
+                    onPressed: (!_isAddingToCart && !_isBuyingNow)
+                        ? _buyNow
+                        : null,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: _isBuyingNow
-                        ? SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-                            ),
-                          )
+                        ? SizedBox(width: 24, height: 24)
                         : Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

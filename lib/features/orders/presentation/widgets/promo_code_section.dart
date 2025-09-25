@@ -6,7 +6,7 @@ import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
 import '../../../../core/utils/widgets/custom_snackbar.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../cubit/promo_code_cubit.dart';
+import '../cubit/promo_code_cubit/promo_code_cubit.dart';
 import '../../domain/entities/promo_code.dart';
 
 class PromoCodeSection extends StatefulWidget {

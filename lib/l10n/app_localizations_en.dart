@@ -960,7 +960,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get subTotal => 'Sub Total';
 
   @override
-  String get error => 'Error';
+  String get error => 'Something went wrong';
 
   @override
   String get success => 'Success';
@@ -1455,5 +1455,59 @@ class AppLocalizationsEn extends AppLocalizations {
   String get guestLogin => 'Guest Login';
 
   @override
+  String get myOrders => 'My Orders';
+
+  @override
+  String get noOrdersYet => 'No orders yet';
+
+  @override
+  String get noOrdersMessage => 'Looks like you haven’t placed any orders yet. Start shopping to discover our amazing products!';
+
+  @override
+  String get orderHistory => 'Order History';
+
+  @override
+  String get totalOrders => 'Total Orders';
+
+  @override
+  String get loadingOrders => 'Loading your orders...';
+
+  @override
+  String get orderNumber => 'Order Number';
+
+  @override
+  String get totalAmount => 'Total Amount';
+
+  @override
+  String get refunded => 'Refunded';
+
+  @override
+  String get viewDetails => 'View Details';
+
+  @override
   String get guestLoginDescription => 'Browse products without creating an account';
+
+  @override
+  String get loadingOrderDetails => 'Loading Order Details';
+
+  @override
+  String get orderItems => 'Order Items';
+
+  @override
+  String get customerInformation => 'Customer Information';
+
+  @override
+  String get orderDate => 'Order Date';
+
+  @override
+  String get orderDetails => 'Order Details';
+
+  @override
+  String get includesTaxes => 'includesTaxes';
+
+  @override
+  String get unitPrice => 'unitPrice';
+
+  @override
+  String get taxItems => 'taxItems';
 }

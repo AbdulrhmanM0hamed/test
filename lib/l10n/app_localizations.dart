@@ -2000,7 +2000,7 @@ abstract class AppLocalizations {
   /// No description provided for @error.
   ///
   /// In en, this message translates to:
-  /// **'Error'**
+  /// **'Something went wrong'**
   String get error;
 
   /// No description provided for @success.
@@ -2987,11 +2987,119 @@ abstract class AppLocalizations {
   /// **'Guest Login'**
   String get guestLogin;
 
+  /// No description provided for @myOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'My Orders'**
+  String get myOrders;
+
+  /// No description provided for @noOrdersYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No orders yet'**
+  String get noOrdersYet;
+
+  /// No description provided for @noOrdersMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Looks like you haven’t placed any orders yet. Start shopping to discover our amazing products!'**
+  String get noOrdersMessage;
+
+  /// No description provided for @orderHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Order History'**
+  String get orderHistory;
+
+  /// No description provided for @totalOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Orders'**
+  String get totalOrders;
+
+  /// No description provided for @loadingOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading your orders...'**
+  String get loadingOrders;
+
+  /// No description provided for @orderNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Number'**
+  String get orderNumber;
+
+  /// No description provided for @totalAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Amount'**
+  String get totalAmount;
+
+  /// No description provided for @refunded.
+  ///
+  /// In en, this message translates to:
+  /// **'Refunded'**
+  String get refunded;
+
+  /// No description provided for @viewDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View Details'**
+  String get viewDetails;
+
   /// No description provided for @guestLoginDescription.
   ///
   /// In en, this message translates to:
   /// **'Browse products without creating an account'**
   String get guestLoginDescription;
+
+  /// No description provided for @loadingOrderDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading Order Details'**
+  String get loadingOrderDetails;
+
+  /// No description provided for @orderItems.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Items'**
+  String get orderItems;
+
+  /// No description provided for @customerInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer Information'**
+  String get customerInformation;
+
+  /// No description provided for @orderDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Date'**
+  String get orderDate;
+
+  /// No description provided for @orderDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Details'**
+  String get orderDetails;
+
+  /// No description provided for @includesTaxes.
+  ///
+  /// In en, this message translates to:
+  /// **'includesTaxes'**
+  String get includesTaxes;
+
+  /// No description provided for @unitPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'unitPrice'**
+  String get unitPrice;
+
+  /// No description provided for @taxItems.
+  ///
+  /// In en, this message translates to:
+  /// **'taxItems'**
+  String get taxItems;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
