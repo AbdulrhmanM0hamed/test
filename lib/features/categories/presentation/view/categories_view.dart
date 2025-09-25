@@ -88,6 +88,7 @@ class _CategoriesViewState extends State<CategoriesView> {
           return Scaffold(
             appBar: CustomAppBar(
               title: categoryName ?? AppLocalizations.of(context)!.categories,
+              automaticallyImplyLeading: false,
             ),
             body: SafeArea(
               child: Column(
