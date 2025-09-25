@@ -9,6 +9,7 @@ import 'package:test/features/orders/presentation/cubit/orders_cubit/orders_cubi
 import 'package:test/features/orders/presentation/cubit/orders_cubit/orders_state.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../orders/domain/entities/order_details.dart';
+import '../../../orders/domain/entities/order_status.dart';
 import '../widgets/order_product_item_card.dart';
 
 class OrderDetailsView extends StatefulWidget {
@@ -102,7 +103,13 @@ class _OrderDetailsViewState extends State<OrderDetailsView>
   }
 
   Widget _buildLoadedState(BuildContext context, OrderDetails orderDetails) {
-    final statusColor = _parseColor(orderDetails.statusColor);
+    final isArabic = AppLocalizations.of(context)?.localeName == 'ar';
+    final orderStatus = OrderStatus.fromString(orderDetails.status);
+    final statusColor =
+        orderStatus?.color ??
+        OrderStatus.getColorFromHex(orderDetails.statusColor);
+    final statusText =
+        orderStatus?.getLocalizedName(isArabic == true) ?? orderDetails.status;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -110,7 +117,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Order Header Card
-          _buildOrderHeaderCard(context, orderDetails, statusColor),
+          _buildOrderHeaderCard(context, orderDetails, statusColor, statusText),
 
           const SizedBox(height: 16),
 
@@ -135,6 +142,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView>
     BuildContext context,
     OrderDetails orderDetails,
     Color statusColor,
+    String statusText,
   ) {
     return Container(
       width: double.infinity,
@@ -193,7 +201,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView>
                   ),
                 ),
                 child: Text(
-                  orderDetails.status,
+                  statusText,
                   style: getBoldStyle(
                     fontSize: FontSize.size14,
                     fontFamily: FontConstant.cairo,
@@ -587,17 +595,5 @@ class _OrderDetailsViewState extends State<OrderDetailsView>
         ],
       ),
     );
-  }
-
-  Color _parseColor(String colorString) {
-    try {
-      String hexColor = colorString.replaceAll('#', '');
-      if (hexColor.length == 6) {
-        hexColor = 'FF$hexColor';
-      }
-      return Color(int.parse(hexColor, radix: 16));
-    } catch (e) {
-      return AppColors.primary;
-    }
   }
 }

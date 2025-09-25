@@ -8,6 +8,7 @@ import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/features/orders/presentation/cubit/orders_cubit/orders_cubit.dart';
 import 'package:test/features/orders/presentation/cubit/orders_cubit/orders_state.dart';
 import 'package:test/l10n/app_localizations.dart';
+import '../../../orders/domain/entities/order_status.dart';
 import '../widgets/order_card.dart';
 
 class MyOrdersView extends StatefulWidget {

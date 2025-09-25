@@ -4,16 +4,19 @@ import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../orders/domain/entities/order_item.dart';
+import '../../../orders/domain/entities/order_status.dart';
 
 class OrderCard extends StatelessWidget {
   final OrderItem order;
   final VoidCallback onTap;
-
   const OrderCard({super.key, required this.order, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    final statusColor = _parseColor(order.statusColor);
+    final isArabic = AppLocalizations.of(context)?.localeName == 'ar';
+    final orderStatus = OrderStatus.fromString(order.status);
+    final statusColor = orderStatus?.color ?? OrderStatus.getColorFromHex(order.statusColor);
+    final statusText = orderStatus?.getLocalizedName(isArabic == true) ?? order.status;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -82,7 +85,7 @@ class OrderCard extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        order.status,
+                        statusText,
                         style: getSemiBoldStyle(
                           fontSize: FontSize.size12,
                           fontFamily: FontConstant.cairo,
@@ -208,17 +211,4 @@ class OrderCard extends StatelessWidget {
     );
   }
 
-  Color _parseColor(String colorString) {
-    try {
-      // Remove # if present and convert to Color
-      String hexColor = colorString.replaceAll('#', '');
-      if (hexColor.length == 6) {
-        hexColor = 'FF$hexColor'; // Add alpha if not present
-      }
-      return Color(int.parse(hexColor, radix: 16));
-    } catch (e) {
-      // Fallback to primary color if parsing fails
-      return AppColors.primary;
-    }
-  }
 }
