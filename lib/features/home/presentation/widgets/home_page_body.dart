@@ -16,6 +16,7 @@ import '../cubits/latest_products/latest_products_cubit.dart';
 import '../cubits/special_offer_products/special_offer_products_cubit.dart';
 import 'package:test/features/home/presentation/cubit/main_category_cubit.dart';
 import 'package:test/features/home/presentation/cubit/slider_cubit.dart';
+
 class HomePageBody extends StatelessWidget {
   const HomePageBody({super.key});
 
@@ -25,7 +26,8 @@ class HomePageBody extends StatelessWidget {
       providers: [
         // Provide ProfileCubit
         BlocProvider<ProfileCubit>(
-          create: (context) => DependencyInjection.getIt<ProfileCubit>()..getProfile(),
+          create: (context) =>
+              DependencyInjection.getIt<ProfileCubit>()..getProfile(),
         ),
         // Provide WishlistCubit
         BlocProvider<WishlistCubit>(

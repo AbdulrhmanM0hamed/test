@@ -7,8 +7,8 @@ import 'package:test/l10n/app_localizations.dart';
 import '../../../domain/entities/home_product.dart';
 import '../../cubits/featured_products/featured_products_cubit.dart';
 import '../../cubits/featured_products/featured_products_state.dart';
-import '../home_product_card.dart';
-import '../home_product_card_shimmer.dart';
+import '../featured_product_card_compact.dart';
+import '../featured_product_card_compact_shimmer.dart';
 
 class FeaturedProductsSection extends StatelessWidget {
   final Function(HomeProduct)? onProductTap;
@@ -59,33 +59,35 @@ class FeaturedProductsSection extends StatelessWidget {
             return _buildEmptyState(context);
           }
 
-          // Check if any product has a special offer to determine height
-          final hasSpecialOffer = products.any(
-            (product) => product.isSpecialOffer,
-          );
+          final double rowHeight = 100.0; // ارتفاع كل صف
+          final double spacingBetweenRows = 16.0; // المسافة بين الصفوف
+
+          // حساب الارتفاع الإجمالي (3 صفوف + 2 مسافات بينها + هامش أمان)
+          final double totalHeight = (rowHeight * 3) + (spacingBetweenRows * 2) + 10;
+          final double screenWidth = MediaQuery.of(context).size.width;
+          // تقليل الهامش بين الكروت لتوفير مساحة أكبر
+          final double cardWidth = (screenWidth - 20) / 2; // عرض البطاقة أكبر بتقليل الهوامش
 
           return SizedBox(
-            height: hasSpecialOffer ? 290 : 270,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
+            height: totalHeight,
+            child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: products.length > 4 ? 4 : products.length,
-              itemBuilder: (context, index) {
-                final product = products[index];
-                return Container(
-                  width: 170,
-                  margin: EdgeInsetsDirectional.only(
-                    end:
-                        index == (products.length > 4 ? 3 : products.length - 1)
-                        ? 0
-                        : 12,
-                  ),
-                  child: HomeProductCard(
-                    product: product,
-                    onTap: () => onProductTap?.call(product),
-                  ),
-                );
-              },
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                padding: EdgeInsets.zero, // تقليل الهوامش الجانبية
+                itemCount: (products.length / 6).ceil(),
+                itemBuilder: (context, pageIndex) {
+                  return _buildProductsPage(
+                    context,
+                    pageIndex,
+                    products,
+                    cardWidth,
+                    rowHeight,
+                    spacingBetweenRows,
+                  );
+                },
+              ),
             ),
           );
         }
@@ -95,19 +97,131 @@ class FeaturedProductsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildLoadingGrid() {
+  // بناء صفحة كاملة من المنتجات (3 صفوف)
+  Widget _buildProductsPage(
+    BuildContext context,
+    int pageIndex,
+    List<HomeProduct> products,
+    double cardWidth,
+    double rowHeight,
+    double spacingBetweenRows,
+  ) {
     return SizedBox(
-      height: 270,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
+      width: MediaQuery.of(context).size.width - 4, // تقليل الهوامش
+      child: Column(
+        children: [
+          // الصف الأول
+          SizedBox(
+            height: rowHeight,
+            child: _buildProductRow(context, pageIndex * 6, products, cardWidth),
+          ),
+          SizedBox(height: spacingBetweenRows),
+          // الصف الثاني
+          SizedBox(
+            height: rowHeight,
+            child: _buildProductRow(
+              context,
+              pageIndex * 6 + 2,
+              products,
+              cardWidth,
+            ),
+          ),
+          SizedBox(height: spacingBetweenRows),
+          // الصف الثالث
+          SizedBox(
+            height: rowHeight,
+            child: _buildProductRow(
+              context,
+              pageIndex * 6 + 4,
+              products,
+              cardWidth,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // بناء صف من المنتجات (كل صف يحتوي على كارتين)
+  Widget _buildProductRow(
+    BuildContext context,
+    int startIndex,
+    List<HomeProduct> products,
+    double cardWidth,
+  ) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // الكارت الأول
+        if (startIndex < products.length)
+          FeaturedProductCardCompact(
+            product: products[startIndex],
+            width: cardWidth,
+            onTap: () => onProductTap?.call(products[startIndex]),
+          ),
+        const SizedBox(width: 8), // تقليل المسافة بين البطاقات
+        // الكارت الثاني
+        if (startIndex + 1 < products.length)
+          FeaturedProductCardCompact(
+            product: products[startIndex + 1],
+            width: cardWidth,
+            onTap: () => onProductTap?.call(products[startIndex + 1]),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildLoadingGrid() {
+    final double rowHeight = 100.0;
+    final double spacingBetweenRows = 16.0;
+    final double totalHeight = (rowHeight * 3) + (spacingBetweenRows * 2) + 10;
+    
+    return SizedBox(
+      height: totalHeight,
+      child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: 4,
-        itemBuilder: (context, index) {
-          return Container(
-            margin: EdgeInsetsDirectional.only(end: index == 3 ? 0 : 12),
-            child: const HomeProductCardShimmer(),
-          );
-        },
+        child: Column(
+          children: [
+            // الصف الأول
+            SizedBox(
+              height: rowHeight,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(child: const FeaturedProductCardCompactShimmer()),
+                  const SizedBox(width: 8),
+                  Expanded(child: const FeaturedProductCardCompactShimmer()),
+                ],
+              ),
+            ),
+            SizedBox(height: spacingBetweenRows),
+            // الصف الثاني
+            SizedBox(
+              height: rowHeight,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(child: const FeaturedProductCardCompactShimmer()),
+                  const SizedBox(width: 8),
+                  Expanded(child: const FeaturedProductCardCompactShimmer()),
+                ],
+              ),
+            ),
+            SizedBox(height: spacingBetweenRows),
+            // الصف الثالث
+            SizedBox(
+              height: rowHeight,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(child: const FeaturedProductCardCompactShimmer()),
+                  const SizedBox(width: 8),
+                  Expanded(child: const FeaturedProductCardCompactShimmer()),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
