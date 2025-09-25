@@ -7,15 +7,50 @@ import 'package:test/features/home/domain/entities/home_product.dart';
 import 'package:test/features/home/presentation/cubits/featured_products/featured_products_cubit.dart';
 import 'package:test/features/home/presentation/cubits/featured_products/featured_products_state.dart';
 import 'package:test/features/home/presentation/widgets/home_product_card.dart';
+import 'package:test/features/home/presentation/widgets/home_product_card_shimmer.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/core/services/app_state_service.dart';
 import 'package:test/l10n/app_localizations.dart';
 
-class FeaturedProductsView extends StatelessWidget {
+class FeaturedProductsView extends StatefulWidget {
   const FeaturedProductsView({super.key});
 
   static const String routeName = '/featured-products';
+
+  @override
+  State<FeaturedProductsView> createState() => _FeaturedProductsViewState();
+}
+
+class _FeaturedProductsViewState extends State<FeaturedProductsView> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    
+    // Load data after widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<FeaturedProductsCubit>().getFeaturedProducts();
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    final pixels = _scrollController.position.pixels;
+    final maxExtent = _scrollController.position.maxScrollExtent;
+    
+    if (pixels >= maxExtent - 200) {
+      print('🎯 FeaturedProducts: Scroll threshold reached, calling loadMore');
+      context.read<FeaturedProductsCubit>().loadMore();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +74,7 @@ class FeaturedProductsView extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) =>
-              DependencyInjection.getIt<FeaturedProductsCubit>()
-                ..getFeaturedProducts(),
-        ),
+        // Remove the BlocProvider creation - use existing one from navigation
         if (isLoggedIn) ...[
           if (existingWishlistCubit != null)
             BlocProvider.value(value: existingWishlistCubit)
@@ -73,20 +104,25 @@ class FeaturedProductsView extends StatelessWidget {
               return _buildErrorState(context, state.message);
             }
 
-            if (state is FeaturedProductsLoaded) {
-              final products = state.products;
+            if (state is FeaturedProductsLoaded || state is FeaturedProductsLoadingMore) {
+              final products = state is FeaturedProductsLoaded 
+                  ? state.products 
+                  : (state as FeaturedProductsLoadingMore).products;
+              final hasMore = state is FeaturedProductsLoaded ? state.hasMore : true;
+              final isLoadingMore = state is FeaturedProductsLoadingMore;
 
-              if (products.isEmpty) {
+              if (products.isEmpty && !isLoadingMore) {
                 return _buildEmptyState(context);
               }
 
               return RefreshIndicator(
                 onRefresh: () async {
-                  context.read<FeaturedProductsCubit>().getFeaturedProducts();
+                  context.read<FeaturedProductsCubit>().getFeaturedProducts(refresh: true);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: GridView.builder(
+                    controller: _scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
@@ -95,14 +131,19 @@ class FeaturedProductsView extends StatelessWidget {
                           crossAxisSpacing: 12,
                           mainAxisSpacing: 12,
                         ),
-                    itemCount: products.length,
+                    itemCount: products.length + (isLoadingMore && hasMore ? 2 : 0),
                     itemBuilder: (context, index) {
-                      final product = products[index];
-                      return HomeProductCard(
-                        product: product,
-                        onTap: () =>
-                            _navigateToProductDetails(context, product),
-                      );
+                      if (index < products.length) {
+                        final product = products[index];
+                        return HomeProductCard(
+                          product: product,
+                          onTap: () =>
+                              _navigateToProductDetails(context, product),
+                        );
+                      } else {
+                        // Show shimmer for loading more
+                        return const HomeProductCardShimmer();
+                      }
                     },
                   ),
                 ),

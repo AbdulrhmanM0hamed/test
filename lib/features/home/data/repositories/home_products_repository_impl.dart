@@ -8,26 +8,38 @@ class HomeProductsRepositoryImpl implements HomeProductsRepository {
   HomeProductsRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<List<HomeProduct>> getFeaturedProducts() async {
-    final productModels = await remoteDataSource.getFeaturedProducts();
-    return productModels.map((model) => model.toEntity()).toList();
+  Future<HomeProductsResponse> getFeaturedProducts({int page = 1}) async {
+    final response = await remoteDataSource.getFeaturedProducts(page: page);
+    return HomeProductsResponse(
+      products: response.toEntities(),
+      pagination: response.pagination,
+    );
   }
 
   @override
-  Future<List<HomeProduct>> getBestSellerProducts() async {
-    final productModels = await remoteDataSource.getBestSellerProducts();
-    return productModels.map((model) => model.toEntity()).toList();
+  Future<HomeProductsResponse> getBestSellerProducts({int page = 1}) async {
+    final response = await remoteDataSource.getBestSellerProducts(page: page);
+    return HomeProductsResponse(
+      products: response.toEntities(),
+      pagination: response.pagination,
+    );
   }
 
   @override
-  Future<List<HomeProduct>> getLatestProducts() async {
-    final productModels = await remoteDataSource.getLatestProducts();
-    return productModels.map((model) => model.toEntity()).toList();
+  Future<HomeProductsResponse> getLatestProducts({int page = 1}) async {
+    final response = await remoteDataSource.getLatestProducts(page: page);
+    return HomeProductsResponse(
+      products: response.toEntities(),
+      pagination: response.pagination,
+    );
   }
 
   @override
-  Future<List<HomeProduct>> getSpecialOfferProducts() async {
-    final productModels = await remoteDataSource.getSpecialOfferProducts();
-    return productModels.map((model) => model.toEntity()).toList();
+  Future<HomeProductsResponse> getSpecialOfferProducts({int page = 1}) async {
+    final response = await remoteDataSource.getSpecialOfferProducts(page: page);
+    return HomeProductsResponse(
+      products: response.toEntities(),
+      pagination: response.pagination,
+    );
   }
 }

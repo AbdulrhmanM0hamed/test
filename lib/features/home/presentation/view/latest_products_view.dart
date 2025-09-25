@@ -7,15 +7,50 @@ import 'package:test/features/home/domain/entities/home_product.dart';
 import 'package:test/features/home/presentation/cubits/latest_products/latest_products_cubit.dart';
 import 'package:test/features/home/presentation/cubits/latest_products/latest_products_state.dart';
 import 'package:test/features/home/presentation/widgets/home_product_card.dart';
+import 'package:test/features/home/presentation/widgets/home_product_card_shimmer.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/core/services/app_state_service.dart';
 import 'package:test/l10n/app_localizations.dart';
 
-class LatestProductsView extends StatelessWidget {
+class LatestProductsView extends StatefulWidget {
   const LatestProductsView({super.key});
 
   static const String routeName = '/latest-products';
+
+  @override
+  State<LatestProductsView> createState() => _LatestProductsViewState();
+}
+
+class _LatestProductsViewState extends State<LatestProductsView> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    
+    // Load data after widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<LatestProductsCubit>().getLatestProducts();
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    final pixels = _scrollController.position.pixels;
+    final maxExtent = _scrollController.position.maxScrollExtent;
+    
+    if (pixels >= maxExtent - 200) {
+      print('🎯 LatestProducts: Scroll threshold reached, calling loadMore');
+      context.read<LatestProductsCubit>().loadMore();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +74,6 @@ class LatestProductsView extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) =>
-              DependencyInjection.getIt<LatestProductsCubit>()
-                ..getLatestProducts(),
-        ),
         if (isLoggedIn) ...[
           if (existingWishlistCubit != null)
             BlocProvider.value(value: existingWishlistCubit)
@@ -73,20 +103,25 @@ class LatestProductsView extends StatelessWidget {
               return _buildErrorState(context, state.message);
             }
 
-            if (state is LatestProductsLoaded) {
-              final products = state.products;
+            if (state is LatestProductsLoaded || state is LatestProductsLoadingMore) {
+              final products = state is LatestProductsLoaded 
+                  ? state.products 
+                  : (state as LatestProductsLoadingMore).products;
+              final hasMore = state is LatestProductsLoaded ? state.hasMore : true;
+              final isLoadingMore = state is LatestProductsLoadingMore;
 
-              if (products.isEmpty) {
+              if (products.isEmpty && !isLoadingMore) {
                 return _buildEmptyState(context);
               }
 
               return RefreshIndicator(
                 onRefresh: () async {
-                  context.read<LatestProductsCubit>().getLatestProducts();
+                  context.read<LatestProductsCubit>().getLatestProducts(refresh: true);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: GridView.builder(
+                    controller: _scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
@@ -95,14 +130,18 @@ class LatestProductsView extends StatelessWidget {
                           crossAxisSpacing: 12,
                           mainAxisSpacing: 12,
                         ),
-                    itemCount: products.length,
+                    itemCount: products.length + (isLoadingMore && hasMore ? 2 : 0),
                     itemBuilder: (context, index) {
-                      final product = products[index];
-                      return HomeProductCard(
-                        product: product,
-                        onTap: () =>
-                            _navigateToProductDetails(context, product),
-                      );
+                      if (index < products.length) {
+                        final product = products[index];
+                        return HomeProductCard(
+                          product: product,
+                          onTap: () =>
+                              _navigateToProductDetails(context, product),
+                        );
+                      } else {
+                        return const HomeProductCardShimmer();
+                      }
                     },
                   ),
                 ),

@@ -7,15 +7,53 @@ import 'package:test/features/home/domain/entities/home_product.dart';
 import 'package:test/features/home/presentation/cubits/special_offer_products/special_offer_products_cubit.dart';
 import 'package:test/features/home/presentation/cubits/special_offer_products/special_offer_products_state.dart';
 import 'package:test/features/home/presentation/widgets/home_product_card.dart';
+import 'package:test/features/home/presentation/widgets/home_product_card_shimmer.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/core/services/app_state_service.dart';
 import 'package:test/l10n/app_localizations.dart';
 
-class SpecialOffersView extends StatelessWidget {
+class SpecialOffersView extends StatefulWidget {
   const SpecialOffersView({super.key});
 
   static const String routeName = '/special-offers';
+
+  @override
+  State<SpecialOffersView> createState() => _SpecialOffersViewState();
+}
+
+class _SpecialOffersViewState extends State<SpecialOffersView> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    
+    // Load data after widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SpecialOfferProductsCubit>().getSpecialOfferProducts();
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    final pixels = _scrollController.position.pixels;
+    final maxExtent = _scrollController.position.maxScrollExtent;
+    final threshold = maxExtent - 200;
+    
+    print('📜 Scroll: pixels=$pixels, maxExtent=$maxExtent, threshold=$threshold');
+    
+    if (pixels >= threshold) {
+      print('🎯 Scroll threshold reached, calling loadMore');
+      context.read<SpecialOfferProductsCubit>().loadMore();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +77,6 @@ class SpecialOffersView extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) =>
-              DependencyInjection.getIt<SpecialOfferProductsCubit>()
-                ..getSpecialOfferProducts(),
-        ),
         if (isLoggedIn) ...[
           if (existingWishlistCubit != null)
             BlocProvider.value(value: existingWishlistCubit)
@@ -73,10 +106,14 @@ class SpecialOffersView extends StatelessWidget {
               return _buildErrorState(context, state.message);
             }
 
-            if (state is SpecialOfferProductsLoaded) {
-              final products = state.products;
+            if (state is SpecialOfferProductsLoaded || state is SpecialOfferProductsLoadingMore) {
+              final products = state is SpecialOfferProductsLoaded 
+                  ? state.products 
+                  : (state as SpecialOfferProductsLoadingMore).products;
+              final hasMore = state is SpecialOfferProductsLoaded ? state.hasMore : true;
+              final isLoadingMore = state is SpecialOfferProductsLoadingMore;
 
-              if (products.isEmpty) {
+              if (products.isEmpty && !isLoadingMore) {
                 return _buildEmptyState(context);
               }
 
@@ -84,11 +121,12 @@ class SpecialOffersView extends StatelessWidget {
                 onRefresh: () async {
                   context
                       .read<SpecialOfferProductsCubit>()
-                      .getSpecialOfferProducts();
+                      .getSpecialOfferProducts(refresh: true);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: GridView.builder(
+                    controller: _scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
@@ -97,14 +135,18 @@ class SpecialOffersView extends StatelessWidget {
                           crossAxisSpacing: 12,
                           mainAxisSpacing: 12,
                         ),
-                    itemCount: products.length,
+                    itemCount: products.length + (isLoadingMore && hasMore ? 2 : 0),
                     itemBuilder: (context, index) {
-                      final product = products[index];
-                      return HomeProductCard(
-                        product: product,
-                        onTap: () =>
-                            _navigateToProductDetails(context, product),
-                      );
+                      if (index < products.length) {
+                        final product = products[index];
+                        return HomeProductCard(
+                          product: product,
+                          onTap: () =>
+                              _navigateToProductDetails(context, product),
+                        );
+                      } else {
+                        return const HomeProductCardShimmer();
+                      }
                     },
                   ),
                 ),

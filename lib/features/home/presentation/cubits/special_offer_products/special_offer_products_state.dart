@@ -12,13 +12,23 @@ class SpecialOfferProductsInitial extends SpecialOfferProductsState {}
 
 class SpecialOfferProductsLoading extends SpecialOfferProductsState {}
 
-class SpecialOfferProductsLoaded extends SpecialOfferProductsState {
+class SpecialOfferProductsLoadingMore extends SpecialOfferProductsState {
   final List<HomeProduct> products;
 
-  const SpecialOfferProductsLoaded({required this.products});
+  const SpecialOfferProductsLoadingMore({required this.products});
 
   @override
   List<Object> get props => [products];
+}
+
+class SpecialOfferProductsLoaded extends SpecialOfferProductsState {
+  final List<HomeProduct> products;
+  final bool hasMore;
+
+  const SpecialOfferProductsLoaded({required this.products, required this.hasMore});
+
+  @override
+  List<Object> get props => [products, hasMore];
 }
 
 class SpecialOfferProductsError extends SpecialOfferProductsState {

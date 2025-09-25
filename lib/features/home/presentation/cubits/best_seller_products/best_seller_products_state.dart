@@ -12,13 +12,23 @@ class BestSellerProductsInitial extends BestSellerProductsState {}
 
 class BestSellerProductsLoading extends BestSellerProductsState {}
 
-class BestSellerProductsLoaded extends BestSellerProductsState {
+class BestSellerProductsLoadingMore extends BestSellerProductsState {
   final List<HomeProduct> products;
 
-  const BestSellerProductsLoaded({required this.products});
+  const BestSellerProductsLoadingMore({required this.products});
 
   @override
   List<Object> get props => [products];
+}
+
+class BestSellerProductsLoaded extends BestSellerProductsState {
+  final List<HomeProduct> products;
+  final bool hasMore;
+
+  const BestSellerProductsLoaded({required this.products, required this.hasMore});
+
+  @override
+  List<Object> get props => [products, hasMore];
 }
 
 class BestSellerProductsError extends BestSellerProductsState {

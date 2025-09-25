@@ -7,15 +7,52 @@ import 'package:test/features/home/domain/entities/home_product.dart';
 import 'package:test/features/home/presentation/cubits/best_seller_products/best_seller_products_cubit.dart';
 import 'package:test/features/home/presentation/cubits/best_seller_products/best_seller_products_state.dart';
 import 'package:test/features/home/presentation/widgets/home_product_card.dart';
+import 'package:test/features/home/presentation/widgets/home_product_card_shimmer.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/core/services/app_state_service.dart';
 import 'package:test/l10n/app_localizations.dart';
 
-class BestSellerProductsView extends StatelessWidget {
+class BestSellerProductsView extends StatefulWidget {
   const BestSellerProductsView({super.key});
 
   static const String routeName = '/best-seller-products';
+
+  @override
+  State<BestSellerProductsView> createState() => _BestSellerProductsViewState();
+}
+
+class _BestSellerProductsViewState extends State<BestSellerProductsView> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+
+    // Load data after widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<BestSellerProductsCubit>().getBestSellerProducts();
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    final pixels = _scrollController.position.pixels;
+    final maxExtent = _scrollController.position.maxScrollExtent;
+
+    if (pixels >= maxExtent - 200) {
+      print(
+        '🎯 BestSellerProducts: Scroll threshold reached, calling loadMore',
+      );
+      context.read<BestSellerProductsCubit>().loadMore();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +76,6 @@ class BestSellerProductsView extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) =>
-              DependencyInjection.getIt<BestSellerProductsCubit>()
-                ..getBestSellerProducts(),
-        ),
         if (isLoggedIn) ...[
           if (existingWishlistCubit != null)
             BlocProvider.value(value: existingWishlistCubit)
@@ -73,22 +105,30 @@ class BestSellerProductsView extends StatelessWidget {
               return _buildErrorState(context, state.message);
             }
 
-            if (state is BestSellerProductsLoaded) {
-              final products = state.products;
+            if (state is BestSellerProductsLoaded ||
+                state is BestSellerProductsLoadingMore) {
+              final products = state is BestSellerProductsLoaded
+                  ? state.products
+                  : (state as BestSellerProductsLoadingMore).products;
+              final hasMore = state is BestSellerProductsLoaded
+                  ? state.hasMore
+                  : true;
+              final isLoadingMore = state is BestSellerProductsLoadingMore;
 
-              if (products.isEmpty) {
+              if (products.isEmpty && !isLoadingMore) {
                 return _buildEmptyState(context);
               }
 
               return RefreshIndicator(
                 onRefresh: () async {
-                  context
-                      .read<BestSellerProductsCubit>()
-                      .getBestSellerProducts();
+                  context.read<BestSellerProductsCubit>().getBestSellerProducts(
+                    refresh: true,
+                  );
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: GridView.builder(
+                    controller: _scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
@@ -97,14 +137,19 @@ class BestSellerProductsView extends StatelessWidget {
                           crossAxisSpacing: 12,
                           mainAxisSpacing: 12,
                         ),
-                    itemCount: products.length,
+                    itemCount:
+                        products.length + (isLoadingMore && hasMore ? 2 : 0),
                     itemBuilder: (context, index) {
-                      final product = products[index];
-                      return HomeProductCard(
-                        product: product,
-                        onTap: () =>
-                            _navigateToProductDetails(context, product),
-                      );
+                      if (index < products.length) {
+                        final product = products[index];
+                        return HomeProductCard(
+                          product: product,
+                          onTap: () =>
+                              _navigateToProductDetails(context, product),
+                        );
+                      } else {
+                        return const HomeProductCardShimmer();
+                      }
                     },
                   ),
                 ),

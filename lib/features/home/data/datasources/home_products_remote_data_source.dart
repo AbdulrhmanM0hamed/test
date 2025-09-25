@@ -1,14 +1,15 @@
 import '../../../../core/services/network/dio_service.dart';
 import '../../../../core/utils/constant/api_endpoints.dart';
 import '../../../../core/services/location_service.dart';
-import '../models/home_product_model.dart';
+import '../models/home_products_response_model.dart';
+import '../models/pagination_info_model.dart';
 import 'package:get_it/get_it.dart';
 
 abstract class HomeProductsRemoteDataSource {
-  Future<List<HomeProductModel>> getFeaturedProducts();
-  Future<List<HomeProductModel>> getBestSellerProducts();
-  Future<List<HomeProductModel>> getLatestProducts();
-  Future<List<HomeProductModel>> getSpecialOfferProducts();
+  Future<HomeProductsResponseModel> getFeaturedProducts({int page = 1});
+  Future<HomeProductsResponseModel> getBestSellerProducts({int page = 1});
+  Future<HomeProductsResponseModel> getLatestProducts({int page = 1});
+  Future<HomeProductsResponseModel> getSpecialOfferProducts({int page = 1});
 }
 
 class HomeProductsRemoteDataSourceImpl implements HomeProductsRemoteDataSource {
@@ -17,128 +18,71 @@ class HomeProductsRemoteDataSourceImpl implements HomeProductsRemoteDataSource {
   HomeProductsRemoteDataSourceImpl({required this.dioService});
 
   @override
-  Future<List<HomeProductModel>> getFeaturedProducts() async {
+  Future<HomeProductsResponseModel> getFeaturedProducts({int page = 1}) async {
     try {
       final locationService = GetIt.instance<LocationService>();
       final regionId = locationService.getSelectedRegionId();
       final response = await dioService.get(
-        ApiEndpoints.featuredProductsUrl(regionId: regionId),
+        ApiEndpoints.featuredProductsUrl(regionId: regionId, page: page),
       );
-      final Map<String, dynamic> responseData =
-          response.data as Map<String, dynamic>;
-      final Map<String, dynamic>? dataSection =
-          responseData['data'] as Map<String, dynamic>?;
+      return HomeProductsResponseModel.fromJson(response.data);
 
-      if (dataSection == null) return [];
-
-      final List<dynamic> productsJson =
-          dataSection['data'] as List<dynamic>? ?? [];
-      return productsJson
-          .map(
-            (json) => HomeProductModel.fromJson(json as Map<String, dynamic>),
-          )
-          .toList();
     } catch (e) {
-      //print('Error in getFeaturedProducts: $e');
-      return [];
+      return HomeProductsResponseModel(
+        products: const [],
+        pagination: const PaginationInfoModel(perPage: 0, to: 0, total: 0),
+      );
     }
   }
 
   @override
-  Future<List<HomeProductModel>> getBestSellerProducts() async {
+  Future<HomeProductsResponseModel> getBestSellerProducts({int page = 1}) async {
     try {
       final locationService = GetIt.instance<LocationService>();
       final regionId = locationService.getSelectedRegionId();
       final response = await dioService.get(
-        ApiEndpoints.bestSellerProductsUrl(regionId: regionId),
+        ApiEndpoints.bestSellerProductsUrl(regionId: regionId, page: page),
       );
-      final Map<String, dynamic> responseData =
-          response.data as Map<String, dynamic>;
-      final Map<String, dynamic>? dataSection =
-          responseData['data'] as Map<String, dynamic>?;
-
-      if (dataSection == null) return [];
-
-      final List<dynamic> productsJson =
-          dataSection['data'] as List<dynamic>? ?? [];
-      return productsJson
-          .map(
-            (json) => HomeProductModel.fromJson(json as Map<String, dynamic>),
-          )
-          .toList();
+      return HomeProductsResponseModel.fromJson(response.data);
     } catch (e) {
-      //print('Error in getBestSellerProducts: $e');
-      return [];
+      return HomeProductsResponseModel(
+        products: const [],
+        pagination: const PaginationInfoModel(perPage: 0, to: 0, total: 0),
+      );
     }
   }
 
   @override
-  Future<List<HomeProductModel>> getLatestProducts() async {
+  Future<HomeProductsResponseModel> getLatestProducts({int page = 1}) async {
     try {
       final locationService = GetIt.instance<LocationService>();
       final regionId = locationService.getSelectedRegionId();
       final response = await dioService.get(
-        ApiEndpoints.latestProductsUrl(regionId: regionId),
+        ApiEndpoints.latestProductsUrl(regionId: regionId, page: page),
       );
-      final Map<String, dynamic> responseData =
-          response.data as Map<String, dynamic>;
-      final Map<String, dynamic>? dataSection =
-          responseData['data'] as Map<String, dynamic>?;
-
-      if (dataSection == null) return [];
-
-      final List<dynamic> productsJson =
-          dataSection['data'] as List<dynamic>? ?? [];
-      return productsJson
-          .map(
-            (json) => HomeProductModel.fromJson(json as Map<String, dynamic>),
-          )
-          .toList();
+      return HomeProductsResponseModel.fromJson(response.data);
     } catch (e) {
-      //print('Error in getLatestProducts: $e');
-      return [];
+      return HomeProductsResponseModel(
+        products: const [],
+        pagination: const PaginationInfoModel(perPage: 0, to: 0, total: 0),
+      );
     }
   }
 
   @override
-  Future<List<HomeProductModel>> getSpecialOfferProducts() async {
+  Future<HomeProductsResponseModel> getSpecialOfferProducts({int page = 1}) async {
     try {
       final locationService = GetIt.instance<LocationService>();
       final regionId = locationService.getSelectedRegionId();
       final response = await dioService.get(
-        ApiEndpoints.specialOfferProductsUrl(regionId: regionId),
+        ApiEndpoints.specialOfferProductsUrl(regionId: regionId, page: page),
       );
-
-      //print('Special Offer Response type: ${response.runtimeType}');
-
-      // Extract data from Response object
-      final Map<String, dynamic> responseData =
-          response.data as Map<String, dynamic>;
-      //print('Special Offer Response data: ${responseData.toString().substring(0, 200)}...');
-
-      final Map<String, dynamic>? dataSection =
-          responseData['data'] as Map<String, dynamic>?;
-
-      if (dataSection == null) {
-        //print('Data section is null');
-        return [];
-      }
-
-      final List<dynamic> productsJson =
-          dataSection['data'] as List<dynamic>? ?? [];
-      //print('Special Offer Products JSON count: ${productsJson.length}');
-
-      final products = productsJson
-          .map(
-            (json) => HomeProductModel.fromJson(json as Map<String, dynamic>),
-          )
-          .toList();
-
-      //print('Special Offer Products parsed count: ${products.length}');
-      return products;
+      return HomeProductsResponseModel.fromJson(response.data);
     } catch (e) {
-      //print('Error in getSpecialOfferProducts: $e');
-      return [];
+      return HomeProductsResponseModel(
+        products: const [],
+        pagination: const PaginationInfoModel(perPage: 0, to: 0, total: 0),
+      );
     }
   }
 }

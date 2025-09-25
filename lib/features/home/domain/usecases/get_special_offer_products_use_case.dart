@@ -1,4 +1,3 @@
-import '../entities/home_product.dart';
 import '../repositories/home_products_repository.dart';
 
 class GetSpecialOfferProductsUseCase {
@@ -6,7 +5,7 @@ class GetSpecialOfferProductsUseCase {
 
   GetSpecialOfferProductsUseCase({required this.repository});
 
-  Future<List<HomeProduct>> call() async {
-    return await repository.getSpecialOfferProducts();
+  Future<HomeProductsResponse> call({int page = 1}) async {
+    return await repository.getSpecialOfferProducts(page: page);
   }
 }

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:test/features/home/domain/entities/home_product.dart';
+import '../../../domain/entities/home_product.dart';
 
 abstract class FeaturedProductsState extends Equatable {
   const FeaturedProductsState();
@@ -12,13 +12,23 @@ class FeaturedProductsInitial extends FeaturedProductsState {}
 
 class FeaturedProductsLoading extends FeaturedProductsState {}
 
-class FeaturedProductsLoaded extends FeaturedProductsState {
+class FeaturedProductsLoadingMore extends FeaturedProductsState {
   final List<HomeProduct> products;
 
-  const FeaturedProductsLoaded({required this.products});
+  const FeaturedProductsLoadingMore({required this.products});
 
   @override
   List<Object> get props => [products];
+}
+
+class FeaturedProductsLoaded extends FeaturedProductsState {
+  final List<HomeProduct> products;
+  final bool hasMore;
+
+  const FeaturedProductsLoaded({required this.products, required this.hasMore});
+
+  @override
+  List<Object> get props => [products, hasMore];
 }
 
 class FeaturedProductsError extends FeaturedProductsState {

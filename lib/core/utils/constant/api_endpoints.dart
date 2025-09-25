@@ -37,14 +37,22 @@ class ApiEndpoints {
       '$baseUrl/cart/remove/$cartItemId';
   static String get removeAllFromCart => '$baseUrl/cart/remove-all';
 
-  static String featuredProductsUrl({int? regionId}) =>
-      '$baseUrl$featuredProducts${regionId != null ? '?region_id=$regionId' : ''}';
-  static String bestSellerProductsUrl({int? regionId}) =>
-      '$baseUrl$bestSellerProducts${regionId != null ? '?region_id=$regionId' : ''}';
-  static String latestProductsUrl({int? regionId}) =>
-      '$baseUrl$latestProducts${regionId != null ? '?region_id=$regionId' : ''}';
-  static String specialOfferProductsUrl({int? regionId}) =>
-      '$baseUrl$specialOfferProducts${regionId != null ? '?region_id=$regionId' : ''}';
+  static String featuredProductsUrl({int? regionId, int page = 1}) {
+    final regionQuery = regionId != null ? '&region_id=$regionId' : '';
+    return '$baseUrl$featuredProducts?page=$page$regionQuery';
+  }
+  static String bestSellerProductsUrl({int? regionId, int page = 1}) {
+    final regionQuery = regionId != null ? '&region_id=$regionId' : '';
+    return '$baseUrl$bestSellerProducts?page=$page$regionQuery';
+  }
+  static String latestProductsUrl({int? regionId, int page = 1}) {
+    final regionQuery = regionId != null ? '&region_id=$regionId' : '';
+    return '$baseUrl$latestProducts?page=$page$regionQuery';
+  }
+  static String specialOfferProductsUrl({int? regionId, int page = 1}) {
+    final regionQuery = regionId != null ? '&region_id=$regionId' : '';
+    return '$baseUrl$specialOfferProducts?page=$page$regionQuery';
+  }
 
   // Product details endpoint
   static String productDetails(int productId) =>
