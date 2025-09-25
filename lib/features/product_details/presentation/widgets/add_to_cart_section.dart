@@ -25,6 +25,7 @@ class _AddToCartSectionState extends State<AddToCartSection> {
   int _quantity = 1;
   ProductSizeColor? _selectedVariant;
   bool _isAddingToCart = false;
+  bool _isBuyingNow = false;
 
   @override
   void initState() {
@@ -86,7 +87,7 @@ class _AddToCartSectionState extends State<AddToCartSection> {
                               ? '${AppLocalizations.of(context)!.addToCart} ($currentQuantity)'
                               : AppLocalizations.of(context)!.addToCart)
                         : AppLocalizations.of(context)!.outOfStock,
-                    onPressed: (isAvailable && !_isAddingToCart)
+                    onPressed: (isAvailable && !_isAddingToCart && !_isBuyingNow)
                         ? _addToCart
                         : null,
                     backgroundColor: isAvailable
@@ -119,29 +120,38 @@ class _AddToCartSectionState extends State<AddToCartSection> {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: MaterialButton(
-                    onPressed: () {},
+                    onPressed: (!_isAddingToCart && !_isBuyingNow) ? _buyNow : null,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.flash_on_outlined,
-                          size: 24,
-                          color: AppColors.primary,
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          AppLocalizations.of(context)!.buyNow,
-                          style: getBoldStyle(
-                            fontSize: FontSize.size16,
-                            fontFamily: FontConstant.cairo,
-                            color: AppColors.primary,
+                    child: _isBuyingNow
+                        ? SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                            ),
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.flash_on_outlined,
+                                size: 24,
+                                color: AppColors.primary,
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                AppLocalizations.of(context)!.buyNow,
+                                style: getBoldStyle(
+                                  fontSize: FontSize.size16,
+                                  fontFamily: FontConstant.cairo,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
             ],
@@ -149,7 +159,7 @@ class _AddToCartSectionState extends State<AddToCartSection> {
         ),
 
         // Loading overlay with CustomProgressIndicator
-        if (_isAddingToCart)
+        if (_isAddingToCart || _isBuyingNow)
           const Positioned.fill(
             child: Center(child: CustomProgressIndicator(size: 80)),
           ),
@@ -261,12 +271,42 @@ class _AddToCartSectionState extends State<AddToCartSection> {
     }
   }
 
-  // void _buyNow() {
-  //   // TODO: Implement buy now functionality - navigate to checkout
-  //   _showCustomSnackBar(
-  //     message: 'الانتقال إلى صفحة الدفع...',
-  //     isSuccess: true,
-  //     icon: Icons.flash_on_outlined,
-  //   );
-  // }
+  Future<void> _buyNow() async {
+    if (_isBuyingNow || _isAddingToCart) return;
+
+    setState(() {
+      _isBuyingNow = true;
+    });
+
+    try {
+      // Use the selected variant's ID if available, otherwise use product ID
+      final productSizeColorId =
+          _selectedVariant?.id ?? widget.product.productSizeColor.first.id;
+
+      // Add product to cart first
+      await HybridCartService.instance.addToCart(
+        product: widget.product,
+        productSizeColorId: productSizeColorId,
+        quantity: _quantity,
+      );
+
+      if (mounted) {
+        // Navigate to checkout page
+        Navigator.pushNamed(context, '/checkout');
+      }
+    } catch (error) {
+      if (mounted) {
+        CustomSnackbar.showError(
+          context: context,
+          message: AppLocalizations.of(context)!.failedToAddToCart,
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isBuyingNow = false;
+        });
+      }
+    }
+  }
 }
