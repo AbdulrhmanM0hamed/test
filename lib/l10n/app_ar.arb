@@ -627,5 +627,6 @@
   "includesTaxes": "شاملة الضريبة",
   "unitPrice": "السعر",
   "taxItems": "عناصر ضريبية",
-  "addingToCart": "إضافة"
+  "addingToCart": "إضافة",
+  "failedToLoadSliders": "فشل في تحميل العروض"
 }

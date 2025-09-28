@@ -3106,6 +3106,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Adding'**
   String get addingToCart;
+
+  /// No description provided for @failedToLoadSliders.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load sliders'**
+  String get failedToLoadSliders;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

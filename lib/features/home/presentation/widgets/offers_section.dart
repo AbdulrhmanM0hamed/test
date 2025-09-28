@@ -4,12 +4,13 @@ import 'package:test/features/home/presentation/cubit/slider_cubit.dart';
 import 'package:test/features/home/presentation/cubit/slider_state.dart';
 import 'package:test/features/home/presentation/widgets/offers_slider.dart';
 import 'package:test/features/home/presentation/widgets/offers_slider_shimmer.dart';
+import 'package:test/l10n/app_localizations.dart';
 
 class OffersSection extends StatelessWidget {
   const OffersSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {  
     return BlocBuilder<SliderCubit, SliderState>(
       builder: (context, state) {
         return Column(
@@ -33,7 +34,7 @@ class OffersSection extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 child: Center(
                   child: Text(
-                    'Failed to load sliders',
+                    AppLocalizations.of(context)!.failedToLoadSliders,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),

@@ -631,5 +631,6 @@
   "includesTaxes": "includesTaxes",
   "unitPrice": "unitPrice",
   "taxItems": "taxItems",
-  "addingToCart": "Adding"
+  "addingToCart": "Adding",
+  "failedToLoadSliders": "Failed to load sliders"
 }

@@ -1513,4 +1513,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get addingToCart => 'إضافة';
+
+  @override
+  String get failedToLoadSliders => 'فشل في تحميل العروض';
 }

@@ -1513,4 +1513,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addingToCart => 'Adding';
+
+  @override
+  String get failedToLoadSliders => 'Failed to load sliders';
 }
