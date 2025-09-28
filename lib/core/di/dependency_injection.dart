@@ -131,6 +131,13 @@ import 'package:test/features/orders/presentation/cubit/addresses_cubit/addresse
 import 'package:test/features/orders/presentation/cubit/promo_code_cubit/promo_code_cubit.dart';
 import 'package:test/features/orders/presentation/cubit/checkout_cubit/checkout_cubit.dart';
 import 'package:test/features/orders/presentation/cubit/orders_cubit/orders_cubit.dart';
+// Notifications feature imports
+import 'package:test/features/notifications/data/datasources/notifications_remote_data_source.dart';
+import 'package:test/features/notifications/data/repositories/notifications_repository_impl.dart';
+import 'package:test/features/notifications/domain/repositories/notifications_repository.dart';
+import 'package:test/features/notifications/domain/usecases/get_notifications_usecase.dart';
+import 'package:test/features/notifications/domain/usecases/get_notification_details_usecase.dart';
+import 'package:test/features/notifications/presentation/cubit/notifications_cubit.dart';
 
 class DependencyInjection {
   static final GetIt getIt = GetIt.instance;
@@ -706,6 +713,28 @@ class DependencyInjection {
       () => ReturnOrderUseCase(getIt<OrdersRepository>()),
     );
 
+    // Notifications feature dependencies
+    // Data Sources
+    getIt.registerLazySingleton<NotificationsRemoteDataSource>(
+      () => NotificationsRemoteDataSourceImpl(dioService: getIt<DioService>()),
+    );
+
+    // Repositories
+    getIt.registerLazySingleton<NotificationsRepository>(
+      () => NotificationsRepositoryImpl(
+        remoteDataSource: getIt<NotificationsRemoteDataSource>(),
+        networkInfo: getIt<NetworkInfo>(),
+      ),
+    );
+
+    // Use Cases
+    getIt.registerLazySingleton<GetNotificationsUseCase>(
+      () => GetNotificationsUseCase(getIt<NotificationsRepository>()),
+    );
+    getIt.registerLazySingleton<GetNotificationDetailsUseCase>(
+      () => GetNotificationDetailsUseCase(getIt<NotificationsRepository>()),
+    );
+
     // Cubits
     getIt.registerFactory<AddressesCubit>(
       () => AddressesCubit(
@@ -728,6 +757,18 @@ class DependencyInjection {
         getOrderDetailsUseCase: getIt<GetOrderDetailsUseCase>(),
         cancelOrderUseCase: getIt<CancelOrderUseCase>(),
         returnOrderUseCase: getIt<ReturnOrderUseCase>(),
+      ),
+    );
+
+    // Notifications Cubits
+    getIt.registerFactory<NotificationsCubit>(
+      () => NotificationsCubit(
+        getNotificationsUseCase: getIt<GetNotificationsUseCase>(),
+      ),
+    );
+    getIt.registerFactory<NotificationDetailsCubit>(
+      () => NotificationDetailsCubit(
+        getNotificationDetailsUseCase: getIt<GetNotificationDetailsUseCase>(),
       ),
     );
   }

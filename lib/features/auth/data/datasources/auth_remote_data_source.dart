@@ -37,11 +37,22 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<ApiResponse<UserModel>> login(LoginRequestModel loginRequest) async {
-    return await dioService.postWithResponse<UserModel>(
+    print('🚀 Sending login request to API...');
+    print('📧 Email: ${loginRequest.email}');
+    print('🔑 FCM Token: ${loginRequest.fcmToken ?? "null"}');
+    print('📤 Login data: ${loginRequest.toJson()}');
+    
+    final response = await dioService.postWithResponse<UserModel>(
       ApiEndpoints.login,
       data: loginRequest.toJson(),
       dataParser: (data) => UserModel.fromJson(data),
     );
+    
+    print('📥 Login response received');
+    print('✅ Login success: ${response.success}');
+    print('📝 Login message: ${response.message}');
+    
+    return response;
   }
 
   @override

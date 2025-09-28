@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Notification color - Coffee brown -->
+    <color name="notification_color">#8B4513</color>
+    <!-- Primary color -->
+    <color name="primary_color">#8B4513</color>
+    <!-- Accent color -->
+    <color name="accent_color">#D2691E</color>
+</resources>

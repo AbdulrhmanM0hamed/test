@@ -28,6 +28,9 @@ import 'package:test/features/orders/domain/entities/address.dart';
 import 'package:test/features/orders/presentation/cubit/orders_cubit/orders_cubit.dart';
 import 'package:test/features/profile/presentation/view/my_orders_view.dart';
 import 'package:test/features/profile/presentation/view/order_details_view.dart';
+import 'package:test/features/notifications/presentation/view/notifications_view.dart';
+import 'package:test/features/notifications/presentation/view/notification_details_view.dart';
+import 'package:test/features/notifications/presentation/cubit/notifications_cubit.dart';
 import '../../../features/splash/presentation/view/splash_view.dart';
 import '../../../features/onboarding/presentation/view/onboarding_view.dart';
 import '../../../features/auth/presentation/view/login_view.dart';
@@ -251,6 +254,21 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
             return cubit;
           },
           child: OrderDetailsView(orderId: orderId),
+        ),
+      );
+
+    case '/notifications':
+      //print('🔍 Navigation: Navigating to NotificationsView');
+      return MaterialPageRoute(
+        builder: (context) => const NotificationsView(),
+      );
+
+    case '/notification-details':
+      //print('🔍 Navigation: Navigating to NotificationDetailsView');
+      final notificationId = settings.arguments as int;
+      return MaterialPageRoute(
+        builder: (context) => NotificationDetailsView(
+          notificationId: notificationId,
         ),
       );
 

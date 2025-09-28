@@ -73,7 +73,7 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
         );
       }
     } catch (e) {
-      print('❌ Unexpected error in getMyOrders: $e');
+      // print('❌ Unexpected error in getMyOrders: $e');
       return ApiResponse.error(message: 'Failed to parse server response: $e');
     }
   }
@@ -81,12 +81,9 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
   @override
   Future<ApiResponse<OrderDetailsResponse>> getOrderDetails(int orderId) async {
     try {
-      print('🔍 Starting getOrderDetails for order: $orderId');
       final response = await dioService.get(ApiEndpoints.orderDetails(orderId));
-      print('🔍 Raw order details response: ${response.data}');
 
       final orderDetailsResponse = OrderDetailsResponse.fromJson(response.data);
-      print('🔍 Order details parsed successfully!');
 
       return ApiResponse.success(
         data: orderDetailsResponse,
@@ -152,7 +149,8 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
 
       return ApiResponse.success(
         data: response.data as Map<String, dynamic>,
-        message: response.data['message'] ?? 'Order return requested successfully',
+        message:
+            response.data['message'] ?? 'Order return requested successfully',
       );
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
@@ -165,7 +163,8 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
         return ApiResponse.error(message: 'Network connection error');
       } else {
         return ApiResponse.error(
-          message: e.response?.data?['message'] ?? 'Failed to request order return',
+          message:
+              e.response?.data?['message'] ?? 'Failed to request order return',
         );
       }
     } catch (e) {

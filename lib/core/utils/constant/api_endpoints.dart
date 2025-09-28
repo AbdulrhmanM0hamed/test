@@ -117,4 +117,8 @@ class ApiEndpoints {
   static String orderDetails(int orderId) => '$baseUrl/order-details/$orderId';
   static String cancelOrder(int orderId) => '$baseUrl/cancel-order/$orderId';
   static String returnOrder(int orderId) => '$baseUrl/return-order/$orderId';
+
+  // Notifications endpoints
+  static String get notifications => '$baseUrl/notifications';
+  static String notificationDetails(int notificationId) => '$baseUrl/notifications/$notificationId';
 }

@@ -245,7 +245,7 @@ class _GreetingHeaderState extends State<GreetingHeader> {
   Widget _buildNotificationButton() {
     return GestureDetector(
       onTap: () {
-        // Handle notification tap
+        Navigator.pushNamed(context, '/notifications');
       },
       child: Stack(
         clipBehavior: Clip.none,

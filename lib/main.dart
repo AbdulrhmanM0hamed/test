@@ -9,15 +9,22 @@ import 'package:test/core/services/network/dio_service.dart';
 import 'package:test/core/services/language_service.dart';
 import 'package:test/core/services/country_service.dart';
 import 'package:test/core/services/location_service.dart';
+import 'package:test/core/services/firebase_notification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+
+// Global navigator key for Firebase notifications
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Initialize Firebase Notification Service
+  await FirebaseNotificationService.instance.initialize();
 
   // Initialize dependency injection
   await DependencyInjection.init();
@@ -44,7 +51,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Get initial route based on app state
-    final appStateService = DependencyInjection.getIt.get<AppStateService>();
     final initialRoute = '/splash';
 
     //print(' App: Initial route determined as: $initialRoute');
@@ -71,6 +77,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             themeMode: ThemeMode.light,
             theme: AppTheme.lightTheme,
+            navigatorKey: navigatorKey,
 
             locale: languageService.currentLocale,
             localizationsDelegates: AppLocalizations.localizationsDelegates,

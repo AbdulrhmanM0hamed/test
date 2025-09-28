@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/services/token_storage_service.dart';
 import 'package:test/core/services/app_state_service.dart';
 import 'package:test/core/services/auth_state_service.dart';
+import 'package:test/core/services/firebase_notification_service.dart';
 import 'package:test/core/utils/error/error_handler.dart';
 import 'package:test/features/auth/domain/entities/login_request.dart';
 import 'package:test/features/auth/domain/usecases/login_usecase.dart';
@@ -40,18 +41,25 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthLoading());
 
       // Get FCM token
-      // final fcmToken = await fcmService.getFCMToken();
+      print('🔥 Getting FCM token for login...');
+      final fcmToken = await FirebaseNotificationService.instance.getCurrentToken();
+      print('🎯 FCM Token obtained: ${fcmToken ?? "null"}');
 
       final loginRequest = LoginRequest(
         email: email,
         password: password,
-        //   fcmToken: "akfkl",
+        fcmToken: fcmToken,
       );
 
+      print('📤 Sending login request to use case...');
       final response = await loginUseCase(loginRequest);
+      print('📥 Login use case response received');
+      print('✅ Response success: ${response.success}');
 
       if (response.success && response.data != null) {
         final user = response.data!;
+        print('👤 User logged in successfully: ${user.email}');
+        print('🎯 User ID: ${user.id}');
 
         // Store token and user data with expiration
         await tokenStorageService.saveTokens(
@@ -76,6 +84,17 @@ class AuthCubit extends Cubit<AuthState> {
 
         // Update AuthStateService to reflect login state
         await AuthStateService.instance.login();
+
+        // Subscribe to user-specific notification topics
+        print('📢 Subscribing to notification topics for user: ${user.id}');
+        try {
+          await FirebaseNotificationService.instance.subscribeToTopic('user_${user.id}');
+          await FirebaseNotificationService.instance.subscribeToTopic('general_notifications');
+          await FirebaseNotificationService.instance.subscribeToTopic('order_notifications');
+          print('✅ Successfully subscribed to notification topics');
+        } catch (e) {
+          print('❌ Error subscribing to notification topics: $e');
+        }
 
         emit(AuthSuccess(user, message: response.message));
 
@@ -141,8 +160,24 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       emit(AuthLoading());
 
+      // Get current user ID before clearing tokens
+      final userId = tokenStorageService.userId;
+      print('🚪 Logging out user: $userId');
+
       // Call logout API
       final response = await logoutUseCase();
+
+      // Unsubscribe from user-specific notification topics
+      if (userId != null) {
+        print('📢 Unsubscribing from notification topics for user: $userId');
+        try {
+          await FirebaseNotificationService.instance.unsubscribeFromTopic('user_$userId');
+          await FirebaseNotificationService.instance.unsubscribeFromTopic('order_notifications');
+          print('✅ Successfully unsubscribed from notification topics');
+        } catch (e) {
+          print('❌ Error unsubscribing from notification topics: $e');
+        }
+      }
 
       // Clear stored tokens
       await tokenStorageService.clearAll();

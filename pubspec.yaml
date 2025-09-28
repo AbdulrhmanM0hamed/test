@@ -37,10 +37,12 @@ dependencies:
   easy_stepper: ^0.8.5+1
   equatable: ^2.0.7
   firebase_core: ^4.1.0
+  firebase_messaging: ^16.0.2
   flutter:
     sdk: flutter
   flutter_animate: ^4.5.2
   flutter_bloc: ^9.1.0
+  flutter_local_notifications: ^19.4.2
   flutter_localizations:
     sdk: flutter
   flutter_native_splash: ^2.4.6
@@ -54,6 +56,7 @@ dependencies:
   provider: any
   shared_preferences: ^2.2.3
   shimmer: ^3.0.0
+  timeago: ^3.7.1
   url_launcher: ^6.3.1
   youtube_player_iframe: ^5.1.22
 dev_dependencies:

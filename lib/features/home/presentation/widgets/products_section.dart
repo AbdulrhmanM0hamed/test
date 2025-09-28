@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
@@ -69,7 +70,7 @@ class ProductsSection extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  'عرض الكل',
+                  AppLocalizations.of(context)!.seeAll,
                   style: getSemiBoldStyle(
                     fontSize: FontSize.size13,
                     fontFamily: FontConstant.cairo,
