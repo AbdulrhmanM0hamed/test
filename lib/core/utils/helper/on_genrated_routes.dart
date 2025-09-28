@@ -259,17 +259,14 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
 
     case '/notifications':
       //print('🔍 Navigation: Navigating to NotificationsView');
-      return MaterialPageRoute(
-        builder: (context) => const NotificationsView(),
-      );
+      return MaterialPageRoute(builder: (context) => const NotificationsView());
 
     case '/notification-details':
       //print('🔍 Navigation: Navigating to NotificationDetailsView');
       final notificationId = settings.arguments as int;
       return MaterialPageRoute(
-        builder: (context) => NotificationDetailsView(
-          notificationId: notificationId,
-        ),
+        builder: (context) =>
+            NotificationDetailsView(notificationId: notificationId),
       );
 
     default:

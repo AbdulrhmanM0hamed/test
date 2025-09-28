@@ -3,6 +3,8 @@ import 'package:test/core/utils/theme/app_theme.dart';
 import 'package:test/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
+import 'package:device_preview/device_preview.dart';
 import 'core/utils/helper/on_genrated_routes.dart';
 import 'package:test/core/services/app_state_service.dart';
 import 'package:test/core/services/network/dio_service.dart';
@@ -41,7 +43,9 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(const MyApp());
+  runApp(
+    DevicePreview(enabled: !kReleaseMode, builder: (context) => const MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -79,7 +83,9 @@ class MyApp extends StatelessWidget {
             theme: AppTheme.lightTheme,
             navigatorKey: navigatorKey,
 
-            locale: languageService.currentLocale,
+            useInheritedMediaQuery: true,
+            locale:
+                DevicePreview.locale(context) ?? languageService.currentLocale,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             onGenerateRoute: onGenratedRoutes,
@@ -87,7 +93,11 @@ class MyApp extends StatelessWidget {
             builder: (context, child) {
               // Set DioService context for proper language header handling
               DioService.instance.setContext(context);
-              return child!;
+
+              // Wrap with DevicePreview builder
+              child = DevicePreview.appBuilder(context, child);
+
+              return child;
             },
           );
         },

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/features/home/presentation/widgets/section_header.dart';
 import '../../../../../core/utils/constant/font_manger.dart';
 import '../../../../../core/utils/constant/styles_manger.dart';
+import '../../../../../core/utils/responsive/responsive_helper.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../domain/entities/home_product.dart';
 import '../../cubits/featured_products/featured_products_cubit.dart';
@@ -45,7 +46,7 @@ class FeaturedProductsSection extends StatelessWidget {
     return BlocBuilder<FeaturedProductsCubit, FeaturedProductsState>(
       builder: (context, state) {
         if (state is FeaturedProductsLoading) {
-          return _buildLoadingGrid();
+          return _buildLoadingGrid(context);
         }
 
         if (state is FeaturedProductsError) {
@@ -59,19 +60,33 @@ class FeaturedProductsSection extends StatelessWidget {
             return _buildEmptyState(context);
           }
 
-          final double rowHeight = 100.0; // ارتفاع كل صف
-          final double spacingBetweenRows = 16.0; // المسافة بين الصفوف
+          final double rowHeight = ResponsiveHelper.getResponsiveValue(
+            context,
+            smallMobile: 80.0,
+            mobile: 100.0,
+            tablet: 110.0,
+            desktop: 120.0,
+          );
+          final double spacingBetweenRows =
+              ResponsiveHelper.getResponsiveSpacing(context, 16.0);
 
           // حساب الارتفاع الإجمالي (3 صفوف + 2 مسافات بينها + هامش أمان)
-          final double totalHeight = (rowHeight * 3) + (spacingBetweenRows * 2) + 10;
-          final double screenWidth = MediaQuery.of(context).size.width;
-          // تقليل الهامش بين الكروت لتوفير مساحة أكبر
-          final double cardWidth = (screenWidth - 20) / 2; // عرض البطاقة أكبر بتقليل الهوامش
+          final double totalHeight =
+              (rowHeight * 3) + (spacingBetweenRows * 3.1) + 10;
+          final double screenWidth = ResponsiveHelper.getScreenWidth(context);
+          final double horizontalPadding = ResponsiveHelper.getResponsiveValue(
+            context,
+            smallMobile: 16.0,
+            mobile: 20.0,
+            tablet: 32.0,
+            desktop: 48.0,
+          );
+          final double cardWidth = (screenWidth - horizontalPadding) / 2;
 
           return SizedBox(
             height: totalHeight,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: ResponsiveHelper.getResponsivePadding(context),
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 physics: const BouncingScrollPhysics(),
@@ -107,13 +122,26 @@ class FeaturedProductsSection extends StatelessWidget {
     double spacingBetweenRows,
   ) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width - 4, // تقليل الهوامش
+      width:
+          ResponsiveHelper.getScreenWidth(context) -
+          ResponsiveHelper.getResponsiveValue(
+            context,
+
+            mobile: 4.0,
+            tablet: 8.0,
+            desktop: 12.0,
+          ),
       child: Column(
         children: [
           // الصف الأول
           SizedBox(
             height: rowHeight,
-            child: _buildProductRow(context, pageIndex * 6, products, cardWidth),
+            child: _buildProductRow(
+              context,
+              pageIndex * 6,
+              products,
+              cardWidth,
+            ),
           ),
           SizedBox(height: spacingBetweenRows),
           // الصف الثاني
@@ -171,15 +199,23 @@ class FeaturedProductsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildLoadingGrid() {
-    final double rowHeight = 100.0;
-    final double spacingBetweenRows = 16.0;
+  Widget _buildLoadingGrid(BuildContext context) {
+    final double rowHeight = ResponsiveHelper.getResponsiveValue(
+      context,
+      mobile: 100.0,
+      tablet: 110.0,
+      desktop: 120.0,
+    );
+    final double spacingBetweenRows = ResponsiveHelper.getResponsiveSpacing(
+      context,
+      16.0,
+    );
     final double totalHeight = (rowHeight * 3) + (spacingBetweenRows * 2) + 10;
-    
+
     return SizedBox(
       height: totalHeight,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: ResponsiveHelper.getResponsivePadding(context),
         child: Column(
           children: [
             // الصف الأول
@@ -189,7 +225,9 @@ class FeaturedProductsSection extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(child: const FeaturedProductCardCompactShimmer()),
-                  const SizedBox(width: 8),
+                  SizedBox(
+                    width: ResponsiveHelper.getResponsiveSpacing(context, 8),
+                  ),
                   Expanded(child: const FeaturedProductCardCompactShimmer()),
                 ],
               ),
@@ -202,7 +240,9 @@ class FeaturedProductsSection extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(child: const FeaturedProductCardCompactShimmer()),
-                  const SizedBox(width: 8),
+                  SizedBox(
+                    width: ResponsiveHelper.getResponsiveSpacing(context, 8),
+                  ),
                   Expanded(child: const FeaturedProductCardCompactShimmer()),
                 ],
               ),
@@ -215,7 +255,9 @@ class FeaturedProductsSection extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(child: const FeaturedProductCardCompactShimmer()),
-                  const SizedBox(width: 8),
+                  SizedBox(
+                    width: ResponsiveHelper.getResponsiveSpacing(context, 8),
+                  ),
                   Expanded(child: const FeaturedProductCardCompactShimmer()),
                 ],
               ),

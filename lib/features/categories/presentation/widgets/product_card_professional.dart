@@ -13,6 +13,7 @@ import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
 import '../../../../core/utils/animations/custom_progress_indcator.dart';
+import '../../../../core/utils/responsive/responsive_helper.dart';
 import '../../domain/entities/product.dart';
 
 class ProductCardProfessional extends StatefulWidget {
@@ -126,10 +127,19 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
             scale: _isPressed ? 0.95 : 1.0,
             duration: const Duration(milliseconds: 120),
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 1.0),
+              padding: EdgeInsets.symmetric(
+                vertical: ResponsiveHelper.getResponsiveSpacing(context, 1.0),
+              ),
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(
+                    ResponsiveHelper.getResponsiveValue(
+                      context,
+                      mobile: 12.0,
+                      tablet: 14.0,
+                      desktop: 16.0,
+                    ),
+                  ),
                   color: Theme.of(context).cardColor,
                   boxShadow: [
                     BoxShadow(
@@ -162,9 +172,23 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
         Hero(
           tag: 'category_product_${widget.product.id}',
           child: ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(
+                ResponsiveHelper.getResponsiveValue(
+                  context,
+                  mobile: 12.0,
+                  tablet: 14.0,
+                  desktop: 16.0,
+                ),
+              ),
+            ),
             child: Container(
-              height: 130,
+              height: ResponsiveHelper.getResponsiveValue(
+                context,
+                mobile: 120.0,
+                tablet: 140.0,
+                desktop: 160.0,
+              ),
               width: double.infinity,
               color: const Color.fromARGB(255, 240, 233, 211),
               child: CachedNetworkImage(
@@ -177,7 +201,12 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
                   child: Icon(
                     Icons.image_not_supported_outlined,
                     color: Colors.grey[400],
-                    size: 40,
+                    size: ResponsiveHelper.getResponsiveValue(
+                      context,
+                      mobile: 35.0,
+                      tablet: 40.0,
+                      desktop: 45.0,
+                    ),
                   ),
                 ),
               ),
@@ -187,8 +216,8 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
 
         // Product badges
         Positioned(
-          top: 8,
-          right: 8,
+          top: ResponsiveHelper.getResponsiveSpacing(context, 8),
+          right: ResponsiveHelper.getResponsiveSpacing(context, 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [if (widget.product.isBest) _buildBestSellerBadge()],
@@ -197,35 +226,63 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
 
         // Discount badge - Bottom left
         if (widget.product.hasDiscount)
-          Positioned(bottom: 8, left: 8, child: _buildDiscountBadge()),
+          Positioned(
+            bottom: ResponsiveHelper.getResponsiveSpacing(context, 8),
+            left: ResponsiveHelper.getResponsiveSpacing(context, 8),
+            child: _buildDiscountBadge(),
+          ),
 
         // Favorite button - Fixed position on top left
-        Positioned(top: 8, left: 8, child: _buildFavoriteButton()),
+        Positioned(
+          top: ResponsiveHelper.getResponsiveSpacing(context, 8),
+          left: ResponsiveHelper.getResponsiveSpacing(context, 8),
+          child: _buildFavoriteButton(),
+        ),
 
         // Stock indicator
         if (!widget.product.isAvailable)
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(16),
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(
+                    ResponsiveHelper.getResponsiveValue(
+                      context,
+                      mobile: 12.0,
+                      tablet: 14.0,
+                      desktop: 16.0,
+                    ),
+                  ),
                 ),
                 color: Colors.black.withValues(alpha: 0.6),
               ),
               child: Center(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: ResponsiveHelper.getResponsiveSpacing(
+                      context,
+                      12,
+                    ),
+                    vertical: ResponsiveHelper.getResponsiveSpacing(context, 6),
                   ),
                   decoration: BoxDecoration(
                     color: Colors.red,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(
+                      ResponsiveHelper.getResponsiveValue(
+                        context,
+                        mobile: 16.0,
+                        tablet: 18.0,
+                        desktop: 20.0,
+                      ),
+                    ),
                   ),
                   child: Text(
                     AppLocalizations.of(context)!.notAvailable,
                     style: getBoldStyle(
-                      fontSize: FontSize.size12,
+                      fontSize: ResponsiveHelper.getResponsiveFontSize(
+                        context,
+                        12,
+                      ),
                       fontFamily: FontConstant.cairo,
                       color: Colors.white,
                     ),
@@ -258,15 +315,25 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
 
   Widget _buildBestSellerBadge() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: EdgeInsets.symmetric(
+        horizontal: ResponsiveHelper.getResponsiveSpacing(context, 8),
+        vertical: ResponsiveHelper.getResponsiveSpacing(context, 4),
+      ),
       decoration: BoxDecoration(
         color: AppColors.secondary,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(
+          ResponsiveHelper.getResponsiveValue(
+            context,
+            mobile: 6.0,
+            tablet: 7.0,
+            desktop: 8.0,
+          ),
+        ),
       ),
       child: Text(
         AppLocalizations.of(context)!.bestSellers,
         style: getBoldStyle(
-          fontSize: FontSize.size10,
+          fontSize: ResponsiveHelper.getResponsiveFontSize(context, 10),
           fontFamily: FontConstant.cairo,
           color: AppColors.white,
         ),
@@ -377,7 +444,12 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
 
   Widget _buildProductDetails() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 12, 2),
+      padding: EdgeInsets.fromLTRB(
+        ResponsiveHelper.getResponsiveSpacing(context, 12),
+        ResponsiveHelper.getResponsiveSpacing(context, 10),
+        ResponsiveHelper.getResponsiveSpacing(context, 10),
+        ResponsiveHelper.getResponsiveSpacing(context, 2),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -389,28 +461,60 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
                 if (widget.product.brandLogo.isNotEmpty) ...[
                   CachedNetworkImage(
                     imageUrl: widget.product.brandLogo,
-                    width: 16,
-                    height: 16,
+                    width: ResponsiveHelper.getResponsiveValue(
+                      context,
+                      mobile: 14.0,
+                      tablet: 16.0,
+                      desktop: 18.0,
+                    ),
+                    height: ResponsiveHelper.getResponsiveValue(
+                      context,
+                      mobile: 14.0,
+                      tablet: 16.0,
+                      desktop: 18.0,
+                    ),
                     fit: BoxFit.contain,
                     placeholder: (context, url) => Container(
-                      width: 16,
-                      height: 16,
+                      width: ResponsiveHelper.getResponsiveValue(
+                        context,
+                        mobile: 14.0,
+                        tablet: 16.0,
+                        desktop: 18.0,
+                      ),
+                      height: ResponsiveHelper.getResponsiveValue(
+                        context,
+                        mobile: 14.0,
+                        tablet: 16.0,
+                        desktop: 18.0,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(2),
+                        borderRadius: BorderRadius.circular(
+                          ResponsiveHelper.getResponsiveValue(
+                            context,
+                            mobile: 2.0,
+                            tablet: 2.5,
+                            desktop: 3.0,
+                          ),
+                        ),
                       ),
                     ),
                     errorWidget: (context, url, error) =>
                         const SizedBox.shrink(),
                   ),
-                  const SizedBox(width: 6),
+                  SizedBox(
+                    width: ResponsiveHelper.getResponsiveSpacing(context, 6),
+                  ),
                 ],
                 // Brand name
                 Flexible(
                   child: Text(
                     widget.product.brandName,
                     style: getMediumStyle(
-                      fontSize: FontSize.size11,
+                      fontSize: ResponsiveHelper.getResponsiveFontSize(
+                        context,
+                        11,
+                      ),
                       fontFamily: FontConstant.cairo,
                       color: Colors.grey[600],
                     ),
@@ -419,7 +523,7 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
                 ),
               ],
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: ResponsiveHelper.getResponsiveSpacing(context, 4)),
           ],
 
           // Product name
@@ -428,13 +532,13 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: getSemiBoldStyle(
-              fontSize: FontSize.size13,
+              fontSize: ResponsiveHelper.getResponsiveFontSize(context, 13),
               fontFamily: FontConstant.cairo,
               color: Theme.of(context).textTheme.bodyLarge?.color,
             ),
           ),
 
-          const SizedBox(height: 8),
+          SizedBox(height: ResponsiveHelper.getResponsiveSpacing(context, 8)),
 
           // Price, Rating and Add to Cart in one row
           Row(
@@ -451,45 +555,84 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
                       '${widget.product.finalPrice.toStringAsFixed(0)} ${AppLocalizations.of(context)!.currency}',
                       style: getBoldStyle(
                         fontFamily: FontConstant.cairo,
-                        fontSize: FontSize.size14,
+                        fontSize: ResponsiveHelper.getResponsiveFontSize(
+                          context,
+                          14,
+                        ),
                         color: AppColors.primary,
                       ),
                     ),
                     if (widget.product.hasDiscount) ...[
-                      const SizedBox(height: 2),
+                      SizedBox(
+                        height: ResponsiveHelper.getResponsiveSpacing(
+                          context,
+                          2,
+                        ),
+                      ),
                       Text(
                         '${widget.product.originalPrice.toStringAsFixed(0)} ${widget.product.currency}',
                         style: TextStyle(
-                          fontSize: FontSize.size11,
+                          fontSize: ResponsiveHelper.getResponsiveFontSize(
+                            context,
+                            11,
+                          ),
                           fontFamily: FontConstant.cairo,
                           color: Colors.grey[600],
                           decoration: TextDecoration.lineThrough,
                         ),
                       ),
                     ],
-                    const SizedBox(height: 4),
+                    SizedBox(
+                      height: ResponsiveHelper.getResponsiveSpacing(context, 4),
+                    ),
                     // Rating
                     if (widget.product.rating >= 0)
                       Row(
                         children: [
                           SvgPicture.asset(
                             AppAssets.starIcon,
-                            width: 12,
-                            height: 12,
+                            width: ResponsiveHelper.getResponsiveValue(
+                              context,
+                              mobile: 10.0,
+                              tablet: 12.0,
+                              desktop: 14.0,
+                            ),
+                            height: ResponsiveHelper.getResponsiveValue(
+                              context,
+                              mobile: 10.0,
+                              tablet: 12.0,
+                              desktop: 14.0,
+                            ),
                           ),
-                          const SizedBox(width: 2),
+                          SizedBox(
+                            width: ResponsiveHelper.getResponsiveSpacing(
+                              context,
+                              2,
+                            ),
+                          ),
                           Text(
                             '${widget.product.rating}',
                             style: getSemiBoldStyle(
-                              fontSize: FontSize.size11,
+                              fontSize: ResponsiveHelper.getResponsiveFontSize(
+                                context,
+                                11,
+                              ),
                               fontFamily: FontConstant.cairo,
                             ),
                           ),
-                          const SizedBox(width: 2),
+                          SizedBox(
+                            width: ResponsiveHelper.getResponsiveSpacing(
+                              context,
+                              2,
+                            ),
+                          ),
                           Text(
                             '(${widget.product.reviewsCount})',
                             style: getMediumStyle(
-                              fontSize: FontSize.size10,
+                              fontSize: ResponsiveHelper.getResponsiveFontSize(
+                                context,
+                                10,
+                              ),
                               fontFamily: FontConstant.cairo,
                               color: Colors.grey[600],
                             ),
@@ -572,9 +715,7 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
                                   CustomSnackbar.showSuccess(
                                     context: context,
                                     message:
-                                        '${AppLocalizations.of(
-                                          context,
-                                        )!.addedToCart} ${widget.product.name} ${AppLocalizations.of(context)!.toCart}',
+                                        '${AppLocalizations.of(context)!.addedToCart} ${widget.product.name} ${AppLocalizations.of(context)!.toCart}',
                                   );
 
                                   // debug(
@@ -723,6 +864,9 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
               // Stock quantity
               if (widget.product.stock > 0)
                 Container(
+                  margin: widget.product.discount == 0
+                      ? const EdgeInsets.only(top: 10)
+                      : EdgeInsets.zero,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 6,
                     vertical: 2,

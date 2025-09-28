@@ -1485,6 +1485,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get viewDetails => 'عرض التفاصيل';
 
   @override
+  String get guest => 'زائر';
+
+  @override
   String get guestLoginDescription => 'تصفح المنتجات دون إنشاء حساب';
 
   @override
@@ -1498,6 +1501,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get orderDate => 'تاريخ الطلب';
+
+  @override
+  String get add => 'إضافة';
+
+  @override
+  String get inCart => 'في السلة';
 
   @override
   String get orderDetails => 'تفاصيل الطلب';

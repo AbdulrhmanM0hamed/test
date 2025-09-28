@@ -3047,6 +3047,12 @@ abstract class AppLocalizations {
   /// **'View Details'**
   String get viewDetails;
 
+  /// No description provided for @guest.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest'**
+  String get guest;
+
   /// No description provided for @guestLoginDescription.
   ///
   /// In en, this message translates to:
@@ -3076,6 +3082,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Order Date'**
   String get orderDate;
+
+  /// No description provided for @add.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get add;
+
+  /// No description provided for @inCart.
+  ///
+  /// In en, this message translates to:
+  /// **'In Cart'**
+  String get inCart;
 
   /// No description provided for @orderDetails.
   ///

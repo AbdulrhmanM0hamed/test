@@ -1485,6 +1485,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get viewDetails => 'View Details';
 
   @override
+  String get guest => 'Guest';
+
+  @override
   String get guestLoginDescription => 'Browse products without creating an account';
 
   @override
@@ -1498,6 +1501,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get orderDate => 'Order Date';
+
+  @override
+  String get add => 'Add';
+
+  @override
+  String get inCart => 'In Cart';
 
   @override
   String get orderDetails => 'Order Details';

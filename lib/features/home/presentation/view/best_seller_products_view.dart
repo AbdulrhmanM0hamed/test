@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/core/utils/common/custom_app_bar.dart';
+import 'package:test/core/utils/responsive/responsive_helper.dart';
 import 'package:test/features/home/domain/entities/home_product.dart';
 import 'package:test/features/home/presentation/cubits/best_seller_products/best_seller_products_cubit.dart';
 import 'package:test/features/home/presentation/cubits/best_seller_products/best_seller_products_state.dart';
@@ -126,17 +127,29 @@ class _BestSellerProductsViewState extends State<BestSellerProductsView> {
                   );
                 },
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: ResponsiveHelper.getResponsivePadding(context),
                   child: GridView.builder(
                     controller: _scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.65,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                        ),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: ResponsiveHelper.getGridCrossAxisCount(
+                        context,
+                      ),
+                      childAspectRatio: ResponsiveHelper.getResponsiveValue(
+                        context,
+                        mobile: 0.62,
+                        tablet: 0.7,
+                        desktop: 0.75,
+                      ),
+                      crossAxisSpacing: ResponsiveHelper.getResponsiveSpacing(
+                        context,
+                        12,
+                      ),
+                      mainAxisSpacing: ResponsiveHelper.getResponsiveSpacing(
+                        context,
+                        12,
+                      ),
+                    ),
                     itemCount:
                         products.length + (isLoadingMore && hasMore ? 2 : 0),
                     itemBuilder: (context, index) {

@@ -51,7 +51,13 @@ class SectionHeader extends StatelessWidget {
           ),
           if (onSeeAll != null)
             GestureDetector(
-              onTap: onSeeAll,
+              onTap: () {
+                try {
+                  onSeeAll?.call();
+                } catch (e) {
+                  debugPrint('Navigation error: $e');
+                }
+              },
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 12,
@@ -65,7 +71,7 @@ class SectionHeader extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      AppLocalizations.of(context)!.showMore,
+                      AppLocalizations.of(context)?.showMore ?? 'عرض المزيد',
                       style: getSemiBoldStyle(
                         fontSize: FontSize.size12,
                         fontFamily: FontConstant.cairo,

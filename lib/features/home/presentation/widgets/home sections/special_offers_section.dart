@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/features/home/presentation/widgets/section_header.dart';
 import '../../../../../core/utils/constant/font_manger.dart';
 import '../../../../../core/utils/constant/styles_manger.dart';
+import '../../../../../core/utils/responsive/responsive_helper.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../domain/entities/home_product.dart';
 import '../../cubits/special_offer_products/special_offer_products_cubit.dart';
@@ -45,7 +46,7 @@ class SpecialOffersSection extends StatelessWidget {
     return BlocBuilder<SpecialOfferProductsCubit, SpecialOfferProductsState>(
       builder: (context, state) {
         if (state is SpecialOfferProductsLoading) {
-          return _buildLoadingGrid();
+          return _buildLoadingGrid(context);
         }
 
         if (state is SpecialOfferProductsError) {
@@ -65,20 +66,23 @@ class SpecialOffersSection extends StatelessWidget {
           );
 
           return SizedBox(
-            height: hasSpecialOffer ? 290 : 270,
+            height: ResponsiveHelper.getSectionHeight(
+              context,
+              hasSpecialOffer: hasSpecialOffer,
+            ),
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: ResponsiveHelper.getResponsivePadding(context),
               itemCount: products.length > 4 ? 4 : products.length,
               itemBuilder: (context, index) {
                 final product = products[index];
                 return Container(
-                  width: 170,
+                  width: ResponsiveHelper.getHorizontalItemWidth(context),
                   margin: EdgeInsetsDirectional.only(
                     end:
                         index == (products.length > 4 ? 3 : products.length - 1)
                         ? 0
-                        : 12,
+                        : ResponsiveHelper.getHorizontalItemMargin(context),
                   ),
                   child: HomeProductCard(
                     product: product,
@@ -95,16 +99,21 @@ class SpecialOffersSection extends StatelessWidget {
     );
   }
 
-  Widget _buildLoadingGrid() {
+  Widget _buildLoadingGrid(BuildContext context) {
     return SizedBox(
-      height: 270,
+      height: ResponsiveHelper.getSectionHeight(context),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: ResponsiveHelper.getResponsivePadding(context),
         itemCount: 4,
         itemBuilder: (context, index) {
           return Container(
-            margin: EdgeInsetsDirectional.only(end: index == 3 ? 0 : 12),
+            width: ResponsiveHelper.getHorizontalItemWidth(context),
+            margin: EdgeInsetsDirectional.only(
+              end: index == 3
+                  ? 0
+                  : ResponsiveHelper.getHorizontalItemMargin(context),
+            ),
             child: const HomeProductCardShimmer(),
           );
         },

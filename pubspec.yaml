@@ -53,13 +53,14 @@ dependencies:
   intl: any
   otp_pin_field: ^1.2.2
   photo_view: ^0.13.0
-  provider: any
+  provider: ^6.1.2
   shared_preferences: ^2.2.3
   shimmer: ^3.0.0
   timeago: ^3.7.1
   url_launcher: ^6.3.1
   youtube_player_iframe: ^5.1.22
 dev_dependencies:
+  device_preview: ^1.2.0
   flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter

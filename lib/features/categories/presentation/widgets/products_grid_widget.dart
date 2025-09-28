@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:test/core/utils/animations/custom_animations.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
+import 'package:test/core/utils/responsive/responsive_helper.dart';
 import 'package:test/features/categories/domain/entities/product.dart';
 import 'package:test/features/categories/presentation/widgets/product_card_professional.dart';
 import 'package:test/features/home/presentation/widgets/home_product_card_shimmer.dart';
@@ -38,7 +39,7 @@ class ProductsGridWidget extends StatelessWidget {
           child: Text(
             AppLocalizations.of(context)!.noProductsInCategory,
             style: getMediumStyle(
-              fontSize: FontSize.size16,
+              fontSize: ResponsiveHelper.getResponsiveFontSize(context, 16),
               fontFamily: FontConstant.cairo,
               color: Colors.grey,
             ),
@@ -57,12 +58,20 @@ class ProductsGridWidget extends StatelessWidget {
 
         return GridView.builder(
           controller: scrollController,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.66,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
+          padding: EdgeInsets.symmetric(
+            horizontal: ResponsiveHelper.getResponsiveSpacing(context, 16),
+            vertical: ResponsiveHelper.getResponsiveSpacing(context, 20),
+          ),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: ResponsiveHelper.getGridCrossAxisCount(context),
+            childAspectRatio: ResponsiveHelper.getResponsiveValue(
+              context,
+              mobile: 0.62,
+              tablet: 0.7,
+              desktop: 0.75,
+            ),
+            crossAxisSpacing: ResponsiveHelper.getResponsiveSpacing(context, 12),
+            mainAxisSpacing: ResponsiveHelper.getResponsiveSpacing(context, 12),
           ),
           itemCount: itemCount,
           itemBuilder: (context, index) {

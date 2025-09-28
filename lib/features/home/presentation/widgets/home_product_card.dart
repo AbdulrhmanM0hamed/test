@@ -12,6 +12,7 @@ import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
 import '../../../../core/utils/animations/custom_progress_indcator.dart';
+import '../../../../core/utils/responsive/responsive_helper.dart';
 import '../../domain/entities/home_product.dart';
 
 class HomeProductCard extends StatefulWidget {
@@ -117,12 +118,20 @@ class _HomeProductCardState extends State<HomeProductCard>
               padding: const EdgeInsets.symmetric(vertical: 1.0),
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(
+                    ResponsiveHelper.getResponsiveBorderRadius(context),
+                  ),
                   color: Theme.of(context).cardColor,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.3),
-                      blurRadius: 2,
+                      blurRadius: ResponsiveHelper.getResponsiveValue(
+                        context,
+                        smallMobile: 1.0,
+                        mobile: 2.0,
+                        tablet: 3.0,
+                        desktop: 4.0,
+                      ),
                       spreadRadius: 0,
                       offset: const Offset(0, 2),
                     ),
@@ -150,9 +159,13 @@ class _HomeProductCardState extends State<HomeProductCard>
         Hero(
           tag: 'home_product_${widget.product.id}_${widget.product.hashCode}',
           child: ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(
+                ResponsiveHelper.getResponsiveBorderRadius(context),
+              ),
+            ),
             child: Container(
-              height: 130,
+              height: ResponsiveHelper.getImageHeight(context),
               width: double.infinity,
               color: const Color.fromARGB(255, 240, 233, 211),
               child: CachedNetworkImage(
@@ -329,7 +342,7 @@ class _HomeProductCardState extends State<HomeProductCard>
                 });
           },
           child: Container(
-            padding: const EdgeInsets.all(6),
+            padding: const EdgeInsets.all(7),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.9),
               shape: BoxShape.circle,
@@ -382,7 +395,12 @@ class _HomeProductCardState extends State<HomeProductCard>
 
   Widget _buildProductDetails() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 12, 8),
+      padding: EdgeInsets.fromLTRB(
+        ResponsiveHelper.getResponsiveSpacing(context, 16),
+        ResponsiveHelper.getResponsiveSpacing(context, 12),
+        ResponsiveHelper.getResponsiveSpacing(context, 12),
+        ResponsiveHelper.getResponsiveSpacing(context, 8),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -416,7 +434,10 @@ class _HomeProductCardState extends State<HomeProductCard>
                   child: Text(
                     widget.product.brandName,
                     style: getMediumStyle(
-                      fontSize: FontSize.size11,
+                      fontSize: ResponsiveHelper.getResponsiveFontSize(
+                        context,
+                        FontSize.size11,
+                      ),
                       fontFamily: FontConstant.cairo,
                       color: Colors.grey[650],
                     ),
@@ -434,7 +455,10 @@ class _HomeProductCardState extends State<HomeProductCard>
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: getSemiBoldStyle(
-              fontSize: FontSize.size13,
+              fontSize: ResponsiveHelper.getResponsiveFontSize(
+                context,
+                FontSize.size13,
+              ),
               fontFamily: FontConstant.cairo,
               color: Theme.of(context).textTheme.bodyLarge?.color,
             ),
@@ -457,7 +481,10 @@ class _HomeProductCardState extends State<HomeProductCard>
                       '${_formatPrice(widget.product.price)} ${AppLocalizations.of(context)!.currency}',
                       style: getBoldStyle(
                         fontFamily: FontConstant.cairo,
-                        fontSize: FontSize.size14,
+                        fontSize: ResponsiveHelper.getResponsiveFontSize(
+                          context,
+                          FontSize.size14,
+                        ),
                         color: AppColors.primary,
                       ),
                     ),
@@ -467,14 +494,23 @@ class _HomeProductCardState extends State<HomeProductCard>
                       children: [
                         SvgPicture.asset(
                           AppAssets.starIcon,
-                          width: 12,
-                          height: 12,
+                          width: ResponsiveHelper.getResponsiveIconSize(
+                            context,
+                            12,
+                          ),
+                          height: ResponsiveHelper.getResponsiveIconSize(
+                            context,
+                            12,
+                          ),
                         ),
                         const SizedBox(width: 2),
                         Text(
                           '${widget.product.star}',
                           style: getSemiBoldStyle(
-                            fontSize: FontSize.size11,
+                            fontSize: ResponsiveHelper.getResponsiveFontSize(
+                              context,
+                              FontSize.size11,
+                            ),
                             fontFamily: FontConstant.cairo,
                           ),
                         ),
@@ -482,7 +518,10 @@ class _HomeProductCardState extends State<HomeProductCard>
                         Text(
                           '(${widget.product.reviewCount})',
                           style: getMediumStyle(
-                            fontSize: FontSize.size10,
+                            fontSize: ResponsiveHelper.getResponsiveFontSize(
+                              context,
+                              FontSize.size10,
+                            ),
                             fontFamily: FontConstant.cairo,
                             color: Colors.grey[600],
                           ),
@@ -543,9 +582,7 @@ class _HomeProductCardState extends State<HomeProductCard>
                                     CustomSnackbar.showSuccess(
                                       context: context,
                                       message:
-                                          '${AppLocalizations.of(
-                                            context,
-                                          )!.addedToCart} ${widget.product.name} ${AppLocalizations.of(context)!.toCart}',
+                                          '${AppLocalizations.of(context)!.addedToCart} ${widget.product.name} ${AppLocalizations.of(context)!.toCart}',
                                     );
                                   } catch (e) {
                                     CustomSnackbar.showError(
@@ -694,7 +731,7 @@ class _HomeProductCardState extends State<HomeProductCard>
               widget.product.originalPrice != null) ...[
             const SizedBox(height: 8),
             Text(
-              '${_formatPrice(widget.product.originalPrice!)} ج.م',
+              '${_formatPrice(widget.product.originalPrice!)} + ${AppLocalizations.of(context)!.currency}',
               style: TextStyle(
                 fontSize: FontSize.size12,
                 fontFamily: FontConstant.cairo,
@@ -711,18 +748,13 @@ class _HomeProductCardState extends State<HomeProductCard>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // Availability text
-              Text(
-                widget.product.availabilityText,
-                style: getMediumStyle(
-                  fontSize: FontSize.size11,
-                  fontFamily: FontConstant.cairo,
-                  color: widget.product.isAvailable ? Colors.green : Colors.red,
-                ),
-              ),
 
               // Available Quantity
               if (widget.product.countOfAvailable > 0)
                 Container(
+                  margin: widget.product.isSpecialOffer == false
+                      ? const EdgeInsets.only(top: 10)
+                      : EdgeInsets.zero,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 6,
                     vertical: 2,
@@ -735,7 +767,7 @@ class _HomeProductCardState extends State<HomeProductCard>
                     ),
                   ),
                   child: Text(
-                    'متوفر ${widget.product.countOfAvailable}',
+                    '${AppLocalizations.of(context)!.available} ${widget.product.countOfAvailable}',
                     style: getMediumStyle(
                       fontSize: FontSize.size10,
                       fontFamily: FontConstant.cairo,

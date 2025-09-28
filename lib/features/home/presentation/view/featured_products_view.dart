@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/core/utils/common/custom_app_bar.dart';
+import 'package:test/core/utils/responsive/responsive_helper.dart';
 import 'package:test/features/home/domain/entities/home_product.dart';
 import 'package:test/features/home/presentation/cubits/featured_products/featured_products_cubit.dart';
 import 'package:test/features/home/presentation/cubits/featured_products/featured_products_state.dart';
@@ -29,7 +30,7 @@ class _FeaturedProductsViewState extends State<FeaturedProductsView> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    
+
     // Load data after widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<FeaturedProductsCubit>().getFeaturedProducts();
@@ -45,7 +46,7 @@ class _FeaturedProductsViewState extends State<FeaturedProductsView> {
   void _onScroll() {
     final pixels = _scrollController.position.pixels;
     final maxExtent = _scrollController.position.maxScrollExtent;
-    
+
     if (pixels >= maxExtent - 200) {
       print('🎯 FeaturedProducts: Scroll threshold reached, calling loadMore');
       context.read<FeaturedProductsCubit>().loadMore();
@@ -104,11 +105,14 @@ class _FeaturedProductsViewState extends State<FeaturedProductsView> {
               return _buildErrorState(context, state.message);
             }
 
-            if (state is FeaturedProductsLoaded || state is FeaturedProductsLoadingMore) {
-              final products = state is FeaturedProductsLoaded 
-                  ? state.products 
+            if (state is FeaturedProductsLoaded ||
+                state is FeaturedProductsLoadingMore) {
+              final products = state is FeaturedProductsLoaded
+                  ? state.products
                   : (state as FeaturedProductsLoadingMore).products;
-              final hasMore = state is FeaturedProductsLoaded ? state.hasMore : true;
+              final hasMore = state is FeaturedProductsLoaded
+                  ? state.hasMore
+                  : true;
               final isLoadingMore = state is FeaturedProductsLoadingMore;
 
               if (products.isEmpty && !isLoadingMore) {
@@ -117,21 +121,36 @@ class _FeaturedProductsViewState extends State<FeaturedProductsView> {
 
               return RefreshIndicator(
                 onRefresh: () async {
-                  context.read<FeaturedProductsCubit>().getFeaturedProducts(refresh: true);
+                  context.read<FeaturedProductsCubit>().getFeaturedProducts(
+                    refresh: true,
+                  );
                 },
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: ResponsiveHelper.getResponsivePadding(context),
                   child: GridView.builder(
                     controller: _scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.65,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                        ),
-                    itemCount: products.length + (isLoadingMore && hasMore ? 2 : 0),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: ResponsiveHelper.getGridCrossAxisCount(
+                        context,
+                      ),
+                      childAspectRatio: ResponsiveHelper.getResponsiveValue(
+                        context,
+                        mobile: 0.62,
+                        tablet: 0.7,
+                        desktop: 0.75,
+                      ),
+                      crossAxisSpacing: ResponsiveHelper.getResponsiveSpacing(
+                        context,
+                        12,
+                      ),
+                      mainAxisSpacing: ResponsiveHelper.getResponsiveSpacing(
+                        context,
+                        12,
+                      ),
+                    ),
+                    itemCount:
+                        products.length + (isLoadingMore && hasMore ? 2 : 0),
                     itemBuilder: (context, index) {
                       if (index < products.length) {
                         final product = products[index];

@@ -1,4 +1,3 @@
-import '../../domain/entities/home_product.dart';
 import '../../domain/repositories/home_products_repository.dart';
 import '../datasources/home_products_remote_data_source.dart';
 

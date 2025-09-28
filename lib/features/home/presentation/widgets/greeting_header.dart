@@ -76,7 +76,7 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                     children: [
                       BlocBuilder<ProfileCubit, ProfileState>(
                         builder: (context, state) {
-                          String username = 'المستخدم'; // Default fallback
+                          String username = AppLocalizations.of(context)!.guest; // Default fallback
                           
                           if (state is ProfileLoaded) {
                             username = state.userProfile.displayName;
