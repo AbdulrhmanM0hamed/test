@@ -289,7 +289,7 @@ class _FeaturedProductCardCompactState
                       CustomSnackbar.showSuccess(
                         context: context,
                         message:
-                            '${AppLocalizations.of(context)!.addedToCart} ${widget.product.name}',
+                            '${AppLocalizations.of(context)!.addedToCart} ${widget.product.name} ${AppLocalizations.of(context)!.toCart}',
                       );
                     } catch (e) {
                       CustomSnackbar.showError(
@@ -324,10 +324,28 @@ class _FeaturedProductCardCompactState
               ),
             ),
             child: _isAddingToCart
-                ? const SizedBox(
-                    width: 14,
-                    height: 14,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.hourglass_empty,
+                        size: 14,
+                        color: AppColors.primary,
+                      ),
+                      const SizedBox(width: 3),
+                      Flexible(
+                        child: Text(
+                          AppLocalizations.of(context)!.addingToCart,
+                          style: getBoldStyle(
+                            fontFamily: FontConstant.cairo,
+                            fontSize: 10,
+                            color: AppColors.primary,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   )
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -385,13 +403,6 @@ class _FeaturedProductCardCompactState
                         _isInWishlist = !_isInWishlist;
                         _isWishlistLoading = false;
                       });
-
-                      CustomSnackbar.showSuccess(
-                        context: context,
-                        message: _isInWishlist
-                            ? 'تمت الإضافة للمفضلة'
-                            : 'تم الحذف من المفضلة',
-                      );
                     }
                   })
                   .catchError((error) {
@@ -399,10 +410,6 @@ class _FeaturedProductCardCompactState
                       setState(() {
                         _isWishlistLoading = false;
                       });
-                      CustomSnackbar.showError(
-                        context: context,
-                        message: error.toString(),
-                      );
                     }
                   });
             },

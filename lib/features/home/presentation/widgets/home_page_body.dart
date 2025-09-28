@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
+import 'package:test/core/services/global_cubit_service.dart';
 import 'package:test/features/home/presentation/widgets/greeting_header.dart';
 import 'package:test/features/home/presentation/widgets/offers_section.dart';
 import 'package:test/features/home/presentation/widgets/categories_section.dart';
@@ -29,9 +30,11 @@ class HomePageBody extends StatelessWidget {
           create: (context) =>
               DependencyInjection.getIt<ProfileCubit>()..getProfile(),
         ),
-        // Provide WishlistCubit
-        BlocProvider<WishlistCubit>(
-          create: (context) => DependencyInjection.getIt<WishlistCubit>(),
+        // Provide WishlistCubit - use global instance for realtime updates
+        BlocProvider<WishlistCubit>.value(
+          value:
+              GlobalCubitService.instance.wishlistCubit ??
+              DependencyInjection.getIt<WishlistCubit>(),
         ),
         BlocProvider<FeaturedProductsCubit>(
           create: (context) =>

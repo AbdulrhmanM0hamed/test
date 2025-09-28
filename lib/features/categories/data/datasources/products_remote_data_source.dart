@@ -35,17 +35,17 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
         final productsResponse = ProductsResponseModel.fromJson(response.data);
         return ApiResponse.success(
           data: productsResponse,
-          message: response.data['message'] ?? 'Products loaded successfully',
+          message: response.data['message'] ?? 'تم تحميل المنتجات بنجاح',
         );
       } else {
         return ApiResponse.error(
-          message: response.data['message'] ?? 'Failed to load products',
+          message: response.data['message'] ?? 'فشل في تحميل المنتجات، يرجى المحاولة مرة أخرى',
           statusCode: response.statusCode,
         );
       }
     } catch (e) {
       return ApiResponse.error(
-        message: 'Network error: ${e.toString()}',
+        message: 'تعذر الاتصال بالخادم، تأكد من اتصالك بالإنترنت',
         statusCode: 500,
       );
     }
@@ -86,18 +86,18 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
 
         return ApiResponse.success(
           data: productsResponse,
-          message: 'Products loaded successfully',
+          message: response.data['message'] ?? 'تم تحميل المنتجات بنجاح',
         );
       } else {
         return ApiResponse.error(
-          message: response.data['message'] ?? 'Failed to load products',
+          message: response.data['message'] ?? 'فشل في تحميل المنتجات، يرجى المحاولة مرة أخرى',
           statusCode: response.statusCode,
         );
       }
     } catch (e) {
       //print('🚨 Network Error: $e');
       return ApiResponse.error(
-        message: 'Network error: ${e.toString()}',
+        message: 'تعذر الاتصال بالخادم، تأكد من اتصالك بالإنترنت',
         statusCode: 500,
       );
     }

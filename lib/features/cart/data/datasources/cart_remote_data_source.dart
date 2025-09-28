@@ -39,12 +39,15 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
         }
         return CartModel.fromJson(response.data);
       } else {
-        throw Exception('Failed to get cart: ${response.statusMessage}');
+        throw Exception(response.data['message'] ?? 'فشل في تحميل السلة، يرجى المحاولة مرة أخرى');
       }
     } on DioException catch (e) {
-      throw Exception('Network error: ${e.message}');
+      if (e.response?.statusCode == 401) {
+        throw Exception(e.response?.data['message'] ?? 'يجب تسجيل الدخول أولاً');
+      }
+      throw Exception(e.response?.data['message'] ?? 'تعذر الاتصال بالخادم، تأكد من اتصالك بالإنترنت');
     } catch (e) {
-      throw Exception('Unexpected error: $e');
+      throw Exception('حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى');
     }
   }
 
@@ -59,15 +62,15 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
       if (response.statusCode == 200) {
         return response.data['message'] ?? 'تم إضافة المنتج إلى السلة بنجاح';
       } else {
-        throw Exception('Failed to add to cart: ${response.statusMessage}');
+        throw Exception(response.data['message'] ?? 'فشل في إضافة المنتج إلى السلة، يرجى المحاولة مرة أخرى');
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        throw Exception('يجب تسجيل الدخول أولاً');
+        throw Exception(e.response?.data['message'] ?? 'يجب تسجيل الدخول أولاً');
       }
-      throw Exception('Network error: ${e.message}');
+      throw Exception(e.response?.data['message'] ?? 'تعذر الاتصال بالخادم، تأكد من اتصالك بالإنترنت');
     } catch (e) {
-      throw Exception('Unexpected error: $e');
+      throw Exception('حدث خطأ أثناء إضافة المنتج، يرجى المحاولة مرة أخرى');
     }
   }
 
@@ -81,17 +84,15 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
       if (response.statusCode == 200) {
         return response.data['message'] ?? 'تم حذف المنتج من السلة بنجاح';
       } else {
-        throw Exception(
-          'Failed to remove from cart: ${response.statusMessage}',
-        );
+        throw Exception(response.data['message'] ?? 'فشل في حذف المنتج من السلة، يرجى المحاولة مرة أخرى');
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        throw Exception('يجب تسجيل الدخول أولاً');
+        throw Exception(e.response?.data['message'] ?? 'يجب تسجيل الدخول أولاً');
       }
-      throw Exception('Network error: ${e.message}');
+      throw Exception(e.response?.data['message'] ?? 'تعذر الاتصال بالخادم، تأكد من اتصالك بالإنترنت');
     } catch (e) {
-      throw Exception('Unexpected error: $e');
+      throw Exception('حدث خطأ أثناء حذف المنتج، يرجى المحاولة مرة أخرى');
     }
   }
 
@@ -104,15 +105,15 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
         return response.data['message'] ??
             'تم حذف جميع المنتجات من السلة بنجاح';
       } else {
-        throw Exception('Failed to clear cart: ${response.statusMessage}');
+        throw Exception(response.data['message'] ?? 'فشل في تفريغ السلة، يرجى المحاولة مرة أخرى');
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        throw Exception('يجب تسجيل الدخول أولاً');
+        throw Exception(e.response?.data['message'] ?? 'يجب تسجيل الدخول أولاً');
       }
-      throw Exception('Network error: ${e.message}');
+      throw Exception(e.response?.data['message'] ?? 'تعذر الاتصال بالخادم، تأكد من اتصالك بالإنترنت');
     } catch (e) {
-      throw Exception('Unexpected error: $e');
+      throw Exception('حدث خطأ أثناء تفريغ السلة، يرجى المحاولة مرة أخرى');
     }
   }
 }

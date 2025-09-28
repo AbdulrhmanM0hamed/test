@@ -6,6 +6,7 @@ import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/features/cart/presentation/cubit/cart_state.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/core/services/app_state_service.dart';
+import 'package:test/core/services/hybrid_wishlist_service.dart';
 
 /// Global singleton service to manage shared cubit instances across the app
 class GlobalCubitService {
@@ -24,6 +25,11 @@ class GlobalCubitService {
     final appStateService = DependencyInjection.getIt<AppStateService>();
     final isLoggedIn =
         appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+    
+    print('🔍 GlobalCubitService.initialize() called');
+    print('📱 AppState - isLoggedIn: ${appStateService.isLoggedIn()}');
+    print('🚪 AppState - hasLoggedOut: ${appStateService.hasLoggedOut()}');
+    print('✅ Final isLoggedIn result: $isLoggedIn');
 
     if (isLoggedIn) {
       // Always reinitialize to ensure fresh cubit instances after login
@@ -32,9 +38,13 @@ class GlobalCubitService {
         ..getMyWishlist();
       _isInitialized = true;
 
-      //print('🌍 GlobalCubitService: Initialized with shared cubit instances');
+      // Update HybridWishlistService login state
+      HybridWishlistService.instance.updateLoginState(true);
+
+      print('🌍 GlobalCubitService: Initialized with shared cubit instances');
     } else if (_isInitialized) {
       // Reset if user logged out
+      HybridWishlistService.instance.updateLoginState(false);
       reset();
     }
   }
@@ -63,6 +73,8 @@ class GlobalCubitService {
     _cartCubit = null;
     _wishlistCubit = null;
     _isInitialized = false;
+    // Update HybridWishlistService login state
+    HybridWishlistService.instance.updateLoginState(false);
     //print('🔄 GlobalCubitService: Reset completed');
   }
 

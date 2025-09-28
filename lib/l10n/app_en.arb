@@ -630,5 +630,6 @@
   "orderDetails": "Order Details",
   "includesTaxes": "includesTaxes",
   "unitPrice": "unitPrice",
-  "taxItems": "taxItems"
+  "taxItems": "taxItems",
+  "addingToCart": "Adding"
 }

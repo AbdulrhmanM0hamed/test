@@ -1510,4 +1510,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get taxItems => 'عناصر ضريبية';
+
+  @override
+  String get addingToCart => 'إضافة';
 }

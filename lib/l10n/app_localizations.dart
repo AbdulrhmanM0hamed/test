@@ -3100,6 +3100,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'taxItems'**
   String get taxItems;
+
+  /// No description provided for @addingToCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Adding'**
+  String get addingToCart;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

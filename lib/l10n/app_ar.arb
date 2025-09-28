@@ -626,5 +626,6 @@
   "orderDetails": "تفاصيل الطلب",
   "includesTaxes": "شاملة الضريبة",
   "unitPrice": "السعر",
-  "taxItems": "عناصر ضريبية"
+  "taxItems": "عناصر ضريبية",
+  "addingToCart": "إضافة"
 }

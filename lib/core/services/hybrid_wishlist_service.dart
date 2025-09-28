@@ -4,6 +4,8 @@ import 'package:test/features/categories/domain/entities/product.dart';
 import 'package:test/core/services/offline_wishlist_service.dart';
 import 'package:test/core/services/global_cubit_service.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
+import 'package:test/core/di/dependency_injection.dart';
+import 'package:test/core/services/app_state_service.dart';
 
 class HybridWishlistService extends ChangeNotifier {
   static HybridWishlistService? _instance;
@@ -22,19 +24,53 @@ class HybridWishlistService extends ChangeNotifier {
 
   // Update login state from external sources
   void updateLoginState(bool isLoggedIn) {
+    print(
+      '🔄 HybridWishlistService: updateLoginState called - old: $_isLoggedIn, new: $isLoggedIn',
+    );
     if (_isLoggedIn != isLoggedIn) {
       _isLoggedIn = isLoggedIn;
+      print('✅ HybridWishlistService: Login state updated to: $_isLoggedIn');
       notifyListeners();
+    }
+  }
+
+  // Check login state directly from AppStateService (fallback method)
+  bool _checkLoginStateFromAppService() {
+    try {
+      final appStateService = DependencyInjection.getIt<AppStateService>();
+      final isLoggedIn =
+          appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+      print(
+        '🔍 HybridWishlistService: Direct check - AppState isLoggedIn: ${appStateService.isLoggedIn()}, hasLoggedOut: ${appStateService.hasLoggedOut()}, result: $isLoggedIn',
+      );
+      return isLoggedIn;
+    } catch (e) {
+      print('❌ HybridWishlistService: Error checking login state: $e');
+      return false;
     }
   }
 
   // Add to wishlist - handles both online and offline
   Future<void> addToWishlist(HomeProduct product) async {
+    // Double-check login state
+    final actualLoginState = _checkLoginStateFromAppService();
+    if (_isLoggedIn != actualLoginState) {
+      print(
+        '⚠️ HybridWishlistService: Login state mismatch in addToWishlist! Internal: $_isLoggedIn, Actual: $actualLoginState',
+      );
+      _isLoggedIn = actualLoginState;
+    }
+
+    print(
+      '➕ HybridWishlistService: addToWishlist - product ${product.id}, isLoggedIn: $_isLoggedIn',
+    );
     if (_isLoggedIn) {
       // Use server-based wishlist
+      print('🌐 HybridWishlistService: Using server-based wishlist');
       await GlobalCubitService.instance.addToWishlist(product.id);
     } else {
       // Use local wishlist
+      print('💾 HybridWishlistService: Using local wishlist');
       await OfflineWishlistService.instance.addToWishlist(product);
     }
     notifyListeners();
@@ -54,12 +90,27 @@ class HybridWishlistService extends ChangeNotifier {
 
   // Toggle wishlist
   Future<bool> toggleWishlist(HomeProduct product) async {
+    // Double-check login state directly from AppStateService
+    final actualLoginState = _checkLoginStateFromAppService();
+    if (_isLoggedIn != actualLoginState) {
+      print(
+        '⚠️ HybridWishlistService: Login state mismatch! Internal: $_isLoggedIn, Actual: $actualLoginState',
+      );
+      _isLoggedIn = actualLoginState;
+    }
+
+    print(
+      '❤️ HybridWishlistService: toggleWishlist called for product ${product.id}, isLoggedIn: $_isLoggedIn',
+    );
     final isInWishlist = await this.isInWishlist(product.id);
+    print('❤️ HybridWishlistService: Current wishlist status: $isInWishlist');
 
     if (isInWishlist) {
+      print('❤️ HybridWishlistService: Removing from wishlist...');
       await removeFromWishlist(product.id);
       return false;
     } else {
+      print('❤️ HybridWishlistService: Adding to wishlist...');
       await addToWishlist(product);
       return true;
     }

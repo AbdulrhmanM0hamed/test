@@ -1510,4 +1510,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get taxItems => 'taxItems';
+
+  @override
+  String get addingToCart => 'Adding';
 }
