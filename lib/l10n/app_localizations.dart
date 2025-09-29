@@ -3071,6 +3071,30 @@ abstract class AppLocalizations {
   /// **'Order Items'**
   String get orderItems;
 
+  /// No description provided for @errorLoadingRegions.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading regions'**
+  String get errorLoadingRegions;
+
+  /// No description provided for @selectCityFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Select city first'**
+  String get selectCityFirst;
+
+  /// No description provided for @errorLoadingCities.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading cities'**
+  String get errorLoadingCities;
+
+  /// No description provided for @clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get clear;
+
   /// No description provided for @customerInformation.
   ///
   /// In en, this message translates to:
@@ -3130,6 +3154,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to load sliders'**
   String get failedToLoadSliders;
+
+  /// No description provided for @menu.
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get menu;
+
+  /// No description provided for @blog.
+  ///
+  /// In en, this message translates to:
+  /// **'Blog'**
+  String get blog;
+
+  /// No description provided for @contactUs.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Us'**
+  String get contactUs;
+
+  /// No description provided for @aboutApp.
+  ///
+  /// In en, this message translates to:
+  /// **'About App'**
+  String get aboutApp;
+
+  /// No description provided for @faq.
+  ///
+  /// In en, this message translates to:
+  /// **'FAQ'**
+  String get faq;
+
+  /// No description provided for @termsAndConditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms & Conditions'**
+  String get termsAndConditions;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

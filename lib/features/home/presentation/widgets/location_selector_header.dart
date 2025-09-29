@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/services/location_service.dart';
 import '../../../../core/services/language_service.dart';
@@ -93,8 +94,8 @@ class LocationSelectorHeader extends StatelessWidget {
         borderRadius: BorderRadius.circular(3),
         child: CachedNetworkImage(
           imageUrl: city.image!,
-          width: 18,
-          height: 14,
+          width: 25,
+          height: 20,
           fit: BoxFit.cover,
           placeholder: (context, url) => Container(
             width: 18,
@@ -158,29 +159,28 @@ class _LocationSelectorBottomSheet extends StatefulWidget {
 
 class _LocationSelectorBottomSheetState
     extends State<_LocationSelectorBottomSheet> {
-  bool _showingRegions = false;
+  City? _selectedCity;
 
   @override
   void initState() {
     super.initState();
+    _selectedCity = widget.locationService.selectedCity;
+
     if (widget.locationService.cities.isEmpty &&
         !widget.locationService.isLoadingCities) {
       widget.locationService.loadCities();
     }
-    // If we have a selected city but no regions, show regions directly
-    if (widget.locationService.hasSelectedCity &&
-        widget.locationService.regions.isEmpty) {
-      _showingRegions = true;
-      widget.locationService.loadRegions(
-        widget.locationService.selectedCity!.id,
-      );
+
+    // Load regions if we have a selected city
+    if (_selectedCity != null) {
+      widget.locationService.loadRegions(_selectedCity!.id);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.7,
+      height: MediaQuery.of(context).size.height * 0.8,
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -208,11 +208,17 @@ class _LocationSelectorBottomSheetState
           Expanded(
             child: Consumer<LocationService>(
               builder: (context, locationService, child) {
-                if (_showingRegions) {
-                  return _buildRegionsContent(locationService);
-                } else {
-                  return _buildCitiesContent(locationService);
-                }
+                return Column(
+                  children: [
+                    // Cities Horizontal ListView
+                    _buildCitiesHorizontalList(locationService),
+
+                    const SizedBox(height: 20),
+
+                    // Regions Section
+                    Expanded(child: _buildRegionsSection(locationService)),
+                  ],
+                );
               },
             ),
           ),
@@ -226,45 +232,18 @@ class _LocationSelectorBottomSheetState
       padding: const EdgeInsets.all(20),
       child: Row(
         children: [
-          if (_showingRegions)
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  _showingRegions = false;
-                });
-              },
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  Icons.arrow_back,
-                  color: AppColors.primary,
-                  size: 24,
-                ),
-              ),
-            )
-          else
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                Icons.location_on,
-                color: AppColors.primary,
-                size: 24,
-              ),
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
             ),
+            child: Icon(Icons.location_on, color: AppColors.primary, size: 24),
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              _showingRegions
-                  ? AppLocalizations.of(context)!.selectRegion
-                  : AppLocalizations.of(context)!.selectCity,
+              AppLocalizations.of(context)!.selectLocation,
               style: getBoldStyle(
                 fontFamily: FontConstant.cairo,
                 fontSize: FontSize.size18,
@@ -276,10 +255,12 @@ class _LocationSelectorBottomSheetState
             TextButton(
               onPressed: () {
                 widget.locationService.clearSelectedLocation();
-                Navigator.pop(context);
+                setState(() {
+                  _selectedCity = null;
+                });
               },
               child: Text(
-                'مسح',
+                AppLocalizations.of(context)!.clear,
                 style: getMediumStyle(
                   fontFamily: FontConstant.cairo,
                   fontSize: FontSize.size14,
@@ -292,85 +273,259 @@ class _LocationSelectorBottomSheetState
     );
   }
 
-  Widget _buildCitiesContent(LocationService locationService) {
+  Widget _buildCitiesHorizontalList(LocationService locationService) {
     if (locationService.isLoadingCities) {
-      return _buildLoadingState('جاري تحميل المدن...');
+      return Container(
+        height: 120,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [CustomProgressIndicator(), const SizedBox(height: 8)],
+          ),
+        ),
+      );
     }
 
     if (locationService.error != null) {
-      return _buildErrorState(locationService);
+      return Container(
+        height: 120,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.error_outline, color: Colors.red, size: 32),
+              const SizedBox(height: 8),
+              Text(
+                AppLocalizations.of(context)!.errorLoadingCities,
+                style: getMediumStyle(
+                  fontFamily: FontConstant.cairo,
+                  fontSize: FontSize.size12,
+                  color: Colors.red,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
     }
 
     if (locationService.cities.isEmpty) {
-      return _buildEmptyState('لا توجد مدن متاحة', Icons.location_city);
-    }
-
-    return _buildCitiesList(locationService);
-  }
-
-  Widget _buildRegionsContent(LocationService locationService) {
-    if (locationService.isLoadingRegions) {
-      return _buildLoadingState('جاري تحميل المناطق...');
-    }
-
-    if (locationService.error != null) {
-      return _buildErrorState(locationService);
-    }
-
-    if (locationService.regions.isEmpty) {
-      return _buildEmptyState('لا توجد مناطق متاحة', Icons.map);
-    }
-
-    return _buildRegionsList(locationService);
-  }
-
-  Widget _buildLoadingState(String message) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const CustomProgressIndicator(),
-          const SizedBox(height: 16),
-          Text(
-            message,
-            style: const TextStyle(
+      return Container(
+        height: 120,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Center(
+          child: Text(
+            AppLocalizations.of(context)!.noCitiesAvailable,
+            style: getMediumStyle(
               fontFamily: FontConstant.cairo,
               fontSize: FontSize.size14,
               color: AppColors.textSecondary,
             ),
           ),
-        ],
-      ),
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            AppLocalizations.of(context)!.selectCity,
+            style: getBoldStyle(
+              fontFamily: FontConstant.cairo,
+              fontSize: FontSize.size16,
+              color: AppColors.textPrimary,
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 140,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            itemCount: locationService.cities.length,
+            itemBuilder: (context, index) {
+              final city = locationService.cities[index];
+              final isSelected = _selectedCity?.id == city.id;
+
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedCity = city;
+                  });
+                  widget.locationService.selectCity(city);
+                  widget.locationService.loadRegions(city.id);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Container(
+                    width: 130,
+                    margin: EdgeInsets.only(
+                      right: index == locationService.cities.length - 1
+                          ? 0
+                          : 16,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: isSelected
+                            ? AppColors.primary
+                            : AppColors.border,
+                        width: isSelected ? 2.5 : 1,
+                      ),
+                      gradient: isSelected
+                          ? LinearGradient(
+                              colors: [
+                                AppColors.primary.withValues(alpha: 0.15),
+                                AppColors.primary.withValues(alpha: 0.05),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            )
+                          : null,
+                      color: isSelected ? null : Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: isSelected
+                              ? AppColors.primary.withValues(alpha: 0.3)
+                              : Colors.black.withValues(alpha: 0.08),
+                          blurRadius: isSelected ? 12 : 6,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // City Image
+                          Container(
+                            width: 70,
+                            height: 70,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.1),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: city.image != null
+                                  ? CachedNetworkImage(
+                                      imageUrl: city.image!,
+                                      fit: BoxFit.cover,
+                                      placeholder: (context, url) => Container(
+                                        color: AppColors.primary.withValues(
+                                          alpha: 0.1,
+                                        ),
+                                        child: Icon(
+                                          Icons.location_city,
+                                          color: AppColors.primary,
+                                          size: 32,
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          Container(
+                                            color: AppColors.primary.withValues(
+                                              alpha: 0.1,
+                                            ),
+                                            child: Icon(
+                                              Icons.location_city,
+                                              color: AppColors.primary,
+                                              size: 32,
+                                            ),
+                                          ),
+                                    )
+                                  : Container(
+                                      color: AppColors.primary.withValues(
+                                        alpha: 0.1,
+                                      ),
+                                      child: Icon(
+                                        Icons.location_city,
+                                        color: AppColors.primary,
+                                        size: 32,
+                                      ),
+                                    ),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+
+                          // City Name
+                          Consumer<LanguageService>(
+                            builder: (context, languageService, child) {
+                              return Text(
+                                city.getLocalizedTitle(
+                                  languageService.isArabic,
+                                ),
+                                style: getMediumStyle(
+                                  fontFamily: FontConstant.cairo,
+                                  fontSize: FontSize.size12,
+                                  color: isSelected
+                                      ? AppColors.primary
+                                      : AppColors.textPrimary,
+                                ),
+                                textAlign: TextAlign.center,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              );
+                            },
+                          ),
+
+                          // Selection Indicator
+                          if (isSelected) ...[
+                            const SizedBox(height: 4),
+                            Container(
+                              width: 6,
+                              height: 6,
+                              decoration: BoxDecoration(
+                                color: AppColors.primary,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
-  Widget _buildErrorState(LocationService locationService) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
+  Widget _buildRegionsSection(LocationService locationService) {
+    if (_selectedCity == null) {
+      return Container(
+        padding: const EdgeInsets.all(40),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.red.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: Icon(Icons.wifi_off_rounded, color: Colors.red, size: 32),
-            ),
+            Icon(Icons.location_searching, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
-              'خطأ في التحميل',
+              AppLocalizations.of(context)!.selectCityFirst,
               style: getBoldStyle(
                 fontFamily: FontConstant.cairo,
-                fontSize: FontSize.size16,
-                color: Colors.red,
+                fontSize: FontSize.size18,
+                color: AppColors.textSecondary,
               ),
             ),
             const SizedBox(height: 8),
             Text(
-              locationService.error ?? 'حدث خطأ غير متوقع',
+              AppLocalizations.of(context)!.selectCityFirst,
               style: getRegularStyle(
                 fontFamily: FontConstant.cairo,
                 fontSize: FontSize.size14,
@@ -378,12 +533,47 @@ class _LocationSelectorBottomSheetState
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 20),
+          ],
+        ),
+      );
+    }
+
+    if (locationService.isLoadingRegions) {
+      return Container(
+        padding: const EdgeInsets.all(40),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [CustomProgressIndicator(), const SizedBox(height: 16)],
+        ),
+      );
+    }
+
+    if (locationService.error != null) {
+      return Container(
+        padding: const EdgeInsets.all(40),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, color: Colors.red, size: 48),
+            const SizedBox(height: 16),
+            Text(
+              AppLocalizations.of(context)!.errorLoadingRegions,
+              style: getBoldStyle(
+                fontFamily: FontConstant.cairo,
+                fontSize: FontSize.size16,
+                color: Colors.red,
+              ),
+            ),
+            const SizedBox(height: 16),
             ElevatedButton.icon(
-              onPressed: () => locationService.retry(),
+              onPressed: () {
+                if (_selectedCity != null) {
+                  widget.locationService.loadRegions(_selectedCity!.id);
+                }
+              },
               icon: const Icon(Icons.refresh, size: 18),
               label: Text(
-                'إعادة المحاولة',
+                AppLocalizations.of(context)!.retry,
                 style: getBoldStyle(
                   fontFamily: FontConstant.cairo,
                   fontSize: FontSize.size14,
@@ -393,10 +583,6 @@ class _LocationSelectorBottomSheetState
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 12,
-                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -404,382 +590,123 @@ class _LocationSelectorBottomSheetState
             ),
           ],
         ),
-      ),
-    );
-  }
+      );
+    }
 
-  Widget _buildEmptyState(String message, IconData icon) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 48, color: Colors.grey[400]),
-          const SizedBox(height: 16),
-          Text(
-            message,
-            style: getMediumStyle(
-              fontFamily: FontConstant.cairo,
-              fontSize: FontSize.size16,
-              color: AppColors.textSecondary,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCitiesList(LocationService locationService) {
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      itemCount: locationService.cities.length,
-      itemBuilder: (context, index) {
-        final city = locationService.cities[index];
-        final isSelected = locationService.selectedCity?.id == city.id;
-
-        return Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          child: Material(
-            elevation: isSelected ? 8 : 2,
-            shadowColor: isSelected
-                ? AppColors.primary.withValues(alpha: 0.3)
-                : Colors.black.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(16),
-            child: InkWell(
-              onTap: () async {
-                await locationService.selectCity(city);
-                setState(() {
-                  _showingRegions = true;
-                });
-              },
-              borderRadius: BorderRadius.circular(16),
-              child: Container(
-                height: 80,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: isSelected ? AppColors.primary : Colors.transparent,
-                    width: 2,
-                  ),
-                  gradient: isSelected
-                      ? LinearGradient(
-                          colors: [
-                            AppColors.primary.withValues(alpha: 0.1),
-                            AppColors.primary.withValues(alpha: 0.05),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        )
-                      : null,
-                  color: isSelected ? null : Colors.white,
-                ),
-                child: Row(
-                  children: [
-                    // City Image
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(14),
-                          bottomLeft: Radius.circular(14),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.1),
-                            blurRadius: 4,
-                            offset: const Offset(2, 0),
-                          ),
-                        ],
-                      ),
-                      child: _buildProfessionalCityImage(city, isSelected),
-                    ),
-
-                    // Content
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // City Name
-                            Consumer<LanguageService>(
-                              builder: (context, languageService, child) {
-                                return Text(
-                                  city.getLocalizedTitle(
-                                    languageService.isArabic,
-                                  ),
-                                  style: getBoldStyle(
-                                    fontFamily: FontConstant.cairo,
-                                    fontSize: FontSize.size18,
-                                    color: isSelected
-                                        ? AppColors.primary
-                                        : AppColors.textPrimary,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                );
-                              },
-                            ),
-
-                            const SizedBox(height: 4),
-
-                            // Subtitle
-                            Text(
-                              AppLocalizations.of(context)!.selectThisCity,
-                              style: getRegularStyle(
-                                fontFamily: FontConstant.cairo,
-                                fontSize: FontSize.size12,
-                                color: isSelected
-                                    ? AppColors.primary.withValues(alpha: 0.8)
-                                    : AppColors.textSecondary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    // Selection Indicator & Arrow
-                    Padding(
-                      padding: const EdgeInsets.only(right: 16),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          if (isSelected)
-                            Container(
-                              padding: const EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                color: AppColors.primary,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: const Icon(
-                                Icons.check,
-                                color: Colors.white,
-                                size: 16,
-                              ),
-                            )
-                          else
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.grey[600],
-                                size: 14,
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildRegionsList(LocationService locationService) {
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      itemCount: locationService.regions.length,
-      itemBuilder: (context, index) {
-        final region = locationService.regions[index];
-        final isSelected = locationService.selectedRegion?.id == region.id;
-
-        return Container(
-          margin: const EdgeInsets.only(bottom: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: isSelected ? AppColors.primary : AppColors.border,
-              width: isSelected ? 2 : 1,
-            ),
-            color: isSelected
-                ? AppColors.primary.withValues(alpha: 0.05)
-                : Colors.white,
-          ),
-          child: ListTile(
-            onTap: () {
-              locationService.selectRegion(region);
-              Navigator.pop(context);
-            },
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 8,
-            ),
-            leading: Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? AppColors.primary.withValues(alpha: 0.2)
-                    : Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(
-                Icons.map,
-                size: 16,
-                color: isSelected ? AppColors.primary : Colors.grey[600],
-              ),
-            ),
-            title: Consumer<LanguageService>(
-              builder: (context, languageService, child) {
-                return Text(
-                  region.getLocalizedTitle(languageService.isArabic),
-                  style: getSemiBoldStyle(
-                    fontFamily: FontConstant.cairo,
-                    fontSize: FontSize.size16,
-                    color: isSelected
-                        ? AppColors.primary
-                        : AppColors.textPrimary,
-                  ),
-                );
-              },
-            ),
-            trailing: isSelected
-                ? Icon(Icons.check_circle, color: AppColors.primary, size: 24)
-                : Icon(
-                    Icons.radio_button_unchecked,
-                    color: Colors.grey[400],
-                    size: 24,
-                  ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildProfessionalCityImage(City city, bool isSelected) {
-    if (city.image != null && city.image!.isNotEmpty) {
-      return ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(14),
-          bottomLeft: Radius.circular(14),
-        ),
-        child: Stack(
+    if (locationService.regions.isEmpty) {
+      return Container(
+        padding: const EdgeInsets.all(40),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CachedNetworkImage(
-              imageUrl: city.image!,
-              width: 80,
-              height: 80,
-              fit: BoxFit.cover,
-              placeholder: (context, url) => Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.grey[300]!, Colors.grey[200]!],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-                child: const Center(
-                  child: SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-              errorWidget: (context, url, error) =>
-                  _buildDefaultCityImage(isSelected),
-            ),
-
-            // Gradient overlay for better text readability
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.black.withValues(alpha: 0.1),
-                    Colors.black.withValues(alpha: 0.3),
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
+            Icon(Icons.map_outlined, size: 48, color: Colors.grey[400]),
+            const SizedBox(height: 16),
+            Text(
+              AppLocalizations.of(context)!.noRegionsAvailable,
+              style: getMediumStyle(
+                fontFamily: FontConstant.cairo,
+                fontSize: FontSize.size16,
+                color: AppColors.textSecondary,
               ),
             ),
-
-            // Selection overlay
-            if (isSelected)
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.2),
-                ),
-              ),
           ],
         ),
       );
     }
 
-    return _buildDefaultCityImage(isSelected);
-  }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            AppLocalizations.of(context)!.selectRegion,
+            style: getBoldStyle(
+              fontFamily: FontConstant.cairo,
+              fontSize: FontSize.size16,
+              color: AppColors.textPrimary,
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Expanded(
+          child: GridView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 3,
+            ),
+            itemCount: locationService.regions.length,
+            itemBuilder: (context, index) {
+              final region = locationService.regions[index];
+              final isSelected =
+                  locationService.selectedRegion?.id == region.id;
 
-  Widget _buildDefaultCityImage(bool isSelected) {
-    return Container(
-      width: 80,
-      height: 80,
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(14),
-          bottomLeft: Radius.circular(14),
-        ),
-        gradient: LinearGradient(
-          colors: isSelected
-              ? [
-                  AppColors.primary.withValues(alpha: 0.8),
-                  AppColors.primary.withValues(alpha: 0.6),
-                ]
-              : [Colors.grey[400]!, Colors.grey[300]!],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.location_city_rounded,
-            size: 24,
-            color: isSelected ? Colors.white : Colors.grey[600],
+              return GestureDetector(
+                onTap: () {
+                  locationService.selectRegion(region);
+                  Navigator.pop(context);
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: isSelected ? AppColors.primary : AppColors.border,
+                      width: isSelected ? 2 : 1,
+                    ),
+                    gradient: isSelected
+                        ? LinearGradient(
+                            colors: [
+                              AppColors.primary.withValues(alpha: 0.15),
+                              AppColors.primary.withValues(alpha: 0.05),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          )
+                        : null,
+                    color: isSelected ? null : Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: isSelected
+                            ? AppColors.primary.withValues(alpha: 0.2)
+                            : Colors.black.withValues(alpha: 0.05),
+                        blurRadius: isSelected ? 8 : 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: Consumer<LanguageService>(
+                      builder: (context, languageService, child) {
+                        return Text(
+                          region.getLocalizedTitle(languageService.isArabic),
+                          style: getMediumStyle(
+                            fontFamily: FontConstant.cairo,
+                            fontSize: FontSize.size13,
+                            color: isSelected
+                                ? AppColors.primary
+                                : AppColors.textPrimary,
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
-          const SizedBox(height: 4),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(
-              color: (isSelected ? Colors.white : Colors.grey[600])?.withValues(
-                alpha: 0.2,
-              ),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Text(
-              'صورة',
-              style: TextStyle(
-                fontFamily: FontConstant.cairo,
-                fontSize: 8,
-                color: isSelected ? Colors.white : Colors.grey[600],
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

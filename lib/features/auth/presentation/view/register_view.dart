@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
+import 'package:test/core/utils/common/custom_app_bar.dart';
 import 'package:test/core/utils/common/custom_button.dart';
 import 'package:test/core/utils/constant/app_assets.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
@@ -43,7 +44,6 @@ class _RegisterViewState extends State<RegisterView> {
   bool _acceptTerms = false;
   DateTime? _selectedBirthDate;
   String? _selectedGender;
-  Country? _selectedCountry;
   City? _selectedCity;
   Region? _selectedRegion;
 
@@ -102,13 +102,7 @@ class _RegisterViewState extends State<RegisterView> {
         return;
       }
 
-      if (_selectedCountry == null) {
-        CustomSnackbar.showError(
-          context: context,
-          message: AppLocalizations.of(context)!.countryRequired,
-        );
-        return;
-      }
+      // Country is automatically set to Egypt (ID: 1), no validation needed
 
       if (_selectedCity == null) {
         CustomSnackbar.showError(
@@ -134,7 +128,13 @@ class _RegisterViewState extends State<RegisterView> {
         confirmPassword: _confirmPasswordController.text.trim(),
         birthDate: _selectedBirthDate!,
         gender: _selectedGender!,
-        country: _selectedCountry!,
+        country: const Country(
+          id: 1,
+          titleEn: 'Egypt',
+          titleAr: 'مصر',
+          shortcut: 'EG',
+          code: '+20',
+        ),
         city: _selectedCity,
         region: _selectedRegion,
       );
@@ -158,6 +158,7 @@ class _RegisterViewState extends State<RegisterView> {
       ],
       child: Builder(
         builder: (context) => Scaffold(
+          appBar: CustomAppBar(title: s!.signup),
           body: BlocConsumer<RegistrationCubit, RegistrationState>(
             listener: (context, state) {
               if (state is RegistrationSuccess) {
@@ -189,22 +190,9 @@ class _RegisterViewState extends State<RegisterView> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               // App Logo
-                              SizedBox(height: size.height * 0.02),
                               Center(
                                 child: Image.asset(AppAssets.logo, height: 165),
                               ),
-                              SizedBox(height: size.height * 0.01),
-
-                              // Register Text
-                              Text(
-                                s!.signup,
-                                style: getBoldStyle(
-                                  fontFamily: FontConstant.cairo,
-                                  fontSize: FontSize.size24,
-                                  color: AppColors.primary,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
 
                               // Welcome Text
                               Text(
@@ -257,16 +245,8 @@ class _RegisterViewState extends State<RegisterView> {
 
                               // Location Selector
                               RegistrationLocationSelector(
-                                selectedCountry: _selectedCountry,
                                 selectedCity: _selectedCity,
                                 selectedRegion: _selectedRegion,
-                                onCountrySelected: (country) {
-                                  setState(() {
-                                    _selectedCountry = country;
-                                    _selectedCity = null;
-                                    _selectedRegion = null;
-                                  });
-                                },
                                 onCitySelected: (city) {
                                   setState(() {
                                     _selectedCity = city;

@@ -78,17 +78,19 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                     children: [
                       BlocBuilder<ProfileCubit, ProfileState>(
                         builder: (context, state) {
-                          String username = AppLocalizations.of(context)!.guest; // Default fallback
-                          
+                          String username = AppLocalizations.of(
+                            context,
+                          )!.guest; // Default fallback
+
                           if (state is ProfileLoaded) {
                             username = state.userProfile.displayName;
                           }
-                          
+
                           return Text(
                             _getGreeting(context, username),
                             style: getBoldStyle(
                               fontFamily: FontConstant.cairo,
-                              fontSize: FontSize.size18,
+                              fontSize: FontSize.size16,
                               color: Colors.white,
                             ),
                           );
@@ -105,7 +107,7 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                 // Actions Row
                 Row(
                   children: [
-                    _buildLanguageSwitch(),
+                    //    _buildLanguageSwitch(),
                     const SizedBox(width: 12),
                     _buildNotificationButton(),
                   ],
@@ -305,7 +307,7 @@ class _GreetingHeaderState extends State<GreetingHeader> {
 
   void _showDrawer(BuildContext context) {
     final bool isArabic = Localizations.localeOf(context).languageCode == 'ar';
-    
+
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -318,10 +320,7 @@ class _GreetingHeaderState extends State<GreetingHeader> {
             // Arabic: slide from right (1.0, 0.0), English: slide from left (-1.0, 0.0)
             begin: isArabic ? const Offset(1.0, 0.0) : const Offset(-1.0, 0.0),
             end: Offset.zero,
-          ).animate(CurvedAnimation(
-            parent: animation,
-            curve: Curves.easeInOut,
-          )),
+          ).animate(CurvedAnimation(parent: animation, curve: Curves.easeInOut)),
           child: Align(
             // Arabic: align to right, English: align to left
             alignment: isArabic ? Alignment.centerRight : Alignment.centerLeft,
@@ -334,7 +333,7 @@ class _GreetingHeaderState extends State<GreetingHeader> {
 
   Widget _buildDrawer() {
     final bool isArabic = Localizations.localeOf(context).languageCode == 'ar';
-    
+
     return Container(
       width: MediaQuery.of(context).size.width * 0.85,
       height: MediaQuery.of(context).size.height,
@@ -369,7 +368,10 @@ class _GreetingHeaderState extends State<GreetingHeader> {
             ),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [AppColors.primary, AppColors.primary.withValues(alpha: 0.8)],
+                colors: [
+                  AppColors.primary,
+                  AppColors.primary.withValues(alpha: 0.8),
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -403,7 +405,9 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                     const SizedBox(width: 16),
                     Expanded(
                       child: Text(
-                        Localizations.localeOf(context).languageCode == 'ar' ? 'القائمة' : 'Menu',
+                        Localizations.localeOf(context).languageCode == 'ar'
+                            ? 'القائمة'
+                            : 'Menu',
                         style: getBoldStyle(
                           fontFamily: FontConstant.cairo,
                           fontSize: FontSize.size20,
@@ -487,27 +491,37 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                 const SizedBox(height: 8),
                 _buildDrawerItem(
                   icon: Icons.article_outlined,
-                  title: Localizations.localeOf(context).languageCode == 'ar' ? 'المدونة' : 'Blog',
+                  title: Localizations.localeOf(context).languageCode == 'ar'
+                      ? 'المدونة'
+                      : 'Blog',
                   onTap: () => Navigator.pop(context),
                 ),
                 _buildDrawerItem(
                   icon: Icons.support_agent_rounded,
-                  title: Localizations.localeOf(context).languageCode == 'ar' ? 'التواصل' : 'Contact Us',
+                  title: Localizations.localeOf(context).languageCode == 'ar'
+                      ? 'التواصل'
+                      : 'Contact Us',
                   onTap: () => Navigator.pop(context),
                 ),
                 _buildDrawerItem(
                   icon: Icons.info_outline_rounded,
-                  title: Localizations.localeOf(context).languageCode == 'ar' ? 'حول التطبيق' : 'About App',
+                  title: Localizations.localeOf(context).languageCode == 'ar'
+                      ? 'حول التطبيق'
+                      : 'About App',
                   onTap: () => Navigator.pop(context),
                 ),
                 _buildDrawerItem(
                   icon: Icons.help_outline_rounded,
-                  title: Localizations.localeOf(context).languageCode == 'ar' ? 'الأسئلة الشائعة' : 'FAQ',
+                  title: Localizations.localeOf(context).languageCode == 'ar'
+                      ? 'الأسئلة الشائعة'
+                      : 'FAQ',
                   onTap: () => Navigator.pop(context),
                 ),
                 _buildDrawerItem(
                   icon: Icons.description_outlined,
-                  title: Localizations.localeOf(context).languageCode == 'ar' ? 'الشروط والأحكام' : 'Terms & Conditions',
+                  title: Localizations.localeOf(context).languageCode == 'ar'
+                      ? 'الشروط والأحكام'
+                      : 'Terms & Conditions',
                   onTap: () => Navigator.pop(context),
                 ),
                 const SizedBox(height: 20),
@@ -538,10 +552,7 @@ class _GreetingHeaderState extends State<GreetingHeader> {
             offset: const Offset(0, 2),
           ),
         ],
-        border: Border.all(
-          color: Colors.grey.withValues(alpha: 0.1),
-          width: 1,
-        ),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.1), width: 1),
       ),
       child: Material(
         color: Colors.transparent,
@@ -570,11 +581,7 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                       width: 1,
                     ),
                   ),
-                  child: Icon(
-                    icon, 
-                    color: AppColors.primary, 
-                    size: 22,
-                  ),
+                  child: Icon(icon, color: AppColors.primary, size: 22),
                 ),
                 const SizedBox(width: 16),
                 // Title and subtitle
@@ -616,7 +623,10 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                         ),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            colors: [Colors.red, Colors.red.withValues(alpha: 0.8)],
+                            colors: [
+                              Colors.red,
+                              Colors.red.withValues(alpha: 0.8),
+                            ],
                           ),
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
@@ -675,14 +685,12 @@ class _GreetingHeaderState extends State<GreetingHeader> {
           ),
           child: Row(
             children: [
-              Icon(
-                Icons.language_rounded,
-                color: Colors.white,
-                size: 20,
-              ),
+              Icon(Icons.language_rounded, color: Colors.white, size: 20),
               const SizedBox(width: 12),
               Text(
-                Localizations.localeOf(context).languageCode == 'ar' ? 'اللغة' : 'Language',
+                Localizations.localeOf(context).languageCode == 'ar'
+                    ? 'اللغة'
+                    : 'Language',
                 style: getMediumStyle(
                   fontFamily: FontConstant.cairo,
                   fontSize: FontSize.size14,
@@ -695,7 +703,10 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                   languageService.toggleLanguage();
                 },
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20),
@@ -708,7 +719,9 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       SvgPicture.asset(
-                        languageService.isArabic ? AppAssets.egypt : AppAssets.england,
+                        languageService.isArabic
+                            ? AppAssets.egypt
+                            : AppAssets.england,
                         width: 16,
                         height: 16,
                       ),

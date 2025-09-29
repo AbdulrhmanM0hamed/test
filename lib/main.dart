@@ -43,9 +43,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(
-    DevicePreview(enabled: !kReleaseMode, builder: (context) => const MyApp()),
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -83,9 +81,7 @@ class MyApp extends StatelessWidget {
             theme: AppTheme.lightTheme,
             navigatorKey: navigatorKey,
 
-            useInheritedMediaQuery: true,
-            locale:
-                DevicePreview.locale(context) ?? languageService.currentLocale,
+            locale: languageService.currentLocale,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             onGenerateRoute: onGenratedRoutes,

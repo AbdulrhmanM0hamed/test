@@ -1497,6 +1497,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get orderItems => 'عناصر الطلب';
 
   @override
+  String get errorLoadingRegions => 'فشل فى تحميل المناطق';
+
+  @override
+  String get selectCityFirst => 'اختر المدينة اولا';
+
+  @override
+  String get errorLoadingCities => 'فشل فى تحميل المدن';
+
+  @override
+  String get clear => 'مسح';
+
+  @override
   String get customerInformation => 'معلومات العميل';
 
   @override
@@ -1525,4 +1537,28 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get failedToLoadSliders => 'فشل في تحميل العروض';
+
+  @override
+  String get menu => 'القائمة';
+
+  @override
+  String get blog => 'المدونة';
+
+  @override
+  String get contactUs => 'التواصل';
+
+  @override
+  String get aboutApp => 'حول التطبيق';
+
+  @override
+  String get faq => 'الأسئلة الشائعة';
+
+  @override
+  String get termsAndConditions => 'الشروط والأحكام';
+
+  @override
+  String get privacyPolicy => 'سياسة الخصوصية';
+
+  @override
+  String get language => 'اللغة';
 }
