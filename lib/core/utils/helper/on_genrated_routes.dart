@@ -117,6 +117,13 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
         settings: settings, // Pass arguments through settings
       );
 
+    case '/categories-with-back':
+      //print('🔍 Navigation: Navigating to CategoriesView with back button');
+      return MaterialPageRoute(
+        builder: (context) => const CategoriesView(showBackButton: true),
+        settings: settings, // Pass arguments through settings
+      );
+
     case '/latest-products':
       //print('🔍 Navigation: Navigating to LatestProductsView');
       return MaterialPageRoute(

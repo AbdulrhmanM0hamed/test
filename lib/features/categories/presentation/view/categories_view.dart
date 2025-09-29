@@ -21,7 +21,12 @@ import 'package:test/l10n/app_localizations.dart';
 
 /// صفحة عرض الفئات والمنتجات مع نظام الفلترة المتقدم
 class CategoriesView extends StatefulWidget {
-  const CategoriesView({super.key});
+  final bool showBackButton;
+  
+  const CategoriesView({
+    super.key,
+    this.showBackButton = false,
+  });
 
   @override
   State<CategoriesView> createState() => _CategoriesViewState();
@@ -118,7 +123,7 @@ class _CategoriesViewState extends State<CategoriesView> {
           return Scaffold(
             appBar: CustomAppBar(
               title: categoryName ?? AppLocalizations.of(context)!.categories,
-              automaticallyImplyLeading: false,
+              automaticallyImplyLeading: widget.showBackButton,
             ),
             body: SafeArea(
               child: Column(

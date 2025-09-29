@@ -146,10 +146,10 @@ class AllCategoriesView extends StatelessWidget {
   }
 
   void _navigateToProducts(BuildContext context, category) {
-    // Navigate to categories view with mainCategoryId filter
+    // Navigate to categories view with mainCategoryId filter and back button
     Navigator.pushNamed(
       context,
-      '/categories',
+      '/categories-with-back',
       arguments: {'mainCategoryId': category.id, 'categoryName': category.name},
     );
   }

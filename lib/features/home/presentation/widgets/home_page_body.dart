@@ -69,12 +69,8 @@ class HomePageBody extends StatelessWidget {
       child: Column(
         children: [
           // Greeting and Notification Header
-          GreetingHeader(
-            location: 'Dubai, UAE', // This would come from user location state
-            notificationCount: 6,
-          ),
 
-          // Scrollable Content
+          // Scrollable Content with Refresh Indicator
           Expanded(
             child: Builder(
               builder: (innerContext) {
@@ -100,6 +96,16 @@ class HomePageBody extends StatelessWidget {
                   child: CustomScrollView(
                     physics: const BouncingScrollPhysics(),
                     slivers: [
+                      // Greeting Header (Scrollable, outside refresh area)
+                      SliverToBoxAdapter(
+                        child: GreetingHeader(
+                          location:
+                              'Dubai, UAE', // This would come from user location state
+                          notificationCount: 6,
+                        ),
+                      ),
+                      // Empty space to push refresh indicator below greeting header
+                      const SliverToBoxAdapter(child: SizedBox(height: 1)),
                       SliverToBoxAdapter(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,7 +207,7 @@ class HomePageBody extends StatelessWidget {
 
                             // Stores Showcase Section
                             const SizedBox(height: 24),
-                            //  const StoresShowcaseSection(),
+                            //       const StoresShowcaseSection(),
 
                             // Footer space
                             const SizedBox(height: 20),

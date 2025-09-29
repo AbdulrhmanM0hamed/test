@@ -98,7 +98,12 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                 ),
                 child: TextField(
                   controller: _searchController,
-                  textAlign: TextAlign.right,
+                  textAlign: Localizations.localeOf(context).languageCode == 'ar' 
+                      ? TextAlign.right 
+                      : TextAlign.left,
+                  textDirection: Localizations.localeOf(context).languageCode == 'ar' 
+                      ? TextDirection.rtl 
+                      : TextDirection.ltr,
                   decoration: InputDecoration(
                     hintText: AppLocalizations.of(context)!.searchProducts,
                     hintStyle: getRegularStyle(
@@ -106,18 +111,35 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                       fontFamily: FontConstant.cairo,
                       color: Colors.grey,
                     ),
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: SvgPicture.asset(
-                        AppAssets.searchIcon,
-                        width: 20,
-                        height: 20,
-                        colorFilter: const ColorFilter.mode(
-                          Colors.grey,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                    ),
+                    // استخدام prefixIcon للعربية و suffixIcon للإنجليزية
+                    prefixIcon: Localizations.localeOf(context).languageCode == 'ar' 
+                        ? Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: SvgPicture.asset(
+                              AppAssets.searchIcon,
+                              width: 20,
+                              height: 20,
+                              colorFilter: const ColorFilter.mode(
+                                Colors.grey,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          )
+                        : null,
+                    suffixIcon: Localizations.localeOf(context).languageCode != 'ar' 
+                        ? Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: SvgPicture.asset(
+                              AppAssets.searchIcon,
+                              width: 20,
+                              height: 20,
+                              colorFilter: const ColorFilter.mode(
+                                Colors.grey,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          )
+                        : null,
                     border: InputBorder.none,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                   ),
