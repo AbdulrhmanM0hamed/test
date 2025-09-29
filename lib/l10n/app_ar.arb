@@ -631,5 +631,14 @@
   "unitPrice": "السعر",
   "taxItems": "عناصر ضريبية",
   "addingToCart": "إضافة",
-  "failedToLoadSliders": "فشل في تحميل العروض"
+  "failedToLoadSliders": "فشل في تحميل العروض",
+  "menu": "القائمة",
+  "blog": "المدونة",
+  "contactUs": "التواصل",
+  "aboutApp": "حول التطبيق",
+  "faq": "الأسئلة الشائعة",
+  "termsAndConditions": "الشروط والأحكام",
+  "privacyPolicy": "سياسة الخصوصية",
+  "language": "اللغة",
+  "settings": "الإعدادات"
 }

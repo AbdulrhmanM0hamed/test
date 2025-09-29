@@ -12,19 +12,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fastDelivery => 'Fast & Reliable Delivery';
 
   @override
-  String get fastDeliveryDesc => 'Experience trust in fast and reliable delivery, ensuring your orders reach you promptly and in excellent condition.';
+  String get fastDeliveryDesc =>
+      'Experience trust in fast and reliable delivery, ensuring your orders reach you promptly and in excellent condition.';
 
   @override
   String get highQualityProducts => 'High Quality Products';
 
   @override
-  String get highQualityProductsDesc => 'We offer you the best high-quality products that have been carefully selected to meet your needs.';
+  String get highQualityProductsDesc =>
+      'We offer you the best high-quality products that have been carefully selected to meet your needs.';
 
   @override
   String get easyShoppingExperience => 'Easy Shopping Experience';
 
   @override
-  String get easyShoppingExperienceDesc => 'Enjoy a smooth and easy shopping experience through a simple and user-friendly interface.';
+  String get easyShoppingExperienceDesc =>
+      'Enjoy a smooth and easy shopping experience through a simple and user-friendly interface.';
 
   @override
   String get goodMorning => 'Good Morning,';
@@ -60,7 +63,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get emailVerificationRequired => 'Email Verification Required';
 
   @override
-  String get emailNotVerifiedMessage => 'Please verify your email address to continue. A verification link has been sent to your email.';
+  String get emailNotVerifiedMessage =>
+      'Please verify your email address to continue. A verification link has been sent to your email.';
 
   @override
   String get resendVerificationEmail => 'Resend Verification Email';
@@ -258,7 +262,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get datePickerFeatureComingSoon => 'Date picker feature coming soon';
 
   @override
-  String get genderPickerFeatureComingSoon => 'Gender picker feature coming soon';
+  String get genderPickerFeatureComingSoon =>
+      'Gender picker feature coming soon';
 
   @override
   String get editProfileFeatureComingSoon => 'Edit profile feature coming soon';
@@ -330,7 +335,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noLatestAvailable => 'No new products available';
 
   @override
-  String get noSpecialOffersAvailable => 'No special offers available currently';
+  String get noSpecialOffersAvailable =>
+      'No special offers available currently';
 
   @override
   String get productVideo => 'Product Video';
@@ -390,7 +396,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewSubmitted => 'Review submitted successfully!';
 
   @override
-  String get reviewSubmissionError => 'Error submitting review. Please try again.';
+  String get reviewSubmissionError =>
+      'Error submitting review. Please try again.';
 
   @override
   String get addedToCart => 'Added';
@@ -528,7 +535,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get forgetPasswordTitle => 'Reset Password';
 
   @override
-  String get forgetPasswordDesc => 'Enter your email address to send verification code';
+  String get forgetPasswordDesc =>
+      'Enter your email address to send verification code';
 
   @override
   String get sendVerificationCode => 'Send Verification Code';
@@ -630,13 +638,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordTooLongMax50 => 'Password is too long';
 
   @override
-  String get passwordMustContainUppercase => 'Password must contain at least one uppercase letter';
+  String get passwordMustContainUppercase =>
+      'Password must contain at least one uppercase letter';
 
   @override
-  String get passwordMustContainLowercase => 'Password must contain at least one lowercase letter';
+  String get passwordMustContainLowercase =>
+      'Password must contain at least one lowercase letter';
 
   @override
-  String get passwordMustContainNumber => 'Password must contain at least one number';
+  String get passwordMustContainNumber =>
+      'Password must contain at least one number';
 
   @override
   String get pleaseConfirmPassword => 'Please confirm password';
@@ -753,16 +764,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirmNewPasswordLabel => 'Confirm New Password';
 
   @override
-  String get securityTip => 'Keep your account secure by updating your password regularly and using a strong password.';
+  String get securityTip =>
+      'Keep your account secure by updating your password regularly and using a strong password.';
 
   @override
-  String get nameUpdateTip => 'You can change your full name here. The new name will appear in your profile.';
+  String get nameUpdateTip =>
+      'You can change your full name here. The new name will appear in your profile.';
 
   @override
-  String get phoneUpdateTip => 'You can update your phone number here. Make sure to enter a valid number for contact.';
+  String get phoneUpdateTip =>
+      'You can update your phone number here. Make sure to enter a valid number for contact.';
 
   @override
-  String get birthDateUpdateTip => 'You can update your birth date here. This information helps personalize your experience.';
+  String get birthDateUpdateTip =>
+      'You can update your birth date here. This information helps personalize your experience.';
 
   @override
   String get notSpecifiedValue => 'Not specified';
@@ -783,19 +798,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addressNotChanged => 'Address not changed';
 
   @override
-  String get addressUpdateTip => 'You can update your address here. This helps improve delivery services.';
+  String get addressUpdateTip =>
+      'You can update your address here. This helps improve delivery services.';
 
   @override
   String get addressTipsTitle => 'Address writing tips:';
 
   @override
-  String get addressTips => '• Write street and neighborhood name\n• Add building or apartment number\n• Mention city and governorate\n• You can add distinctive landmarks';
+  String get addressTips =>
+      '• Write street and neighborhood name\n• Add building or apartment number\n• Mention city and governorate\n• You can add distinctive landmarks';
 
   @override
-  String get addressUpdateNotAvailable => 'Address editing is not available currently - this feature will be added soon';
+  String get addressUpdateNotAvailable =>
+      'Address editing is not available currently - this feature will be added soon';
 
   @override
-  String get passwordUpdateTip => 'Keep your account secure by updating your password regularly and using a strong password.';
+  String get passwordUpdateTip =>
+      'Keep your account secure by updating your password regularly and using a strong password.';
 
   @override
   String get imageUpdatedSuccessfully => 'Image updated successfully';
@@ -813,7 +832,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logoutConfirmationTitle => 'Are you sure you want to log out?';
 
   @override
-  String get logoutConfirmationMessage => 'Your current session will be ended and you\'ll need to sign in again';
+  String get logoutConfirmationMessage =>
+      'Your current session will be ended and you\'ll need to sign in again';
 
   @override
   String get cancelButton => 'Cancel';
@@ -867,7 +887,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorLoadingCountries => 'Error loading countries';
 
   @override
-  String get checkInternetConnection => 'Please check your internet connection and try again';
+  String get checkInternetConnection =>
+      'Please check your internet connection and try again';
 
   @override
   String get selectYourCountry => 'Select your country';
@@ -891,7 +912,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clearCart => 'Clear Cart';
 
   @override
-  String get clearCartConfirmation => 'Are you sure you want to remove all products from the cart?';
+  String get clearCartConfirmation =>
+      'Are you sure you want to remove all products from the cart?';
 
   @override
   String get yes => 'Yes';
@@ -945,7 +967,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notLoggedIn => 'You are not logged in';
 
   @override
-  String get loginToAccessAccount => 'Please log in to access your account and manage your information';
+  String get loginToAccessAccount =>
+      'Please log in to access your account and manage your information';
 
   @override
   String get dontHaveAccountQuestion => 'Don\'t have an account?';
@@ -1005,7 +1028,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewOnlySpaces => 'Review cannot contain only spaces';
 
   @override
-  String get reviewInappropriateContent => 'Review contains inappropriate content';
+  String get reviewInappropriateContent =>
+      'Review contains inappropriate content';
 
   @override
   String get wishlistEmpty => 'Wishlist is Empty';
@@ -1014,22 +1038,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get wishlistEmptyMessage => 'No products in your wishlist';
 
   @override
-  String get addProductsToWishlist => 'Add products to your wishlist to see them here';
+  String get addProductsToWishlist =>
+      'Add products to your wishlist to see them here';
 
   @override
   String get clearWishlist => 'Clear Wishlist';
 
   @override
-  String get clearWishlistConfirmation => 'Are you sure you want to remove all products from wishlist?';
+  String get clearWishlistConfirmation =>
+      'Are you sure you want to remove all products from wishlist?';
 
   @override
   String get wishlistCleared => 'All products removed from wishlist';
 
   @override
-  String get failedToClearWishlist => 'Failed to clear all products from wishlist';
+  String get failedToClearWishlist =>
+      'Failed to clear all products from wishlist';
 
   @override
-  String get failedToRemoveFromWishlist => 'Failed to remove product from wishlist';
+  String get failedToRemoveFromWishlist =>
+      'Failed to remove product from wishlist';
 
   @override
   String get failedToAddToWishlist => 'Failed to add product to wishlist';
@@ -1086,13 +1114,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discoverAllCategories => 'Discover All Categories';
 
   @override
-  String get browseCategorizedProducts => 'Browse a wide range of products categorized by categories';
+  String get browseCategorizedProducts =>
+      'Browse a wide range of products categorized by categories';
 
   @override
   String get bestSellerProducts => 'Best Sellers';
 
   @override
-  String get noBestSellerAvailable => 'No best seller products available currently';
+  String get noBestSellerAvailable =>
+      'No best seller products available currently';
 
   @override
   String get networkConnectionTimeout => 'Network connection timeout';
@@ -1182,13 +1212,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clientPreconditionRequired => 'Precondition required';
 
   @override
-  String get clientTooManyRequests => 'Too many requests - please try again later';
+  String get clientTooManyRequests =>
+      'Too many requests - please try again later';
 
   @override
-  String get clientRequestHeaderFieldsTooLarge => 'Request header fields too large';
+  String get clientRequestHeaderFieldsTooLarge =>
+      'Request header fields too large';
 
   @override
-  String get clientUnavailableForLegalReasons => 'Unavailable for legal reasons';
+  String get clientUnavailableForLegalReasons =>
+      'Unavailable for legal reasons';
 
   @override
   String get serverNotImplemented => 'Feature not implemented';
@@ -1209,7 +1242,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get serverNotExtended => 'Not extended';
 
   @override
-  String get serverNetworkAuthenticationRequired => 'Network authentication required';
+  String get serverNetworkAuthenticationRequired =>
+      'Network authentication required';
 
   @override
   String get requestCancelled => 'Request cancelled';
@@ -1239,13 +1273,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get unexpectedError => 'An unexpected error occurred';
 
   @override
-  String get pleaseCheckInternetConnection => 'Please check your internet connection';
+  String get pleaseCheckInternetConnection =>
+      'Please check your internet connection';
 
   @override
   String get pleaseTryAgainLater => 'Please try again later';
 
   @override
-  String get contactSupportIfPersists => 'Contact support if the problem persists';
+  String get contactSupportIfPersists =>
+      'Contact support if the problem persists';
 
   @override
   String get retryRequest => 'Retry';
@@ -1338,7 +1374,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get youSave => 'You Save';
 
   @override
-  String get addYourFirstAddress => 'Add your first delivery address to get started';
+  String get addYourFirstAddress =>
+      'Add your first delivery address to get started';
 
   @override
   String get somethingWentWrong => 'Something went wrong';
@@ -1347,7 +1384,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteAddress => 'Delete Address';
 
   @override
-  String get deleteAddressConfirmation => 'Are you sure you want to delete this address?';
+  String get deleteAddressConfirmation =>
+      'Are you sure you want to delete this address?';
 
   @override
   String get editAddress => 'Edit Address';
@@ -1377,7 +1415,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pleaseEnterShippingCost => 'Please enter shipping cost';
 
   @override
-  String get pleaseEnterValidShippingCost => 'Please enter a valid shipping cost';
+  String get pleaseEnterValidShippingCost =>
+      'Please enter a valid shipping cost';
 
   @override
   String get updateAddress => 'Update Address';
@@ -1389,7 +1428,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get other => 'Other';
 
   @override
-  String get pleaseSelectAllLocationFields => 'Please select all location fields';
+  String get pleaseSelectAllLocationFields =>
+      'Please select all location fields';
 
   @override
   String get select => 'Select';
@@ -1410,7 +1450,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get orderId => 'Order ID: #%s';
 
   @override
-  String get orderConfirmationMessage => 'We will contact you soon to confirm your order and schedule delivery';
+  String get orderConfirmationMessage =>
+      'We will contact you soon to confirm your order and schedule delivery';
 
   @override
   String get trackOrder => 'Track Order';
@@ -1422,16 +1463,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noProductsFound => 'No products found';
 
   @override
-  String get tryDifferentKeywords => 'Try different keywords or browse categories';
+  String get tryDifferentKeywords =>
+      'Try different keywords or browse categories';
 
   @override
-  String get connectionClosed => 'Connection failed. Check your internet connection and try again';
+  String get connectionClosed =>
+      'Connection failed. Check your internet connection and try again';
 
   @override
-  String get connectionTimeout => 'Connection timeout. Check your internet speed and try again';
+  String get connectionTimeout =>
+      'Connection timeout. Check your internet speed and try again';
 
   @override
-  String get noInternetConnection => 'No internet connection. Check your connection and try again';
+  String get noInternetConnection =>
+      'No internet connection. Check your connection and try again';
 
   @override
   String get serverNotResponding => 'Server not responding. Try again later';
@@ -1446,7 +1491,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get numberOfProducts => 'Number of Products';
 
   @override
-  String get loginToSyncCart => 'Login to sync your cart and complete your purchase';
+  String get loginToSyncCart =>
+      'Login to sync your cart and complete your purchase';
 
   @override
   String get continueAsGuest => 'Continue as Guest';
@@ -1461,7 +1507,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noOrdersYet => 'No orders yet';
 
   @override
-  String get noOrdersMessage => 'Looks like you haven’t placed any orders yet. Start shopping to discover our amazing products!';
+  String get noOrdersMessage =>
+      'Looks like you haven’t placed any orders yet. Start shopping to discover our amazing products!';
 
   @override
   String get orderHistory => 'Order History';
@@ -1488,7 +1535,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get guest => 'Guest';
 
   @override
-  String get guestLoginDescription => 'Browse products without creating an account';
+  String get guestLoginDescription =>
+      'Browse products without creating an account';
 
   @override
   String get loadingOrderDetails => 'Loading Order Details';

@@ -634,5 +634,14 @@
   "unitPrice": "unitPrice",
   "taxItems": "taxItems",
   "addingToCart": "Adding",
-  "failedToLoadSliders": "Failed to load sliders"
+  "failedToLoadSliders": "Failed to load sliders",
+  "menu": "Menu",
+  "blog": "Blog",
+  "contactUs": "Contact Us",
+  "aboutApp": "About App",
+  "faq": "FAQ",
+  "termsAndConditions": "Terms & Conditions",
+  "privacyPolicy": "Privacy Policy",
+  "language": "Language",
+  "settings": "Settings"
 }

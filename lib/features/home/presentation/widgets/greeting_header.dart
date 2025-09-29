@@ -14,6 +14,8 @@ import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/l10n/app_localizations.dart';
+import 'package:test/features/profile/presentation/view/my_orders_view.dart';
+import 'package:test/features/wishlist/presentation/view/wishlist_view.dart';
 import 'header_search_bar.dart';
 import 'location_selector_header.dart';
 
@@ -302,68 +304,134 @@ class _GreetingHeaderState extends State<GreetingHeader> {
   }
 
   void _showDrawer(BuildContext context) {
-    showModalBottomSheet(
+    final bool isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    
+    showGeneralDialog(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => _buildDrawer(),
+      barrierDismissible: true,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierColor: Colors.black54,
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            // Arabic: slide from right (1.0, 0.0), English: slide from left (-1.0, 0.0)
+            begin: isArabic ? const Offset(1.0, 0.0) : const Offset(-1.0, 0.0),
+            end: Offset.zero,
+          ).animate(CurvedAnimation(
+            parent: animation,
+            curve: Curves.easeInOut,
+          )),
+          child: Align(
+            // Arabic: align to right, English: align to left
+            alignment: isArabic ? Alignment.centerRight : Alignment.centerLeft,
+            child: _buildDrawer(),
+          ),
+        );
+      },
     );
   }
 
   Widget _buildDrawer() {
+    final bool isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    
     return Container(
-      height: MediaQuery.of(context).size.height * 0.85,
-      decoration: const BoxDecoration(
+      width: MediaQuery.of(context).size.width * 0.85,
+      height: MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(32),
-          topRight: Radius.circular(32),
+          // Arabic: round left corners, English: round right corners
+          topLeft: isArabic ? const Radius.circular(32) : Radius.zero,
+          bottomLeft: isArabic ? const Radius.circular(32) : Radius.zero,
+          topRight: isArabic ? Radius.zero : const Radius.circular(32),
+          bottomRight: isArabic ? Radius.zero : const Radius.circular(32),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.15),
+            blurRadius: 20,
+            // Arabic: shadow to left, English: shadow to right
+            offset: isArabic ? const Offset(-5, 0) : const Offset(5, 0),
+          ),
+        ],
       ),
       child: Column(
         children: [
-          // Handle
+          // Header with gradient background
           Container(
-            margin: const EdgeInsets.only(top: 12),
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(2),
+            width: double.infinity,
+            padding: EdgeInsets.fromLTRB(
+              24,
+              MediaQuery.of(context).padding.top + 20,
+              24,
+              24,
             ),
-          ),
-
-          // Header
-          Container(
-            padding: const EdgeInsets.all(24),
-            child: Row(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [AppColors.primary, AppColors.primary.withValues(alpha: 0.8)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.only(
+                // Arabic: round top-left, English: round top-right
+                topLeft: isArabic ? const Radius.circular(32) : Radius.zero,
+                topRight: isArabic ? Radius.zero : const Radius.circular(32),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        AppColors.primary,
-                        AppColors.primary.withValues(alpha: 0.8),
-                      ],
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.menu_rounded,
+                        color: Colors.white,
+                        size: 24,
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Icon(
-                    Icons.menu_rounded,
-                    color: Colors.white,
-                    size: 24,
-                  ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        Localizations.localeOf(context).languageCode == 'ar' ? 'القائمة' : 'Menu',
+                        style: getBoldStyle(
+                          fontFamily: FontConstant.cairo,
+                          fontSize: FontSize.size20,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    // Close button
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          Icons.close_rounded,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 16),
-                Text(
-                  'القائمة',
-                  style: getBoldStyle(
-                    fontFamily: FontConstant.cairo,
-                    fontSize: FontSize.size20,
-                    color: AppColors.black,
-                  ),
-                ),
+                const SizedBox(height: 20),
+                // Language switcher in header
+                _buildLanguageSwitcherInDrawer(),
               ],
             ),
           ),
@@ -371,51 +439,78 @@ class _GreetingHeaderState extends State<GreetingHeader> {
           // Menu Items
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.all(24),
               children: [
+                const SizedBox(height: 8),
                 _buildDrawerItem(
                   icon: Icons.shopping_bag_outlined,
-                  title: 'طلباتي',
-                  onTap: () => Navigator.pop(context),
+                  title: AppLocalizations.of(context)!.myOrders,
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, MyOrdersView.routeName);
+                  },
                 ),
                 _buildDrawerItem(
                   icon: Icons.favorite_outline_rounded,
-                  title: 'المفضلة',
-                  onTap: () => Navigator.pop(context),
+                  title: AppLocalizations.of(context)!.favorite,
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, WishlistView.routeName);
+                  },
                 ),
                 _buildDrawerItem(
                   icon: Icons.notifications_outlined,
-                  title: 'الإشعارات',
+                  title: AppLocalizations.of(context)!.notifications,
                   badge: widget.notificationCount > 0
                       ? widget.notificationCount.toString()
                       : null,
-                  onTap: () => Navigator.pop(context),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/notifications');
+                  },
                 ),
                 _buildDrawerItem(
+                  icon: Icons.category_outlined,
+                  title: AppLocalizations.of(context)!.categories,
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/all-categories');
+                  },
+                ),
+                const SizedBox(height: 16),
+                // Divider
+                Container(
+                  height: 1,
+                  color: Colors.grey[200],
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                ),
+                const SizedBox(height: 8),
+                _buildDrawerItem(
                   icon: Icons.article_outlined,
-                  title: 'المدونة',
+                  title: Localizations.localeOf(context).languageCode == 'ar' ? 'المدونة' : 'Blog',
                   onTap: () => Navigator.pop(context),
                 ),
                 _buildDrawerItem(
                   icon: Icons.support_agent_rounded,
-                  title: 'التواصل',
+                  title: Localizations.localeOf(context).languageCode == 'ar' ? 'التواصل' : 'Contact Us',
                   onTap: () => Navigator.pop(context),
                 ),
                 _buildDrawerItem(
                   icon: Icons.info_outline_rounded,
-                  title: 'حول التطبيق',
+                  title: Localizations.localeOf(context).languageCode == 'ar' ? 'حول التطبيق' : 'About App',
                   onTap: () => Navigator.pop(context),
                 ),
                 _buildDrawerItem(
                   icon: Icons.help_outline_rounded,
-                  title: 'الأسئلة الشائعة',
+                  title: Localizations.localeOf(context).languageCode == 'ar' ? 'الأسئلة الشائعة' : 'FAQ',
                   onTap: () => Navigator.pop(context),
                 ),
                 _buildDrawerItem(
                   icon: Icons.description_outlined,
-                  title: 'الشروط والأحكام',
+                  title: Localizations.localeOf(context).languageCode == 'ar' ? 'الشروط والأحكام' : 'Terms & Conditions',
                   onTap: () => Navigator.pop(context),
                 ),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -429,77 +524,211 @@ class _GreetingHeaderState extends State<GreetingHeader> {
     required String title,
     String? subtitle,
     String? badge,
-    Widget? trailing,
     required VoidCallback onTap,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+        border: Border.all(
+          color: Colors.grey.withValues(alpha: 0.1),
+          width: 1,
+        ),
       ),
-      child: ListTile(
-        onTap: onTap,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-        leading: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: AppColors.primary.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(icon, color: AppColors.primary, size: 24),
-        ),
-        title: Text(
-          title,
-          style: getSemiBoldStyle(
-            fontFamily: FontConstant.cairo,
-            fontSize: FontSize.size16,
-            color: AppColors.black,
-          ),
-        ),
-        subtitle: subtitle != null
-            ? Text(
-                subtitle,
-                style: getMediumStyle(
-                  fontFamily: FontConstant.cairo,
-                  fontSize: FontSize.size14,
-                  color: Colors.grey[600],
-                ),
-              )
-            : null,
-        trailing:
-            trailing ??
-            Row(
-              mainAxisSize: MainAxisSize.min,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(20),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Row(
               children: [
-                if (badge != null)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
+                // Icon container with gradient
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        AppColors.primary.withValues(alpha: 0.1),
+                        AppColors.primary.withValues(alpha: 0.05),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      badge,
-                      style: getSemiBoldStyle(
-                        fontFamily: FontConstant.cairo,
-                        fontSize: FontSize.size12,
-                        color: Colors.white,
-                      ),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: AppColors.primary.withValues(alpha: 0.1),
+                      width: 1,
                     ),
                   ),
-                const SizedBox(width: 8),
-                Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: Colors.grey[400],
-                  size: 16,
+                  child: Icon(
+                    icon, 
+                    color: AppColors.primary, 
+                    size: 22,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                // Title and subtitle
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: getSemiBoldStyle(
+                          fontFamily: FontConstant.cairo,
+                          fontSize: FontSize.size16,
+                          color: AppColors.black,
+                        ),
+                      ),
+                      if (subtitle != null) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          subtitle,
+                          style: getMediumStyle(
+                            fontFamily: FontConstant.cairo,
+                            fontSize: FontSize.size13,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                // Badge and arrow
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (badge != null) ...[
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.red, Colors.red.withValues(alpha: 0.8)],
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.red.withValues(alpha: 0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Text(
+                          badge,
+                          style: getSemiBoldStyle(
+                            fontFamily: FontConstant.cairo,
+                            fontSize: FontSize.size11,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                    ],
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        color: Colors.grey[500],
+                        size: 14,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
+          ),
+        ),
       ),
+    );
+  }
+
+  Widget _buildLanguageSwitcherInDrawer() {
+    return Consumer<LanguageService>(
+      builder: (context, languageService, child) {
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.3),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.language_rounded,
+                color: Colors.white,
+                size: 20,
+              ),
+              const SizedBox(width: 12),
+              Text(
+                Localizations.localeOf(context).languageCode == 'ar' ? 'اللغة' : 'Language',
+                style: getMediumStyle(
+                  fontFamily: FontConstant.cairo,
+                  fontSize: FontSize.size14,
+                  color: Colors.white,
+                ),
+              ),
+              const Spacer(),
+              GestureDetector(
+                onTap: () {
+                  languageService.toggleLanguage();
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.4),
+                      width: 1,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SvgPicture.asset(
+                        languageService.isArabic ? AppAssets.egypt : AppAssets.england,
+                        width: 16,
+                        height: 16,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        languageService.isArabic ? 'عربي' : 'EN',
+                        style: getSemiBoldStyle(
+                          fontFamily: FontConstant.cairo,
+                          fontSize: FontSize.size12,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
