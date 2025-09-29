@@ -60,17 +60,21 @@ class ProductsGridWidget extends StatelessWidget {
           controller: scrollController,
           padding: EdgeInsets.symmetric(
             horizontal: ResponsiveHelper.getResponsiveSpacing(context, 16),
-            vertical: ResponsiveHelper.getResponsiveSpacing(context, 20),
+            vertical: ResponsiveHelper.getResponsiveSpacing(context, 8),
           ),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: ResponsiveHelper.getGridCrossAxisCount(context),
             childAspectRatio: ResponsiveHelper.getResponsiveValue(
               context,
-              mobile: 0.62,
-              tablet: 0.7,
-              desktop: 0.75,
+              smallMobile: 0.63,
+              mobile: 0.66,
+              tablet: 0.76,
+              desktop: 0.78,
             ),
-            crossAxisSpacing: ResponsiveHelper.getResponsiveSpacing(context, 12),
+            crossAxisSpacing: ResponsiveHelper.getResponsiveSpacing(
+              context,
+              12,
+            ),
             mainAxisSpacing: ResponsiveHelper.getResponsiveSpacing(context, 12),
           ),
           itemCount: itemCount,
@@ -79,7 +83,7 @@ class ProductsGridWidget extends StatelessWidget {
               // Show shimmer loading for additional items
               return const HomeProductCardShimmer();
             }
-            
+
             return Directionality(
               textDirection: textDirection,
               child: ProductCardProfessional(

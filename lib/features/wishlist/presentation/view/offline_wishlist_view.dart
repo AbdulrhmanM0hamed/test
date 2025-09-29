@@ -4,6 +4,7 @@ import 'package:test/core/utils/common/custom_button.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:test/core/utils/responsive/responsive_helper.dart';
 import 'package:test/core/services/offline_wishlist_service.dart';
 import 'package:test/core/services/hybrid_wishlist_service.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
@@ -97,7 +98,8 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
       if (mounted) {
         CustomSnackbar.showError(
           context: context,
-          message: '${AppLocalizations.of(context)!.failedToClearWishlist}: ${e.toString()}',
+          message:
+              '${AppLocalizations.of(context)!.failedToClearWishlist}: ${e.toString()}',
         );
       }
     }
@@ -115,7 +117,7 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
         title: Text(
           AppLocalizations.of(context)!.favorite,
           style: getBoldStyle(
-            fontSize: FontSize.size20,
+            fontSize: ResponsiveHelper.getResponsiveFontSize(context, 20),
             fontFamily: FontConstant.cairo,
             color: Theme.of(context).textTheme.titleLarge?.color,
           ),
@@ -123,11 +125,21 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
         actions: [
           if (_wishlistItems.isNotEmpty)
             IconButton(
-              icon: Icon(Icons.delete_sweep, color: Colors.red, size: 24),
+              icon: Icon(
+                Icons.delete_sweep,
+                color: Colors.red,
+                size: ResponsiveHelper.getResponsiveValue(
+                  context,
+                  smallMobile: 20.0,
+                  mobile: 22.0,
+                  tablet: 24.0,
+                  desktop: 26.0,
+                ),
+              ),
               onPressed: () => _showClearWishlistDialog(),
               tooltip: AppLocalizations.of(context)!.clearAll,
             ),
-          const SizedBox(width: 8),
+          SizedBox(width: ResponsiveHelper.getResponsiveSpacing(context, 8)),
         ],
       ),
       body: FadeTransition(
@@ -147,42 +159,54 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding: const EdgeInsets.all(32),
+            padding: EdgeInsets.all(
+              ResponsiveHelper.getResponsiveSpacing(context, 32),
+            ),
             decoration: BoxDecoration(
               color: AppColors.primary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
               Icons.favorite_border,
-              size: 80,
+              size: ResponsiveHelper.getResponsiveValue(
+                context,
+                smallMobile: 60.0,
+                mobile: 70.0,
+                tablet: 80.0,
+                desktop: 90.0,
+              ),
               color: AppColors.primary.withValues(alpha: 0.7),
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.getResponsiveSpacing(context, 24)),
           Text(
             AppLocalizations.of(context)!.wishlistEmpty,
             style: getBoldStyle(
-              fontSize: FontSize.size20,
+              fontSize: ResponsiveHelper.getResponsiveFontSize(context, 20),
               fontFamily: FontConstant.cairo,
               color: Theme.of(context).textTheme.titleLarge?.color,
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: ResponsiveHelper.getResponsiveSpacing(context, 12)),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
+            padding: EdgeInsets.symmetric(
+              horizontal: ResponsiveHelper.getResponsiveSpacing(context, 32),
+            ),
             child: Text(
               AppLocalizations.of(context)!.wishlistEmptyDescription,
               textAlign: TextAlign.center,
               style: getRegularStyle(
-                fontSize: FontSize.size14,
+                fontSize: ResponsiveHelper.getResponsiveFontSize(context, 14),
                 fontFamily: FontConstant.cairo,
                 color: Colors.grey[600],
               ),
             ),
           ),
-          const SizedBox(height: 32),
+          SizedBox(height: ResponsiveHelper.getResponsiveSpacing(context, 32)),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 64),
+            padding: EdgeInsets.symmetric(
+              horizontal: ResponsiveHelper.getResponsiveSpacing(context, 64),
+            ),
             child: CustomButton(
               onPressed: () {
                 // Navigate to home tab using static method
@@ -190,12 +214,25 @@ class _OfflineWishlistViewState extends State<OfflineWishlistView>
               },
               text: AppLocalizations.of(context)!.browseProducts,
               backgroundColor: AppColors.primary,
-              height: 56,
+              height: ResponsiveHelper.getResponsiveValue(
+                context,
+                mobile: 50.0,
+                tablet: 56.0,
+                desktop: 60.0,
+              ),
               prefix: Padding(
-                padding: const EdgeInsets.only(right: 8),
+                padding: EdgeInsets.only(
+                  right: ResponsiveHelper.getResponsiveSpacing(context, 8),
+                ),
                 child: Icon(
                   Icons.shopping_bag_outlined,
-                  size: 24,
+                  size: ResponsiveHelper.getResponsiveValue(
+                    context,
+                    smallMobile: 20.0,
+                    mobile: 22.0,
+                    tablet: 24.0,
+                    desktop: 26.0,
+                  ),
                   color: Colors.white,
                 ),
               ),

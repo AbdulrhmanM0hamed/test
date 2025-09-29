@@ -11,6 +11,7 @@ import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
 import '../../../../core/utils/animations/custom_progress_indcator.dart';
+import '../../../../core/utils/responsive/responsive_helper.dart';
 
 class OfflineWishlistItemCard extends StatefulWidget {
   final Map<String, dynamic> product;
@@ -86,9 +87,20 @@ class _OfflineWishlistItemCardState extends State<OfflineWishlistItemCard>
             scale: _isPressed ? 0.98 : 1.0,
             duration: const Duration(milliseconds: 120),
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              margin: EdgeInsets.symmetric(
+                horizontal: ResponsiveHelper.getResponsiveSpacing(context, 16),
+                vertical: ResponsiveHelper.getResponsiveSpacing(context, 8),
+              ),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(
+                  ResponsiveHelper.getResponsiveValue(
+                    context,
+                    smallMobile: 12.0,
+                    mobile: 16.0,
+                    tablet: 18.0,
+                    desktop: 20.0,
+                  ),
+                ),
                 color: Theme.of(context).cardColor,
                 boxShadow: [
                   BoxShadow(
@@ -122,17 +134,47 @@ class _OfflineWishlistItemCardState extends State<OfflineWishlistItemCard>
     return Hero(
       tag: 'offline_wishlist_product_$productId',
       child: Container(
-        width: 120,
-        height: 120,
-        margin: const EdgeInsets.all(12),
+        width: ResponsiveHelper.getResponsiveValue(
+          context,
+          smallMobile: 80.0,
+          mobile: 100.0,
+          tablet: 120.0,
+          desktop: 140.0,
+        ),
+        height: ResponsiveHelper.getResponsiveValue(
+          context,
+          smallMobile: 80.0,
+          mobile: 100.0,
+          tablet: 120.0,
+          desktop: 140.0,
+        ),
+        margin: EdgeInsets.all(
+          ResponsiveHelper.getResponsiveSpacing(context, 12),
+        ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(
+            ResponsiveHelper.getResponsiveValue(
+              context,
+              smallMobile: 12.0,
+              mobile: 12.0,
+              tablet: 14.0,
+              desktop: 16.0,
+            ),
+          ),
           color: const Color.fromARGB(255, 240, 233, 211),
         ),
         child: Stack(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(
+                ResponsiveHelper.getResponsiveValue(
+                  context,
+                  smallMobile: 12.0,
+                  mobile: 12.0,
+                  tablet: 14.0,
+                  desktop: 16.0,
+                ),
+              ),
               child: productImage.isNotEmpty
                   ? CachedNetworkImage(
                       imageUrl: productImage,
@@ -143,11 +185,17 @@ class _OfflineWishlistItemCardState extends State<OfflineWishlistItemCard>
                           const Center(child: CustomProgressIndicator()),
                       errorWidget: (context, url, error) => Container(
                         color: Colors.grey[200],
-                        child: const Center(
+                        child: Center(
                           child: Icon(
                             Icons.image_not_supported,
                             color: Colors.grey,
-                            size: 40,
+                            size: ResponsiveHelper.getResponsiveValue(
+                              context,
+                              smallMobile: 24.0,
+                              mobile: 32.0,
+                              tablet: 40.0,
+                              desktop: 48.0,
+                            ),
                           ),
                         ),
                       ),
@@ -158,7 +206,13 @@ class _OfflineWishlistItemCardState extends State<OfflineWishlistItemCard>
                         child: Icon(
                           Icons.image_not_supported_outlined,
                           color: Colors.grey[400],
-                          size: 40,
+                          size: ResponsiveHelper.getResponsiveValue(
+                            context,
+                            smallMobile: 24.0,
+                            mobile: 32.0,
+                            tablet: 40.0,
+                            desktop: 48.0,
+                          ),
                         ),
                       ),
                     ),
@@ -166,21 +220,35 @@ class _OfflineWishlistItemCardState extends State<OfflineWishlistItemCard>
             // Status badge
             if (isBest)
               Positioned(
-                top: 8,
-                right: 8,
+                top: ResponsiveHelper.getResponsiveSpacing(context, 8),
+                right: ResponsiveHelper.getResponsiveSpacing(context, 8),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 3,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: ResponsiveHelper.getResponsiveSpacing(
+                      context,
+                      6,
+                    ),
+                    vertical: ResponsiveHelper.getResponsiveSpacing(context, 3),
                   ),
                   decoration: BoxDecoration(
                     color: AppColors.secondary,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(
+                      ResponsiveHelper.getResponsiveValue(
+                        context,
+                        smallMobile: 6.0,
+                        mobile: 6.0,
+                        tablet: 7.0,
+                        desktop: 8.0,
+                      ),
+                    ),
                   ),
                   child: Text(
                     AppLocalizations.of(context)!.bestSellers,
                     style: getBoldStyle(
-                      fontSize: FontSize.size9,
+                      fontSize: ResponsiveHelper.getResponsiveFontSize(
+                        context,
+                        9,
+                      ),
                       fontFamily: FontConstant.cairo,
                       color: AppColors.white,
                     ),
@@ -192,23 +260,47 @@ class _OfflineWishlistItemCardState extends State<OfflineWishlistItemCard>
               Positioned.fill(
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(
+                      ResponsiveHelper.getResponsiveValue(
+                        context,
+                        smallMobile: 6.0,
+                        mobile: 12.0,
+                        tablet: 14.0,
+                        desktop: 16.0,
+                      ),
+                    ),
                     color: Colors.black.withValues(alpha: 0.6),
                   ),
                   child: Center(
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: ResponsiveHelper.getResponsiveSpacing(
+                          context,
+                          8,
+                        ),
+                        vertical: ResponsiveHelper.getResponsiveSpacing(
+                          context,
+                          4,
+                        ),
                       ),
                       decoration: BoxDecoration(
                         color: Colors.red,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(
+                          ResponsiveHelper.getResponsiveValue(
+                            context,
+                            mobile: 8.0,
+                            tablet: 10.0,
+                            desktop: 12.0,
+                          ),
+                        ),
                       ),
                       child: Text(
                         AppLocalizations.of(context)!.outOfStock,
                         style: getBoldStyle(
-                          fontSize: FontSize.size10,
+                          fontSize: ResponsiveHelper.getResponsiveFontSize(
+                            context,
+                            10,
+                          ),
                           fontFamily: FontConstant.cairo,
                           color: Colors.white,
                         ),
@@ -235,7 +327,10 @@ class _OfflineWishlistItemCardState extends State<OfflineWishlistItemCard>
     final fakePrice = widget.product['fakePrice'] ?? widget.product['oldPrice'];
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+      padding: EdgeInsets.symmetric(
+        vertical: ResponsiveHelper.getResponsiveSpacing(context, 12),
+        horizontal: ResponsiveHelper.getResponsiveSpacing(context, 8),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -247,12 +342,33 @@ class _OfflineWishlistItemCardState extends State<OfflineWishlistItemCard>
                 if (brandLogo.isNotEmpty) ...[
                   CachedNetworkImage(
                     imageUrl: brandLogo,
-                    width: 16,
-                    height: 16,
+                    width: ResponsiveHelper.getResponsiveValue(
+                      context,
+                      smallMobile: 12.0,
+                      mobile: 14.0,
+                      tablet: 16.0,
+                      desktop: 18.0,
+                    ),
+                    height: ResponsiveHelper.getResponsiveValue(
+                      context,
+                      mobile: 14.0,
+                      tablet: 16.0,
+                      desktop: 18.0,
+                    ),
                     fit: BoxFit.contain,
                     placeholder: (context, url) => Container(
-                      width: 16,
-                      height: 16,
+                      width: ResponsiveHelper.getResponsiveValue(
+                        context,
+                        mobile: 14.0,
+                        tablet: 16.0,
+                        desktop: 18.0,
+                      ),
+                      height: ResponsiveHelper.getResponsiveValue(
+                        context,
+                        mobile: 14.0,
+                        tablet: 16.0,
+                        desktop: 18.0,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(2),
@@ -261,13 +377,18 @@ class _OfflineWishlistItemCardState extends State<OfflineWishlistItemCard>
                     errorWidget: (context, url, error) =>
                         const SizedBox.shrink(),
                   ),
-                  const SizedBox(width: 6),
+                  SizedBox(
+                    width: ResponsiveHelper.getResponsiveSpacing(context, 6),
+                  ),
                 ],
                 Flexible(
                   child: Text(
                     brandName,
                     style: getMediumStyle(
-                      fontSize: FontSize.size11,
+                      fontSize: ResponsiveHelper.getResponsiveFontSize(
+                        context,
+                        11,
+                      ),
                       fontFamily: FontConstant.cairo,
                       color: Colors.grey[650],
                     ),
@@ -276,7 +397,7 @@ class _OfflineWishlistItemCardState extends State<OfflineWishlistItemCard>
                 ),
               ],
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: ResponsiveHelper.getResponsiveSpacing(context, 4)),
           ],
 
           // Product name
@@ -285,7 +406,7 @@ class _OfflineWishlistItemCardState extends State<OfflineWishlistItemCard>
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: getSemiBoldStyle(
-              fontSize: FontSize.size14,
+              fontSize: ResponsiveHelper.getResponsiveFontSize(context, 14),
               fontFamily: FontConstant.cairo,
               color: Theme.of(context).textTheme.bodyLarge?.color,
             ),

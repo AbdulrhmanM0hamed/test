@@ -23,19 +23,98 @@ class FirebaseNotificationService {
   Future<void> initialize() async {
     print('🔥 FirebaseNotificationService: Initializing...');
 
-    // Request permission for notifications
-    await _requestPermission();
+    try {
+      // Request permission for notifications
+      await _requestPermission();
 
-    // Initialize local notifications
-    await _initializeLocalNotifications();
+      // Initialize local notifications
+      await _initializeLocalNotifications();
 
-    // Configure Firebase Messaging
-    await _configureFirebaseMessaging();
+      // Configure Firebase Messaging
+      await _configureFirebaseMessaging();
 
-    // Get FCM token
-    await _getFCMToken();
+      // Get FCM token
+      await _getFCMToken();
 
-    print('✅ FirebaseNotificationService: Initialization completed');
+      // Test notification functionality
+      await _testNotificationSetup();
+
+      print(
+        '✅ FirebaseNotificationService: Initialization completed successfully',
+      );
+    } catch (e) {
+      print('❌ FirebaseNotificationService: Initialization failed: $e');
+      rethrow;
+    }
+  }
+
+  // Test notification setup
+  Future<void> _testNotificationSetup() async {
+    try {
+      print('🧪 Testing notification setup...');
+
+      // Check if notifications are enabled
+      final settings = await _firebaseMessaging.getNotificationSettings();
+      print(
+        '🔔 Current notification settings: ${settings.authorizationStatus}',
+      );
+
+      // Get current token
+      final token = await _firebaseMessaging.getToken();
+      if (token != null) {
+        print('✅ FCM Token is available: ${token.substring(0, 20)}...');
+      } else {
+        print('❌ FCM Token is null');
+      }
+
+      // Test local notification
+      await _showTestLocalNotification();
+
+      print('✅ Notification setup test completed');
+    } catch (e) {
+      print('❌ Notification setup test failed: $e');
+    }
+  }
+
+  // Show test local notification
+  Future<void> _showTestLocalNotification() async {
+    try {
+      const androidDetails = AndroidNotificationDetails(
+        'high_importance_channel',
+        'High Importance Notifications',
+        channelDescription: 'This channel is used for important notifications.',
+        importance: Importance.high,
+        priority: Priority.high,
+        showWhen: true,
+        icon: '@mipmap/ic_launcher',
+        color: Color(0xFF8B4513),
+        playSound: true,
+        enableVibration: true,
+      );
+
+      const iosDetails = DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+      );
+
+      const details = NotificationDetails(
+        android: androidDetails,
+        iOS: iosDetails,
+      );
+
+      await _localNotifications.show(
+        999999,
+        'Sobieh Coffee - Test',
+        'Firebase notifications are working! 🎉',
+        details,
+        payload: '{"type": "test", "message": "Test notification"}',
+      );
+
+      print('✅ Test local notification sent');
+    } catch (e) {
+      print('❌ Failed to send test local notification: $e');
+    }
   }
 
   // Request notification permissions
@@ -51,6 +130,15 @@ class FirebaseNotificationService {
     );
 
     print('🔔 Notification permission status: ${settings.authorizationStatus}');
+
+    if (settings.authorizationStatus == AuthorizationStatus.denied) {
+      print('❌ User denied notification permissions');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.notDetermined) {
+      print('⚠️ User has not yet granted notification permissions');
+    } else {
+      print('✅ User granted notification permissions');
+    }
   }
 
   // Initialize local notifications
@@ -111,24 +199,38 @@ class FirebaseNotificationService {
   // Get FCM token
   Future<String?> _getFCMToken() async {
     try {
+      print('🎯 Getting FCM token...');
       final token = await _firebaseMessaging.getToken();
-      print('🎯 FCM Token: $token');
 
-      // Listen for token refresh
-      _firebaseMessaging.onTokenRefresh.listen((newToken) {
-        print('🔄 FCM Token refreshed: $newToken');
-        // TODO: Send new token to server
-        _sendTokenToServer(newToken);
-      });
-
-      // Send initial token to server
       if (token != null) {
-        _sendTokenToServer(token);
-      }
+        print('✅ FCM Token received successfully');
+        print(
+          '🎯 Token (first 50 chars): ${token.substring(0, token.length > 50 ? 50 : token.length)}...',
+        );
+        print('🎯 Token length: ${token.length} characters');
 
-      return token;
+        // Listen for token refresh
+        _firebaseMessaging.onTokenRefresh.listen((newToken) {
+          print('🔄 FCM Token refreshed');
+          print(
+            '🔄 New token (first 50 chars): ${newToken.substring(0, newToken.length > 50 ? 50 : newToken.length)}...',
+          );
+          _sendTokenToServer(newToken);
+        });
+
+        // Send initial token to server
+        _sendTokenToServer(token);
+
+        return token;
+      } else {
+        print(
+          '❌ FCM Token is null - this might indicate a problem with Firebase setup',
+        );
+        return null;
+      }
     } catch (e) {
       print('❌ Error getting FCM token: $e');
+      print('❌ This might indicate Firebase is not properly configured');
       return null;
     }
   }
@@ -149,10 +251,15 @@ class FirebaseNotificationService {
 
   // Handle foreground messages
   void _handleForegroundMessage(RemoteMessage message) {
-    print('📱 Foreground message received: ${message.messageId}');
+    print('📱 ========== FOREGROUND MESSAGE RECEIVED ==========');
+    print('📱 Message ID: ${message.messageId}');
     print('📱 Title: ${message.notification?.title}');
     print('📱 Body: ${message.notification?.body}');
     print('📱 Data: ${message.data}');
+    print('📱 From: ${message.from}');
+    print('📱 Sent Time: ${message.sentTime}');
+    print('📱 TTL: ${message.ttl}');
+    print('📱 ===============================================');
 
     // Show local notification when app is in foreground
     _showLocalNotification(message);
@@ -313,15 +420,100 @@ class FirebaseNotificationService {
       print('❌ Error setting auto initialization: $e');
     }
   }
+
+  // Send test notification manually
+  Future<void> sendTestNotification() async {
+    try {
+      print('🧪 Sending manual test notification...');
+
+      await _localNotifications.show(
+        DateTime.now().millisecondsSinceEpoch ~/ 1000,
+        'Test Notification',
+        'This is a manual test notification from Sobieh Coffee! ☕',
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'high_importance_channel',
+            'High Importance Notifications',
+            channelDescription:
+                'This channel is used for important notifications.',
+            importance: Importance.high,
+            priority: Priority.high,
+            showWhen: true,
+            icon: '@mipmap/ic_launcher',
+            color: Color(0xFF8B4513),
+            playSound: true,
+            enableVibration: true,
+          ),
+          iOS: DarwinNotificationDetails(
+            presentAlert: true,
+            presentBadge: true,
+            presentSound: true,
+          ),
+        ),
+        payload:
+            '{"type": "manual_test", "timestamp": "${DateTime.now().toIso8601String()}"}',
+      );
+
+      print('✅ Manual test notification sent successfully');
+    } catch (e) {
+      print('❌ Failed to send manual test notification: $e');
+    }
+  }
+
+  // Check notification status
+  Future<Map<String, dynamic>> getNotificationStatus() async {
+    try {
+      final settings = await _firebaseMessaging.getNotificationSettings();
+      final token = await _firebaseMessaging.getToken();
+      
+      print('🔍 ========== NOTIFICATION STATUS CHECK ==========');
+      print('🔍 Authorization Status: ${settings.authorizationStatus}');
+      print('🔍 Alert Setting: ${settings.alert}');
+      print('🔍 Badge Setting: ${settings.badge}');
+      print('🔍 Sound Setting: ${settings.sound}');
+      print('🔍 Announcement Setting: ${settings.announcement}');
+      print('🔍 Critical Alert Setting: ${settings.criticalAlert}');
+      print('🔍 Token Available: ${token != null}');
+      if (token != null) {
+        print('🔍 Token: $token');
+      }
+      print('🔍 ===============================================');
+      
+      return {
+        'permissionStatus': settings.authorizationStatus.toString(),
+        'alert': settings.alert.toString(),
+        'badge': settings.badge.toString(),
+        'sound': settings.sound.toString(),
+        'hasToken': token != null,
+        'token': token,
+        'tokenPreview': token != null ? '${token.substring(0, 20)}...' : null,
+        'isInitialized': true,
+      };
+    } catch (e) {
+      print('❌ Error getting notification status: $e');
+      return {
+        'permissionStatus': 'error',
+        'hasToken': false,
+        'tokenPreview': null,
+        'isInitialized': false,
+        'error': e.toString(),
+      };
+    }
+  }
 }
 
 // Background message handler (must be top-level function)
 @pragma('vm:entry-point')
 Future<void> _handleBackgroundMessage(RemoteMessage message) async {
-  print('🌙 Background message received: ${message.messageId}');
+  print('🌙 ========== BACKGROUND MESSAGE RECEIVED ==========');
+  print('🌙 Message ID: ${message.messageId}');
   print('🌙 Title: ${message.notification?.title}');
   print('🌙 Body: ${message.notification?.body}');
   print('🌙 Data: ${message.data}');
+  print('🌙 From: ${message.from}');
+  print('🌙 Sent Time: ${message.sentTime}');
+  print('🌙 TTL: ${message.ttl}');
+  print('🌙 ===============================================');
 
   // Handle background message processing here
   // Note: UI operations are not allowed in background handlers

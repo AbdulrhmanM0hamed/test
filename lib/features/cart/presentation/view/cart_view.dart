@@ -7,6 +7,7 @@ import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/core/services/cart_global_service.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
+import 'package:test/core/utils/responsive/responsive_helper.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/features/cart/presentation/cubit/cart_state.dart';
 import 'package:test/features/cart/presentation/widgets/cart_item_card.dart';
@@ -90,7 +91,7 @@ class _CartViewState extends State<CartView>
       title: Text(
         AppLocalizations.of(context)!.cartTitle,
         style: getBoldStyle(
-          fontSize: FontSize.size20,
+          fontSize: ResponsiveHelper.getResponsiveFontSize(context, 20),
           fontFamily: FontConstant.cairo,
           color: Theme.of(context).textTheme.titleLarge?.color,
         ),
@@ -100,7 +101,16 @@ class _CartViewState extends State<CartView>
           builder: (context, state) {
             if (state is CartLoaded && state.cart.isNotEmpty) {
               return IconButton(
-                icon: Icon(Icons.delete_sweep, color: Colors.red, size: 24),
+                icon: Icon(
+                  Icons.delete_sweep,
+                  color: Colors.red,
+                  size: ResponsiveHelper.getResponsiveValue(
+                    context,
+                    mobile: 22.0,
+                    tablet: 24.0,
+                    desktop: 26.0,
+                  ),
+                ),
                 onPressed: () => _showClearCartDialog(context),
                 tooltip: AppLocalizations.of(context)!.clearAll,
               );
@@ -108,7 +118,7 @@ class _CartViewState extends State<CartView>
             return const SizedBox.shrink();
           },
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: ResponsiveHelper.getResponsiveSpacing(context, 8)),
       ],
     );
   }
@@ -123,38 +133,47 @@ class _CartViewState extends State<CartView>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding: const EdgeInsets.all(32),
+            padding: EdgeInsets.all(
+              ResponsiveHelper.getResponsiveSpacing(context, 32),
+            ),
             decoration: BoxDecoration(
               color: AppColors.primary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
               Icons.shopping_cart_outlined,
-              size: 80,
+              size: ResponsiveHelper.getResponsiveValue(
+                context,
+                mobile: 70.0,
+                tablet: 80.0,
+                desktop: 90.0,
+              ),
               color: AppColors.primary.withValues(alpha: 0.7),
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: ResponsiveHelper.getResponsiveSpacing(context, 24)),
           Text(
             AppLocalizations.of(context)!.cartEmpty,
             style: getBoldStyle(
-              fontSize: FontSize.size20,
+              fontSize: ResponsiveHelper.getResponsiveFontSize(context, 20),
               fontFamily: FontConstant.cairo,
               color: Colors.grey[600],
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: ResponsiveHelper.getResponsiveSpacing(context, 12)),
           Text(
             AppLocalizations.of(context)!.cartEmptyMessage,
             style: getMediumStyle(
-              fontSize: FontSize.size14,
+              fontSize: ResponsiveHelper.getResponsiveFontSize(context, 14),
               fontFamily: FontConstant.cairo,
               color: Colors.grey[500],
             ),
           ),
-          const SizedBox(height: 32),
+          SizedBox(height: ResponsiveHelper.getResponsiveSpacing(context, 32)),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 64),
+            padding: EdgeInsets.symmetric(
+              horizontal: ResponsiveHelper.getResponsiveSpacing(context, 64),
+            ),
             child: CustomButton(
               onPressed: () {
                 BottomNavBar.navigateToHome();
@@ -162,12 +181,24 @@ class _CartViewState extends State<CartView>
 
               text: AppLocalizations.of(context)!.startShopping,
               backgroundColor: AppColors.primary,
-              height: 56,
+              height: ResponsiveHelper.getResponsiveValue(
+                context,
+                mobile: 50.0,
+                tablet: 56.0,
+                desktop: 60.0,
+              ),
               prefix: Padding(
-                padding: const EdgeInsets.only(right: 8),
+                padding: EdgeInsets.only(
+                  right: ResponsiveHelper.getResponsiveSpacing(context, 8),
+                ),
                 child: Icon(
                   Icons.shopping_cart_outlined,
-                  size: 24,
+                  size: ResponsiveHelper.getResponsiveValue(
+                    context,
+                    mobile: 20.0,
+                    tablet: 24.0,
+                    desktop: 26.0,
+                  ),
                   color: Colors.white,
                 ),
               ),

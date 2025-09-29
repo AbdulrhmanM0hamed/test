@@ -65,14 +65,14 @@ class ResponsiveHelper {
         smallMobile: 12.0,
         mobile: 16.0,
         tablet: 24.0,
-        desktop: 32.0,
+        desktop: 16.0,
       ),
       vertical: getResponsiveValue(
         context,
         smallMobile: 8.0,
         mobile: 0,
-        tablet: 24.0,
-        desktop: 32.0,
+        tablet: 0.0,
+        desktop: 0.0,
       ),
     );
   }

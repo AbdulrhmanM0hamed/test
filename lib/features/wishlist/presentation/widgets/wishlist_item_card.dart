@@ -11,6 +11,7 @@ import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
 import '../../../../core/utils/animations/custom_progress_indcator.dart';
+import '../../../../core/utils/responsive/responsive_helper.dart';
 import '../../domain/entities/wishlist_item.dart';
 import '../cubit/wishlist_cubit.dart';
 
@@ -87,9 +88,20 @@ class _WishlistItemCardState extends State<WishlistItemCard>
             scale: _isPressed ? 0.98 : 1.0,
             duration: const Duration(milliseconds: 120),
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              margin: EdgeInsets.symmetric(
+                horizontal: ResponsiveHelper.getResponsiveSpacing(context, 16),
+                vertical: ResponsiveHelper.getResponsiveSpacing(context, 8),
+              ),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(
+                  ResponsiveHelper.getResponsiveValue(
+                    context,
+                    smallMobile: 12.0,
+                    mobile: 16.0,
+                    tablet: 18.0,
+                    desktop: 20.0,
+                  ),
+                ),
                 color: Theme.of(context).cardColor,
                 boxShadow: [
                   BoxShadow(
@@ -116,17 +128,46 @@ class _WishlistItemCardState extends State<WishlistItemCard>
 
   Widget _buildProductImage() {
     return Container(
-      width: 120,
-      height: 120,
-      margin: const EdgeInsets.all(12),
+      width: ResponsiveHelper.getResponsiveValue(
+        context,
+        mobile: 100.0,
+        tablet: 120.0,
+        desktop: 140.0,
+      ),
+      height: ResponsiveHelper.getResponsiveValue(
+        context,
+        smallMobile: 100.0,
+        mobile: 100.0,
+        tablet: 120.0,
+        desktop: 140.0,
+      ),
+      margin: EdgeInsets.all(
+        ResponsiveHelper.getResponsiveSpacing(context, 12),
+      ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(
+          ResponsiveHelper.getResponsiveValue(
+            context,
+            smallMobile: 12.0,
+            mobile: 12.0,
+            tablet: 14.0,
+            desktop: 16.0,
+          ),
+        ),
         color: const Color.fromARGB(255, 240, 233, 211),
       ),
       child: Stack(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(
+              ResponsiveHelper.getResponsiveValue(
+                context,
+                smallMobile: 12.0,
+                mobile: 12.0,
+                tablet: 14.0,
+                desktop: 16.0,
+              ),
+            ),
             child: CachedNetworkImage(
               imageUrl: widget.item.product.image,
               width: double.infinity,
@@ -201,8 +242,6 @@ class _WishlistItemCardState extends State<WishlistItemCard>
   }
 
   Widget _buildProductDetails() {
- 
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       child: Column(

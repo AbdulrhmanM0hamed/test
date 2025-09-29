@@ -12,6 +12,7 @@ import '../../../../core/utils/constant/app_assets.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
+import '../../../../core/utils/responsive/responsive_helper.dart';
 import '../../domain/entities/cart_item.dart';
 
 class CartItemCard extends StatefulWidget {
@@ -122,10 +123,21 @@ class _CartItemCardState extends State<CartItemCard>
               );
             },
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              margin: EdgeInsets.symmetric(
+                horizontal: ResponsiveHelper.getResponsiveSpacing(context, 16),
+                vertical: ResponsiveHelper.getResponsiveSpacing(context, 8),
+              ),
               decoration: BoxDecoration(
                 color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(
+                  ResponsiveHelper.getResponsiveValue(
+                    context,
+                    smallMobile: 10.0,
+                    mobile: 12.0,
+                    tablet: 14.0,
+                    desktop: 16.0,
+                  ),
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.08),
@@ -136,12 +148,16 @@ class _CartItemCardState extends State<CartItemCard>
                 ],
               ),
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(
+                  ResponsiveHelper.getResponsiveSpacing(context, 16),
+                ),
                 child: Row(
                   children: [
                     // Product Image
                     _buildProductImage(),
-                    const SizedBox(width: 16),
+                    SizedBox(
+                      width: ResponsiveHelper.getResponsiveSpacing(context, 16),
+                    ),
 
                     // Product Details
                     Expanded(child: _buildProductDetails()),
@@ -162,14 +178,42 @@ class _CartItemCardState extends State<CartItemCard>
     return Hero(
       tag: 'cart_product_${widget.cartItem.product.id}',
       child: Container(
-        width: 80,
-        height: 80,
+        width: ResponsiveHelper.getResponsiveValue(
+          context,
+          smallMobile: 60.0,
+          mobile: 70.0,
+          tablet: 80.0,
+          desktop: 90.0,
+        ),
+        height: ResponsiveHelper.getResponsiveValue(
+          context,
+          smallMobile: 60.0,
+          mobile: 70.0,
+          tablet: 80.0,
+          desktop: 90.0,
+        ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(
+            ResponsiveHelper.getResponsiveValue(
+              context,
+              smallMobile: 10.0,
+              mobile: 10.0,
+              tablet: 12.0,
+              desktop: 14.0,
+            ),
+          ),
           color: const Color.fromARGB(255, 240, 233, 211),
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(
+            ResponsiveHelper.getResponsiveValue(
+              context,
+              smallMobile: 10.0,
+              mobile: 10.0,
+              tablet: 12.0,
+              desktop: 14.0,
+            ),
+          ),
           child: CachedNetworkImage(
             imageUrl: widget.cartItem.product.image,
             fit: BoxFit.cover,
@@ -182,7 +226,13 @@ class _CartItemCardState extends State<CartItemCard>
               child: Icon(
                 Icons.image_not_supported_outlined,
                 color: Colors.grey[400],
-                size: 32,
+                size: ResponsiveHelper.getResponsiveValue(
+                  context,
+                  smallMobile: 24.0,
+                  mobile: 28.0,
+                  tablet: 32.0,
+                  desktop: 36.0,
+                ),
               ),
             ),
           ),
@@ -199,14 +249,14 @@ class _CartItemCardState extends State<CartItemCard>
         Text(
           widget.cartItem.product.name,
           style: getBoldStyle(
-            fontSize: FontSize.size14,
+            fontSize: ResponsiveHelper.getResponsiveFontSize(context, 14),
             fontFamily: FontConstant.cairo,
           ),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
 
-        const SizedBox(height: 4),
+        SizedBox(height: ResponsiveHelper.getResponsiveSpacing(context, 4)),
 
         // Size and Color Info
 
@@ -216,19 +266,37 @@ class _CartItemCardState extends State<CartItemCard>
             Text(
               '${widget.cartItem.product.realPrice} ${AppLocalizations.of(context)?.currency}',
               style: getBoldStyle(
-                fontSize: FontSize.size14,
+                fontSize: ResponsiveHelper.getResponsiveFontSize(context, 14),
                 fontFamily: FontConstant.cairo,
                 color: AppColors.primary,
               ),
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: ResponsiveHelper.getResponsiveSpacing(context, 8)),
             if (widget.cartItem.product.star > 0) ...[
-              SvgPicture.asset(AppAssets.starIcon, width: 12, height: 12),
-              const SizedBox(width: 2),
+              SvgPicture.asset(
+                AppAssets.starIcon,
+                width: ResponsiveHelper.getResponsiveValue(
+                  context,
+                  smallMobile: 10.0,
+                  mobile: 10.0,
+                  tablet: 12.0,
+                  desktop: 14.0,
+                ),
+                height: ResponsiveHelper.getResponsiveValue(
+                  context,
+                  smallMobile: 10.0,
+                  mobile: 10.0,
+                  tablet: 12.0,
+                  desktop: 14.0,
+                ),
+              ),
+              SizedBox(
+                width: ResponsiveHelper.getResponsiveSpacing(context, 2),
+              ),
               Text(
                 '${widget.cartItem.product.star}',
                 style: getMediumStyle(
-                  fontSize: FontSize.size11,
+                  fontSize: ResponsiveHelper.getResponsiveFontSize(context, 11),
                   fontFamily: FontConstant.cairo,
                   color: Colors.grey[600],
                 ),
@@ -237,7 +305,7 @@ class _CartItemCardState extends State<CartItemCard>
           ],
         ),
 
-        const SizedBox(height: 4),
+        SizedBox(height: ResponsiveHelper.getResponsiveSpacing(context, 4)),
 
         // Stock Status
         Text(
@@ -245,7 +313,7 @@ class _CartItemCardState extends State<CartItemCard>
               ? AppLocalizations.of(context)!.available
               : AppLocalizations.of(context)!.notAvailable,
           style: getMediumStyle(
-            fontSize: FontSize.size11,
+            fontSize: ResponsiveHelper.getResponsiveFontSize(context, 11),
             fontFamily: FontConstant.cairo,
             color: widget.cartItem.isAvailable ? Colors.green : Colors.red,
           ),
