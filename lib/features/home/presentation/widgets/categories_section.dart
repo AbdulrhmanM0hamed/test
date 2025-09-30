@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/features/categories/presentation/widgets/categories_shimmer.dart';
-import 'package:test/features/home/presentation/cubit/main_category_cubit.dart';
-import 'package:test/features/home/presentation/cubit/main_category_state.dart';
+import 'package:test/features/categories/presentation/cubit/sub_category_cubit.dart';
+import 'package:test/features/categories/presentation/cubit/sub_category_state.dart';
 import 'package:test/features/home/presentation/widgets/category_card.dart';
 import 'package:test/features/home/presentation/widgets/section_header.dart';
 import 'package:test/l10n/app_localizations.dart';
@@ -36,31 +36,33 @@ class CategoriesSection extends StatelessWidget {
 class ShoppingCategories extends StatelessWidget {
   const ShoppingCategories({super.key});
 
-  void _handleCategoryTap(
+  void _handleSubCategoryTap(
     BuildContext context,
     String categorySlug,
     String categoryName,
-    int categoryId,
+    int subCategoryId,
   ) {
-    // Navigate to categories view with mainCategoryId filter and back button
+    // Navigate to categories view with subCategoryId filter
     Navigator.pushNamed(
       context,
       '/categories-with-back',
-      arguments: {'mainCategoryId': categoryId, 'categoryName': categoryName},
+      arguments: {
+        'subCategoryId': subCategoryId,
+        'categoryName': categoryName,
+        'showSearchOnly': true, // Flag to show only search and products
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MainCategoryCubit, MainCategoryState>(
+    return BlocBuilder<SubCategoryCubit, SubCategoryState>(
       builder: (context, state) {
-        if (state is MainCategoryLoading) {
+        if (state is SubCategoryLoading) {
           return const CategoriesShimmer();
-        } else if (state is MainCategoryLoaded) {
-          // Filter only categories that should appear on home page
-          final homeCategories = state.categories
-              .where((category) => category.home)
-              .toList();
+        } else if (state is SubCategoryLoaded) {
+          // Show first 5 sub-categories for home page
+          final homeSubCategories = state.subCategories.take(5).toList();
 
           return SizedBox(
             height: 130,
@@ -68,9 +70,9 @@ class ShoppingCategories extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 12),
-              itemCount: homeCategories.length,
+              itemCount: homeSubCategories.length,
               itemBuilder: (context, index) {
-                final category = homeCategories[index];
+                final subCategory = homeSubCategories[index];
                 return AnimatedOpacity(
                   duration: Duration(milliseconds: 500),
                   opacity: 1.0,
@@ -83,13 +85,13 @@ class ShoppingCategories extends StatelessWidget {
                     },
                     child: CategoryCard(
                       category: CategoryItem(
-                        title: category.name,
-                        image: category.icon,
-                        onTap: () => _handleCategoryTap(
+                        title: subCategory.name,
+                        image: subCategory.image,
+                        onTap: () => _handleSubCategoryTap(
                           context,
-                          category.slug,
-                          category.name,
-                          category.id,
+                          subCategory.slug,
+                          subCategory.name,
+                          subCategory.id,
                         ),
                       ),
                     ),
@@ -98,7 +100,7 @@ class ShoppingCategories extends StatelessWidget {
               },
             ),
           );
-        } else if (state is MainCategoryError) {
+        } else if (state is SubCategoryError) {
           return SizedBox(
             height: 130,
             child: Center(

@@ -14,6 +14,7 @@ class ApiEndpoints {
   static String get updateProfile => '$baseUrl/update-profile';
   static String get categories => '$baseUrl/departments';
   static String get mainCategories => '$baseUrl/main-categories';
+  static String get subCategories => '$baseUrl/sub-categories';
   static String productsByDepartment(String departmentName) =>
       '$baseUrl/products-by-department/$departmentName';
   static String productReview(int productId) =>

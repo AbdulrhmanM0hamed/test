@@ -16,11 +16,13 @@ import 'package:test/l10n/app_localizations.dart';
 class SearchBarWidget extends StatefulWidget {
   final Function(String)? onSearchChanged;
   final bool showFilterBadge;
+  final bool hideFilter;
 
   const SearchBarWidget({
     super.key,
     this.onSearchChanged,
     this.showFilterBadge = false,
+    this.hideFilter = false,
   });
 
   @override
@@ -146,27 +148,30 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                 ),
               ),
             ),
-            const SizedBox(width: 12),
-            Container(
-              height: 48,
-              width: 48,
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: IconButton(
-                icon: SvgPicture.asset(
-                  AppAssets.icon_filter,
-                  width: 24,
-                  height: 24,
-                  colorFilter: const ColorFilter.mode(
-                    Colors.white,
-                    BlendMode.srcIn,
-                  ),
+            // إخفاء الفلتر عند الحاجة (مثل عند الدخول من sub-category)
+            if (!widget.hideFilter) ...[
+              const SizedBox(width: 12),
+              Container(
+                height: 48,
+                width: 48,
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                onPressed: () => _showFilterBottomSheet(context),
+                child: IconButton(
+                  icon: SvgPicture.asset(
+                    AppAssets.icon_filter,
+                    width: 24,
+                    height: 24,
+                    colorFilter: const ColorFilter.mode(
+                      Colors.white,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                  onPressed: () => _showFilterBottomSheet(context),
+                ),
               ),
-            ),
+            ],
           ],
         ),
       ),

@@ -1509,6 +1509,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clear => 'Clear';
 
   @override
+  String get discoverSetsOfProducts => 'Discover a wide range of featured products in each category.';
+
+  @override
   String get customerInformation => 'Customer Information';
 
   @override

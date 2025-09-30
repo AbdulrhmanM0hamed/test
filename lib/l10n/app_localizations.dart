@@ -3095,6 +3095,12 @@ abstract class AppLocalizations {
   /// **'Clear'**
   String get clear;
 
+  /// No description provided for @discoverSetsOfProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover a wide range of featured products in each category.'**
+  String get discoverSetsOfProducts;
+
   /// No description provided for @customerInformation.
   ///
   /// In en, this message translates to:

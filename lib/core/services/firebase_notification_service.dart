@@ -68,7 +68,7 @@ class FirebaseNotificationService {
       }
 
       // Test local notification
-      await _showTestLocalNotification();
+      // await _showTestLocalNotification();
 
       print('✅ Notification setup test completed');
     } catch (e) {
@@ -77,45 +77,45 @@ class FirebaseNotificationService {
   }
 
   // Show test local notification
-  Future<void> _showTestLocalNotification() async {
-    try {
-      const androidDetails = AndroidNotificationDetails(
-        'high_importance_channel',
-        'High Importance Notifications',
-        channelDescription: 'This channel is used for important notifications.',
-        importance: Importance.high,
-        priority: Priority.high,
-        showWhen: true,
-        icon: '@mipmap/ic_launcher',
-        color: Color(0xFF8B4513),
-        playSound: true,
-        enableVibration: true,
-      );
+  // Future<void> _showTestLocalNotification() async {
+  //   try {
+  //     const androidDetails = AndroidNotificationDetails(
+  //       'high_importance_channel',
+  //       'High Importance Notifications',
+  //       channelDescription: 'This channel is used for important notifications.',
+  //       importance: Importance.high,
+  //       priority: Priority.high,
+  //       showWhen: true,
+  //       icon: '@mipmap/ic_launcher',
+  //       color: Color(0xFF8B4513),
+  //       playSound: true,
+  //       enableVibration: true,
+  //     );
 
-      const iosDetails = DarwinNotificationDetails(
-        presentAlert: true,
-        presentBadge: true,
-        presentSound: true,
-      );
+  //     const iosDetails = DarwinNotificationDetails(
+  //       presentAlert: true,
+  //       presentBadge: true,
+  //       presentSound: true,
+  //     );
 
-      const details = NotificationDetails(
-        android: androidDetails,
-        iOS: iosDetails,
-      );
+  //     const details = NotificationDetails(
+  //       android: androidDetails,
+  //       iOS: iosDetails,
+  //     );
 
-      await _localNotifications.show(
-        999999,
-        'Sobieh Coffee - Test',
-        'Firebase notifications are working! 🎉',
-        details,
-        payload: '{"type": "test", "message": "Test notification"}',
-      );
+  //     await _localNotifications.show(
+  //       999999,
+  //       'Sobieh Coffee - Test',
+  //       'Firebase notifications are working! 🎉',
+  //       details,
+  //       payload: '{"type": "test", "message": "Test notification"}',
+  //     );
 
-      print('✅ Test local notification sent');
-    } catch (e) {
-      print('❌ Failed to send test local notification: $e');
-    }
-  }
+  //     print('✅ Test local notification sent');
+  //   } catch (e) {
+  //     print('❌ Failed to send test local notification: $e');
+  //   }
+  // }
 
   // Request notification permissions
   Future<void> _requestPermission() async {
@@ -465,20 +465,7 @@ class FirebaseNotificationService {
     try {
       final settings = await _firebaseMessaging.getNotificationSettings();
       final token = await _firebaseMessaging.getToken();
-      
-      print('🔍 ========== NOTIFICATION STATUS CHECK ==========');
-      print('🔍 Authorization Status: ${settings.authorizationStatus}');
-      print('🔍 Alert Setting: ${settings.alert}');
-      print('🔍 Badge Setting: ${settings.badge}');
-      print('🔍 Sound Setting: ${settings.sound}');
-      print('🔍 Announcement Setting: ${settings.announcement}');
-      print('🔍 Critical Alert Setting: ${settings.criticalAlert}');
-      print('🔍 Token Available: ${token != null}');
-      if (token != null) {
-        print('🔍 Token: $token');
-      }
-      print('🔍 ===============================================');
-      
+
       return {
         'permissionStatus': settings.authorizationStatus.toString(),
         'alert': settings.alert.toString(),

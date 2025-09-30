@@ -5,9 +5,11 @@ import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/core/utils/common/custom_app_bar.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
-import 'package:test/features/home/presentation/cubit/main_category_cubit.dart';
-import 'package:test/features/home/presentation/cubit/main_category_state.dart';
-import 'package:test/features/home/presentation/widgets/main_category_card.dart';
+import 'package:test/features/categories/presentation/cubit/sub_category_cubit.dart';
+import 'package:test/features/categories/presentation/cubit/sub_category_state.dart';
+import 'package:test/features/categories/domain/usecases/get_sub_categories_usecase.dart';
+import 'package:test/features/home/presentation/widgets/sub_category_card.dart';
+import 'package:test/core/utils/responsive/responsive_helper.dart';
 import 'package:test/l10n/app_localizations.dart';
 
 class AllCategoriesView extends StatelessWidget {
@@ -18,17 +20,19 @@ class AllCategoriesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          DependencyInjection.getIt<MainCategoryCubit>()..getMainCategories(),
+      create: (context) => SubCategoryCubit(
+        getSubCategoriesUseCase:
+            DependencyInjection.getIt<GetSubCategoriesUseCase>(),
+      )..getSubCategories(),
       child: Scaffold(
         appBar: CustomAppBar(title: AppLocalizations.of(context)!.categories),
-        body: BlocBuilder<MainCategoryCubit, MainCategoryState>(
+        body: BlocBuilder<SubCategoryCubit, SubCategoryState>(
           builder: (context, state) {
-            if (state is MainCategoryLoading) {
+            if (state is SubCategoryLoading) {
               return const CustomProgressIndicator();
             }
 
-            if (state is MainCategoryError) {
+            if (state is SubCategoryError) {
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -47,7 +51,7 @@ class AllCategoriesView extends StatelessWidget {
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () {
-                        context.read<MainCategoryCubit>().getMainCategories();
+                        context.read<SubCategoryCubit>().getSubCategories();
                       },
                       child: Text(AppLocalizations.of(context)!.retry),
                     ),
@@ -56,8 +60,8 @@ class AllCategoriesView extends StatelessWidget {
               );
             }
 
-            if (state is MainCategoryLoaded) {
-              final categories = state.categories;
+            if (state is SubCategoryLoaded) {
+              final categories = state.subCategories;
 
               if (categories.isEmpty) {
                 return Center(
@@ -82,14 +86,20 @@ class AllCategoriesView extends StatelessWidget {
 
               return RefreshIndicator(
                 onRefresh: () async {
-                  context.read<MainCategoryCubit>().getMainCategories();
+                  context.read<SubCategoryCubit>().getSubCategories();
                 },
                 child: CustomScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   slivers: [
                     SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: ResponsiveHelper.getResponsivePadding(context)
+                            .copyWith(
+                              bottom: ResponsiveHelper.getResponsiveSpacing(
+                                context,
+                                16,
+                              ),
+                            ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -98,18 +108,31 @@ class AllCategoriesView extends StatelessWidget {
                                 context,
                               )!.discoverAllCategories,
                               style: getSemiBoldStyle(
-                                fontSize: FontSize.size20,
+                                fontSize:
+                                    ResponsiveHelper.getResponsiveFontSize(
+                                      context,
+                                      FontSize.size22,
+                                    ),
                                 fontFamily: FontConstant.cairo,
                                 color: Colors.black87,
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            SizedBox(
+                              height: ResponsiveHelper.getResponsiveSpacing(
+                                context,
+                                8,
+                              ),
+                            ),
                             Text(
                               AppLocalizations.of(
                                 context,
-                              )!.browseCategorizedProducts,
+                              )!.discoverSetsOfProducts,
                               style: getRegularStyle(
-                                fontSize: FontSize.size14,
+                                fontSize:
+                                    ResponsiveHelper.getResponsiveFontSize(
+                                      context,
+                                      FontSize.size14,
+                                    ),
                                 fontFamily: FontConstant.cairo,
                                 color: Colors.grey[600]!,
                               ),
@@ -119,16 +142,39 @@ class AllCategoriesView extends StatelessWidget {
                       ),
                     ),
 
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                        final category = categories[index];
-                        return MainCategoryCard(
-                          category: category,
-                          onTap: () {
-                            _navigateToProducts(context, category);
-                          },
-                        );
-                      }, childCount: categories.length),
+                    SliverPadding(
+                      padding: ResponsiveHelper.getResponsivePadding(context),
+                      sliver: SliverGrid(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount:
+                              ResponsiveHelper.getGridCrossAxisCount(context),
+                          crossAxisSpacing:
+                              ResponsiveHelper.getResponsiveSpacing(
+                                context,
+                                16,
+                              ),
+                          mainAxisSpacing:
+                              ResponsiveHelper.getResponsiveSpacing(
+                                context,
+                                16,
+                              ),
+                          childAspectRatio: ResponsiveHelper.getResponsiveValue(
+                            context,
+                            smallMobile: 0.7,
+                            mobile: 0.72,
+                            tablet: 0.8,
+                            desktop: 0.85,
+                          ),
+                        ),
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          final subCategory = categories[index];
+                          return SubCategoryCard(
+                            subCategory: subCategory,
+                            onTap: () =>
+                                _navigateToProducts(context, subCategory),
+                          );
+                        }, childCount: categories.length),
+                      ),
                     ),
 
                     // Bottom padding
@@ -145,12 +191,16 @@ class AllCategoriesView extends StatelessWidget {
     );
   }
 
-  void _navigateToProducts(BuildContext context, category) {
-    // Navigate to categories view with mainCategoryId filter and back button
+  void _navigateToProducts(BuildContext context, subCategory) {
+    // Navigate to categories view with subCategoryId filter and back button
     Navigator.pushNamed(
       context,
       '/categories-with-back',
-      arguments: {'mainCategoryId': category.id, 'categoryName': category.name},
+      arguments: {
+        'subCategoryId': subCategory.id,
+        'categoryName': subCategory.name,
+        'showSearchOnly': true,
+      },
     );
   }
 }

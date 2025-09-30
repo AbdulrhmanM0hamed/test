@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/services/global_cubit_service.dart';
+import 'package:test/features/categories/presentation/cubit/sub_category_cubit.dart';
+import 'package:test/features/categories/domain/usecases/get_sub_categories_usecase.dart';
 import 'package:test/features/home/presentation/widgets/greeting_header.dart';
 import 'package:test/features/home/presentation/widgets/offers_section.dart';
 import 'package:test/features/home/presentation/widgets/categories_section.dart';
@@ -65,6 +67,12 @@ class HomePageBody extends StatelessWidget {
           create: (context) =>
               DependencyInjection.getIt<SliderCubit>()..getSliders(),
         ),
+        BlocProvider<SubCategoryCubit>(
+          create: (context) => SubCategoryCubit(
+            getSubCategoriesUseCase:
+                DependencyInjection.getIt<GetSubCategoriesUseCase>(),
+          )..getSubCategories(),
+        ),
       ],
       child: Column(
         children: [
@@ -91,10 +99,11 @@ class HomePageBody extends StatelessWidget {
                         .read<SpecialOfferProductsCubit>()
                         .getSpecialOfferProducts();
                     innerContext.read<MainCategoryCubit>().getMainCategories();
+                    innerContext.read<SubCategoryCubit>().getSubCategories();
                     innerContext.read<SliderCubit>().getSliders();
                   },
                   child: CustomScrollView(
-                    physics: const BouncingScrollPhysics(),
+                    physics: const ClampingScrollPhysics(),
                     slivers: [
                       // Greeting Header (Scrollable, outside refresh area)
                       SliverToBoxAdapter(

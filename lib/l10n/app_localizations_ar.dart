@@ -1509,6 +1509,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clear => 'مسح';
 
   @override
+  String get discoverSetsOfProducts => 'اكتشف مجموعة واسعة من المنتجات المميزة في كل فئة';
+
+  @override
   String get customerInformation => 'معلومات العميل';
 
   @override

@@ -47,6 +47,12 @@ import 'package:test/features/categories/data/repositories/department_repository
 import 'package:test/features/categories/domain/repositories/department_repository.dart';
 import 'package:test/features/categories/domain/usecases/get_departments_usecase.dart';
 import 'package:test/features/categories/presentation/cubit/department_cubit.dart';
+// Sub-categories feature imports
+import 'package:test/features/categories/data/datasources/sub_category_remote_data_source.dart';
+import 'package:test/features/categories/data/repositories/sub_category_repository_impl.dart';
+import 'package:test/features/categories/domain/repositories/sub_category_repository.dart';
+import 'package:test/features/categories/domain/usecases/get_sub_categories_usecase.dart';
+import 'package:test/features/categories/presentation/cubit/sub_category_cubit.dart';
 // Products feature imports
 import 'package:test/features/categories/data/datasources/products_remote_data_source.dart';
 import 'package:test/features/categories/data/repositories/products_repository_impl.dart';
@@ -177,6 +183,11 @@ class DependencyInjection {
   static DepartmentRepository? _departmentRepository;
   static GetDepartmentsUseCase? _getDepartmentsUseCase;
 
+  // Sub-Categories feature
+  static SubCategoryRemoteDataSource? _subCategoryRemoteDataSource;
+  static SubCategoryRepository? _subCategoryRepository;
+  static GetSubCategoriesUseCase? _getSubCategoriesUseCase;
+
   // Products feature
   static ProductsRemoteDataSource? _productsRemoteDataSource;
   static ProductsRepository? _productsRepository;
@@ -303,6 +314,17 @@ class DependencyInjection {
       remoteDataSource: _departmentRemoteDataSource!,
     );
     _getDepartmentsUseCase = GetDepartmentsUseCase(_departmentRepository!);
+
+    // Initialize Sub-Categories dependencies
+    _subCategoryRemoteDataSource = SubCategoryRemoteDataSourceImpl(
+      dioService: _dioService!,
+    );
+    _subCategoryRepository = SubCategoryRepositoryImpl(
+      remoteDataSource: _subCategoryRemoteDataSource!,
+    );
+    _getSubCategoriesUseCase = GetSubCategoriesUseCase(
+      repository: _subCategoryRepository!,
+    );
 
     // Initialize Products dependencies
     _productsRemoteDataSource = ProductsRemoteDataSourceImpl(
@@ -449,6 +471,9 @@ class DependencyInjection {
     // Categories singletons
     getIt.registerSingleton<DepartmentRepository>(_departmentRepository!);
     getIt.registerSingleton<GetDepartmentsUseCase>(_getDepartmentsUseCase!);
+    // Sub-Categories singletons
+    getIt.registerSingleton<SubCategoryRepository>(_subCategoryRepository!);
+    getIt.registerSingleton<GetSubCategoriesUseCase>(_getSubCategoriesUseCase!);
     // Products singletons
     getIt.registerSingleton<ProductsRepository>(_productsRepository!);
     getIt.registerSingleton<GetProductsByDepartmentUseCase>(
@@ -530,6 +555,13 @@ class DependencyInjection {
       () => DepartmentCubit(
         getDepartmentsUseCase: getIt<GetDepartmentsUseCase>(),
         dataRefreshService: getIt<DataRefreshService>(),
+      ),
+    );
+
+    // Sub-Categories Cubit
+    getIt.registerFactory<SubCategoryCubit>(
+      () => SubCategoryCubit(
+        getSubCategoriesUseCase: getIt<GetSubCategoriesUseCase>(),
       ),
     );
 
@@ -820,4 +852,5 @@ class DependencyInjection {
   static AuthRepository get authRepository => _authRepository!;
   static LoginUseCase get loginUseCase => _loginUseCase!;
   static LocationService get locationService => _locationService!;
+  static GetSubCategoriesUseCase get getSubCategoriesUseCase => _getSubCategoriesUseCase!;
 }

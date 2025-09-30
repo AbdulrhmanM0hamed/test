@@ -36,6 +36,7 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
   bool _isAddingToCart = false;
   bool _isInWishlist = false;
   bool _isWishlistLoading = false;
+  int _cartUpdateCounter = 0;
 
   @override
   void initState() {
@@ -69,6 +70,9 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
 
     // Listen to HybridWishlistService changes for automatic UI updates
     HybridWishlistService.instance.addListener(_onWishlistChanged);
+
+    // Listen to HybridCartService changes for automatic UI updates
+    HybridCartService.instance.addListener(_onCartChanged);
   }
 
   Future<void> _checkWishlistState() async {
@@ -87,12 +91,22 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
   void dispose() {
     _controller.dispose();
     HybridWishlistService.instance.removeListener(_onWishlistChanged);
+    HybridCartService.instance.removeListener(_onCartChanged);
     super.dispose();
   }
 
   void _onWishlistChanged() {
     // Check wishlist state when HybridWishlistService notifies changes
     _checkWishlistState();
+  }
+
+  void _onCartChanged() {
+    // Rebuild widget when cart changes to update border/visual state
+    if (mounted) {
+      setState(() {
+        _cartUpdateCounter++; // This will trigger FutureBuilder rebuild
+      });
+    }
   }
 
   void _handleTap() {
@@ -645,6 +659,7 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
 
               // Add to Cart Button with Visual Indicator
               FutureBuilder<int>(
+                key: ValueKey('cart_${widget.product.id}_$_cartUpdateCounter'),
                 future: HybridCartService.instance.getProductQuantity(
                   productId: widget.product.id,
                   productSizeColorId:

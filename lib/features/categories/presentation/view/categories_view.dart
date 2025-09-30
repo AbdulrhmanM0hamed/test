@@ -22,11 +22,8 @@ import 'package:test/l10n/app_localizations.dart';
 /// صفحة عرض الفئات والمنتجات مع نظام الفلترة المتقدم
 class CategoriesView extends StatefulWidget {
   final bool showBackButton;
-  
-  const CategoriesView({
-    super.key,
-    this.showBackButton = false,
-  });
+
+  const CategoriesView({super.key, this.showBackButton = false});
 
   @override
   State<CategoriesView> createState() => _CategoriesViewState();
@@ -35,7 +32,9 @@ class CategoriesView extends StatefulWidget {
 class _CategoriesViewState extends State<CategoriesView> {
   int? selectedDepartmentId;
   int? mainCategoryId;
+  int? subCategoryId;
   String? categoryName;
+  bool showSearchOnly = false;
   bool _hasAppliedFilter = false;
   final ScrollController _scrollController = ScrollController();
   bool _scrollListenerAdded = false;
@@ -51,8 +50,12 @@ class _CategoriesViewState extends State<CategoriesView> {
       if (args != null) {
         setState(() {
           mainCategoryId = args['mainCategoryId'] as int?;
+          subCategoryId = args['subCategoryId'] as int?;
           categoryName = args['categoryName'] as String?;
+          showSearchOnly = args['showSearchOnly'] as bool? ?? false;
         });
+
+        // SubCategory filter will be applied in the Builder where context has access to providers
       }
     });
   }
@@ -95,28 +98,38 @@ class _CategoriesViewState extends State<CategoriesView> {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               _scrollController.addListener(() {
                 if (!mounted || !_scrollController.hasClients) return;
-                
+
                 final pixels = _scrollController.position.pixels;
                 final maxExtent = _scrollController.position.maxScrollExtent;
                 final threshold = maxExtent - 200;
 
-                print('🔄 Scroll: pixels=$pixels, maxExtent=$maxExtent, threshold=$threshold');
+                print(
+                  '🔄 Scroll: pixels=$pixels, maxExtent=$maxExtent, threshold=$threshold',
+                );
 
                 if (pixels >= threshold) {
-                  print('🎯 Categories: Scroll threshold reached, calling loadMore');
+                  print(
+                    '🎯 Categories: Scroll threshold reached, calling loadMore',
+                  );
                   context.read<ProductsFilterCubit>().loadMore();
                 }
               });
             });
           }
 
-          // Apply the main category filter after providers are available (only once)
-          if (mainCategoryId != null && !_hasAppliedFilter) {
+          // Apply filters after providers are available (only once)
+          if (!_hasAppliedFilter) {
             _hasAppliedFilter = true;
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              context.read<ProductsFilterCubit>().updateMainCategory(
-                mainCategoryId!,
-              );
+              if (mainCategoryId != null) {
+                context.read<ProductsFilterCubit>().updateMainCategory(
+                  mainCategoryId!,
+                );
+              } else if (subCategoryId != null) {
+                context.read<ProductsFilterCubit>().updateSubCategory(
+                  subCategoryId!,
+                );
+              }
             });
           }
 
@@ -128,11 +141,11 @@ class _CategoriesViewState extends State<CategoriesView> {
             body: SafeArea(
               child: Column(
                 children: [
-                  // شريط البحث مع الفلترة المتقدمة
-                  const SearchBarWidget(),
+                  // شريط البحث مع الفلترة المتقدمة (إخفاء الفلتر عند الدخول من sub-category)
+                  SearchBarWidget(hideFilter: showSearchOnly),
 
-                  // علامات تبويب الأقسام (مخفية عند الفلترة بالفئة الرئيسية)
-                  if (mainCategoryId == null)
+                  // علامات تبويب الأقسام (مخفية عند الفلترة بالفئة الرئيسية أو عند عرض sub-category فقط)
+                  if (mainCategoryId == null && !showSearchOnly)
                     BlocBuilder<DepartmentCubit, DepartmentState>(
                       builder: (context, departmentState) {
                         if (departmentState is DepartmentLoading) {
