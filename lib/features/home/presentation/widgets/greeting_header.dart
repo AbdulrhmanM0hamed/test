@@ -731,61 +731,155 @@ class _GreetingHeaderState extends State<GreetingHeader> {
             children: [
               Icon(Icons.language_rounded, color: Colors.white, size: 20),
               const SizedBox(width: 12),
-              Text(
-                Localizations.localeOf(context).languageCode == 'ar'
-                    ? 'اللغة'
-                    : 'Language',
-                style: getMediumStyle(
-                  fontFamily: FontConstant.cairo,
-                  fontSize: FontSize.size14,
-                  color: Colors.white,
-                ),
-              ),
               const Spacer(),
-              GestureDetector(
-                onTap: () {
-                  languageService.toggleLanguage();
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.4),
-                      width: 1,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset(
-                        languageService.isArabic
-                            ? AppAssets.egypt
-                            : AppAssets.england,
-                        width: 16,
-                        height: 16,
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        languageService.isArabic ? 'عربي' : 'EN',
-                        style: getSemiBoldStyle(
-                          fontFamily: FontConstant.cairo,
-                          fontSize: FontSize.size12,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              // Professional Toggle Switch
+              _buildLanguageToggle(languageService),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildLanguageToggle(LanguageService languageService) {
+    return TweenAnimationBuilder<double>(
+      duration: const Duration(milliseconds: 200),
+      tween: Tween(begin: 1.0, end: 1.0),
+      builder: (context, scale, child) {
+        return Transform.scale(
+          scale: scale,
+          child: GestureDetector(
+            onTapDown: (_) {
+              // تأثير الضغط
+            },
+            onTap: () async {
+              // تأخير لإظهار الانيميشن قبل تغيير اللغة
+              await Future.delayed(const Duration(milliseconds: 200));
+              languageService.toggleLanguage();
+            },
+            child: child,
+          ),
+        );
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 600), // زيادة المدة
+        curve: Curves.elasticOut, // منحنى أكثر وضوحاً
+        width: 70,
+        height: 35,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.white.withValues(alpha: 0.2),
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.4),
+            width: 2,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+            // إضافة توهج عند التفاعل
+            BoxShadow(
+              color: Colors.white.withValues(alpha: 0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 0),
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            // Background flags
+            Positioned(
+              left: 4,
+              top: 4,
+              child: AnimatedOpacity(
+                duration: const Duration(
+                  milliseconds: 500,
+                ), // مدة أطول للشفافية
+                opacity: languageService.isArabic ? 0.3 : 0.7,
+                child: Container(
+                  width: 25,
+                  height: 25,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12.5),
+                    color: Colors.white.withValues(alpha: 0.1),
+                  ),
+                  child: Center(
+                    child: SvgPicture.asset(
+                      AppAssets.egypt,
+                      width: 16,
+                      height: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              right: 4,
+              top: 4,
+              child: AnimatedOpacity(
+                duration: const Duration(
+                  milliseconds: 500,
+                ), // مدة أطول للشفافية
+                opacity: languageService.isArabic ? 0.7 : 0.3,
+                child: Container(
+                  width: 25,
+                  height: 25,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12.5),
+                    color: Colors.white.withValues(alpha: 0.1),
+                  ),
+                  child: Center(
+                    child: SvgPicture.asset(
+                      AppAssets.england,
+                      width: 16,
+                      height: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            // Moving ball
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 800), // مدة أطول للكورة
+              curve: Curves.bounceOut, // منحنى مع ارتداد
+              left: languageService.isArabic ? 4 : 37,
+              top: 4,
+              child: Container(
+                width: 27,
+                height: 27,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(13.5),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.2),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(
+                      milliseconds: 400,
+                    ), // مدة أطول لتبديل العلم
+                    child: SvgPicture.asset(
+                      languageService.isArabic
+                          ? AppAssets.egypt
+                          : AppAssets.england,
+                      key: ValueKey(languageService.isArabic),
+                      width: 18,
+                      height: 18,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
