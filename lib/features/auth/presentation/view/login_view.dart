@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
+import 'package:test/core/utils/common/custom_app_bar.dart';
 import 'package:test/core/utils/common/custom_text_field.dart';
 import 'package:test/core/utils/common/custom_button.dart';
 import 'package:test/core/utils/common/password_field.dart';
@@ -79,6 +80,7 @@ class _LoginViewState extends State<LoginView> {
       create: (context) => DependencyInjection.createAuthCubit(),
       child: Builder(
         builder: (context) => Scaffold(
+          appBar: CustomAppBar(title: AppLocalizations.of(context)!.login),
           body: BlocConsumer<AuthCubit, AuthState>(
             listener: (context, state) {
               //print('🔍 LOGIN VIEW STATE CHANGE: ${state.runtimeType}');
@@ -282,17 +284,7 @@ class _LoginViewState extends State<LoginView> {
                               Center(
                                 child: Image.asset(AppAssets.logo, height: 165),
                               ),
-                              SizedBox(height: size.height * 0.01),
 
-                              // Login Text
-                              Text(
-                                AppLocalizations.of(context)!.login,
-                                style: getBoldStyle(
-                                  fontFamily: FontConstant.cairo,
-                                  fontSize: FontSize.size24,
-                                  color: AppColors.primary,
-                                ),
-                              ),
                               const SizedBox(height: 8),
 
                               // Welcome Text

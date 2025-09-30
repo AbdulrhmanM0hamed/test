@@ -1602,5 +1602,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get privacyPolicy => 'Privacy Policy';
 
   @override
+  String get iAgreeToThe => 'I agree to the';
+
+  @override
   String get language => 'Language';
 }

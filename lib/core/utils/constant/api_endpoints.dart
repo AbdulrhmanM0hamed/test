@@ -10,6 +10,7 @@ class ApiEndpoints {
   static String get checkOtp => '$baseUrl/forget-password/check-otp';
   static String get changePassword =>
       '$baseUrl/forget-password/change-password';
+  static String get termsAndConditions => '$baseUrl/term-and-condition';
   static String get myAccount => '$baseUrl/my-account';
   static String get updateProfile => '$baseUrl/update-profile';
   static String get categories => '$baseUrl/departments';
@@ -42,14 +43,17 @@ class ApiEndpoints {
     final regionQuery = regionId != null ? '&region_id=$regionId' : '';
     return '$baseUrl$featuredProducts?page=$page$regionQuery';
   }
+
   static String bestSellerProductsUrl({int? regionId, int page = 1}) {
     final regionQuery = regionId != null ? '&region_id=$regionId' : '';
     return '$baseUrl$bestSellerProducts?page=$page$regionQuery';
   }
+
   static String latestProductsUrl({int? regionId, int page = 1}) {
     final regionQuery = regionId != null ? '&region_id=$regionId' : '';
     return '$baseUrl$latestProducts?page=$page$regionQuery';
   }
+
   static String specialOfferProductsUrl({int? regionId, int page = 1}) {
     final regionQuery = regionId != null ? '&region_id=$regionId' : '';
     return '$baseUrl$specialOfferProducts?page=$page$regionQuery';
@@ -121,5 +125,6 @@ class ApiEndpoints {
 
   // Notifications endpoints
   static String get notifications => '$baseUrl/notifications';
-  static String notificationDetails(int notificationId) => '$baseUrl/notifications/$notificationId';
+  static String notificationDetails(int notificationId) =>
+      '$baseUrl/notifications/$notificationId';
 }

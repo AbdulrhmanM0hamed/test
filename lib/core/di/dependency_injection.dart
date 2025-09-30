@@ -21,6 +21,7 @@ import 'package:test/features/auth/domain/usecases/check_otp_usecase.dart';
 import 'package:test/features/auth/domain/usecases/change_password_usecase.dart';
 import 'package:test/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:test/features/auth/presentation/cubit/forget_password_cubit.dart';
+import 'package:test/features/auth/data/services/terms_service.dart';
 import 'package:test/features/product_details/domain/usecases/get_product_details_usecase.dart';
 import 'package:test/features/profile/data/datasources/profile_remote_data_source.dart';
 import 'package:test/features/profile/data/repositories/profile_repository_impl.dart';
@@ -418,6 +419,11 @@ class DependencyInjection {
     );
     getIt.registerLazySingleton<ChangePasswordUseCase>(
       () => ChangePasswordUseCase(repository: getIt()),
+    );
+
+    // Register Terms Service
+    getIt.registerLazySingleton<TermsService>(
+      () => TermsService(getIt()),
     );
 
     // Register Wishlist dependencies

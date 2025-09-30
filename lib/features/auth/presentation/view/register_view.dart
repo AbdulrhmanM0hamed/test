@@ -280,64 +280,64 @@ class _RegisterViewState extends State<RegisterView> {
                               const SizedBox(height: 24),
 
                               // OR Divider
-                              Row(
-                                children: [
-                                  const Expanded(
-                                    child: Divider(
-                                      color: AppColors.border,
-                                      thickness: 1,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                    ),
-                                    child: Text(
-                                      s.or,
-                                      style: getRegularStyle(
-                                        fontFamily: FontConstant.cairo,
-                                        fontSize: FontSize.size14,
-                                        color: AppColors.textSecondary,
-                                      ),
-                                    ),
-                                  ),
-                                  const Expanded(
-                                    child: Divider(
-                                      color: AppColors.border,
-                                      thickness: 1,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 24),
+                              // Row(
+                              //   children: [
+                              //     const Expanded(
+                              //       child: Divider(
+                              //         color: AppColors.border,
+                              //         thickness: 1,
+                              //       ),
+                              //     ),
+                              //     Padding(
+                              //       padding: const EdgeInsets.symmetric(
+                              //         horizontal: 16,
+                              //       ),
+                              //       child: Text(
+                              //         s.or,
+                              //         style: getRegularStyle(
+                              //           fontFamily: FontConstant.cairo,
+                              //           fontSize: FontSize.size14,
+                              //           color: AppColors.textSecondary,
+                              //         ),
+                              //       ),
+                              //     ),
+                              //     const Expanded(
+                              //       child: Divider(
+                              //         color: AppColors.border,
+                              //         thickness: 1,
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+                              // const SizedBox(height: 24),
 
                               // Social Logins
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SocialAuthButton(
-                                    iconPath: AppAssets.applIcon,
-                                    onPressed: () {
-                                      // Implement Apple login
-                                    },
-                                  ),
-                                  const SizedBox(width: 16),
-                                  SocialAuthButton(
-                                    iconPath: AppAssets.facebookIcon,
-                                    onPressed: () {
-                                      // Implement Facebook login
-                                    },
-                                  ),
-                                  const SizedBox(width: 16),
-                                  SocialAuthButton(
-                                    iconPath: AppAssets.googleIcon,
-                                    onPressed: () {
-                                      // Implement Google login
-                                    },
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 16),
+                              // Row(
+                              //   mainAxisAlignment: MainAxisAlignment.center,
+                              //   children: [
+                              //     SocialAuthButton(
+                              //       iconPath: AppAssets.applIcon,
+                              //       onPressed: () {
+                              //         // Implement Apple login
+                              //       },
+                              //     ),
+                              //     const SizedBox(width: 16),
+                              //     SocialAuthButton(
+                              //       iconPath: AppAssets.facebookIcon,
+                              //       onPressed: () {
+                              //         // Implement Facebook login
+                              //       },
+                              //     ),
+                              //     const SizedBox(width: 16),
+                              //     SocialAuthButton(
+                              //       iconPath: AppAssets.googleIcon,
+                              //       onPressed: () {
+                              //         // Implement Google login
+                              //       },
+                              //     ),
+                              //   ],
+                              // ),
+                              const SizedBox(height: 2),
 
                               // Login Link
                               Row(

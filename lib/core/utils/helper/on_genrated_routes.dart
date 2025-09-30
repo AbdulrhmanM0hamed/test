@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/features/auth/presentation/view/forget_password_view_new.dart';
+import 'package:test/features/auth/presentation/view/terms_and_conditions_view.dart';
 import 'package:test/features/auth/presentation/cubit/forget_password_cubit.dart';
 import 'package:test/features/wishlist/presentation/view/wishlist_view.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
@@ -57,6 +58,10 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
     case RegisterView.routeName:
       //print('🔍 Navigation: Navigating to RegisterView');
       return MaterialPageRoute(builder: (context) => const RegisterView());
+
+    case TermsAndConditionsView.routeName:
+      //print('🔍 Navigation: Navigating to TermsAndConditionsView');
+      return MaterialPageRoute(builder: (context) => const TermsAndConditionsView());
 
     case BottomNavBar.routeName:
       //print('🔍 Navigation: Navigating to BottomNavBar (Home)');
