@@ -172,100 +172,157 @@ class _OnboardingViewState extends State<OnboardingView> {
   Widget _buildLanguageSwitch() {
     return Consumer<LanguageService>(
       builder: (context, languageService, child) {
-        return GestureDetector(
-          onTap: () {
-            languageService.toggleLanguage();
-            // Refresh onboarding data after language change
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              _initData();
-            });
-          },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: AppColors.primary.withValues(alpha: 0.3),
-                width: 1,
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Arabic Flag
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: languageService.isArabic
-                        ? AppColors.primary
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: languageService.isArabic
-                        ? [
-                            BoxShadow(
-                              color: AppColors.primary.withValues(alpha: 0.3),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ]
-                        : null,
-                  ),
-                  child: AnimatedRotation(
-                    turns: languageService.isArabic ? 0 : 0.5,
-                    duration: const Duration(milliseconds: 400),
-                    child: SvgPicture.asset(
-                      AppAssets.egypt,
-                      width: 20,
-                      height: 20,
-                      colorFilter: languageService.isArabic
-                          ? const ColorFilter.mode(Colors.white, BlendMode.srcIn)
-                          : null,
-                    ),
-                  ),
-                ),
+        return _buildLanguageToggle(languageService);
+      },
+    );
+  }
 
-                const SizedBox(width: 4),
-
-                // English Flag
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: !languageService.isArabic
-                        ? AppColors.primary
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: !languageService.isArabic
-                        ? [
-                            BoxShadow(
-                              color: AppColors.primary.withValues(alpha: 0.3),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ]
-                        : null,
-                  ),
-                  child: AnimatedRotation(
-                    turns: !languageService.isArabic ? 0 : -0.5,
-                    duration: const Duration(milliseconds: 400),
-                    child: SvgPicture.asset(
-                      AppAssets.england,
-                      width: 20,
-                      height: 20,
-                      colorFilter: !languageService.isArabic
-                          ? const ColorFilter.mode(Colors.white, BlendMode.srcIn)
-                          : null,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+  Widget _buildLanguageToggle(LanguageService languageService) {
+    return TweenAnimationBuilder<double>(
+      duration: const Duration(milliseconds: 200),
+      tween: Tween(begin: 1.0, end: 1.0),
+      builder: (context, scale, child) {
+        return Transform.scale(
+          scale: scale,
+          child: GestureDetector(
+            onTapDown: (_) {
+              // تأثير الضغط
+            },
+            onTap: () async {
+              // تأخير لإظهار الانيميشن قبل تغيير اللغة
+              await Future.delayed(const Duration(milliseconds: 200));
+              languageService.toggleLanguage();
+              // Refresh onboarding data after language change
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                _initData();
+              });
+            },
+            child: child,
           ),
         );
       },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 600), // زيادة المدة
+        curve: Curves.elasticOut, // منحنى أكثر وضوحاً
+        width: 70,
+        height: 35,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: AppColors.primary.withValues(alpha: 0.1),
+          border: Border.all(
+            color: AppColors.primary.withValues(alpha: 0.3),
+            width: 2,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+            // إضافة توهج عند التفاعل
+            BoxShadow(
+              color: AppColors.primary.withValues(alpha: 0.2),
+              blurRadius: 8,
+              offset: const Offset(0, 0),
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            // Background flags
+            Positioned(
+              left: 4,
+              top: 4,
+              child: AnimatedOpacity(
+                duration: const Duration(
+                  milliseconds: 500,
+                ), // مدة أطول للشفافية
+                opacity: languageService.isArabic ? 0.3 : 0.7,
+                child: Container(
+                  width: 25,
+                  height: 25,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12.5),
+                    color: AppColors.primary.withValues(alpha: 0.1),
+                  ),
+                  child: Center(
+                    child: SvgPicture.asset(
+                      AppAssets.egypt,
+                      width: 16,
+                      height: 16,
+                      // إزالة colorFilter لإظهار الألوان الطبيعية
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              right: 4,
+              top: 4,
+              child: AnimatedOpacity(
+                duration: const Duration(
+                  milliseconds: 500,
+                ), // مدة أطول للشفافية
+                opacity: languageService.isArabic ? 0.7 : 0.3,
+                child: Container(
+                  width: 25,
+                  height: 25,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12.5),
+                    color: AppColors.primary.withValues(alpha: 0.1),
+                  ),
+                  child: Center(
+                    child: SvgPicture.asset(
+                      AppAssets.england,
+                      width: 16,
+                      height: 16,
+                      // إزالة colorFilter لإظهار الألوان الطبيعية
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            // Moving ball
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 800), // مدة أطول للكورة
+              curve: Curves.bounceOut, // منحنى مع ارتداد
+              left: languageService.isArabic ? 4 : 37,
+              top: 4,
+              child: Container(
+                width: 27,
+                height: 27,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(13.5),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.2),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(
+                      milliseconds: 400,
+                    ), // مدة أطول لتبديل العلم
+                    child: SvgPicture.asset(
+                      languageService.isArabic
+                          ? AppAssets.egypt
+                          : AppAssets.england,
+                      key: ValueKey(languageService.isArabic),
+                      width: 18,
+                      height: 18,
+                      // إزالة colorFilter لإظهار الألوان الطبيعية للعلم
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
