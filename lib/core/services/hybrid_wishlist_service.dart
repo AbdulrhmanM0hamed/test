@@ -128,6 +128,7 @@ class HybridWishlistService extends ChangeNotifier {
       if (!_isLoggedIn) {
         // Create a minimal HomeProduct for offline storage
         final product = HomeProduct(
+          stock: 0,
           id: productId,
           name: 'Product $productId',
           image: '',
@@ -166,6 +167,7 @@ class HybridWishlistService extends ChangeNotifier {
     } else {
       // Convert Product to HomeProduct for consistent storage
       final homeProduct = HomeProduct(
+        stock: product.stock,
         id: product.id,
         name: product.name,
         image: product.image,

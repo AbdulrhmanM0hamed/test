@@ -56,6 +56,7 @@ class HybridCartService extends ChangeNotifier {
       } else if (product is ProductDetails) {
         // Convert ProductDetails to HomeProduct
         homeProduct = HomeProduct(
+          stock: product.stock,
           id: product.id,
           name: product.name,
           image: product.image,
@@ -81,6 +82,7 @@ class HybridCartService extends ChangeNotifier {
         // Convert map to HomeProduct
         final productMap = product as Map<String, dynamic>;
         homeProduct = HomeProduct(
+          stock: productMap['stock'] as int? ?? 0,
           id: productMap['id'] as int,
           name: productMap['name'] as String,
           image: productMap['image'] as String,

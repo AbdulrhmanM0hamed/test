@@ -108,9 +108,6 @@ class _CategoriesViewState extends State<CategoriesView> {
                 );
 
                 if (pixels >= threshold) {
-                  print(
-                    '🎯 Categories: Scroll threshold reached, calling loadMore',
-                  );
                   context.read<ProductsFilterCubit>().loadMore();
                 }
               });

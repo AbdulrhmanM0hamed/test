@@ -13,6 +13,7 @@ class HomeProductModel extends HomeProduct {
     required super.brandName,
     super.brandLogo,
     required super.countOfAvailable,
+    required super.stock,
     required super.isBest,
     required super.isFeatured,
     required super.isLatest,
@@ -49,6 +50,7 @@ class HomeProductModel extends HomeProduct {
       brandName: json['brand_name'] ?? '',
       brandLogo: json['brand_logo'],
       countOfAvailable: json['countOfAvailable'] ?? 0,
+      stock: json['stock'] ?? 0,
       isBest: json['isBest'] ?? false,
       isFeatured: true, // من API featured products
       isLatest: true, // من API latest products
@@ -73,6 +75,7 @@ class HomeProductModel extends HomeProduct {
       'brand_name': brandName,
       'brand_logo': brandLogo,
       'countOfAvailable': countOfAvailable,
+      'stock': stock,
       'is_best': isBest,
       'is_featured': isFeatured,
       'is_latest': isLatest,
@@ -97,6 +100,7 @@ class HomeProductModel extends HomeProduct {
       brandName: brandName,
       brandLogo: brandLogo,
       countOfAvailable: countOfAvailable,
+      stock: stock,
       isBest: isBest,
       isFeatured: isFeatured,
       isLatest: isLatest,

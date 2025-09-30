@@ -743,39 +743,149 @@ class _HomeProductCardState extends State<HomeProductCard>
 
           const SizedBox(height: 6),
 
-          // Stock status and quantity
+          // Stock Progress Bar
+          _buildStockProgressBar(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStockProgressBar() {
+    // Use stock as the total inventory and countOfAvailable as current available
+    final int totalStock = widget.product.stock;
+    final int availableStock = widget.product.countOfAvailable;
+    final int soldStock = totalStock - availableStock;
+
+    // Calculate progress (0.0 to 1.0) - how much has been sold
+    final double progress = totalStock > 0
+        ? (soldStock / totalStock).clamp(0.0, 1.0)
+        : 0.0;
+
+    // Determine color based on availability
+    Color progressColor;
+    Color backgroundColor;
+    String statusText;
+
+    // Calculate availability percentage for better color coding
+    final double availabilityPercentage = totalStock > 0
+        ? (availableStock / totalStock)
+        : 0.0;
+
+    if (availableStock == 0) {
+      progressColor = Colors.red;
+      backgroundColor = Colors.red.withValues(alpha: 0.1);
+      statusText = 'غير متوفر';
+    } else if (availabilityPercentage <= 0.2) {
+      progressColor = Colors.orange;
+      backgroundColor = Colors.orange.withValues(alpha: 0.1);
+      statusText = 'متوفر: $availableStock';
+    } else if (availabilityPercentage <= 0.5) {
+      progressColor = Colors.amber;
+      backgroundColor = Colors.amber.withValues(alpha: 0.1);
+      statusText = 'متوفر: $availableStock';
+    } else {
+      progressColor = Colors.green;
+      backgroundColor = Colors.green.withValues(alpha: 0.1);
+      statusText = 'متوفر: $availableStock';
+    }
+
+    return Container(
+      margin: const EdgeInsets.only(top: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Status text and quantity
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Availability text
-
-              // Available Quantity
-              if (widget.product.countOfAvailable > 0)
-                Container(
-                  margin: widget.product.isSpecialOffer == false
-                      ? const EdgeInsets.only(top: 10)
-                      : EdgeInsets.zero,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.green.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: Colors.green.withValues(alpha: 0.3),
-                    ),
-                  ),
-                  child: Text(
-                    '${AppLocalizations.of(context)!.available} ${widget.product.countOfAvailable}',
-                    style: getMediumStyle(
-                      fontSize: FontSize.size10,
-                      fontFamily: FontConstant.cairo,
-                      color: Colors.green[700],
-                    ),
+              Text(
+                statusText,
+                style: getMediumStyle(
+                  fontSize: FontSize.size10,
+                  fontFamily: FontConstant.cairo,
+                  color: progressColor.withValues(alpha: 0.8),
+                ),
+              ),
+              if (totalStock > 0)
+                Text(
+                  'المخزون: $totalStock',
+                  style: getMediumStyle(
+                    fontSize: FontSize.size9,
+                    fontFamily: FontConstant.cairo,
+                    color: Colors.grey[600],
                   ),
                 ),
             ],
+          ),
+
+          const SizedBox(height: 4),
+
+          // Progress bar with animation
+          Container(
+            height: 8,
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: BorderRadius.circular(4),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 2,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: Stack(
+                children: [
+                  // Background
+                  Container(
+                    width: double.infinity,
+                    height: 8,
+                    color: Colors.transparent,
+                  ),
+                  // Progress with gradient
+                  FractionallySizedBox(
+                    widthFactor: progress,
+                    child: Container(
+                      height: 8,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            progressColor,
+                            progressColor.withValues(alpha: 0.8),
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  ),
+                  // Shine effect
+                  if (progress > 0)
+                    Positioned(
+                      left: 0,
+                      top: 0,
+                      bottom: 0,
+                      width: (progress * 200).clamp(0.0, 200.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.white.withValues(alpha: 0.0),
+                              Colors.white.withValues(alpha: 0.3),
+                              Colors.white.withValues(alpha: 0.0),
+                            ],
+                            stops: const [0.0, 0.5, 1.0],
+                          ),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
         ],
       ),

@@ -10,6 +10,7 @@ class HomeProduct {
   final String brandName;
   final String? brandLogo;
   final int countOfAvailable;
+  final int stock;
   final bool isBest;
   final bool isFeatured;
   final bool isLatest;
@@ -31,6 +32,7 @@ class HomeProduct {
     required this.brandName,
     this.brandLogo,
     required this.countOfAvailable,
+    required this.stock,
     required this.isBest,
     required this.isFeatured,
     required this.isLatest,

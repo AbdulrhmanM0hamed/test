@@ -702,6 +702,7 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
 
                                   // Create a minimal HomeProduct for the hybrid service
                                   final homeProduct = HomeProduct(
+                                    stock: widget.product.stock,
                                     id: widget.product.id,
                                     name: widget.product.name,
                                     image: widget.product.image,
