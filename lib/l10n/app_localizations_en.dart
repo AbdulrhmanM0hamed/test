@@ -1533,6 +1533,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get unitPrice => 'unitPrice';
 
   @override
+  String get youHaveNoNotifications => 'You have no notifications';
+
+  @override
+  String get youHave => 'You have';
+
+  @override
+  String get unreadNotifications => 'unread notifications';
+
+  @override
+  String get noNotifications => 'No notifications';
+
+  @override
+  String get newnot => 'new';
+
+  @override
+  String get seen => 'seen';
+
+  @override
+  String get notificationDetails => 'Notification Details';
+
+  @override
+  String get errorOccurred => 'An Error Occurred';
+
+  @override
+  String get couldNotLoadNotificationDetails => 'Could not load notification details, please try again';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get availableActions => 'Available Actions';
+
+  @override
+  String get viewOrderDetails => 'View Order Details';
+
+  @override
+  String get justNow => 'Just now';
+
+  @override
   String get taxItems => 'taxItems';
 
   @override

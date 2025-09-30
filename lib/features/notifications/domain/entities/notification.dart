@@ -1,6 +1,6 @@
 class NotificationEntity {
   final int id;
-  final String? orderId;
+  final int orderId;
   final String title;
   final String description;
   final String type;
@@ -10,7 +10,7 @@ class NotificationEntity {
 
   const NotificationEntity({
     required this.id,
-    this.orderId,
+    required this.orderId,
     required this.title,
     required this.description,
     required this.type,
@@ -21,7 +21,7 @@ class NotificationEntity {
 
   NotificationEntity copyWith({
     int? id,
-    String? orderId,
+    int? orderId,
     String? title,
     String? description,
     String? type,
@@ -53,20 +53,20 @@ class NotificationEntity {
 
 class NotificationDetailsEntity {
   final int id;
-  final String? orderId;
+  final int orderId;
   final String title;
   final String description;
   final String type;
   final bool seen;
-  final DateTime updatedAt;
+  final DateTime? updatedAt;
 
   const NotificationDetailsEntity({
     required this.id,
-    this.orderId,
+    required this.orderId,
     required this.title,
     required this.description,
     required this.type,
     required this.seen,
-    required this.updatedAt,
+    this.updatedAt,
   });
 }

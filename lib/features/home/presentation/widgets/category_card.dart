@@ -60,9 +60,9 @@ class _CategoryCardState extends State<CategoryCard> {
                   ),
                 ],
               ),
-              child: widget.category.image.startsWith('http')
+              child: widget.category.icon.startsWith('http')
                   ? CachedNetworkImage(
-                      imageUrl: widget.category.image,
+                      imageUrl: widget.category.icon,
                       fit: BoxFit.contain,
                       errorWidget: (context, url, error) =>
                           const Icon(Icons.category, size: 30),
@@ -74,7 +74,7 @@ class _CategoryCardState extends State<CategoryCard> {
                         ),
                       ),
                     )
-                  : Image.asset(widget.category.image, fit: BoxFit.contain),
+                  : Image.asset(widget.category.icon, fit: BoxFit.contain),
             ),
             const SizedBox(height: 8),
             // العنوان
@@ -97,8 +97,8 @@ class _CategoryCardState extends State<CategoryCard> {
 
 class CategoryItem {
   final String title;
-  final String image;
+  final String icon;
   final VoidCallback onTap;
 
-  CategoryItem({required this.title, required this.image, required this.onTap});
+  CategoryItem({required this.title, required this.icon, required this.onTap});
 }

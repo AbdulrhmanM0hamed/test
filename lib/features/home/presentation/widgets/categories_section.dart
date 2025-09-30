@@ -86,7 +86,7 @@ class ShoppingCategories extends StatelessWidget {
                     child: CategoryCard(
                       category: CategoryItem(
                         title: subCategory.name,
-                        image: subCategory.image,
+                        icon: subCategory.icon,
                         onTap: () => _handleSubCategoryTap(
                           context,
                           subCategory.slug,

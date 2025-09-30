@@ -562,6 +562,7 @@ class DependencyInjection {
     getIt.registerFactory<SubCategoryCubit>(
       () => SubCategoryCubit(
         getSubCategoriesUseCase: getIt<GetSubCategoriesUseCase>(),
+        dataRefreshService: getIt<DataRefreshService>(),
       ),
     );
 

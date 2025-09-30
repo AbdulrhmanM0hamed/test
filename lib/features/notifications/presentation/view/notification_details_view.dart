@@ -3,9 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/core/utils/common/custom_app_bar.dart';
+import 'package:test/core/utils/common/custom_button.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:test/features/profile/presentation/view/order_details_view.dart';
+import 'package:test/l10n/app_localizations.dart';
+import 'package:test/features/orders/presentation/cubit/orders_cubit/orders_cubit.dart';
 
 import '../cubit/notifications_cubit.dart';
 import '../cubit/notifications_state.dart';
@@ -34,7 +38,9 @@ class NotificationDetailsViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: const CustomAppBar(title: 'تفاصيل الإشعار'),
+      appBar: CustomAppBar(
+        title: AppLocalizations.of(context)!.notificationDetails,
+      ),
       body: BlocBuilder<NotificationDetailsCubit, NotificationDetailsState>(
         builder: (context, state) {
           if (state is NotificationDetailsLoading) {
@@ -75,27 +81,27 @@ class NotificationDetailsViewBody extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.08),
-                  blurRadius: 16,
+                  blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
               ],
             ),
             child: Padding(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header with Icon and Status
+                  // Header with icon and status
                   Row(
                     children: [
                       Container(
-                        width: 56,
-                        height: 56,
+                        width: 60,
+                        height: 60,
                         decoration: BoxDecoration(
                           color: _getNotificationColor(
                             notification.type,
                           ).withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                         child: Icon(
                           _getNotificationIcon(notification.type),
@@ -118,14 +124,16 @@ class NotificationDetailsViewBody extends StatelessWidget {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              timeago.format(
-                                notification.updatedAt,
-                                locale: 'ar',
-                              ),
+                              notification.updatedAt != null
+                                  ? timeago.format(
+                                      notification.updatedAt!,
+                                      locale: 'ar',
+                                    )
+                                  : AppLocalizations.of(context)!.justNow,
                               style: getRegularStyle(
                                 fontFamily: FontConstant.cairo,
                                 fontSize: 11,
-                                color: Colors.grey,
+                                color: Colors.grey[600]!,
                               ),
                             ),
                           ],
@@ -143,12 +151,14 @@ class NotificationDetailsViewBody extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          notification.seen ? 'مقروء' : 'جديد',
+                          notification.seen
+                              ? AppLocalizations.of(context)!.seen
+                              : AppLocalizations.of(context)!.newnot,
                           style: getMediumStyle(
                             fontFamily: FontConstant.cairo,
                             fontSize: 11,
                             color: notification.seen
-                                ? Colors.green
+                                ? Colors.green[700]!
                                 : AppColors.primary,
                           ),
                         ),
@@ -156,7 +166,7 @@ class NotificationDetailsViewBody extends StatelessWidget {
                     ],
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
 
                   // Title
                   Text(
@@ -164,140 +174,127 @@ class NotificationDetailsViewBody extends StatelessWidget {
                     style: getBoldStyle(
                       fontFamily: FontConstant.cairo,
                       fontSize: 18,
-                      color: AppColors.grey,
+                      color: Colors.black87,
                     ),
                   ),
 
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
 
                   // Description
+                  Text(
+                    notification.description,
+                    style: getRegularStyle(
+                      fontFamily: FontConstant.cairo,
+                      fontSize: 14,
+                      color: Colors.grey[700]!,
+                    ),
+                    textAlign: TextAlign.justify,
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Order Information Section
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.grey[50],
+                      color: AppColors.primary.withValues(alpha: 0.05),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: Colors.grey.withValues(alpha: 0.2),
+                        color: AppColors.primary.withValues(alpha: 0.1),
                       ),
                     ),
-                    child: Text(
-                      notification.description,
-                      style: getRegularStyle(
-                        fontFamily: FontConstant.cairo,
-                        fontSize: 15,
-                        color: Colors.grey[700]!,
-                      ),
-                      textAlign: TextAlign.start,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.orderNumber,
+                          style: getMediumStyle(
+                            fontFamily: FontConstant.cairo,
+                            fontSize: 13,
+                            color: Colors.grey[600]!,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.receipt_long,
+                              color: AppColors.primary,
+                              size: 18,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              notification.orderId.toString(),
+                              style: getBoldStyle(
+                                fontFamily: FontConstant.cairo,
+                                fontSize: 16,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-
-                  // Order ID Section
-                  if (notification.orderId != null) ...[
-                    const SizedBox(height: 24),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.05),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: AppColors.primary.withValues(alpha: 0.2),
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'رقم الطلب',
-                            style: getMediumStyle(
-                              fontFamily: FontConstant.cairo,
-                              fontSize: 13,
-                              color: AppColors.primary,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.receipt_long,
-                                color: AppColors.primary,
-                                size: 18,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                notification.orderId!,
-                                style: getBoldStyle(
-                                  fontFamily: FontConstant.cairo,
-                                  fontSize: 16,
-                                  color: AppColors.grey,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
                 ],
               ),
             ),
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
 
-          // Action Buttons
-          if (notification.orderId != null)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'الإجراءات المتاحة',
-                    style: getBoldStyle(
-                      fontFamily: FontConstant.cairo,
-                      fontSize: 16,
-                      color: AppColors.grey,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        // TODO: Navigate to order details
-                        // Navigator.push(context, MaterialPageRoute(
-                        //   builder: (context) => OrderDetailsView(orderId: notification.orderId!),
-                        // ));
-                      },
-                      icon: const Icon(Icons.visibility),
-                      label: const Text('عرض تفاصيل الطلب'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+          // Actions Card
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.availableActions,
+                  style: getBoldStyle(
+                    fontFamily: FontConstant.cairo,
+                    fontSize: 16,
+                    color: AppColors.grey,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: CustomButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BlocProvider(
+                            create: (context) =>
+                                DependencyInjection.getIt<OrdersCubit>()
+                                  ..getOrderDetails(notification.orderId),
+                            child: OrderDetailsView(
+                              orderId: notification.orderId,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    text: AppLocalizations.of(context)!.viewOrderDetails,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -325,7 +322,7 @@ class NotificationDetailsViewBody extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              'حدث خطأ',
+              AppLocalizations.of(context)!.errorOccurred,
               style: getBoldStyle(
                 fontFamily: FontConstant.cairo,
                 fontSize: 18,
@@ -334,7 +331,7 @@ class NotificationDetailsViewBody extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              message,
+              AppLocalizations.of(context)!.couldNotLoadNotificationDetails,
               style: getRegularStyle(
                 fontFamily: FontConstant.cairo,
                 fontSize: 14,
@@ -348,7 +345,7 @@ class NotificationDetailsViewBody extends StatelessWidget {
                 Navigator.pop(context);
               },
               icon: const Icon(Icons.arrow_back),
-              label: const Text('العودة'),
+              label: Text(AppLocalizations.of(context)!.back),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,

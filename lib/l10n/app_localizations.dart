@@ -3143,6 +3143,84 @@ abstract class AppLocalizations {
   /// **'unitPrice'**
   String get unitPrice;
 
+  /// No description provided for @youHaveNoNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no notifications'**
+  String get youHaveNoNotifications;
+
+  /// No description provided for @youHave.
+  ///
+  /// In en, this message translates to:
+  /// **'You have'**
+  String get youHave;
+
+  /// No description provided for @unreadNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'unread notifications'**
+  String get unreadNotifications;
+
+  /// No description provided for @noNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications'**
+  String get noNotifications;
+
+  /// No description provided for @newnot.
+  ///
+  /// In en, this message translates to:
+  /// **'new'**
+  String get newnot;
+
+  /// No description provided for @seen.
+  ///
+  /// In en, this message translates to:
+  /// **'seen'**
+  String get seen;
+
+  /// No description provided for @notificationDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Details'**
+  String get notificationDetails;
+
+  /// No description provided for @errorOccurred.
+  ///
+  /// In en, this message translates to:
+  /// **'An Error Occurred'**
+  String get errorOccurred;
+
+  /// No description provided for @couldNotLoadNotificationDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load notification details, please try again'**
+  String get couldNotLoadNotificationDetails;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @availableActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Available Actions'**
+  String get availableActions;
+
+  /// No description provided for @viewOrderDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View Order Details'**
+  String get viewOrderDetails;
+
+  /// No description provided for @justNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get justNow;
+
   /// No description provided for @taxItems.
   ///
   /// In en, this message translates to:

@@ -11,6 +11,7 @@ import 'package:test/features/home/presentation/widgets/home%20sections/special_
 import 'package:test/features/home/presentation/widgets/home%20sections/featured_products_section.dart';
 import 'package:test/features/home/presentation/widgets/home%20sections/best_seller_products_section.dart';
 import 'package:test/features/home/presentation/widgets/home%20sections/latest_products_section.dart';
+import 'package:test/features/home/presentation/widgets/stores/stores_showcase.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/features/profile/presentation/cubit/profile_cubit.dart';
 import '../cubits/featured_products/featured_products_cubit.dart';
@@ -150,25 +151,25 @@ class HomePageBody extends StatelessWidget {
 
                             // Featured Products Section
                             const SizedBox(height: 24),
-                            FeaturedProductsSection(
-                              onProductTap: (product) {
-                                Navigator.pushNamed(
-                                  context,
-                                  '/product-details',
-                                  arguments: product.id,
-                                );
-                              },
-                              onFavoritePressed: (product) {
-                                // TODO: Toggle favorite
-                                //print('Favorite pressed: ${product.name}');
-                              },
-                              onSeeAll: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  '/featured-products',
-                                );
-                              },
-                            ),
+                            // FeaturedProductsSection(
+                            //   onProductTap: (product) {
+                            //     Navigator.pushNamed(
+                            //       context,
+                            //       '/product-details',
+                            //       arguments: product.id,
+                            //     );
+                            //   },
+                            //   onFavoritePressed: (product) {
+                            //     // TODO: Toggle favorite
+                            //     //print('Favorite pressed: ${product.name}');
+                            //   },
+                            //   onSeeAll: () {
+                            //     Navigator.pushNamed(
+                            //       context,
+                            //       '/featured-products',
+                            //     );
+                            //   },
+                            // ),
 
                             // Best Seller Products Section
                             const SizedBox(height: 24),
@@ -216,7 +217,7 @@ class HomePageBody extends StatelessWidget {
 
                             // Stores Showcase Section
                             const SizedBox(height: 24),
-                            //       const StoresShowcaseSection(),
+                            const StoresShowcaseSection(),
 
                             // Footer space
                             const SizedBox(height: 20),

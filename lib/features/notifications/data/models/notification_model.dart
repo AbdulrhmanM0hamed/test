@@ -3,7 +3,7 @@ import '../../domain/entities/notification.dart';
 class NotificationModel extends NotificationEntity {
   const NotificationModel({
     required super.id,
-    super.orderId,
+    required super.orderId,
     required super.title,
     required super.description,
     required super.type,
@@ -15,7 +15,7 @@ class NotificationModel extends NotificationEntity {
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(
       id: json['id'] as int,
-      orderId: json['order_id']?.toString(),
+      orderId: int.parse(json['order_id'].toString()),
       title: json['title'] as String,
       description: json['desc'] as String,
       type: json['type'] as String,
@@ -44,23 +44,25 @@ class NotificationModel extends NotificationEntity {
 class NotificationDetailsModel extends NotificationDetailsEntity {
   const NotificationDetailsModel({
     required super.id,
-    super.orderId,
+    required super.orderId,
     required super.title,
     required super.description,
     required super.type,
     required super.seen,
-    required super.updatedAt,
+    super.updatedAt,
   });
 
   factory NotificationDetailsModel.fromJson(Map<String, dynamic> json) {
     return NotificationDetailsModel(
       id: json['id'] as int,
-      orderId: json['order_id']?.toString(),
+      orderId: int.parse(json['order_id'].toString()),
       title: json['title'] as String,
       description: json['desc'] as String,
       type: json['type'] as String,
       seen: json['seen'] == 1,
-      updatedAt: DateTime.parse(json['updated_at'] as String),
+      updatedAt: json['updated_at'] != null 
+          ? DateTime.parse(json['updated_at'] as String)
+          : null,
     );
   }
 }
@@ -68,9 +70,7 @@ class NotificationDetailsModel extends NotificationDetailsEntity {
 class NotificationsResponseModel {
   final List<NotificationModel> notifications;
 
-  const NotificationsResponseModel({
-    required this.notifications,
-  });
+  const NotificationsResponseModel({required this.notifications});
 
   factory NotificationsResponseModel.fromJson(Map<String, dynamic> json) {
     final List<dynamic> data = json['data'] as List<dynamic>;
@@ -78,9 +78,7 @@ class NotificationsResponseModel {
         .map((item) => NotificationModel.fromJson(item as Map<String, dynamic>))
         .toList();
 
-    return NotificationsResponseModel(
-      notifications: notifications,
-    );
+    return NotificationsResponseModel(notifications: notifications);
   }
 }
 
@@ -95,7 +93,9 @@ class NotificationDetailsResponseModel {
 
   factory NotificationDetailsResponseModel.fromJson(Map<String, dynamic> json) {
     return NotificationDetailsResponseModel(
-      notification: NotificationDetailsModel.fromJson(json['data'] as Map<String, dynamic>),
+      notification: NotificationDetailsModel.fromJson(
+        json['data'] as Map<String, dynamic>,
+      ),
       message: json['message'] as String,
     );
   }

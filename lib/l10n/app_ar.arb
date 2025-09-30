@@ -645,5 +645,19 @@
   "termsAndConditions": "الشروط والأحكام",
   "privacyPolicy": "سياسة الخصوصية",
   "language": "اللغة",
-  "settings": "الإعدادات"
+  "newnot": "جديد",
+  "seen": "مقروء",
+  "settings": "الإعدادات",
+  "notificationDetails": "تفاصيل الإشعار",
+  "errorOccurred": "حدث خطأ",
+  "couldNotLoadNotificationDetails": "تعذر تحميل تفاصيل الإشعار، يرجى المحاولة مرة أخرى",
+  "back": "العودة",
+  "orderNumber": "رقم الطلب",
+  "availableActions": "الإجراءات المتاحة",
+  "viewOrderDetails": "عرض تفاصيل الطلب",
+  "justNow": "منذ قليل",
+  "youHaveNoNotifications": "لا توجد إشعارات",
+  "youHave": "لديك",
+  "unreadNotifications": "إشعارات غير مقروءة",
+  "noNotifications": "لا توجد إشعارات"
 }

@@ -6,6 +6,7 @@ import 'package:test/core/utils/common/custom_app_bar.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:test/l10n/app_localizations.dart';
 import '../cubit/notifications_cubit.dart';
 import '../cubit/notifications_state.dart';
 import '../widgets/notification_card.dart';
@@ -31,7 +32,7 @@ class NotificationsViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: CustomAppBar(title: 'الإشعارات'),
+      appBar: CustomAppBar(title: AppLocalizations.of(context)!.notifications),
       body: BlocBuilder<NotificationsCubit, NotificationsState>(
         builder: (context, state) {
           if (state is NotificationsLoading) {
@@ -89,7 +90,7 @@ class NotificationsViewBody extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'لديك ${state.unreadCount} إشعار غير مقروء',
+                    '${AppLocalizations.of(context)!.youHave} ${state.unreadCount} ${AppLocalizations.of(context)!.unreadNotifications}',
                     style: getMediumStyle(
                       fontFamily: FontConstant.cairo,
                       fontSize: 13,
@@ -150,7 +151,7 @@ class NotificationsViewBody extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              'لا توجد إشعارات',
+              AppLocalizations.of(context)!.noNotifications,
               style: getBoldStyle(
                 fontFamily: FontConstant.cairo,
                 fontSize: 18,
@@ -159,7 +160,7 @@ class NotificationsViewBody extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'ستظهر هنا جميع الإشعارات الخاصة بك',
+              AppLocalizations.of(context)!.youHaveNoNotifications,
               style: getRegularStyle(
                 fontFamily: FontConstant.cairo,
                 fontSize: 14,
@@ -173,7 +174,7 @@ class NotificationsViewBody extends StatelessWidget {
                 context.read<NotificationsCubit>().refreshNotifications();
               },
               icon: const Icon(Icons.refresh),
-              label: const Text('تحديث'),
+              label: Text(AppLocalizations.of(context)!.retry),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
@@ -214,7 +215,7 @@ class NotificationsViewBody extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             Text(
-              'حدث خطأ',
+              AppLocalizations.of(context)!.error,
               style: getBoldStyle(
                 fontFamily: FontConstant.cairo,
                 fontSize: 18,
@@ -237,7 +238,7 @@ class NotificationsViewBody extends StatelessWidget {
                 context.read<NotificationsCubit>().getNotifications();
               },
               icon: const Icon(Icons.refresh),
-              label: const Text('إعادة المحاولة'),
+              label: Text(AppLocalizations.of(context)!.retry),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,

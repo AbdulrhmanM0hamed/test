@@ -1533,6 +1533,45 @@ class AppLocalizationsAr extends AppLocalizations {
   String get unitPrice => 'السعر';
 
   @override
+  String get youHaveNoNotifications => 'لا توجد إشعارات';
+
+  @override
+  String get youHave => 'لديك';
+
+  @override
+  String get unreadNotifications => 'إشعارات غير مقروءة';
+
+  @override
+  String get noNotifications => 'لا توجد إشعارات';
+
+  @override
+  String get newnot => 'جديد';
+
+  @override
+  String get seen => 'مقروء';
+
+  @override
+  String get notificationDetails => 'تفاصيل الإشعار';
+
+  @override
+  String get errorOccurred => 'حدث خطأ';
+
+  @override
+  String get couldNotLoadNotificationDetails => 'تعذر تحميل تفاصيل الإشعار، يرجى المحاولة مرة أخرى';
+
+  @override
+  String get back => 'العودة';
+
+  @override
+  String get availableActions => 'الإجراءات المتاحة';
+
+  @override
+  String get viewOrderDetails => 'عرض تفاصيل الطلب';
+
+  @override
+  String get justNow => 'منذ قليل';
+
+  @override
   String get taxItems => 'عناصر ضريبية';
 
   @override

@@ -114,8 +114,8 @@ class NotificationCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
 
-                      // Order ID if available
-                      if (notification.orderId != null) ...[
+                      // Order ID
+                      const SizedBox(height: 8),
                         const SizedBox(height: 8),
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -135,7 +135,6 @@ class NotificationCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                      ],
                     ],
                   ),
                 ),
