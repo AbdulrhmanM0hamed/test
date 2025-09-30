@@ -70,20 +70,26 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
 
     // Listen to HybridWishlistService changes for automatic UI updates
     HybridWishlistService.instance.addListener(_onWishlistChanged);
-
-    // Listen to HybridCartService changes for automatic UI updates
-    HybridCartService.instance.addListener(_onCartChanged);
   }
 
   Future<void> _checkWishlistState() async {
-    final isInWishlist = await HybridWishlistService.instance.isInWishlist(
-      widget.product.id,
-    );
-    if (mounted && isInWishlist != _isInWishlist) {
-      setState(() {
-        _isInWishlist = isInWishlist;
-      });
-      ('🔄 ProductCardProfessional: Updated wishlist state for product ${widget.product.id}: $_isInWishlist');
+    try {
+      final isInWishlist = await HybridWishlistService.instance.isInWishlist(
+        widget.product.id,
+      );
+      if (mounted && isInWishlist != _isInWishlist) {
+        setState(() {
+          _isInWishlist = isInWishlist;
+          _isWishlistLoading = false; // Ensure loading is reset
+        });
+        ('🔄 ProductCardProfessional: Updated wishlist state for product ${widget.product.id}: $_isInWishlist');
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isWishlistLoading = false;
+        });
+      }
     }
   }
 
@@ -91,22 +97,12 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
   void dispose() {
     _controller.dispose();
     HybridWishlistService.instance.removeListener(_onWishlistChanged);
-    HybridCartService.instance.removeListener(_onCartChanged);
     super.dispose();
   }
 
   void _onWishlistChanged() {
     // Check wishlist state when HybridWishlistService notifies changes
     _checkWishlistState();
-  }
-
-  void _onCartChanged() {
-    // Rebuild widget when cart changes to update border/visual state
-    if (mounted) {
-      setState(() {
-        _cartUpdateCounter++; // This will trigger FutureBuilder rebuild
-      });
-    }
   }
 
   void _handleTap() {
@@ -360,23 +356,27 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
       listener: (context, state) {
         if (state is WishlistItemAdded &&
             state.productId == widget.product.id) {
-          setState(() {
-            _isInWishlist = true;
-            _isWishlistLoading = false;
-          });
-          // Remove snackbar - handled by WishlistView
+          if (mounted) {
+            setState(() {
+              _isInWishlist = true;
+              _isWishlistLoading = false;
+            });
+          }
         } else if (state is WishlistItemRemoved &&
             state.productId == widget.product.id) {
-          setState(() {
-            _isInWishlist = false;
-            _isWishlistLoading = false;
-          });
-          // Remove snackbar - handled by WishlistView
+          if (mounted) {
+            setState(() {
+              _isInWishlist = false;
+              _isWishlistLoading = false;
+            });
+          }
         } else if (state is WishlistError) {
           // Reset loading for this product on error
-          setState(() {
-            _isWishlistLoading = false;
-          });
+          if (mounted) {
+            setState(() {
+              _isWishlistLoading = false;
+            });
+          }
           // Only show error snackbar for this specific product
           if (state.toString().contains('${widget.product.id}')) {
             CustomSnackbar.showError(context: context, message: state.message);
@@ -393,18 +393,20 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
             //   '❤️ ProductCardProfessional: ${_isInWishlist ? 'Removing' : 'Adding'} product ${widget.product.id} ${_isInWishlist ? 'from' : 'to'} wishlist',
             // );
 
-            // Set loading state for this specific product
+            // Set loading state and optimistically update UI
             setState(() {
               _isWishlistLoading = true;
+              // Optimistically update the wishlist state for immediate feedback
+              _isInWishlist = !_isInWishlist;
             });
 
             // Use hybrid service for wishlist operations (works for both online and offline)
             HybridWishlistService.instance
                 .toggleWishlistForProduct(widget.product)
                 .then((_) {
+                  // Don't update _isInWishlist here - let BlocConsumer handle it
                   if (mounted) {
                     setState(() {
-                      _isInWishlist = !_isInWishlist;
                       _isWishlistLoading = false;
                     });
                   }
@@ -413,6 +415,8 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
                   if (mounted) {
                     setState(() {
                       _isWishlistLoading = false;
+                      // Revert optimistic update on error
+                      _isInWishlist = !_isInWishlist;
                     });
                     CustomSnackbar.showError(
                       context: context,
@@ -659,7 +663,6 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
 
               // Add to Cart Button with Visual Indicator
               FutureBuilder<int>(
-                key: ValueKey('cart_${widget.product.id}_$_cartUpdateCounter'),
                 future: HybridCartService.instance.getProductQuantity(
                   productId: widget.product.id,
                   productSizeColorId:
