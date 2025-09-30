@@ -16,6 +16,7 @@ import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/l10n/app_localizations.dart';
 import 'package:test/features/profile/presentation/view/my_orders_view.dart';
 import 'package:test/features/wishlist/presentation/view/wishlist_view.dart';
+import 'package:test/core/utils/widgets/logout_confirmation_dialog.dart';
 import 'header_search_bar.dart';
 import 'location_selector_header.dart';
 
@@ -324,16 +325,29 @@ class _GreetingHeaderState extends State<GreetingHeader> {
           child: Align(
             // Arabic: align to right, English: align to left
             alignment: isArabic ? Alignment.centerRight : Alignment.centerLeft,
-            child: _buildDrawer(),
+            child: _buildDraggableDrawer(context, isArabic),
           ),
         );
       },
     );
   }
 
-  Widget _buildDrawer() {
-    final bool isArabic = Localizations.localeOf(context).languageCode == 'ar';
+  Widget _buildDraggableDrawer(BuildContext context, bool isArabic) {
+    return GestureDetector(
+      onHorizontalDragUpdate: (details) {
+        // Close drawer when swiping in the opposite direction
+        if ((isArabic && details.delta.dx > 0) ||
+            (!isArabic && details.delta.dx < 0)) {
+          if (details.delta.dx.abs() > 5) {
+            Navigator.pop(context);
+          }
+        }
+      },
+      child: _buildDrawer(isArabic),
+    );
+  }
 
+  Widget _buildDrawer(bool isArabic) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.85,
       height: MediaQuery.of(context).size.height,
@@ -524,6 +538,24 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                       : 'Terms & Conditions',
                   onTap: () => Navigator.pop(context),
                 ),
+                const SizedBox(height: 16),
+                // Divider
+                Container(
+                  height: 1,
+                  color: Colors.grey[200],
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                ),
+                const SizedBox(height: 8),
+                // Logout Button
+                _buildDrawerItem(
+                  icon: Icons.logout_rounded,
+                  title: AppLocalizations.of(context)!.logout,
+                  onTap: () {
+                    Navigator.pop(context);
+                    LogoutConfirmationDialog.showWithDI(context);
+                  },
+                  isDestructive: true,
+                ),
                 const SizedBox(height: 20),
               ],
             ),
@@ -539,6 +571,7 @@ class _GreetingHeaderState extends State<GreetingHeader> {
     String? subtitle,
     String? badge,
     required VoidCallback onTap,
+    bool isDestructive = false,
   }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -568,20 +601,31 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [
-                        AppColors.primary.withValues(alpha: 0.1),
-                        AppColors.primary.withValues(alpha: 0.05),
-                      ],
+                      colors: isDestructive
+                          ? [
+                              Colors.red.withValues(alpha: 0.1),
+                              Colors.red.withValues(alpha: 0.05),
+                            ]
+                          : [
+                              AppColors.primary.withValues(alpha: 0.1),
+                              AppColors.primary.withValues(alpha: 0.05),
+                            ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: AppColors.primary.withValues(alpha: 0.1),
+                      color: isDestructive
+                          ? Colors.red.withValues(alpha: 0.1)
+                          : AppColors.primary.withValues(alpha: 0.1),
                       width: 1,
                     ),
                   ),
-                  child: Icon(icon, color: AppColors.primary, size: 22),
+                  child: Icon(
+                    icon,
+                    color: isDestructive ? Colors.red : AppColors.primary,
+                    size: 22,
+                  ),
                 ),
                 const SizedBox(width: 16),
                 // Title and subtitle

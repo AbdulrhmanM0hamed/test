@@ -38,23 +38,24 @@ class LocationSelectorHeader extends StatelessWidget {
                 const SizedBox(width: 4),
                 // Location text
                 Flexible(
-                  child: Consumer<LanguageService>(
-                    builder: (context, languageService, child) {
-                      return Text(
-                        _getLocationText(
-                          context,
-                          locationService,
-                          languageService,
-                        ),
-                        style: getMediumStyle(
-                          fontFamily: FontConstant.cairo,
-                          fontSize: FontSize.size11,
-                          color: Colors.white.withValues(alpha: 0.9),
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      );
-                    },
+                  child: Consumer2<LocationService, LanguageService>(
+                    builder:
+                        (context, locationService, languageService, child) {
+                          return Text(
+                            _getLocationText(
+                              context,
+                              locationService,
+                              languageService,
+                            ),
+                            style: getMediumStyle(
+                              fontFamily: FontConstant.cairo,
+                              fontSize: FontSize.size11,
+                              color: Colors.white.withValues(alpha: 0.9),
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          );
+                        },
                   ),
                 ),
                 const SizedBox(width: 2),
@@ -84,7 +85,17 @@ class LocationSelectorHeader extends StatelessWidget {
     } else if (locationService.hasSelectedCity) {
       return locationService.selectedCityLocalizedTitle!;
     } else {
-      return AppLocalizations.of(context)!.selectLocation;
+      // Show first available city and region from API
+      final cityTitle = locationService.selectedCityLocalizedTitle;
+      final regionTitle = locationService.selectedRegionLocalizedTitle;
+
+      if (cityTitle != null && regionTitle != null) {
+        return '$regionTitle، $cityTitle';
+      } else if (cityTitle != null) {
+        return cityTitle;
+      } else {
+        return AppLocalizations.of(context)!.selectLocation;
+      }
     }
   }
 

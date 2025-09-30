@@ -42,7 +42,8 @@ class AuthCubit extends Cubit<AuthState> {
 
       // Get FCM token
       print('🔥 Getting FCM token for login...');
-      final fcmToken = await FirebaseNotificationService.instance.getCurrentToken();
+      final fcmToken = await FirebaseNotificationService.instance
+          .getCurrentToken();
       print('🎯 FCM Token obtained: ${fcmToken ?? "null"}');
 
       final loginRequest = LoginRequest(
@@ -88,9 +89,15 @@ class AuthCubit extends Cubit<AuthState> {
         // Subscribe to user-specific notification topics
         print('📢 Subscribing to notification topics for user: ${user.id}');
         try {
-          await FirebaseNotificationService.instance.subscribeToTopic('user_${user.id}');
-          await FirebaseNotificationService.instance.subscribeToTopic('general_notifications');
-          await FirebaseNotificationService.instance.subscribeToTopic('order_notifications');
+          await FirebaseNotificationService.instance.subscribeToTopic(
+            'user_${user.id}',
+          );
+          await FirebaseNotificationService.instance.subscribeToTopic(
+            'general_notifications',
+          );
+          await FirebaseNotificationService.instance.subscribeToTopic(
+            'order_notifications',
+          );
           print('✅ Successfully subscribed to notification topics');
         } catch (e) {
           print('❌ Error subscribing to notification topics: $e');
@@ -158,7 +165,9 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> logout() async {
     try {
-      emit(AuthLoading());
+      if (!isClosed) {
+        emit(AuthLoading());
+      }
 
       // Get current user ID before clearing tokens
       final userId = tokenStorageService.userId;
@@ -171,8 +180,12 @@ class AuthCubit extends Cubit<AuthState> {
       if (userId != null) {
         print('📢 Unsubscribing from notification topics for user: $userId');
         try {
-          await FirebaseNotificationService.instance.unsubscribeFromTopic('user_$userId');
-          await FirebaseNotificationService.instance.unsubscribeFromTopic('order_notifications');
+          await FirebaseNotificationService.instance.unsubscribeFromTopic(
+            'user_$userId',
+          );
+          await FirebaseNotificationService.instance.unsubscribeFromTopic(
+            'order_notifications',
+          );
           print('✅ Successfully unsubscribed from notification topics');
         } catch (e) {
           print('❌ Error unsubscribing from notification topics: $e');
@@ -189,15 +202,21 @@ class AuthCubit extends Cubit<AuthState> {
       await appStateService.handleLogout();
 
       if (response.success) {
-        emit(AuthLoggedOut(message: response.message));
+        if (!isClosed) {
+          emit(AuthLoggedOut(message: response.message));
+        }
       } else {
         String errorMessage =
             response.getFirstErrorMessage() ?? response.message;
-        emit(AuthError(errorMessage));
+        if (!isClosed) {
+          emit(AuthError(errorMessage));
+        }
       }
     } catch (e) {
       final errorMessage = ErrorHandler.extractErrorMessage(e);
-      emit(AuthError(errorMessage));
+      if (!isClosed) {
+        emit(AuthError(errorMessage));
+      }
     }
   }
 

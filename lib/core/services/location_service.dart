@@ -70,11 +70,25 @@ class LocationService extends ChangeNotifier {
   }
 
   String? get selectedCityLocalizedTitle {
-    return _selectedCity?.getLocalizedTitle(_languageService.isArabic);
+    if (_selectedCity != null) {
+      return _selectedCity!.getLocalizedTitle(_languageService.isArabic);
+    }
+    // Use first city from API if available
+    if (_cities.isNotEmpty) {
+      return _cities.first.getLocalizedTitle(_languageService.isArabic);
+    }
+    return null;
   }
 
   String? get selectedRegionLocalizedTitle {
-    return _selectedRegion?.getLocalizedTitle(_languageService.isArabic);
+    if (_selectedRegion != null) {
+      return _selectedRegion!.getLocalizedTitle(_languageService.isArabic);
+    }
+    // Use first region from API if available
+    if (_regions.isNotEmpty) {
+      return _regions.first.getLocalizedTitle(_languageService.isArabic);
+    }
+    return null;
   }
 
   @override
@@ -85,11 +99,21 @@ class LocationService extends ChangeNotifier {
 
   Future<void> initialize() async {
     await _loadSavedLocation();
+
+    // Always load cities if empty
     if (_cities.isEmpty) {
       await loadCities();
     }
+
+    // Load regions if we have a selected city but no regions
     if (_selectedCity != null && _regions.isEmpty) {
       await loadRegions(_selectedCity!.id);
+    }
+
+    // If no saved location, auto-select first city and region
+    if (_selectedCity == null && _cities.isNotEmpty) {
+      _selectedCity = _cities.first;
+      await loadRegions(_cities.first.id);
     }
   }
 
@@ -115,6 +139,15 @@ class LocationService extends ChangeNotifier {
       if (response.success && response.data != null) {
         _cities = response.data!;
         _isLoadingCities = false;
+
+        // Auto-select first city if no city is selected
+        if (_selectedCity == null && _cities.isNotEmpty) {
+          _selectedCity = _cities.first;
+          await _saveSelectedLocation();
+          // Load regions for the first city
+          loadRegions(_cities.first.id);
+        }
+
         WidgetsBinding.instance.addPostFrameCallback((_) {
           notifyListeners();
         });
@@ -155,6 +188,13 @@ class LocationService extends ChangeNotifier {
       if (response.success && response.data != null) {
         _regions = response.data!;
         _isLoadingRegions = false;
+
+        // Auto-select first region if no region is selected
+        if (_selectedRegion == null && _regions.isNotEmpty) {
+          _selectedRegion = _regions.first;
+          await _saveSelectedLocation();
+        }
+
         WidgetsBinding.instance.addPostFrameCallback((_) {
           notifyListeners();
         });

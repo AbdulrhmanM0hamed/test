@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/features/auth/presentation/cubit/auth_cubit.dart';
@@ -22,6 +23,17 @@ class LogoutConfirmationDialog extends StatelessWidget {
     );
   }
 
+  static Future<void> showWithDI(BuildContext context) async {
+    final authCubit = DependencyInjection.getIt<AuthCubit>();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return LogoutConfirmationDialog(authCubit: authCubit);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
@@ -30,14 +42,19 @@ class LogoutConfirmationDialog extends StatelessWidget {
         listener: (context, state) {
           if (state is AuthLoggedOut) {
             Navigator.of(context).pop(); // Close dialog
+            
+            // Show success message
             CustomSnackbar.showSuccess(
               context: context,
               message: state.message,
             );
-            // Navigate to login screen
-            Navigator.of(
-              context,
-            ).pushNamedAndRemoveUntil('/login', (route) => false);
+            
+            // Delay navigation to allow snackbar to show and cubit to complete
+            Future.delayed(const Duration(milliseconds: 500), () {
+              if (context.mounted) {
+                Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+              }
+            });
           } else if (state is AuthError) {
             Navigator.of(context).pop(); // Close dialog
             CustomSnackbar.showError(context: context, message: state.message);
