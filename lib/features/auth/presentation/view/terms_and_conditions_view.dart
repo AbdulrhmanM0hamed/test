@@ -142,44 +142,61 @@ class _TermsAndConditionsViewState extends State<TermsAndConditionsView> {
               color: Colors.grey[50],
               borderRadius: BorderRadius.circular(12),
             ),
-            child: html.Html(
-              data: _terms!.body,
-              style: {
-                "body": html.Style(
-                  fontFamily: FontConstant.cairo,
-                  fontSize: html.FontSize(14),
-                  color: AppColors.textPrimary,
-                  textAlign: TextAlign.justify,
-                  direction: TextDirection.rtl,
-                ),
-                "p": html.Style(
-                  fontFamily: FontConstant.cairo,
-                  fontSize: html.FontSize(14),
-                  color: AppColors.textPrimary,
-                  margin: html.Margins.only(bottom: 12),
-                  textAlign: TextAlign.justify,
-                  direction: TextDirection.rtl,
-                ),
-                "strong": html.Style(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
-                ),
-                "ul": html.Style(
-                  margin: html.Margins.only(left: 16, bottom: 12),
-                ),
-                "li": html.Style(
-                  fontFamily: FontConstant.cairo,
-                  fontSize: html.FontSize(14),
-                  color: AppColors.textPrimary,
-                  margin: html.Margins.only(bottom: 8),
-                  textAlign: TextAlign.justify,
-                  direction: TextDirection.rtl,
-                ),
-                "a": html.Style(
-                  color: AppColors.primary,
-                  textDecoration: TextDecoration.underline,
-                ),
-              },
+            child: Directionality(
+              textDirection:
+                  Localizations.localeOf(context).languageCode == 'ar'
+                  ? TextDirection.rtl
+                  : TextDirection.ltr,
+              child: html.Html(
+                data: _terms!.body,
+                style: {
+                  "body": html.Style(
+                    fontFamily: FontConstant.cairo,
+                    fontSize: html.FontSize(14),
+                    color: AppColors.textPrimary,
+                    textAlign: TextAlign.justify,
+                    direction:
+                        Localizations.localeOf(context).languageCode == 'ar'
+                        ? TextDirection.rtl
+                        : TextDirection.ltr,
+                  ),
+                  "p": html.Style(
+                    fontFamily: FontConstant.cairo,
+                    fontSize: html.FontSize(14),
+                    color: AppColors.textPrimary,
+                    margin: html.Margins.only(bottom: 12),
+                    textAlign: TextAlign.justify,
+                    direction:
+                        Localizations.localeOf(context).languageCode == 'ar'
+                        ? TextDirection.rtl
+                        : TextDirection.ltr,
+                  ),
+                  "strong": html.Style(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primary,
+                  ),
+                  "ul": html.Style(
+                    margin: Localizations.localeOf(context).languageCode == 'ar'
+                        ? html.Margins.only(right: 16, bottom: 12)
+                        : html.Margins.only(left: 16, bottom: 12),
+                  ),
+                  "li": html.Style(
+                    fontFamily: FontConstant.cairo,
+                    fontSize: html.FontSize(14),
+                    color: AppColors.textPrimary,
+                    margin: html.Margins.only(bottom: 8),
+                    textAlign: TextAlign.justify,
+                    direction:
+                        Localizations.localeOf(context).languageCode == 'ar'
+                        ? TextDirection.rtl
+                        : TextDirection.ltr,
+                  ),
+                  "a": html.Style(
+                    color: AppColors.primary,
+                    textDecoration: TextDecoration.underline,
+                  ),
+                },
+              ),
             ),
           ),
           const SizedBox(height: 24),
