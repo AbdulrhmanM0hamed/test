@@ -69,12 +69,40 @@ class AddressesRemoteDataSourceImpl implements AddressesRemoteDataSource {
 
   @override
   Future<ApiResponse<AddressModel>> addAddress(AddressModel address) async {
+    print('🌐 AddressesRemoteDataSource.addAddress called');
+    print('   - Endpoint: ${ApiEndpoints.addresses}');
+    print('   - Address data: ${address.toCreateJson()}');
+
     try {
       final response = await dioService.postWithResponse(
         ApiEndpoints.addresses,
         data: address.toCreateJson(),
-        dataParser: (data) => AddressModel.fromJson(data),
+        dataParser: (data) {
+          // Handle case where server returns empty array instead of address object
+          if (data is List && data.isEmpty) {
+            // Create a mock address with the data we sent, but with a generated ID
+            return AddressModel(
+              id: DateTime.now().millisecondsSinceEpoch, // Temporary ID
+              address: address.address,
+              addressType: address.addressType,
+              country: address.country,
+              city: address.city,
+              region: address.region,
+              shippingCost: address.shippingCost,
+            );
+          } else if (data is Map<String, dynamic>) {
+            return AddressModel.fromJson(data);
+          } else {
+            throw Exception('Unexpected data format: $data');
+          }
+        },
       );
+
+      print('🌐 API Response received:');
+      print('   - Success: ${response.success}');
+      print('   - Message: ${response.message}');
+      print('   - Data: ${response.data?.toJson()}');
+
       return response;
     } on ApiException catch (e) {
       // DioService already extracted the server message

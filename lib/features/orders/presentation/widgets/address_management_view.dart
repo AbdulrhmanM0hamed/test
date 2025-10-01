@@ -332,36 +332,46 @@ class _AddressManagementViewState extends State<AddressManagementView> {
 
   void _navigateToAddAddress() {
     Navigator.of(context).pushNamed('/add-edit-address').then((_) {
-      context.read<AddressesCubit>().getAddresses();
+      // Refresh addresses after returning from add
+      if (mounted) {
+        context.read<AddressesCubit>().getAddresses();
+      }
     });
   }
 
   void _navigateToEditAddress(Address address) {
-    Navigator.of(
-      context,
-    ).pushNamed('/add-edit-address', arguments: address).then((_) {
-      context.read<AddressesCubit>().getAddresses();
+    Navigator.of(context)
+        .pushNamed('/add-edit-address', arguments: address)
+        .then((_) {
+      // Refresh addresses after returning from edit
+      if (mounted) {
+        context.read<AddressesCubit>().getAddresses();
+      }
     });
   }
 
   void _showDeleteConfirmation(Address address) {
+    // Save reference to the original context that has AddressesCubit
+    final originalContext = context;
+    
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(AppLocalizations.of(context)!.deleteAddress),
-        content: Text(AppLocalizations.of(context)!.deleteAddressConfirmation),
+      builder: (dialogContext) => AlertDialog(
+        title: Text(AppLocalizations.of(dialogContext)!.deleteAddress),
+        content: Text(AppLocalizations.of(dialogContext)!.deleteAddressConfirmation),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(AppLocalizations.of(context)!.cancel),
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(AppLocalizations.of(dialogContext)!.cancel),
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
-              context.read<AddressesCubit>().deleteAddress(address.id);
+              Navigator.of(dialogContext).pop();
+              // Use the original context that has access to AddressesCubit
+              originalContext.read<AddressesCubit>().deleteAddress(address.id);
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: Text(AppLocalizations.of(context)!.delete),
+            child: Text(AppLocalizations.of(dialogContext)!.delete),
           ),
         ],
       ),

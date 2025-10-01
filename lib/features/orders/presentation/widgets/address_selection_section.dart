@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
+import 'package:test/core/utils/common/custom_button.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
@@ -187,37 +188,86 @@ class AddressSelectionSection extends StatelessWidget {
 
   Widget _buildNoAddressesWidget(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(32),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.location_off_outlined, size: 48, color: Colors.grey[400]),
-          const SizedBox(height: 16),
+          // Modern icon with gradient background
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.primary.withValues(alpha: 0.1),
+                  AppColors.primary.withValues(alpha: 0.05),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Icon(
+              Icons.location_on_outlined,
+              size: 40,
+              color: AppColors.primary.withValues(alpha: 0.7),
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // Title
           Text(
             AppLocalizations.of(context)!.noAddressesFound,
-            style: getMediumStyle(
+            style: getBoldStyle(
+              fontSize: FontSize.size16,
+              fontFamily: FontConstant.cairo,
+              color: Theme.of(context).textTheme.displayLarge?.color,
+            ),
+            textAlign: TextAlign.center,
+          ),
+
+          const SizedBox(height: 8),
+
+          // Subtitle
+          Text(
+            AppLocalizations.of(context)!.addAddressToCompleteOrder,
+            style: getRegularStyle(
               fontSize: FontSize.size14,
               fontFamily: FontConstant.cairo,
               color: Colors.grey[600],
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () => _navigateToAddressManagement(context),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+
+          const SizedBox(height: 24),
+
+          // Enhanced Add Address Button
+          Container(
+            width: double.infinity,
+            height: 48,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.primary,
+                  AppColors.primary.withValues(alpha: 0.8),
+                ],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
               ),
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withValues(alpha: 0.3),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
-            child: Text(
-              AppLocalizations.of(context)!.addAddress,
-              style: getMediumStyle(
-                fontSize: FontSize.size14,
-                fontFamily: FontConstant.cairo,
-                color: Colors.white,
-              ),
+            child: CustomButton(
+              text: AppLocalizations.of(context)!.addAddress,
+
+              onPressed: () => _navigateToAddressManagement(context),
             ),
           ),
         ],

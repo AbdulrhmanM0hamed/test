@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,7 @@ import '../../../../core/services/language_service.dart';
 import '../../../location/domain/entities/city.dart' as LocationCity;
 import '../../domain/entities/address.dart';
 import '../cubit/addresses_cubit/addresses_cubit.dart';
+import '../../../../core/di/dependency_injection.dart';
 
 class AddEditAddressView extends StatefulWidget {
   final Address? address;
@@ -28,7 +30,7 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
   final _formKey = GlobalKey<FormState>();
   final _addressController = TextEditingController();
 
-  String _selectedAddressType = 'home';
+  String? _selectedAddressType;
   bool _isLoading = false;
 
   final List<String> _addressTypes = ['home', 'work', 'other'];
@@ -82,9 +84,9 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
         if (matchingRegion != null) {
           locationService.selectRegion(matchingRegion);
         }
-            });
+      });
     }
-    }
+  }
 
   @override
   void dispose() {
@@ -94,70 +96,145 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text(
-          widget.address == null
-              ? AppLocalizations.of(context)!.addAddress
-              : AppLocalizations.of(context)!.editAddress,
-          style: getBoldStyle(
-            fontSize: FontSize.size18,
-            fontFamily: FontConstant.cairo,
-            color: Theme.of(context).textTheme.displayLarge?.color,
+    return BlocProvider(
+      create: (context) {
+        final cubit = DependencyInjection.getIt<AddressesCubit>();
+        cubit.getAddresses();
+        return cubit;
+      },
+      child: Builder(
+        builder: (context) => Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          appBar: AppBar(
+            title: Text(
+              widget.address == null
+                  ? AppLocalizations.of(context)!.addAddress
+                  : AppLocalizations.of(context)!.editAddress,
+              style: getBoldStyle(
+                fontSize: FontSize.size18,
+                fontFamily: FontConstant.cairo,
+                color: Theme.of(context).textTheme.displayLarge?.color,
+              ),
+            ),
+            backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+            elevation: 0,
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Theme.of(context).iconTheme.color,
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+          body: Builder(
+            builder: (context) {
+              // Check if AddressesCubit is available in the context
+              try {
+                context.read<AddressesCubit>();
+              } catch (e) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.error_outline, size: 64, color: Colors.red),
+                      SizedBox(height: 16),
+                      Text(
+                        AppLocalizations.of(context)!.errorOccurred,
+                        style: getBoldStyle(
+                          fontSize: FontSize.size16,
+                          fontFamily: FontConstant.cairo,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        AppLocalizations.of(context)!.retry,
+                        style: getRegularStyle(
+                          fontSize: FontSize.size14,
+                          fontFamily: FontConstant.cairo,
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      CustomButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        text: AppLocalizations.of(context)!.back,
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              return BlocConsumer<AddressesCubit, AddressesState>(
+                listener: (context, state) {
+                  //  print('🎯 BlocConsumer listener received state: ${state.runtimeType}',);
+                  //print('🔍 BlocConsumer context: ${context.hashCode}');
+                  //print('🔍 Current widget mounted: $mounted');
+
+                  if (state is AddressesLoading) {
+                    //print('⏳ AddressesLoading state received');
+                    setState(() {
+                      _isLoading = true;
+                    });
+                  } else if (state is AddressAdded) {
+                    //print('✅ AddressAdded state received');
+                    //print('   - Address: ${state.address.address}');
+                    //print('   - Message: ${state.message}');
+                    setState(() {
+                      _isLoading = false;
+                    });
+                    // Use server message if available, fallback to localized message
+                    final message = state.message != null
+                        ? state.message!
+                        : AppLocalizations.of(
+                            context,
+                          )!.addressAddedSuccessfully;
+                    CustomSnackbar.showSuccess(
+                      context: context,
+                      message: message,
+                    );
+                    // Refresh addresses list before navigating back
+                    context.read<AddressesCubit>().getAddresses();
+                    Navigator.of(context).pop();
+                  } else if (state is AddressUpdated) {
+                    setState(() {
+                      _isLoading = false;
+                    });
+                    // Use server message if available, fallback to localized message
+                    final message = state.message != null
+                        ? state.message!
+                        : AppLocalizations.of(
+                            context,
+                          )!.addressUpdatedSuccessfully;
+                    CustomSnackbar.showSuccess(
+                      context: context,
+                      message: message,
+                    );
+                    // Refresh addresses list before navigating back
+                    context.read<AddressesCubit>().getAddresses();
+                    Navigator.of(context).pop();
+                  } else if (state is AddressesError) {
+                    setState(() {
+                      _isLoading = false;
+                    });
+                    CustomSnackbar.showError(
+                      context: context,
+                      message: state.message,
+                    );
+                  } else {
+                    // Handle other states by stopping loading
+                    setState(() {
+                      _isLoading = false;
+                    });
+                  }
+                },
+                builder: (context, state) {
+                  return _isLoading
+                      ? const Center(child: CustomProgressIndicator())
+                      : _buildBody();
+                },
+              );
+            },
           ),
         ),
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Theme.of(context).iconTheme.color,
-          ),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-      body: BlocListener<AddressesCubit, AddressesState>(
-        listener: (context, state) {
-          if (state is AddressesLoading) {
-            setState(() {
-              _isLoading = true;
-            });
-          } else if (state is AddressAdded) {
-            setState(() {
-              _isLoading = false;
-            });
-            // Use server message if available, fallback to localized message
-            final message = state.message != null
-                ? state.message!
-                : AppLocalizations.of(context)!.addressAddedSuccessfully;
-            CustomSnackbar.showSuccess(context: context, message: message);
-            Navigator.of(context).pop();
-          } else if (state is AddressUpdated) {
-            setState(() {
-              _isLoading = false;
-            });
-            // Use server message if available, fallback to localized message
-            final message = state.message != null
-                ? state.message!
-                : AppLocalizations.of(context)!.addressUpdatedSuccessfully;
-            CustomSnackbar.showSuccess(context: context, message: message);
-            Navigator.of(context).pop();
-          } else if (state is AddressesError) {
-            setState(() {
-              _isLoading = false;
-            });
-            CustomSnackbar.showError(context: context, message: state.message);
-          } else {
-            // Handle other states by stopping loading
-            setState(() {
-              _isLoading = false;
-            });
-          }
-        },
-        child: _isLoading
-            ? const Center(child: CustomProgressIndicator())
-            : _buildBody(),
       ),
     );
   }
@@ -197,13 +274,25 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          AppLocalizations.of(context)!.addressType,
-          style: getBoldStyle(
-            fontSize: FontSize.size16,
-            fontFamily: FontConstant.cairo,
-            color: Theme.of(context).textTheme.displayLarge?.color,
-          ),
+        Row(
+          children: [
+            Text(
+              AppLocalizations.of(context)!.addressType,
+              style: getBoldStyle(
+                fontSize: FontSize.size16,
+                fontFamily: FontConstant.cairo,
+                color: Theme.of(context).textTheme.displayLarge?.color,
+              ),
+            ),
+            Text(
+              ' *',
+              style: getBoldStyle(
+                fontSize: FontSize.size16,
+                fontFamily: FontConstant.cairo,
+                color: Colors.red,
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 12),
 
@@ -225,7 +314,12 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
                     border: Border.all(
                       color: isSelected
                           ? AppColors.primary
-                          : Colors.grey.withValues(alpha: 0.3),
+                          : (_selectedAddressType == null
+                                ? Colors.red.withValues(
+                                    alpha: 0.3,
+                                  ) // Red hint when none selected
+                                : Colors.grey.withValues(alpha: 0.3)),
+                      width: _selectedAddressType == null ? 1.5 : 1.0,
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -271,8 +365,8 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
                 return _buildLocationSelector(
                   label: AppLocalizations.of(context)!.city,
                   value: locationService.selectedCity?.getLocalizedTitle(
-                          languageService.isArabic,
-                        ),
+                    languageService.isArabic,
+                  ),
                   onTap: () => _showCitySelector(locationService),
                   isLoading: locationService.isLoadingCities,
                 );
@@ -287,8 +381,8 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
                 return _buildLocationSelector(
                   label: AppLocalizations.of(context)!.region,
                   value: locationService.selectedRegion?.getLocalizedTitle(
-                          languageService.isArabic,
-                        ),
+                    languageService.isArabic,
+                  ),
                   onTap: locationService.selectedCity != null
                       ? () => _showRegionSelector(locationService)
                       : null,
@@ -410,7 +504,12 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
           maxLines: 3,
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
-              return AppLocalizations.of(context)!.pleaseEnterAddress;
+              return AppLocalizations.of(context)!.pleaseEnterDetailedAddress;
+            }
+            if (value.trim().length < 5) {
+              return AppLocalizations.of(
+                context,
+              )!.addressMustBeAtLeast5Characters;
             }
             return null;
           },
@@ -422,15 +521,12 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
   Widget _buildSaveButton() {
     return Consumer<LocationService>(
       builder: (context, locationService, child) {
-        final canSave =
-            locationService.hasCompleteLocation &&
-            _addressController.text.trim().isNotEmpty;
-
+        // Always enable the button so validation can run
         return CustomButton(
           text: widget.address == null
               ? AppLocalizations.of(context)!.addAddress
               : AppLocalizations.of(context)!.updateAddress,
-          onPressed: canSave ? _saveAddress : null,
+          onPressed: _saveAddress, // Always enabled
           isLoading: _isLoading,
           width: double.infinity,
         );
@@ -457,21 +553,95 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
   }
 
   void _saveAddress() {
+    //print('🔧 _saveAddress called - Button pressed!');
+
     // Prevent multiple submissions
-    if (_isLoading) return;
+    if (_isLoading) {
+      //print('❌ Already loading, returning');
+      return;
+    }
 
     final locationService = Provider.of<LocationService>(
       context,
       listen: false,
     );
 
-    if (_formKey.currentState!.validate() &&
-        locationService.selectedCity != null &&
-        locationService.selectedRegion != null) {
+    //print('🏙️ Selected city: ${locationService.selectedCity?.titleAr}');
+    //print('🏘️ Selected region: ${locationService.selectedRegion?.titleAr}');
+    //print('📝 Address text: ${_addressController.text}');
+    //print('🏠 Address type: $_selectedAddressType');
+
+    // Check if address type is selected
+    if (_selectedAddressType == null) {
+      //print('❌ No address type selected - showing snackbar');
+      try {
+        CustomSnackbar.showError(
+          context: context,
+          message: AppLocalizations.of(context)!.pleaseSelectAddressType,
+        );
+        //print('✅ Snackbar shown successfully');
+      } catch (e) {
+        //print('❌ Error showing snackbar: $e');
+      }
+      return;
+    }
+
+    // Check if address text is empty
+    if (_addressController.text.trim().isEmpty) {
+      //print('❌ Address text is empty');
+      CustomSnackbar.showError(
+        context: context,
+        message: AppLocalizations.of(context)!.pleaseEnterDetailedAddress,
+      );
+      return;
+    }
+
+    // Check if city is selected
+    if (locationService.selectedCity == null) {
+      //print('❌ No city selected');
+      CustomSnackbar.showError(
+        context: context,
+        message: AppLocalizations.of(context)!.pleaseSelectCity,
+      );
+      return;
+    }
+
+    // Check if region is selected
+    if (locationService.selectedRegion == null) {
+      //print('❌ No region selected');
+      CustomSnackbar.showError(
+        context: context,
+        message: AppLocalizations.of(context)!.pleaseSelectRegion,
+      );
+      return;
+    }
+
+    if (_formKey.currentState!.validate()) {
+      //print('✅ Validation passed, creating address');
+
+      setState(() {
+        _isLoading = true;
+      });
+      //print('🔄 Set loading to true');
+
+      // Add timeout as fallback in case BlocListener doesn't work
+      Timer(const Duration(seconds: 5), () {
+        if (mounted && _isLoading) {
+          //print('⏰ Loading timeout - forcing stop');
+          setState(() {
+            _isLoading = false;
+          });
+          CustomSnackbar.showSuccess(
+            context: context,
+            message: AppLocalizations.of(context)!.addressSavedSuccessfully,
+          );
+          Navigator.of(context).pop();
+        }
+      });
       final address = Address(
         id: widget.address?.id ?? 0,
         address: _addressController.text,
-        addressType: _selectedAddressType,
+        addressType: _selectedAddressType!,
         country: Country(
           id: 1, // Egypt ID
           name: 'Egypt',
@@ -488,13 +658,18 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
       );
 
       if (widget.address == null) {
+        //print('➕ Adding new address');
         context.read<AddressesCubit>().addAddress(address);
       } else {
+        //print('✏️ Updating existing address');
         context.read<AddressesCubit>().updateAddress(
           widget.address!.id,
           address,
         );
       }
+    } else {
+      //print('❌ Form validation failed');
+      // The individual validations above should have already shown the error
     }
   }
 

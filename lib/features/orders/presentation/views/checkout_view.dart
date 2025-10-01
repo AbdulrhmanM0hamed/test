@@ -35,6 +35,12 @@ class _CheckoutViewState extends State<CheckoutView> {
   double shippingCost = 0.0;
   double discountAmount = 0.0;
 
+  // ScrollController for auto scroll functionality
+  final ScrollController _scrollController = ScrollController();
+
+  // Key for address section to highlight it
+  final GlobalKey _addressSectionKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
@@ -47,6 +53,12 @@ class _CheckoutViewState extends State<CheckoutView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadCartData();
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   void _loadCartData() {
@@ -94,10 +106,18 @@ class _CheckoutViewState extends State<CheckoutView> {
 
   void _proceedToCheckout() {
     if (selectedAddress == null) {
-      CustomSnackbar.showError(
-        context: context,
-        message: AppLocalizations.of(context)!.pleaseSelectAddress,
-      );
+      // Auto scroll to address section
+      _scrollToAddressSection();
+
+      // Show error message after a small delay to ensure scroll completes
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (mounted) {
+          CustomSnackbar.showError(
+            context: context,
+            message: AppLocalizations.of(context)!.pleaseSelectAddress,
+          );
+        }
+      });
       return;
     }
 
@@ -107,6 +127,41 @@ class _CheckoutViewState extends State<CheckoutView> {
       cartTotal: cartTotal,
       paymentType: selectedPaymentMethod,
     );
+  }
+
+  void _scrollToAddressSection() {
+    try {
+      // Try to scroll to the exact position of address section
+      final RenderBox? renderBox =
+          _addressSectionKey.currentContext?.findRenderObject() as RenderBox?;
+      if (renderBox != null) {
+        final position = renderBox.localToGlobal(Offset.zero);
+        _scrollController.animateTo(
+          position.dy - 100, // Offset to show some padding above
+          duration: const Duration(milliseconds: 600),
+          curve: Curves.easeInOutCubic,
+        );
+      } else {
+        // Fallback: scroll to top
+        _scrollController.animateTo(
+          0.0,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    } catch (e) {
+
+
+
+
+      
+      // Fallback: scroll to top
+      _scrollController.animateTo(
+        0.0,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   @override
@@ -185,14 +240,18 @@ class _CheckoutViewState extends State<CheckoutView> {
           children: [
             Expanded(
               child: SingleChildScrollView(
+                controller: _scrollController,
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Address Selection Section
-                    AddressSelectionSection(
-                      selectedAddress: selectedAddress,
-                      onAddressSelected: _onAddressSelected,
+                    Container(
+                      key: _addressSectionKey,
+                      child: AddressSelectionSection(
+                        selectedAddress: selectedAddress,
+                        onAddressSelected: _onAddressSelected,
+                      ),
                     ),
 
                     const SizedBox(height: 24),

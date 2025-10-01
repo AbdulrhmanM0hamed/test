@@ -24,9 +24,9 @@ class AddressesCubit extends Cubit<AddressesState> {
   Future<void> getAddresses() async {
     if (isClosed) return;
     emit(AddressesLoading());
-    
+
     final result = await getAddressesUseCase();
-    
+
     if (isClosed) return;
     result.fold(
       (failure) {
@@ -39,21 +39,36 @@ class AddressesCubit extends Cubit<AddressesState> {
   }
 
   Future<void> addAddress(Address address) async {
+    print('🏗️ AddressesCubit.addAddress called');
+    print('   - Address: ${address.address}');
+    print('   - Type: ${address.addressType}');
+    print('   - City: ${address.city.name}');
+    print('   - Region: ${address.region.name}');
+
     if (isClosed) return;
     emit(AddressesLoading());
-    
+    print('⏳ Emitted AddressesLoading');
+
     final result = await addAddressUseCase(address);
-    
+    print('📡 UseCase result received');
+
     if (isClosed) return;
     result.fold(
       (failure) {
+        print('❌ AddAddress failed: ${failure.message}');
         if (!isClosed) emit(AddressesError(failure.message));
       },
       (newAddress) {
+        print('✅ AddAddress success');
+        print('   - New address ID: ${newAddress.id}');
         if (!isClosed) {
-          // Refresh the addresses list
-          getAddresses();
+          print('🎯 About to emit AddressAdded');
+          print('🔍 Cubit state before emit: ${state.runtimeType}');
           emit(AddressAdded(newAddress));
+          print('🎯 Emitted AddressAdded');
+          print('🔍 Cubit state after emit: ${state.runtimeType}');
+          // Don't call getAddresses here - let the UI handle the refresh
+          // getAddresses();
         }
       },
     );
@@ -68,25 +83,27 @@ class AddressesCubit extends Cubit<AddressesState> {
     );
 
     if (isClosed) return;
-    result.fold((failure) {
-      if (!isClosed) emit(AddressesError(failure.message));
-    }, (updatedAddress) {
-      if (!isClosed) {
-        // Refresh the addresses list
-        getAddresses();
-        emit(AddressUpdated(updatedAddress));
-      }
-    });
+    result.fold(
+      (failure) {
+        if (!isClosed) emit(AddressesError(failure.message));
+      },
+      (updatedAddress) {
+        if (!isClosed) {
+          emit(AddressUpdated(updatedAddress));
+          // Don't call getAddresses here - let the UI handle the refresh
+        }
+      },
+    );
   }
 
   Future<void> deleteAddress(int addressId) async {
     if (isClosed) return;
     emit(AddressesLoading());
-    
+
     final result = await deleteAddressUseCase(
       DeleteAddressParams(addressId: addressId),
     );
-    
+
     if (isClosed) return;
     result.fold(
       (failure) {
@@ -94,9 +111,9 @@ class AddressesCubit extends Cubit<AddressesState> {
       },
       (_) {
         if (!isClosed) {
-          // Refresh the addresses list
-          getAddresses();
           emit(AddressDeleted(addressId));
+          // Refresh the addresses list immediately for delete
+          getAddresses();
         }
       },
     );

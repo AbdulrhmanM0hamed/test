@@ -220,11 +220,18 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (context) {
+            print('🔧 Creating AddressesCubit for AddressManagementView');
             final cubit = DependencyInjection.getIt<AddressesCubit>();
+            print('✅ AddressesCubit created: ${cubit.runtimeType}');
             cubit.getAddresses();
             return cubit;
           },
-          child: const AddressManagementView(),
+          child: Builder(
+            builder: (context) {
+              print('🏗️ Building AddressManagementView with context');
+              return const AddressManagementView();
+            },
+          ),
         ),
       );
 
@@ -238,7 +245,9 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
             cubit.getAddresses();
             return cubit;
           },
-          child: AddEditAddressView(address: address),
+          child: Builder(
+            builder: (context) => AddEditAddressView(address: address),
+          ),
         ),
       );
 

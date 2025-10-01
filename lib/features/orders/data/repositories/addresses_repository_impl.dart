@@ -31,6 +31,9 @@ class AddressesRepositoryImpl implements AddressesRepository {
 
   @override
   Future<Either<Failure, Address>> addAddress(Address address) async {
+    print('🏪 AddressesRepository.addAddress called');
+    print('   - Network connected: ${await networkInfo.isConnected}');
+    
     if (await networkInfo.isConnected) {
       final addressModel = AddressModel(
         id: address.id,
@@ -42,13 +45,20 @@ class AddressesRepositoryImpl implements AddressesRepository {
         shippingCost: address.shippingCost,
       );
       
+      print('📡 Calling remote data source...');
       final response = await remoteDataSource.addAddress(addressModel);
+      print('📡 Remote data source response:');
+      print('   - Success: ${response.success}');
+      print('   - Message: ${response.message}');
+      print('   - Data: ${response.data != null ? 'Address ID ${response.data!.id}' : 'null'}');
+      
       if (response.success && response.data != null) {
         return Right(response.data!);
       } else {
         return Left(ServerFailure(message: response.message));
       }
     } else {
+      print('❌ No internet connection');
       return Left(NetworkFailure(message: 'No internet connection'));
     }
   }

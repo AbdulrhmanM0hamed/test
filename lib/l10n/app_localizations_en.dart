@@ -1590,6 +1590,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cartIsEmpty => 'Cart is empty';
 
   @override
+  String get addAddressToCompleteOrder => 'Add an address to complete your order';
+
+  @override
+  String get pleaseSelectAddressType => 'Please select address type';
+
+  @override
+  String get pleaseEnterDetailedAddress => 'Please enter detailed address';
+
+  @override
+  String get addressMustBeAtLeast5Characters => 'Address must be at least 5 characters';
+
+  @override
+  String get pleaseSelectCity => 'Please select city';
+
+  @override
+  String get pleaseSelectRegion => 'Please select region';
+
+  @override
+  String get addressSavedSuccessfully => 'Address saved successfully';
+
+  @override
   String get unitPrice => 'unitPrice';
 
   @override

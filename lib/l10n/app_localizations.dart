@@ -3257,6 +3257,48 @@ abstract class AppLocalizations {
   /// **'Cart is empty'**
   String get cartIsEmpty;
 
+  /// No description provided for @addAddressToCompleteOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an address to complete your order'**
+  String get addAddressToCompleteOrder;
+
+  /// No description provided for @pleaseSelectAddressType.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select address type'**
+  String get pleaseSelectAddressType;
+
+  /// No description provided for @pleaseEnterDetailedAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter detailed address'**
+  String get pleaseEnterDetailedAddress;
+
+  /// No description provided for @addressMustBeAtLeast5Characters.
+  ///
+  /// In en, this message translates to:
+  /// **'Address must be at least 5 characters'**
+  String get addressMustBeAtLeast5Characters;
+
+  /// No description provided for @pleaseSelectCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select city'**
+  String get pleaseSelectCity;
+
+  /// No description provided for @pleaseSelectRegion.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select region'**
+  String get pleaseSelectRegion;
+
+  /// No description provided for @addressSavedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Address saved successfully'**
+  String get addressSavedSuccessfully;
+
   /// No description provided for @unitPrice.
   ///
   /// In en, this message translates to:

@@ -1590,6 +1590,27 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cartIsEmpty => 'السلة فارغة';
 
   @override
+  String get addAddressToCompleteOrder => 'أضف عنوان لإتمام طلبك';
+
+  @override
+  String get pleaseSelectAddressType => 'يرجى اختيار نوع العنوان';
+
+  @override
+  String get pleaseEnterDetailedAddress => 'يرجى إدخال العنوان التفصيلي';
+
+  @override
+  String get addressMustBeAtLeast5Characters => 'العنوان يجب أن يكون 5 أحرف على الأقل';
+
+  @override
+  String get pleaseSelectCity => 'يرجى اختيار المدينة';
+
+  @override
+  String get pleaseSelectRegion => 'يرجى اختيار المنطقة';
+
+  @override
+  String get addressSavedSuccessfully => 'تم حفظ العنوان بنجاح';
+
+  @override
   String get unitPrice => 'السعر';
 
   @override
