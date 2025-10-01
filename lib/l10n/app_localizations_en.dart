@@ -1539,6 +1539,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get forWishlist => 'For Wishlist';
 
   @override
+  String get selectVariant => 'Select Variant';
+
+  @override
+  String get offerEndsIn => 'Offer ends in:';
+
+  @override
+  String get newnot => 'New';
+
+  @override
+  String get day => 'Day';
+
+  @override
+  String get hour => 'Hour';
+
+  @override
+  String get minute => 'Minute';
+
+  @override
+  String get second => 'Second';
+
+  @override
+  String get lowStock => 'Low Stock';
+
+  @override
   String get unitPrice => 'unitPrice';
 
   @override
@@ -1552,9 +1576,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noNotifications => 'No notifications';
-
-  @override
-  String get newnot => 'new';
 
   @override
   String get seen => 'seen';

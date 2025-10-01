@@ -11,6 +11,7 @@ import '../../../../core/services/hybrid_cart_service.dart';
 import '../../../cart/presentation/cubit/cart_cubit.dart';
 import '../../../cart/presentation/cubit/cart_state.dart';
 import '../../domain/entities/product_details.dart';
+import 'product_variant_selector.dart';
 
 class AddToCartSection extends StatefulWidget {
   final ProductDetails product;
@@ -37,7 +38,7 @@ class _AddToCartSectionState extends State<AddToCartSection> {
 
   @override
   Widget build(BuildContext context) {
-    final isAvailable = widget.product.stock > 0;
+    final isAvailable = (_selectedVariant?.countOfAvailable ?? 0) > 0;
 
     return Stack(
       children: [
@@ -48,24 +49,50 @@ class _AddToCartSectionState extends State<AddToCartSection> {
             border: Border.all(color: Colors.grey[200]!, width: 1),
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Quantity selector
-              Row(
-                children: [
-                  Text(
-                    AppLocalizations.of(context)!.quantity,
-                    style: TextStyle(
-                      fontSize: FontSize.size16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  const Spacer(),
-                  _buildQuantitySelector(),
-                ],
-              ),
+              // Variant Selector
+              if (widget.product.productSizeColor.isNotEmpty) ...[
+                ProductVariantSelector(
+                  variants: widget.product.productSizeColor,
+                  selectedVariant: _selectedVariant,
+                  onVariantSelected: (variant) {
+                    setState(() {
+                      _selectedVariant = variant;
+                      // Reset quantity if it exceeds new variant's stock
+                      if (_quantity > variant.countOfAvailable) {
+                        _quantity = variant.countOfAvailable > 0 ? 1 : 0;
+                      }
+                    });
+                  },
+                ),
+                const SizedBox(height: 24),
+              ],
 
-              const SizedBox(height: 20),
+              // Selected Variant Price Display
+              if (_selectedVariant != null) ...[
+                _buildSelectedVariantInfo(),
+                const SizedBox(height: 20),
+              ],
+
+              // Quantity selector
+              if (isAvailable) ...[
+                Row(
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.quantity,
+                      style: getBoldStyle(
+                        fontSize: FontSize.size16,
+                        fontFamily: FontConstant.cairo,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    const Spacer(),
+                    _buildQuantitySelector(),
+                  ],
+                ),
+                const SizedBox(height: 20),
+              ],
 
               // Add to cart button
               BlocBuilder<CartCubit, CartState>(
@@ -163,7 +190,86 @@ class _AddToCartSectionState extends State<AddToCartSection> {
     );
   }
 
+  Widget _buildSelectedVariantInfo() {
+    if (_selectedVariant == null) return const SizedBox.shrink();
+    
+    final hasOffer = _selectedVariant!.fakePrice != null && _selectedVariant!.fakePrice!.isNotEmpty;
+    
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.primary.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'السعر المحدد:',
+                  style: getMediumStyle(
+                    fontSize: FontSize.size12,
+                    fontFamily: FontConstant.cairo,
+                    color: Colors.grey[600],
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Text(
+                      '${_selectedVariant!.realPrice} ${AppLocalizations.of(context)!.currency}',
+                      style: getBoldStyle(
+                        fontSize: FontSize.size18,
+                        fontFamily: FontConstant.cairo,
+                        color: hasOffer ? AppColors.primary : Colors.black,
+                      ),
+                    ),
+                    if (hasOffer) ...[
+                      const SizedBox(width: 8),
+                      Text(
+                        '${_selectedVariant!.fakePrice} ${AppLocalizations.of(context)!.currency}',
+                        style: getMediumStyle(
+                          fontSize: FontSize.size14,
+                          fontFamily: FontConstant.cairo,
+                          color: Colors.grey[500],
+                        ).copyWith(
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ],
+            ),
+          ),
+          if (hasOffer && _selectedVariant!.discount != null)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                'خصم ${_selectedVariant!.discount}%',
+                style: getBoldStyle(
+                  fontSize: FontSize.size12,
+                  fontFamily: FontConstant.cairo,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildQuantitySelector() {
+    final maxQuantity = _selectedVariant?.countOfAvailable ?? widget.product.stock;
+    final limitation = widget.product.limitation;
+    
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -190,10 +296,8 @@ class _AddToCartSectionState extends State<AddToCartSection> {
           ),
           _buildQuantityButton(
             icon: Icons.add,
-            onPressed:
-                _quantity < widget.product.stock &&
-                    (_quantity < widget.product.limitation ||
-                        widget.product.limitation == 0)
+            onPressed: _quantity < maxQuantity &&
+                    (limitation == 0 || _quantity < limitation)
                 ? () => setState(() => _quantity++)
                 : null,
           ),

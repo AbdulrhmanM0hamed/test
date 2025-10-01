@@ -135,31 +135,8 @@ class ProductInfoSection extends StatelessWidget {
 
           const SizedBox(height: 20),
 
-          // Stock and sales info
-          Row(
-            children: [
-              _buildInfoChip(
-                icon: Icons.inventory_2_outlined,
-                label: AppLocalizations.of(context)!.stock,
-                value: '${product.stock}',
-                color: product.stock > 0 ? Colors.green : Colors.red,
-              ),
-              const SizedBox(width: 12),
-              _buildInfoChip(
-                icon: Icons.shopping_cart_outlined,
-                label: AppLocalizations.of(context)!.salesCount,
-                value: '${product.numberOfSale}',
-                color: AppColors.primary,
-              ),
-              const SizedBox(width: 12),
-              _buildInfoChip(
-                icon: Icons.visibility_outlined,
-                label: AppLocalizations.of(context)!.viewsCount,
-                value: '${product.views}',
-                color: Colors.orange,
-              ),
-            ],
-          ),
+          // Stock info
+          _buildStockInfo(context),
 
           const SizedBox(height: 24),
 
@@ -228,43 +205,89 @@ class ProductInfoSection extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoChip({
-    required IconData icon,
-    required String label,
-    required String value,
-    required Color color,
-  }) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
+  Widget _buildStockInfo(BuildContext context) {
+    // استخدام بيانات المخزون من أول متغير متاح
+    final mainVariant = product.productSizeColor.isNotEmpty 
+        ? product.productSizeColor.first 
+        : null;
+    
+    final totalStock = mainVariant?.stock ?? product.stock;
+    final availableStock = mainVariant?.countOfAvailable ?? product.countOfAvailable;
+    
+    // حساب النسبة المئوية للتوفر
+    final availabilityPercentage = totalStock > 0 ? (availableStock / totalStock) : 0.0;
+    
+    // تحديد اللون حسب النسبة المئوية
+    Color stockColor;
+    String stockStatus;
+    
+    if (availableStock == 0) {
+      stockColor = Colors.red;
+      stockStatus = AppLocalizations.of(context)!.outOfStock;
+    } else if (availabilityPercentage < 0.2) {
+      stockColor = Colors.orange;
+      stockStatus = AppLocalizations.of(context)!.lowStock;
+    } else if (availabilityPercentage < 0.5) {
+      stockColor = Colors.amber;
+      stockStatus = AppLocalizations.of(context)!.available;
+    } else {
+      stockColor = Colors.green;
+      stockStatus = AppLocalizations.of(context)!.available;
+    }
+    
+    return Row(
+      children: [
+        Icon(
+          Icons.inventory_2_outlined,
+          color: stockColor,
+          size: 20,
         ),
-        child: Column(
-          children: [
-            Icon(icon, color: color, size: 20),
-            const SizedBox(height: 4),
-            Text(
-              value,
-              style: getBoldStyle(
-                fontSize: FontSize.size14,
-                fontFamily: FontConstant.cairo,
-                color: color,
-              ),
-            ),
-            Text(
-              label,
-              style: getMediumStyle(
-                fontSize: FontSize.size10,
-                fontFamily: FontConstant.cairo,
-                color: Colors.grey[600],
-              ),
-            ),
-          ],
+        const SizedBox(width: 8),
+        Text(
+          '${AppLocalizations.of(context)!.stock}:',
+          style: getMediumStyle(
+            fontSize: FontSize.size14,
+            fontFamily: FontConstant.cairo,
+            color: Colors.grey[700],
+          ),
         ),
-      ),
+        const SizedBox(width: 4),
+        Text(
+          '$availableStock',
+          style: getBoldStyle(
+            fontSize: FontSize.size14,
+            fontFamily: FontConstant.cairo,
+            color: stockColor,
+          ),
+        ),
+        if (totalStock != availableStock) ...[
+          Text(
+            '/$totalStock',
+            style: getMediumStyle(
+              fontSize: FontSize.size12,
+              fontFamily: FontConstant.cairo,
+              color: Colors.grey[500],
+            ),
+          ),
+        ],
+        const SizedBox(width: 8),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+          decoration: BoxDecoration(
+            color: stockColor.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(color: stockColor.withValues(alpha: 0.3)),
+          ),
+          child: Text(
+            stockStatus,
+            style: getMediumStyle(
+              fontSize: FontSize.size12,
+              fontFamily: FontConstant.cairo,
+              color: stockColor,
+            ),
+          ),
+        ),
+      ],
     );
   }
 

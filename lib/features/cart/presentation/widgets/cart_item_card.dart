@@ -176,7 +176,8 @@ class _CartItemCardState extends State<CartItemCard>
 
   Widget _buildProductImage() {
     return Hero(
-      tag: 'cart_product_${widget.cartItem.product.id}',
+      tag:
+          'cart_product_${widget.cartItem.product.id}_${widget.cartItem.productSizeColorId}_${widget.cartItem.hashCode}',
       child: Container(
         width: ResponsiveHelper.getResponsiveValue(
           context,

@@ -45,59 +45,59 @@ class OrderSummarySection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          
+
           // Cart Subtotal
           _buildSummaryRow(
             context: context,
             label: AppLocalizations.of(context)!.subtotal,
-            value: '${cartTotal.toStringAsFixed(0)} ${AppLocalizations.of(context)!.currency}',
+            value:
+                '${cartTotal.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
             isRegular: true,
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           // Shipping Cost
           _buildSummaryRow(
             context: context,
             label: AppLocalizations.of(context)!.shipping,
-            value: shippingCost > 0 
-                ? '${shippingCost.toStringAsFixed(0)} ${AppLocalizations.of(context)!.currency}'
+            value: shippingCost > 0
+                ? '${shippingCost.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}'
                 : AppLocalizations.of(context)!.free,
             isRegular: true,
           ),
-          
+
           // Discount (if applied)
           if (discountAmount > 0) ...[
             const SizedBox(height: 12),
             _buildSummaryRow(
               context: context,
               label: AppLocalizations.of(context)!.discount,
-              value: '-${discountAmount.toStringAsFixed(0)} ${AppLocalizations.of(context)!.currency}',
+              value:
+                  '-${discountAmount.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
               isRegular: true,
               valueColor: Colors.green,
             ),
           ],
-          
+
           const SizedBox(height: 16),
-          
+
           // Divider
-          Container(
-            height: 1,
-            color: Colors.grey.withValues(alpha: 0.2),
-          ),
-          
+          Container(height: 1, color: Colors.grey.withValues(alpha: 0.2)),
+
           const SizedBox(height: 16),
-          
+
           // Total
           _buildSummaryRow(
             context: context,
             label: AppLocalizations.of(context)!.total,
-            value: '${finalTotal.toStringAsFixed(0)} ${AppLocalizations.of(context)!.currency}',
+            value:
+                '${finalTotal.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
             isRegular: false,
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Savings indicator (if discount applied)
           if (discountAmount > 0)
             Container(
@@ -105,9 +105,7 @@ class OrderSummarySection extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.green.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: Colors.green.withValues(alpha: 0.3),
-                ),
+                border: Border.all(color: Colors.green.withValues(alpha: 0.3)),
               ),
               child: Row(
                 children: [
@@ -118,7 +116,7 @@ class OrderSummarySection extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    '${AppLocalizations.of(context)!.youSave} ${discountAmount.toStringAsFixed(0)} ${AppLocalizations.of(context)!.currency}',
+                    '${AppLocalizations.of(context)!.youSave} ${discountAmount.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
                     style: getMediumStyle(
                       fontSize: FontSize.size12,
                       fontFamily: FontConstant.cairo,
@@ -163,7 +161,9 @@ class OrderSummarySection extends StatelessWidget {
               ? getMediumStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
-                  color: valueColor ?? Theme.of(context).textTheme.bodyLarge?.color,
+                  color:
+                      valueColor ??
+                      Theme.of(context).textTheme.bodyLarge?.color,
                 )
               : getBoldStyle(
                   fontSize: FontSize.size16,

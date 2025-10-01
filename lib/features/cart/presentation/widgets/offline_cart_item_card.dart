@@ -97,8 +97,10 @@ class _OfflineCartItemCardState extends State<OfflineCartItemCard>
   }
 
   Widget _buildProductImage(String productImage, String productId) {
+    final productSizeColorId = widget.cartItem['productSizeColorId'] ?? 0;
     return Hero(
-      tag: 'offline_cart_product_$productId',
+      tag:
+          'offline_cart_product_${productId}_${productSizeColorId}_${widget.cartItem.hashCode}',
       child: Container(
         width: 80,
         height: 80,

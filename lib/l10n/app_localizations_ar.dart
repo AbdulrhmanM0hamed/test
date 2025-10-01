@@ -420,7 +420,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get stock => 'المخزون';
 
   @override
-  String get available => 'متوفر';
+  String get available => 'متاح';
 
   @override
   String get salesCount => 'عدد المبيعات';
@@ -1539,6 +1539,30 @@ class AppLocalizationsAr extends AppLocalizations {
   String get forWishlist => 'للمفضلة';
 
   @override
+  String get selectVariant => 'اختر المتغير';
+
+  @override
+  String get offerEndsIn => 'ينتهي العرض خلال:';
+
+  @override
+  String get newnot => 'جديد';
+
+  @override
+  String get day => 'يوم';
+
+  @override
+  String get hour => 'ساعة';
+
+  @override
+  String get minute => 'دقيقة';
+
+  @override
+  String get second => 'ثانية';
+
+  @override
+  String get lowStock => 'مخزون قليل';
+
+  @override
   String get unitPrice => 'السعر';
 
   @override
@@ -1552,9 +1576,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noNotifications => 'لا توجد إشعارات';
-
-  @override
-  String get newnot => 'جديد';
 
   @override
   String get seen => 'مقروء';

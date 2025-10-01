@@ -3155,6 +3155,54 @@ abstract class AppLocalizations {
   /// **'For Wishlist'**
   String get forWishlist;
 
+  /// No description provided for @selectVariant.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Variant'**
+  String get selectVariant;
+
+  /// No description provided for @offerEndsIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer ends in:'**
+  String get offerEndsIn;
+
+  /// No description provided for @newnot.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get newnot;
+
+  /// No description provided for @day.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get day;
+
+  /// No description provided for @hour.
+  ///
+  /// In en, this message translates to:
+  /// **'Hour'**
+  String get hour;
+
+  /// No description provided for @minute.
+  ///
+  /// In en, this message translates to:
+  /// **'Minute'**
+  String get minute;
+
+  /// No description provided for @second.
+  ///
+  /// In en, this message translates to:
+  /// **'Second'**
+  String get second;
+
+  /// No description provided for @lowStock.
+  ///
+  /// In en, this message translates to:
+  /// **'Low Stock'**
+  String get lowStock;
+
   /// No description provided for @unitPrice.
   ///
   /// In en, this message translates to:
@@ -3184,12 +3232,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No notifications'**
   String get noNotifications;
-
-  /// No description provided for @newnot.
-  ///
-  /// In en, this message translates to:
-  /// **'new'**
-  String get newnot;
 
   /// No description provided for @seen.
   ///

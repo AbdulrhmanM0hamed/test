@@ -242,7 +242,7 @@ class _CheckoutViewState extends State<CheckoutView> {
 
             return CustomButton(
               text:
-                  '${AppLocalizations.of(context)!.placeOrder} • ${finalTotal.toStringAsFixed(0)} ${AppLocalizations.of(context)!.currency}',
+                  '${AppLocalizations.of(context)!.placeOrder} • ${finalTotal.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
               onPressed: _proceedToCheckout,
               isLoading: isLoading,
               width: double.infinity,
