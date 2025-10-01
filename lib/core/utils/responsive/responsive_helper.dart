@@ -70,7 +70,7 @@ class ResponsiveHelper {
       vertical: getResponsiveValue(
         context,
         smallMobile: 8.0,
-        mobile: 0,
+        mobile: 0, // خلاص كده مناسب مع زيادة الارتفاع
         tablet: 0.0,
         desktop: 0.0,
       ),
@@ -180,7 +180,7 @@ class ResponsiveHelper {
     return getResponsiveValue(
       context,
       smallMobile: baseHeight,
-      mobile: baseHeight,
+      mobile: baseHeight + 15, // زيادة 15 بكسل للموبايل
       tablet: baseHeight + 20,
       desktop: baseHeight + 40,
     );
