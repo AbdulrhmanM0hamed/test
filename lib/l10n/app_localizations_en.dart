@@ -1530,6 +1530,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get includesTaxes => 'includesTaxes';
 
   @override
+  String get adddedToWishlist => 'Added';
+
+  @override
+  String get fromWishlist => 'From Wishlist';
+
+  @override
+  String get forWishlist => 'For Wishlist';
+
+  @override
   String get unitPrice => 'unitPrice';
 
   @override

@@ -113,6 +113,9 @@ class HybridCartService extends ChangeNotifier {
         productSizeColorId: productSizeColorId,
         quantity: quantity,
       );
+
+      // Update bottom nav counter for offline cart
+      GlobalCubitService.instance.refreshAll();
     }
     notifyListeners();
   }
@@ -139,6 +142,9 @@ class HybridCartService extends ChangeNotifier {
         productSizeColorId: productSizeColorId,
         newQuantity: newQuantity,
       );
+
+      // Update bottom nav counter for offline cart
+      GlobalCubitService.instance.refreshAll();
     }
     notifyListeners();
   }
@@ -161,6 +167,9 @@ class HybridCartService extends ChangeNotifier {
         productId: productId,
         productSizeColorId: productSizeColorId,
       );
+
+      // Update bottom nav counter for offline cart
+      GlobalCubitService.instance.refreshAll();
     }
     notifyListeners();
   }

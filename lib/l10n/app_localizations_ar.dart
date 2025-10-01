@@ -1530,6 +1530,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get includesTaxes => 'شاملة الضريبة';
 
   @override
+  String get adddedToWishlist => 'تم اضافة';
+
+  @override
+  String get fromWishlist => 'من المفضلة';
+
+  @override
+  String get forWishlist => 'للمفضلة';
+
+  @override
   String get unitPrice => 'السعر';
 
   @override

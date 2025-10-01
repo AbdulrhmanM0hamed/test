@@ -3137,6 +3137,24 @@ abstract class AppLocalizations {
   /// **'includesTaxes'**
   String get includesTaxes;
 
+  /// No description provided for @adddedToWishlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Added'**
+  String get adddedToWishlist;
+
+  /// No description provided for @fromWishlist.
+  ///
+  /// In en, this message translates to:
+  /// **'From Wishlist'**
+  String get fromWishlist;
+
+  /// No description provided for @forWishlist.
+  ///
+  /// In en, this message translates to:
+  /// **'For Wishlist'**
+  String get forWishlist;
+
   /// No description provided for @unitPrice.
   ///
   /// In en, this message translates to:

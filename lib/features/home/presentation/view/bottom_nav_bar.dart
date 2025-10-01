@@ -23,6 +23,7 @@ import 'package:test/core/services/global_cubit_service.dart';
 import 'package:test/core/services/offline_cart_service.dart';
 import 'package:test/core/services/offline_wishlist_service.dart';
 import 'package:test/core/services/hybrid_wishlist_service.dart';
+import 'package:test/core/services/hybrid_cart_service.dart';
 import 'package:test/features/home/presentation/widgets/login_prompt_widget.dart';
 import 'package:test/features/home/presentation/widgets/lazy_tab_wrapper.dart';
 
@@ -518,14 +519,19 @@ class _HomeViewState extends State<BottomNavBar> {
                       return const SizedBox.shrink();
                     },
                   )
-                : FutureBuilder<int>(
-                    future: OfflineCartService.instance.getCartItemCount(),
-                    builder: (context, snapshot) {
-                      final itemCount = snapshot.data ?? 0;
-                      if (itemCount > 0) {
-                        return _buildBadge(itemCount);
-                      }
-                      return const SizedBox.shrink();
+                : ListenableBuilder(
+                    listenable: HybridCartService.instance,
+                    builder: (context, child) {
+                      return FutureBuilder<int>(
+                        future: OfflineCartService.instance.getCartItemCount(),
+                        builder: (context, snapshot) {
+                          final itemCount = snapshot.data ?? 0;
+                          if (itemCount > 0) {
+                            return _buildBadge(itemCount);
+                          }
+                          return const SizedBox.shrink();
+                        },
+                      );
                     },
                   ),
           ),

@@ -409,6 +409,14 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
                     setState(() {
                       _isWishlistLoading = false;
                     });
+
+                    // Show success snackbar for wishlist operations
+                    CustomSnackbar.showSuccess(
+                      context: context,
+                      message: _isInWishlist
+                          ? '${AppLocalizations.of(context)!.adddedToWishlist}${widget.product.name} ${" " + AppLocalizations.of(context)!.forWishlist}'
+                          : '${AppLocalizations.of(context)!.productRemovedFromWishlist}',
+                    );
                   }
                 })
                 .catchError((error) {
