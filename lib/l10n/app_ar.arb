@@ -672,6 +672,7 @@
   "second": "ثانية",
 
   "lowStock": "مخزون قليل",
+  "showLess": "عرض أقل",
   "unreadNotifications": "إشعارات غير مقروءة",
   "noNotifications": "لا توجد إشعارات",
   "failedToLoadCartItems": "فشل في تحميل عناصر السلة",

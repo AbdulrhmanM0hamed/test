@@ -3203,6 +3203,12 @@ abstract class AppLocalizations {
   /// **'Low Stock'**
   String get lowStock;
 
+  /// No description provided for @showLess.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Less'**
+  String get showLess;
+
   /// No description provided for @unitPrice.
   ///
   /// In en, this message translates to:

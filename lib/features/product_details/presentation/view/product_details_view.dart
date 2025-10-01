@@ -34,11 +34,12 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
   late ScrollController _scrollController;
   bool _showFloatingCart = false;
   bool _isWishlistLoading = false;
+  bool _isExpanded = false;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
 
@@ -417,24 +418,51 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
               fontFamily: FontConstant.cairo,
             ),
             tabs: [
-              Tab(text: AppLocalizations.of(context)!.description),
-              Tab(text: AppLocalizations.of(context)!.features),
-              Tab(text: AppLocalizations.of(context)!.specifications),
-              Tab(text: AppLocalizations.of(context)!.shipping),
+              Tab(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.description_outlined, size: 16),
+                    const SizedBox(width: 4),
+                    Text(AppLocalizations.of(context)!.description),
+                  ],
+                ),
+              ),
+              Tab(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.star_outline, size: 16),
+                    const SizedBox(width: 4),
+                    Text(AppLocalizations.of(context)!.features),
+                  ],
+                ),
+              ),
+              Tab(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.info_outline, size: 16),
+                    const SizedBox(width: 4),
+                    Text(AppLocalizations.of(context)!.specifications),
+                  ],
+                ),
+              ),
             ],
           ),
-          SizedBox(
-            height: 200,
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            height: _isExpanded ? 250 : 80,
             child: TabBarView(
               controller: _tabController,
               children: [
-                _buildHtmlContent(product.details),
-                _buildHtmlContent(product.features),
-                _buildSpecifications(product),
-                _buildShippingInfo(product),
+                _buildExpandableContent(_buildHtmlContent(product.details)),
+                _buildExpandableContent(_buildHtmlContent(product.features)),
+                _buildExpandableContent(_buildSpecifications(product)),
               ],
             ),
           ),
+          _buildExpandToggle(),
         ],
       ),
     );
@@ -531,42 +559,54 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
     );
   }
 
-  Widget _buildShippingInfo(ProductDetails product) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(
-                Icons.local_shipping_outlined,
-                color: AppColors.primary,
-                size: 24,
+  Widget _buildExpandableContent(Widget content) {
+    return content;
+  }
+
+  Widget _buildExpandToggle() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Center(
+        child: GestureDetector(
+          onTap: () {
+            setState(() {
+              _isExpanded = !_isExpanded;
+            });
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: AppColors.primary.withValues(alpha: 0.3),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  product.shipping,
-                  style: getSemiBoldStyle(
-                    fontSize: FontSize.size16,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  _isExpanded
+                      ? AppLocalizations.of(context)!.showLess
+                      : AppLocalizations.of(context)!.showMore,
+                  style: getMediumStyle(
+                    fontSize: FontSize.size12,
                     fontFamily: FontConstant.cairo,
-                    color: Colors.grey[650],
+                    color: AppColors.primary,
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            '${AppLocalizations.of(context)!.shippingAvailableTo}: ${product.cityName}',
-            style: getMediumStyle(
-              fontSize: FontSize.size14,
-              fontFamily: FontConstant.cairo,
-              color: Colors.grey[650],
+                const SizedBox(width: 4),
+                Icon(
+                  _isExpanded
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
+                  color: AppColors.primary,
+                  size: 16,
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

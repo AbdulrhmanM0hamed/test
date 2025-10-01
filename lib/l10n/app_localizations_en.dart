@@ -1563,6 +1563,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lowStock => 'Low Stock';
 
   @override
+  String get showLess => 'Show Less';
+
+  @override
   String get unitPrice => 'unitPrice';
 
   @override

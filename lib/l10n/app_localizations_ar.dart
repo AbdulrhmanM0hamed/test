@@ -1563,6 +1563,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get lowStock => 'مخزون قليل';
 
   @override
+  String get showLess => 'عرض أقل';
+
+  @override
   String get unitPrice => 'السعر';
 
   @override
