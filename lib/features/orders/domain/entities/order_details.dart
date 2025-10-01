@@ -26,7 +26,7 @@ class OrderDetails extends Equatable {
   final List<OrderProductItem> orderProducts;
   final double totalOrderPrice;
   final List<dynamic> extras;
-  final bool? refunded;
+  final double? refunded;
 
   const OrderDetails({
     required this.id,
@@ -65,20 +65,28 @@ class OrderDetails extends Equatable {
       customerPhone: json['customer_phone'] as String,
       shipping: double.parse(json['shipping'].toString()),
       customerPromoCodeTitle: json['customer_promo_code_title'] as String?,
-      customerPromoCodeValue: double.parse(json['customer_promo_code_value'].toString()),
+      customerPromoCodeValue: double.parse(
+        json['customer_promo_code_value'].toString(),
+      ),
       customerPromoCodeType: json['customer_promo_code_type'] as String?,
-      promoCodeDiscountAmount: double.parse(json['promo_code_discount_amount'].toString()),
+      promoCodeDiscountAmount: double.parse(
+        json['promo_code_discount_amount'].toString(),
+      ),
       totalTax: double.parse(json['total_tax'].toString()),
       totalProductPrice: double.parse(json['total_product_price'].toString()),
       quantity: json['quantity'] as int,
       totalPrice: double.parse(json['total_price'].toString()),
       issueDate: json['issue_date'] as String,
       orderProducts: (json['orderProducts'] as List<dynamic>)
-          .map((item) => OrderProductItem.fromJson(item as Map<String, dynamic>))
+          .map(
+            (item) => OrderProductItem.fromJson(item as Map<String, dynamic>),
+          )
           .toList(),
       totalOrderPrice: double.parse(json['total_order_price'].toString()),
       extras: json['extras'] as List<dynamic>,
-      refunded: json['refunded'] as bool?,
+      refunded: json['refunded'] != null
+          ? double.parse(json['refunded'].toString())
+          : null,
     );
   }
 
@@ -104,7 +112,7 @@ class OrderDetails extends Equatable {
     List<OrderProductItem>? orderProducts,
     double? totalOrderPrice,
     List<dynamic>? extras,
-    bool? refunded,
+    double? refunded,
   }) {
     return OrderDetails(
       id: id ?? this.id,
@@ -116,10 +124,14 @@ class OrderDetails extends Equatable {
       customerAddress: customerAddress ?? this.customerAddress,
       customerPhone: customerPhone ?? this.customerPhone,
       shipping: shipping ?? this.shipping,
-      customerPromoCodeTitle: customerPromoCodeTitle ?? this.customerPromoCodeTitle,
-      customerPromoCodeValue: customerPromoCodeValue ?? this.customerPromoCodeValue,
-      customerPromoCodeType: customerPromoCodeType ?? this.customerPromoCodeType,
-      promoCodeDiscountAmount: promoCodeDiscountAmount ?? this.promoCodeDiscountAmount,
+      customerPromoCodeTitle:
+          customerPromoCodeTitle ?? this.customerPromoCodeTitle,
+      customerPromoCodeValue:
+          customerPromoCodeValue ?? this.customerPromoCodeValue,
+      customerPromoCodeType:
+          customerPromoCodeType ?? this.customerPromoCodeType,
+      promoCodeDiscountAmount:
+          promoCodeDiscountAmount ?? this.promoCodeDiscountAmount,
       totalTax: totalTax ?? this.totalTax,
       totalProductPrice: totalProductPrice ?? this.totalProductPrice,
       quantity: quantity ?? this.quantity,

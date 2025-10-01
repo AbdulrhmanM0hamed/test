@@ -141,41 +141,39 @@ class OrderCard extends StatelessWidget {
                 const SizedBox(height: 12),
 
                 // Refund status if applicable
-                if (order.refunded == true)
+                if (order.refunded != null && order.refunded! > 0)
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 8,
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.orange.withValues(alpha: 0.1),
+                      color: Colors.green.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: Colors.orange.withValues(alpha: 0.3),
-                        width: 1,
+                        color: Colors.green.withValues(alpha: 0.3),
                       ),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          Icons.refresh,
-                          size: 16,
-                          color: Colors.orange[700],
+                          Icons.check_circle_outline,
+                          size: 14,
+                          color: Colors.green,
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          AppLocalizations.of(context)!.refunded,
+                          '${AppLocalizations.of(context)!.refunded}: ${order.refunded!.toStringAsFixed(2)} ${order.currency.ar}',
                           style: getSemiBoldStyle(
                             fontSize: FontSize.size12,
                             fontFamily: FontConstant.cairo,
-                            color: Colors.orange[700],
+                            color: Colors.green,
                           ),
                         ),
                       ],
                     ),
                   ),
-
                 const SizedBox(height: 16),
 
                 // Action buttons and view details
@@ -193,73 +191,73 @@ class OrderCard extends StatelessWidget {
     final canReturn = OrderActionsHelper.canReturnOrder(order.status);
 
     return Column(
-        children: [
-          // Action buttons row
-          if (canCancel || canReturn) ...[
-            Row(
-              children: [
-                // Cancel button
-                if (canCancel) ...[
-                  Expanded(
-                    child: _buildActionButton(
-                      context: context,
-                      text: OrderActionsHelper.getCancelButtonText(isArabic),
-                      icon: Icons.cancel_outlined,
-                      color: Colors.red[600]!,
-                      onPressed: () => _showCancelDialog(context, isArabic),
-                    ),
-                  ),
-                  if (canReturn) const SizedBox(width: 12),
-                ],
-
-                // Return button
-                if (canReturn)
-                  Expanded(
-                    child: _buildActionButton(
-                      context: context,
-                      text: OrderActionsHelper.getReturnButtonText(isArabic),
-                      icon: Icons.assignment_return_outlined,
-                      color: Colors.orange[600]!,
-                      onPressed: () => _showReturnDialog(context, isArabic),
-                    ),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 12),
-          ],
-
-          // View details button
+      children: [
+        // Action buttons row
+        if (canCancel || canReturn) ...[
           Row(
             children: [
-              const Spacer(),
-              TextButton.icon(
-                onPressed: onTap,
-                icon: Icon(
-                  Icons.arrow_forward_ios,
-                  size: 16,
-                  color: AppColors.primary,
-                ),
-                label: Text(
-                  AppLocalizations.of(context)!.viewDetails,
-                  style: getSemiBoldStyle(
-                    fontSize: FontSize.size14,
-                    fontFamily: FontConstant.cairo,
-                    color: AppColors.primary,
+              // Cancel button
+              if (canCancel) ...[
+                Expanded(
+                  child: _buildActionButton(
+                    context: context,
+                    text: OrderActionsHelper.getCancelButtonText(isArabic),
+                    icon: Icons.cancel_outlined,
+                    color: Colors.red[600]!,
+                    onPressed: () => _showCancelDialog(context, isArabic),
                   ),
                 ),
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                if (canReturn) const SizedBox(width: 12),
+              ],
+
+              // Return button
+              if (canReturn)
+                Expanded(
+                  child: _buildActionButton(
+                    context: context,
+                    text: OrderActionsHelper.getReturnButtonText(isArabic),
+                    icon: Icons.assignment_return_outlined,
+                    color: Colors.orange[600]!,
+                    onPressed: () => _showReturnDialog(context, isArabic),
                   ),
                 ),
-              ),
             ],
           ),
+          const SizedBox(height: 12),
         ],
+
+        // View details button
+        Row(
+          children: [
+            const Spacer(),
+            TextButton.icon(
+              onPressed: onTap,
+              icon: Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: AppColors.primary,
+              ),
+              label: Text(
+                AppLocalizations.of(context)!.viewDetails,
+                style: getSemiBoldStyle(
+                  fontSize: FontSize.size14,
+                  fontFamily: FontConstant.cairo,
+                  color: AppColors.primary,
+                ),
+              ),
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 

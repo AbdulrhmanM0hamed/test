@@ -8,7 +8,7 @@ class OrderItem extends Equatable {
   final String statusColor;
   final double totalPrice;
   final Currency currency;
-  final bool? refunded;
+  final double? refunded;
 
   const OrderItem({
     required this.id,
@@ -29,7 +29,9 @@ class OrderItem extends Equatable {
         statusColor: json['status_color'] as String,
         totalPrice: double.parse(json['total_price'].toString()),
         currency: Currency.fromJson(json['currancy'] as Map<String, dynamic>),
-        refunded: json['refunded'] as bool?,
+        refunded: json['refunded'] != null
+            ? double.parse(json['refunded'].toString())
+            : null,
       );
     } catch (e) {
       print('❌ Error parsing OrderItem: $e');
@@ -45,7 +47,7 @@ class OrderItem extends Equatable {
     String? statusColor,
     double? totalPrice,
     Currency? currency,
-    bool? refunded,
+    double? refunded,
   }) {
     return OrderItem(
       id: id ?? this.id,

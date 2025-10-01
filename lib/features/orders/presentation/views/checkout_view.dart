@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/core/widgets/order_success_dialog.dart';
+import 'package:test/features/profile/presentation/view/my_orders_view.dart';
 import 'package:test/l10n/app_localizations.dart';
 import 'package:test/core/services/global_cubit_service.dart';
 import '../cubit/checkout_cubit/checkout_cubit.dart';
@@ -150,11 +151,6 @@ class _CheckoutViewState extends State<CheckoutView> {
         );
       }
     } catch (e) {
-
-
-
-
-      
       // Fallback: scroll to top
       _scrollController.animateTo(
         0.0,
@@ -202,22 +198,28 @@ class _CheckoutViewState extends State<CheckoutView> {
                 // Refresh cart after successful order
                 GlobalCubitService.instance.refreshCartAfterOrder();
 
-                // Go back to previous page (don't create new route)
-                Navigator.of(context).pop();
+                // Show dialog first (don't pop the context yet)
+                bool hasNavigated = false;
 
-                // Show dialog after navigation
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (dialogContext) => OrderSuccessDialog(
-                      orderId: state.order.id.toString(),
-                      onTrackOrder: () {
-                        Navigator.of(dialogContext).pop(); // Close dialog
-                        // TODO: Navigate to orders page
-                      },
-                    ),
-                  );
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (dialogContext) => OrderSuccessDialog(
+                    orderId: state.order.id.toString(),
+                    onTrackOrder: () {
+                      hasNavigated = true;
+                      Navigator.of(dialogContext).pop(); // Close dialog
+                      // Navigate to orders and clear checkout from stack
+                      Navigator.of(
+                        context,
+                      ).pushReplacementNamed(MyOrdersView.routeName);
+                    },
+                  ),
+                ).then((_) {
+                  // Only go back if user didn't track order
+                  if (!hasNavigated && Navigator.canPop(context)) {
+                    Navigator.of(context).pop();
+                  }
                 });
               } else if (state is CheckoutError) {
                 CustomSnackbar.showError(
