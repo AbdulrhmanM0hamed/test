@@ -990,22 +990,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get writeYourReview => 'اكتب مراجعتك هنا...';
 
   @override
-  String get pleaseSelectRating => 'يرجى اختيار التقييم';
+  String get pleaseSelectRating => 'يرجى اختيار تقييم بالنجوم';
 
   @override
-  String get pleaseWriteReview => 'يرجى كتابة المراجعة';
+  String get pleaseWriteReview => 'يرجى كتابة تقييم';
 
   @override
-  String get reviewMinLength => 'المراجعة يجب أن تكون على الأقل %d أحرف';
+  String get reviewMinLength => 'التقييم يجب أن يكون على الأقل %d حرف';
 
   @override
-  String get reviewMaxLength => 'المراجعة يجب أن تكون أقل من %d حرف';
+  String get reviewMaxLength => 'التقييم يجب ألا يزيد عن %d حرف';
 
   @override
-  String get reviewOnlySpaces => 'المراجعة لا يمكن أن تحتوي على مسافات فقط';
+  String get reviewOnlySpaces => 'التقييم لا يمكن أن يحتوي على مسافات فقط';
 
   @override
-  String get reviewInappropriateContent => 'المراجعة تحتوي على محتوى غير مناسب';
+  String get reviewInappropriateContent => 'التقييم يحتوي على محتوى غير مناسب';
 
   @override
   String get wishlistEmpty => 'المفضلة فارغة';
@@ -1570,6 +1570,21 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get loginRequiredToReview => 'يجب تسجيل الدخول أولاً لإضافة تقييم للمنتج';
+
+  @override
+  String get maxAllowedQuantity => 'الحد الأقصى المسموح';
+
+  @override
+  String get forThisProduct => 'لهذا المنتج';
+
+  @override
+  String get onlyAvailable => 'متوفر فقط';
+
+  @override
+  String get inStock => 'في المخزون';
+
+  @override
+  String get cannotAddMoreItems => 'لا يمكن إضافة المزيد من القطع';
 
   @override
   String get unitPrice => 'السعر';

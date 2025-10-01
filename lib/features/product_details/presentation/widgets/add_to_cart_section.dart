@@ -301,7 +301,7 @@ class _AddToCartSectionState extends State<AddToCartSection> {
                 _quantity < maxQuantity &&
                     (limitation == 0 || _quantity < limitation)
                 ? () => setState(() => _quantity++)
-                : null,
+                : () => _showLimitationMessage(maxQuantity, limitation),
           ),
         ],
       ),
@@ -331,6 +331,25 @@ class _AddToCartSectionState extends State<AddToCartSection> {
         ),
       ),
     );
+  }
+
+  void _showLimitationMessage(int maxQuantity, int limitation) {
+    String message;
+
+    if (limitation > 0 && _quantity >= limitation) {
+      // Product-specific limitation reached
+      message =
+          '${AppLocalizations.of(context)!.maxAllowedQuantity} $limitation ${AppLocalizations.of(context)!.forThisProduct}';
+    } else if (_quantity >= maxQuantity) {
+      // Stock limitation reached
+      message =
+          '${AppLocalizations.of(context)!.onlyAvailable} $maxQuantity ${AppLocalizations.of(context)!.inStock}';
+    } else {
+      // General limitation message
+      message = AppLocalizations.of(context)!.cannotAddMoreItems;
+    }
+
+    CustomSnackbar.showWarning(context: context, message: message);
   }
 
   Future<void> _addToCart() async {

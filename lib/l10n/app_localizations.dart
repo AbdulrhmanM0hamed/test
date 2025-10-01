@@ -2060,7 +2060,7 @@ abstract class AppLocalizations {
   /// No description provided for @pleaseSelectRating.
   ///
   /// In en, this message translates to:
-  /// **'Please select a rating'**
+  /// **'Please select a star rating'**
   String get pleaseSelectRating;
 
   /// No description provided for @pleaseWriteReview.
@@ -2078,7 +2078,7 @@ abstract class AppLocalizations {
   /// No description provided for @reviewMaxLength.
   ///
   /// In en, this message translates to:
-  /// **'Review must be less than %d characters'**
+  /// **'Review must not exceed %d characters'**
   String get reviewMaxLength;
 
   /// No description provided for @reviewOnlySpaces.
@@ -3220,6 +3220,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please login first to add a product review'**
   String get loginRequiredToReview;
+
+  /// No description provided for @maxAllowedQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum allowed quantity'**
+  String get maxAllowedQuantity;
+
+  /// No description provided for @forThisProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'for this product'**
+  String get forThisProduct;
+
+  /// No description provided for @onlyAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Only available'**
+  String get onlyAvailable;
+
+  /// No description provided for @inStock.
+  ///
+  /// In en, this message translates to:
+  /// **'in stock'**
+  String get inStock;
+
+  /// No description provided for @cannotAddMoreItems.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot add more items'**
+  String get cannotAddMoreItems;
 
   /// No description provided for @unitPrice.
   ///

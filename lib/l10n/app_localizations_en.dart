@@ -990,7 +990,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get writeYourReview => 'Write your review here...';
 
   @override
-  String get pleaseSelectRating => 'Please select a rating';
+  String get pleaseSelectRating => 'Please select a star rating';
 
   @override
   String get pleaseWriteReview => 'Please write a review';
@@ -999,7 +999,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewMinLength => 'Review must be at least %d characters';
 
   @override
-  String get reviewMaxLength => 'Review must be less than %d characters';
+  String get reviewMaxLength => 'Review must not exceed %d characters';
 
   @override
   String get reviewOnlySpaces => 'Review cannot contain only spaces';
@@ -1570,6 +1570,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loginRequiredToReview => 'Please login first to add a product review';
+
+  @override
+  String get maxAllowedQuantity => 'Maximum allowed quantity';
+
+  @override
+  String get forThisProduct => 'for this product';
+
+  @override
+  String get onlyAvailable => 'Only available';
+
+  @override
+  String get inStock => 'in stock';
+
+  @override
+  String get cannotAddMoreItems => 'Cannot add more items';
 
   @override
   String get unitPrice => 'unitPrice';
