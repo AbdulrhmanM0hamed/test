@@ -44,26 +44,27 @@ class CartFloatingButton extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Stack(
+                      clipBehavior: Clip.none,
                       children: [
                         const Icon(Icons.shopping_cart_outlined, size: 24),
                         if (cartCount > 0)
                           Positioned(
-                            right: 0,
-                            top: 0,
+                            right: -10,
+                            top: -10,
                             child: Container(
-                              padding: const EdgeInsets.all(4),
+                              padding: const EdgeInsets.all(3),
                               decoration: BoxDecoration(
                                 color: AppColors.error,
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(8),
                               ),
                               constraints: const BoxConstraints(
-                                minWidth: 16,
-                                minHeight: 16,
+                                minWidth: 18,
+                                minHeight: 18,
                               ),
                               child: Text(
                                 cartCount.toString(),
                                 style: getBoldStyle(
-                                  fontSize: FontSize.size10,
+                                  fontSize: FontSize.size11,
                                   fontFamily: FontConstant.cairo,
                                   color: Colors.white,
                                 ),
@@ -100,7 +101,7 @@ class CartFloatingButton extends StatelessWidget {
       builder: (context) {
         final cartCubit = GlobalCubitService.instance.cartCubit;
         final wishlistCubit = GlobalCubitService.instance.wishlistCubit;
-        
+
         if (cartCubit != null && wishlistCubit != null) {
           // User is logged in - use online cart
           return MultiBlocProvider(

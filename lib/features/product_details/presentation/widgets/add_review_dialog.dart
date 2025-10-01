@@ -5,8 +5,9 @@ import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
 import '../../../../core/utils/validators/form_validators_clean.dart';
-import '../../../../core/utils/widgets/custom_snackbar.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/services/app_state_service.dart';
+import '../../../../core/di/dependency_injection.dart';
 
 class AddReviewDialog extends StatefulWidget {
   final int productId;
@@ -26,6 +27,7 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
   final TextEditingController _reviewController = TextEditingController();
   int _selectedStars = 0;
   final bool _isSubmitting = false;
+  String? _validationError;
 
   @override
   void dispose() {
@@ -98,6 +100,7 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
                   onTap: () {
                     setState(() {
                       _selectedStars = index + 1;
+                      _validationError = null; // Clear error when user selects stars
                     });
                   },
                   child: Container(
@@ -152,7 +155,9 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
                     controller: _reviewController,
                     maxLines: 4,
                     maxLength: 500,
-                    onChanged: (value) => setState(() {}),
+                    onChanged: (value) => setState(() {
+                      _validationError = null; // Clear error when user types
+                    }),
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)!.writeYourReview,
                       hintStyle: getRegularStyle(
@@ -179,7 +184,36 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
               ],
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
+
+            // Validation Error Display
+            if (_validationError != null) ...[
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.red.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.error_outline, color: Colors.red, size: 20),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        _validationError!,
+                        style: getMediumStyle(
+                          fontSize: FontSize.size12,
+                          fontFamily: FontConstant.cairo,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
 
             // Action Buttons
             Row(
@@ -261,13 +295,28 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
   }
 
   void _submitReview() {
+    // Clear previous validation error
+    setState(() {
+      _validationError = null;
+    });
+
+    // Check if user is logged in first
+    final appStateService = DependencyInjection.getIt<AppStateService>();
+    if (!appStateService.isLoggedIn()) {
+      Navigator.of(context).pop(); // Close current dialog
+      _showLoginRequiredDialog();
+      return;
+    }
+
     // Validate star rating using FormValidators
     final ratingError = FormValidators.validateStarRating(
       _selectedStars,
       context,
     );
     if (ratingError != null) {
-      CustomSnackbar.showError(context: context, message: ratingError);
+      setState(() {
+        _validationError = ratingError;
+      });
       return;
     }
 
@@ -276,7 +325,9 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
     // Validate review text using FormValidators
     final reviewError = FormValidators.validateReviewText(reviewText, context);
     if (reviewError != null) {
-      CustomSnackbar.showError(context: context, message: reviewError);
+      setState(() {
+        _validationError = reviewError;
+      });
       return;
     }
 
@@ -285,6 +336,69 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
       productId: widget.productId,
       review: reviewText,
       star: _selectedStars,
+    );
+  }
+
+  void _showLoginRequiredDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Row(
+          children: [
+            Icon(Icons.login, color: AppColors.primary),
+            const SizedBox(width: 8),
+            Text(
+              AppLocalizations.of(context)!.loginRequired,
+              style: getBoldStyle(
+                fontSize: FontSize.size16,
+                fontFamily: FontConstant.cairo,
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          AppLocalizations.of(context)!.loginRequiredToReview,
+          style: getMediumStyle(
+            fontSize: FontSize.size14,
+            fontFamily: FontConstant.cairo,
+            color: Colors.grey[600],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(
+              AppLocalizations.of(context)!.cancel,
+              style: getMediumStyle(
+                fontSize: FontSize.size14,
+                fontFamily: FontConstant.cairo,
+                color: Colors.grey[600],
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.pushNamed(context, '/login');
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: Text(
+              AppLocalizations.of(context)!.login,
+              style: getBoldStyle(
+                fontSize: FontSize.size14,
+                fontFamily: FontConstant.cairo,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

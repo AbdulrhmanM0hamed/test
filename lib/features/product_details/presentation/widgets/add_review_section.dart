@@ -5,6 +5,8 @@ import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/services/app_state_service.dart';
+import '../../../../core/di/dependency_injection.dart';
 
 class AddReviewSection extends StatefulWidget {
   final int productId;
@@ -200,6 +202,13 @@ class _AddReviewSectionState extends State<AddReviewSection> {
   Future<void> _submitReview() async {
     if (!_canSubmit()) return;
 
+    // Check if user is logged in
+    final appStateService = DependencyInjection.getIt<AppStateService>();
+    if (!appStateService.isLoggedIn()) {
+      _showLoginRequiredDialog();
+      return;
+    }
+
     setState(() {
       _isSubmitting = true;
     });
@@ -207,6 +216,22 @@ class _AddReviewSectionState extends State<AddReviewSection> {
     try {
       // TODO: Implement API call to submit review
       await Future.delayed(const Duration(seconds: 2)); // Simulate API call
+      
+      if (mounted) {
+        CustomSnackbar.showSuccess(
+          context: context,
+          message: AppLocalizations.of(context)!.reviewSubmittedSuccessfully,
+        );
+        
+        // Clear form
+        _reviewController.clear();
+        setState(() {
+          _selectedRating = 0;
+        });
+        
+        // Call callback
+        widget.onReviewAdded?.call();
+      }
     } catch (e) {
       if (mounted) {
         CustomSnackbar.showError(
@@ -221,5 +246,68 @@ class _AddReviewSectionState extends State<AddReviewSection> {
         });
       }
     }
+  }
+
+  void _showLoginRequiredDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Row(
+          children: [
+            Icon(Icons.login, color: AppColors.primary),
+            const SizedBox(width: 8),
+            Text(
+              AppLocalizations.of(context)!.loginRequired,
+              style: getBoldStyle(
+                fontSize: FontSize.size16,
+                fontFamily: FontConstant.cairo,
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          AppLocalizations.of(context)!.loginRequiredToReview,
+          style: getMediumStyle(
+            fontSize: FontSize.size14,
+            fontFamily: FontConstant.cairo,
+            color: Colors.grey[600],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(
+              AppLocalizations.of(context)!.cancel,
+              style: getMediumStyle(
+                fontSize: FontSize.size14,
+                fontFamily: FontConstant.cairo,
+                color: Colors.grey[600],
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.pushNamed(context, '/login');
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: Text(
+              AppLocalizations.of(context)!.login,
+              style: getBoldStyle(
+                fontSize: FontSize.size14,
+                fontFamily: FontConstant.cairo,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

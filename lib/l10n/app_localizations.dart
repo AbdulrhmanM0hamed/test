@@ -872,7 +872,7 @@ abstract class AppLocalizations {
   /// No description provided for @toCart.
   ///
   /// In en, this message translates to:
-  /// **'to Cart'**
+  /// **'to cart'**
   String get toCart;
 
   /// No description provided for @productDetails.
@@ -3208,6 +3208,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show Less'**
   String get showLess;
+
+  /// No description provided for @reviewSubmittedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Review submitted successfully'**
+  String get reviewSubmittedSuccessfully;
+
+  /// No description provided for @loginRequiredToReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Please login first to add a product review'**
+  String get loginRequiredToReview;
 
   /// No description provided for @unitPrice.
   ///

@@ -186,9 +186,7 @@ class _WishlistViewState extends State<WishlistView>
               ),
             ),
           ),
-          SizedBox(
-            height: ResponsiveHelper.getResponsiveSpacing(context, 32),
-          ),
+          SizedBox(height: ResponsiveHelper.getResponsiveSpacing(context, 32)),
           Padding(
             padding: EdgeInsets.symmetric(
               horizontal: ResponsiveHelper.getResponsiveSpacing(context, 64),

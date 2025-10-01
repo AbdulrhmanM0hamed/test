@@ -1566,6 +1566,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get showLess => 'عرض أقل';
 
   @override
+  String get reviewSubmittedSuccessfully => 'تم إرسال التقييم بنجاح';
+
+  @override
+  String get loginRequiredToReview => 'يجب تسجيل الدخول أولاً لإضافة تقييم للمنتج';
+
+  @override
   String get unitPrice => 'السعر';
 
   @override

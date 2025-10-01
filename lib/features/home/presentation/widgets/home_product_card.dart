@@ -329,12 +329,12 @@ class _HomeProductCardState extends State<HomeProductCard>
                     });
 
                     // Show success snackbar for wishlist operations
-                    CustomSnackbar.showSuccess(
-                      context: context,
-                      message: _isInWishlist
-                          ? '${AppLocalizations.of(context)!.adddedToWishlist}${" " + widget.product.name} ${AppLocalizations.of(context)!.forWishlist}'
-                          : '${AppLocalizations.of(context)!.productRemovedFromWishlist}',
-                    );
+                    // CustomSnackbar.showSuccess(
+                    //   context: context,
+                    //   message: _isInWishlist
+                    //       ? '${AppLocalizations.of(context)!.adddedToWishlist}${" " + widget.product.name} ${AppLocalizations.of(context)!.forWishlist}'
+                    //       : '${AppLocalizations.of(context)!.productRemovedFromWishlist}',
+                    // );
                   }
                 })
                 .catchError((error) {

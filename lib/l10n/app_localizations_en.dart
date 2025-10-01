@@ -396,7 +396,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addedToCart => 'Added';
 
   @override
-  String get toCart => 'to Cart';
+  String get toCart => 'to cart';
 
   @override
   String get productDetails => 'Product Details';
@@ -1564,6 +1564,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get showLess => 'Show Less';
+
+  @override
+  String get reviewSubmittedSuccessfully => 'Review submitted successfully';
+
+  @override
+  String get loginRequiredToReview => 'Please login first to add a product review';
 
   @override
   String get unitPrice => 'unitPrice';

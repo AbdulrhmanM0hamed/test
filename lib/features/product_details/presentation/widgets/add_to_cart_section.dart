@@ -192,9 +192,11 @@ class _AddToCartSectionState extends State<AddToCartSection> {
 
   Widget _buildSelectedVariantInfo() {
     if (_selectedVariant == null) return const SizedBox.shrink();
-    
-    final hasOffer = _selectedVariant!.fakePrice != null && _selectedVariant!.fakePrice!.isNotEmpty;
-    
+
+    final hasOffer =
+        _selectedVariant!.fakePrice != null &&
+        _selectedVariant!.fakePrice!.isNotEmpty;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -235,9 +237,7 @@ class _AddToCartSectionState extends State<AddToCartSection> {
                           fontSize: FontSize.size14,
                           fontFamily: FontConstant.cairo,
                           color: Colors.grey[500],
-                        ).copyWith(
-                          decoration: TextDecoration.lineThrough,
-                        ),
+                        ).copyWith(decoration: TextDecoration.lineThrough),
                       ),
                     ],
                   ],
@@ -267,9 +267,10 @@ class _AddToCartSectionState extends State<AddToCartSection> {
   }
 
   Widget _buildQuantitySelector() {
-    final maxQuantity = _selectedVariant?.countOfAvailable ?? widget.product.stock;
+    final maxQuantity =
+        _selectedVariant?.countOfAvailable ?? widget.product.stock;
     final limitation = widget.product.limitation;
-    
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -296,7 +297,8 @@ class _AddToCartSectionState extends State<AddToCartSection> {
           ),
           _buildQuantityButton(
             icon: Icons.add,
-            onPressed: _quantity < maxQuantity &&
+            onPressed:
+                _quantity < maxQuantity &&
                     (limitation == 0 || _quantity < limitation)
                 ? () => setState(() => _quantity++)
                 : null,
@@ -349,12 +351,13 @@ class _AddToCartSectionState extends State<AddToCartSection> {
         quantity: _quantity,
       );
 
-      // if (mounted) {
-      //   CustomSnackbar.showSuccess(
-      //     context: context,
-      //     message: AppLocalizations.of(context)!.productAddedToCart,
-      //   );
-      // }
+      if (mounted) {
+        CustomSnackbar.showSuccess(
+          context: context,
+          message:
+              '${AppLocalizations.of(context)!.addedToCart} ${widget.product.name} ${AppLocalizations.of(context)!.toCart}',
+        );
+      }
     } catch (error) {
       if (mounted) {
         CustomSnackbar.showError(
