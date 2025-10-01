@@ -876,41 +876,152 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
 
           const SizedBox(height: 6),
 
-          // Stock status and quantity
+          // Stock progress bar
+          _buildStockProgressBar(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStockProgressBar() {
+    // Use stock as the total inventory and stock as current available (since Product doesn't have countOfAvailable)
+    final int totalStock = widget.product.stock;
+    final int availableStock = widget
+        .product
+        .stock; // Available stock (assuming all stock is available)
+
+    // Calculate progress (0.0 to 1.0) - how much has been sold
+    final double progress = 0.0; // No sales data available for Product entity
+
+    // Determine color based on availability
+    Color progressColor;
+    Color backgroundColor;
+    String statusText;
+
+    if (availableStock == 0 || !widget.product.isAvailable) {
+      progressColor = Colors.red;
+      backgroundColor = Colors.red.withValues(alpha: 0.1);
+      statusText = AppLocalizations.of(context)!.outOfStock;
+    } else if (totalStock > 0 && (availableStock / totalStock) <= 0.2) {
+      progressColor = Colors.orange;
+      backgroundColor = Colors.orange.withValues(alpha: 0.1);
+      statusText =
+          AppLocalizations.of(context)!.available +
+          ' ' +
+          availableStock.toString();
+    } else if (totalStock > 0 && (availableStock / totalStock) <= 0.5) {
+      progressColor = Colors.amber;
+      backgroundColor = Colors.amber.withValues(alpha: 0.1);
+      statusText =
+          AppLocalizations.of(context)!.available +
+          ' ' +
+          availableStock.toString();
+    } else {
+      progressColor = Colors.green;
+      backgroundColor = Colors.green.withValues(alpha: 0.1);
+      statusText =
+          AppLocalizations.of(context)!.available +
+          ' ' +
+          availableStock.toString();
+    }
+
+    return Container(
+      margin: const EdgeInsets.only(top: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Status text and quantity
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Stock quantity
-              if (widget.product.stock > 0)
-                Container(
-                  margin: widget.product.discount == 0
-                      ? const EdgeInsets.only(top: 10)
-                      : EdgeInsets.zero,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.green.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: Colors.green.withValues(alpha: 0.3),
-                    ),
-                  ),
-                  child: Text(
-                    widget.product.isAvailable
-                        ? '${AppLocalizations.of(context)?.available}  ${widget.product.stock}'
-                        : '${AppLocalizations.of(context)?.notAvailable}',
-                    style: getMediumStyle(
-                      fontSize: FontSize.size10,
-                      fontFamily: FontConstant.cairo,
-                      color: widget.product.isAvailable
-                          ? Colors.green
-                          : Colors.red,
-                    ),
+              Text(
+                statusText,
+                style: getMediumStyle(
+                  fontSize: FontSize.size10,
+                  fontFamily: FontConstant.cairo,
+                  color: progressColor.withValues(alpha: 0.8),
+                ),
+              ),
+              if (totalStock > 0)
+                Text(
+                  '${AppLocalizations.of(context)!.stock}: $totalStock',
+                  style: getMediumStyle(
+                    fontSize: FontSize.size9,
+                    fontFamily: FontConstant.cairo,
+                    color: Colors.grey[600],
                   ),
                 ),
             ],
+          ),
+
+          const SizedBox(height: 4),
+
+          // Progress bar with animation
+          Container(
+            height: 8,
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: BorderRadius.circular(4),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 2,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: Stack(
+                children: [
+                  // Background
+                  Container(
+                    width: double.infinity,
+                    height: 8,
+                    color: Colors.transparent,
+                  ),
+                  // Progress with gradient
+                  FractionallySizedBox(
+                    widthFactor: progress,
+                    child: Container(
+                      height: 8,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            progressColor,
+                            progressColor.withValues(alpha: 0.8),
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  ),
+                  // Shine effect
+                  if (progress > 0)
+                    Positioned(
+                      left: 0,
+                      top: 0,
+                      bottom: 0,
+                      width: (progress * 200).clamp(0.0, 200.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.white.withValues(alpha: 0.0),
+                              Colors.white.withValues(alpha: 0.3),
+                              Colors.white.withValues(alpha: 0.0),
+                            ],
+                            stops: const [0.0, 0.5, 1.0],
+                          ),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
         ],
       ),

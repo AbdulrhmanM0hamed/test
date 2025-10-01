@@ -67,7 +67,7 @@ class ProductsGridWidget extends StatelessWidget {
             childAspectRatio: ResponsiveHelper.getResponsiveValue(
               context,
               smallMobile: 0.63,
-              mobile: 0.66,
+              mobile: 0.64,
               tablet: 0.76,
               desktop: 0.78,
             ),

@@ -309,9 +309,9 @@ class _HomeProductCardState extends State<HomeProductCard>
             // Prevent multiple taps while this product is loading
             if (_isWishlistLoading) return;
 
-            debugPrint(
-              '❤️ HomeProductCard: ${_isInWishlist ? 'Removing' : 'Adding'} product ${widget.product.id} ${_isInWishlist ? 'from' : 'to'} wishlist',
-            );
+            // debugPrint(
+            //   '❤️ HomeProductCard: ${_isInWishlist ? 'Removing' : 'Adding'} product ${widget.product.id} ${_isInWishlist ? 'from' : 'to'} wishlist',
+            // );
 
             // Set loading state for this specific product
             setState(() {
@@ -566,9 +566,9 @@ class _HomeProductCardState extends State<HomeProductCard>
                                   });
 
                                   try {
-                                    debugPrint(
-                                      '🛒 HomeProductCard: ${isInCart ? 'Updating' : 'Adding'} product ${widget.product.id} to cart with quantity ${currentQuantity + 1}',
-                                    );
+                                    // debugPrint(
+                                    //   '🛒 HomeProductCard: ${isInCart ? 'Updating' : 'Adding'} product ${widget.product.id} to cart with quantity ${currentQuantity + 1}',
+                                    // );
 
                                     // Use hybrid service for cart operations (works for both online and offline)
                                     await HybridCartService.instance.addToCart(
@@ -741,7 +741,7 @@ class _HomeProductCardState extends State<HomeProductCard>
             ),
           ],
 
-          const SizedBox(height: 6),
+          const SizedBox(height: 4),
 
           // Stock Progress Bar
           _buildStockProgressBar(),
@@ -774,19 +774,28 @@ class _HomeProductCardState extends State<HomeProductCard>
     if (availableStock == 0) {
       progressColor = Colors.red;
       backgroundColor = Colors.red.withValues(alpha: 0.1);
-      statusText = 'غير متوفر';
+      statusText = AppLocalizations.of(context)!.outOfStock;
     } else if (availabilityPercentage <= 0.2) {
       progressColor = Colors.orange;
       backgroundColor = Colors.orange.withValues(alpha: 0.1);
-      statusText = 'متوفر: $availableStock';
+      statusText =
+          AppLocalizations.of(context)!.available +
+          ' ' +
+          availableStock.toString();
     } else if (availabilityPercentage <= 0.5) {
       progressColor = Colors.amber;
       backgroundColor = Colors.amber.withValues(alpha: 0.1);
-      statusText = 'متوفر: $availableStock';
+      statusText =
+          AppLocalizations.of(context)!.available +
+          ' ' +
+          availableStock.toString();
     } else {
       progressColor = Colors.green;
       backgroundColor = Colors.green.withValues(alpha: 0.1);
-      statusText = 'متوفر: $availableStock';
+      statusText =
+          AppLocalizations.of(context)!.available +
+          ' ' +
+          availableStock.toString();
     }
 
     return Container(
@@ -808,7 +817,7 @@ class _HomeProductCardState extends State<HomeProductCard>
               ),
               if (totalStock > 0)
                 Text(
-                  'المخزون: $totalStock',
+                  '${AppLocalizations.of(context)!.stock}: $totalStock',
                   style: getMediumStyle(
                     fontSize: FontSize.size9,
                     fontFamily: FontConstant.cairo,
