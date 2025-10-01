@@ -15,10 +15,25 @@ class CartItem {
     required this.countOfAvailable,
   });
 
-  double get totalPrice => double.parse(product.realPrice) * quantity;
-  
+  double get totalPrice => _parsePrice(product.realPrice) * quantity;
+
+  /// Helper method to parse price strings that may contain commas
+  static double _parsePrice(String priceString) {
+    if (priceString.isEmpty) return 0.0;
+
+    // Remove commas and any currency symbols
+    String cleanPrice = priceString
+        .replaceAll(',', '')
+        .replaceAll('EGP', '')
+        .replaceAll('ج.م', '')
+        .replaceAll('£', '')
+        .trim();
+
+    return double.tryParse(cleanPrice) ?? 0.0;
+  }
+
   bool get isAvailable => countOfAvailable > 0;
-  
+
   String get availabilityText {
     if (countOfAvailable > 10) return 'متوفر';
     if (countOfAvailable > 0) return 'قطع قليلة متبقية';
@@ -62,9 +77,9 @@ class CartProduct {
   });
 
   bool get hasDiscount => discount > 0;
-  
+
   bool get isAvailable => stock > 0;
-  
+
   String get discountText => hasDiscount ? '$discount%' : '';
 }
 
@@ -72,8 +87,5 @@ class CartTax {
   final String name;
   final double amount;
 
-  const CartTax({
-    required this.name,
-    required this.amount,
-  });
+  const CartTax({required this.name, required this.amount});
 }

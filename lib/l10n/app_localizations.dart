@@ -3251,6 +3251,12 @@ abstract class AppLocalizations {
   /// **'Cannot add more items'**
   String get cannotAddMoreItems;
 
+  /// No description provided for @cartIsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Cart is empty'**
+  String get cartIsEmpty;
+
   /// No description provided for @unitPrice.
   ///
   /// In en, this message translates to:

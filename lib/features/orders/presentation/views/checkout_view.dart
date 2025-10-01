@@ -40,7 +40,13 @@ class _CheckoutViewState extends State<CheckoutView> {
     super.initState();
     // Load addresses and cart data
     context.read<AddressesCubit>().getAddresses();
-    _loadCartData();
+    // Ensure cart is loaded first
+    context.read<CartCubit>().getCart();
+
+    // Try to load cart data immediately if already available
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadCartData();
+    });
   }
 
   void _loadCartData() {
@@ -128,6 +134,13 @@ class _CheckoutViewState extends State<CheckoutView> {
       ),
       body: MultiBlocListener(
         listeners: [
+          BlocListener<CartCubit, CartState>(
+            listener: (context, state) {
+              if (state is CartLoaded) {
+                _loadCartData();
+              }
+            },
+          ),
           BlocListener<CheckoutCubit, CheckoutState>(
             listener: (context, state) {
               if (state is CheckoutSuccess) {

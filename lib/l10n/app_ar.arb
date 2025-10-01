@@ -688,6 +688,7 @@
   "onlyAvailable": "متوفر فقط",
   "inStock": "في المخزون",
   "cannotAddMoreItems": "لا يمكن إضافة المزيد من القطع",
+  "cartIsEmpty": "السلة فارغة",
   "unreadNotifications": "إشعارات غير مقروءة",
   "noNotifications": "لا توجد إشعارات",
   "failedToLoadCartItems": "فشل في تحميل عناصر السلة",

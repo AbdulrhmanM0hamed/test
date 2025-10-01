@@ -665,6 +665,7 @@
   "onlyAvailable": "Only available",
   "inStock": "in stock",
   "cannotAddMoreItems": "Cannot add more items",
+  "cartIsEmpty": "Cart is empty",
   "unitPrice": "unitPrice",
   "youHaveNoNotifications": "You have no notifications",
   "youHave": "You have",

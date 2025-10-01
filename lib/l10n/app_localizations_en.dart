@@ -1587,6 +1587,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cannotAddMoreItems => 'Cannot add more items';
 
   @override
+  String get cartIsEmpty => 'Cart is empty';
+
+  @override
   String get unitPrice => 'unitPrice';
 
   @override

@@ -1587,6 +1587,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cannotAddMoreItems => 'لا يمكن إضافة المزيد من القطع';
 
   @override
+  String get cartIsEmpty => 'السلة فارغة';
+
+  @override
   String get unitPrice => 'السعر';
 
   @override

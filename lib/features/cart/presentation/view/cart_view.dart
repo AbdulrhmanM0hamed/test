@@ -371,9 +371,16 @@ class _CartViewState extends State<CartView>
             width: double.infinity,
             child: CustomButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/checkout');
+                final cartState = context.read<CartCubit>().state;
+                if (cartState is CartLoaded && cartState.cart.items.isNotEmpty) {
+                  Navigator.pushNamed(context, '/checkout');
+                } else {
+                  CustomSnackbar.showError(
+                    context: context,
+                    message: AppLocalizations.of(context)!.cartIsEmpty,
+                  );
+                }
               },
-
               text: AppLocalizations.of(context)!.completeOrder,
             ),
           ),
