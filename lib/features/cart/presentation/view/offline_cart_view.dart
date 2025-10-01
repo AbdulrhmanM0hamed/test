@@ -404,7 +404,7 @@ class _OfflineCartViewState extends State<OfflineCartView>
                 ),
               ),
               Text(
-                '${_totalPrice.toStringAsFixed(0)} ${AppLocalizations.of(context)!.currency}',
+                '${_totalPrice.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
                 style: getBoldStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
@@ -449,7 +449,7 @@ class _OfflineCartViewState extends State<OfflineCartView>
                 ),
               ),
               Text(
-                '${_totalPrice.toStringAsFixed(0)} ${AppLocalizations.of(context)!.currency}',
+                '${_totalPrice.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
                 style: getBoldStyle(
                   fontSize: FontSize.size18,
                   fontFamily: FontConstant.cairo,

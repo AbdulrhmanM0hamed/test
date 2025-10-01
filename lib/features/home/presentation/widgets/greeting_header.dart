@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/services/language_service.dart';
+import 'package:test/core/services/app_state_service.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/features/categories/presentation/cubits/products_filter_cubit.dart';
@@ -546,15 +547,39 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                   margin: const EdgeInsets.symmetric(vertical: 8),
                 ),
                 const SizedBox(height: 8),
-                // Logout Button
-                _buildDrawerItem(
-                  icon: Icons.logout_rounded,
-                  title: AppLocalizations.of(context)!.logout,
-                  onTap: () {
-                    Navigator.pop(context);
-                    LogoutConfirmationDialog.showWithDI(context);
+                // Login/Logout Button based on user state
+                Builder(
+                  builder: (context) {
+                    final appStateService =
+                        DependencyInjection.getIt<AppStateService>();
+                    final isLoggedIn =
+                        appStateService.isLoggedIn() &&
+                        !appStateService.hasLoggedOut();
+
+                    if (isLoggedIn) {
+                      // Show Logout Button for logged in users
+                      return _buildDrawerItem(
+                        icon: Icons.logout_rounded,
+                        title: AppLocalizations.of(context)!.logout,
+                        onTap: () {
+                          Navigator.pop(context);
+                          LogoutConfirmationDialog.showWithDI(context);
+                        },
+                        isDestructive: true,
+                      );
+                    } else {
+                      // Show Login Button for guests
+                      return _buildDrawerItem(
+                        icon: Icons.login_rounded,
+                        title: AppLocalizations.of(context)!.login,
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, '/login');
+                        },
+                        isDestructive: false,
+                      );
+                    }
                   },
-                  isDestructive: true,
                 ),
                 const SizedBox(height: 20),
               ],

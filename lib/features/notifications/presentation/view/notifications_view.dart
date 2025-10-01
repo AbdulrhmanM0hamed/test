@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
+import 'package:test/core/services/app_state_service.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/core/utils/common/custom_app_bar.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/l10n/app_localizations.dart';
+import 'package:test/features/home/presentation/widgets/login_prompt_widget.dart';
 import '../cubit/notifications_cubit.dart';
 import '../cubit/notifications_state.dart';
 import '../widgets/notification_card.dart';
@@ -17,11 +19,21 @@ class NotificationsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          DependencyInjection.getIt<NotificationsCubit>()..getNotifications(),
-      child: const NotificationsViewBody(),
-    );
+    // Check if user is logged in before creating cubit
+    final appStateService = DependencyInjection.getIt<AppStateService>();
+    final isLoggedIn =
+        appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+
+    if (isLoggedIn) {
+      return BlocProvider(
+        create: (context) =>
+            DependencyInjection.getIt<NotificationsCubit>()..getNotifications(),
+        child: const NotificationsViewBody(),
+      );
+    } else {
+      // For guests, show login prompt directly without cubit
+      return const NotificationsViewBody();
+    }
   }
 }
 
@@ -30,30 +42,36 @@ class NotificationsViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Check if user is logged in
+    final appStateService = DependencyInjection.getIt<AppStateService>();
+    final isLoggedIn =
+        appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+
     return Scaffold(
-      backgroundColor: Colors.grey[50],
       appBar: CustomAppBar(title: AppLocalizations.of(context)!.notifications),
-      body: BlocBuilder<NotificationsCubit, NotificationsState>(
-        builder: (context, state) {
-          if (state is NotificationsLoading) {
-            return const Center(child: CustomProgressIndicator());
-          }
+      body: isLoggedIn
+          ? BlocBuilder<NotificationsCubit, NotificationsState>(
+              builder: (context, state) {
+                if (state is NotificationsLoading) {
+                  return const Center(child: CustomProgressIndicator());
+                }
 
-          if (state is NotificationsError) {
-            return _buildErrorState(context, state.message);
-          }
+                if (state is NotificationsError) {
+                  return _buildErrorState(context, state.message);
+                }
 
-          if (state is NotificationsLoaded) {
-            if (state.notifications.isEmpty) {
-              return _buildEmptyState(context);
-            }
+                if (state is NotificationsLoaded) {
+                  if (state.notifications.isEmpty) {
+                    return _buildEmptyState(context);
+                  }
 
-            return _buildNotificationsList(context, state);
-          }
+                  return _buildNotificationsList(context, state);
+                }
 
-          return const SizedBox.shrink();
-        },
-      ),
+                return const SizedBox.shrink();
+              },
+            )
+          : const LoginPromptWidget(), // Show login prompt for guests
     );
   }
 
