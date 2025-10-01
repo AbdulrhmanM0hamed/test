@@ -54,11 +54,27 @@ class LocationService extends ChangeNotifier {
   }
 
   LocationService._internal(this._languageService, this._dioService) {
+    print('🏗️ LocationService - Initializing with LanguageService');
+    print('🌍 LocationService - Initial LanguageService isArabic: ${_languageService.isArabic}');
+    print('🌍 LocationService - Initial LanguageService currentLocale: ${_languageService.currentLocale}');
     _languageService.addListener(_onLanguageChanged);
+    _loadSavedLocation();
   }
 
   void _onLanguageChanged() {
+    print('🔄 LocationService - Language changed notification received');
+    print('🌍 LocationService - New LanguageService isArabic: ${_languageService.isArabic}');
+    print('🌍 LocationService - New LanguageService currentLocale: ${_languageService.currentLocale}');
+    
+    // Force refresh all cached titles
+    print('🔄 LocationService - Forcing UI refresh due to language change');
     notifyListeners();
+    
+    // Additional notification after a small delay to ensure UI updates
+    Future.delayed(const Duration(milliseconds: 100), () {
+      print('🔄 LocationService - Secondary notification for UI refresh');
+      notifyListeners();
+    });
   }
 
   String getLocalizedCityTitle(City city) {
@@ -69,24 +85,67 @@ class LocationService extends ChangeNotifier {
     return region.getLocalizedTitle(_languageService.isArabic);
   }
 
+  /// Get city title with context-based fallback
+  String getCityTitleWithFallback(City city, bool contextIsArabic) {
+    print('🏙️ LocationService - getCityTitleWithFallback: contextIsArabic=$contextIsArabic, serviceIsArabic=${_languageService.isArabic}');
+    return city.getLocalizedTitle(contextIsArabic);
+  }
+
+  /// Get region title with context-based fallback
+  String getRegionTitleWithFallback(Region region, bool contextIsArabic) {
+    print('🏛️ LocationService - getRegionTitleWithFallback: contextIsArabic=$contextIsArabic, serviceIsArabic=${_languageService.isArabic}');
+    return region.getLocalizedTitle(contextIsArabic);
+  }
+
+  /// Force refresh location titles (useful after language change)
+  void forceRefresh() {
+    print('🔄 LocationService - Force refresh requested');
+    notifyListeners();
+  }
+
+  /// Clear cached location data and reload from API
+  Future<void> clearCacheAndReload() async {
+    print('🗑️ LocationService - Clearing cache and reloading...');
+    await _clearSavedLocation();
+    _selectedCity = null;
+    _selectedRegion = null;
+    _cities.clear();
+    _regions.clear();
+    
+    // Reload data from API
+    await loadCities();
+    notifyListeners();
+  }
+
   String? get selectedCityLocalizedTitle {
+    print('🏙️ LocationService - LanguageService isArabic: ${_languageService.isArabic}');
+    print('🏙️ LocationService - LanguageService currentLocale: ${_languageService.currentLocale}');
+    
     if (_selectedCity != null) {
-      return _selectedCity!.getLocalizedTitle(_languageService.isArabic);
+      final title = _selectedCity!.getLocalizedTitle(_languageService.isArabic);
+      print('🏙️ LocationService - Selected city title: $title (isArabic: ${_languageService.isArabic})');
+      return title;
     }
     // Use first city from API if available
     if (_cities.isNotEmpty) {
-      return _cities.first.getLocalizedTitle(_languageService.isArabic);
+      final title = _cities.first.getLocalizedTitle(_languageService.isArabic);
+      print('🏙️ LocationService - First city title: $title (isArabic: ${_languageService.isArabic})');
+      return title;
     }
     return null;
   }
 
   String? get selectedRegionLocalizedTitle {
     if (_selectedRegion != null) {
-      return _selectedRegion!.getLocalizedTitle(_languageService.isArabic);
+      final title = _selectedRegion!.getLocalizedTitle(_languageService.isArabic);
+      print('🏛️ LocationService - Selected region title: $title (isArabic: ${_languageService.isArabic})');
+      return title;
     }
     // Use first region from API if available
     if (_regions.isNotEmpty) {
-      return _regions.first.getLocalizedTitle(_languageService.isArabic);
+      final title = _regions.first.getLocalizedTitle(_languageService.isArabic);
+      print('🏛️ LocationService - First region title: $title (isArabic: ${_languageService.isArabic})');
+      return title;
     }
     return null;
   }
@@ -140,6 +199,22 @@ class LocationService extends ChangeNotifier {
         _cities = response.data!;
         _isLoadingCities = false;
 
+        // Update selected city with fresh data from API if it exists
+        if (_selectedCity != null) {
+          final updatedCity = _cities.firstWhere(
+            (city) => city.id == _selectedCity!.id,
+            orElse: () => _cities.first,
+          );
+          if (updatedCity.titleEn != _selectedCity!.titleEn || 
+              updatedCity.titleAr != _selectedCity!.titleAr) {
+            print('🔄 Updating selected city with fresh API data');
+            print('   Old: ${_selectedCity!.titleEn} / ${_selectedCity!.titleAr}');
+            print('   New: ${updatedCity.titleEn} / ${updatedCity.titleAr}');
+            _selectedCity = updatedCity;
+            await _saveSelectedLocation();
+          }
+        }
+
         // Auto-select first city if no city is selected
         if (_selectedCity == null && _cities.isNotEmpty) {
           _selectedCity = _cities.first;
@@ -188,6 +263,22 @@ class LocationService extends ChangeNotifier {
       if (response.success && response.data != null) {
         _regions = response.data!;
         _isLoadingRegions = false;
+
+        // Update selected region with fresh data from API if it exists
+        if (_selectedRegion != null) {
+          final updatedRegion = _regions.firstWhere(
+            (region) => region.id == _selectedRegion!.id,
+            orElse: () => _regions.first,
+          );
+          if (updatedRegion.titleEn != _selectedRegion!.titleEn || 
+              updatedRegion.titleAr != _selectedRegion!.titleAr) {
+            print('🔄 Updating selected region with fresh API data');
+            print('   Old: ${_selectedRegion!.titleEn} / ${_selectedRegion!.titleAr}');
+            print('   New: ${updatedRegion.titleEn} / ${updatedRegion.titleAr}');
+            _selectedRegion = updatedRegion;
+            await _saveSelectedLocation();
+          }
+        }
 
         // Auto-select first region if no region is selected
         if (_selectedRegion == null && _regions.isNotEmpty) {
@@ -269,32 +360,65 @@ class LocationService extends ChangeNotifier {
   Future<void> _loadSavedLocation() async {
     try {
       final prefs = await SharedPreferences.getInstance();
+      
+      // Load saved city with both languages
       final cityId = prefs.getInt(_selectedCityKey);
-      final cityName = prefs.getString(_selectedCityNameKey);
+      final cityTitleEn = prefs.getString('${_selectedCityNameKey}_en');
+      final cityTitleAr = prefs.getString('${_selectedCityNameKey}_ar');
       final cityImage = prefs.getString(_selectedCityImageKey);
-      final regionId = prefs.getInt(_selectedRegionKey);
-      final regionName = prefs.getString(_selectedRegionNameKey);
-
-      if (cityId != null && cityName != null) {
-        _selectedCity = City(
+      
+      if (cityId != null && cityTitleEn != null && cityTitleAr != null) {
+        _selectedCity = CityModel(
           id: cityId,
-          titleAr: cityName,
-          titleEn: cityName,
-          countryId: 1, // Default country ID
+          titleEn: cityTitleEn,
+          titleAr: cityTitleAr,
+          countryId: 1, // Default Egypt
           image: cityImage,
         );
+        print('📂 Loaded saved city: ${_selectedCity!.titleEn} / ${_selectedCity!.titleAr}');
+      } else if (cityId != null) {
+        // Fallback for old format (single language)
+        final cityName = prefs.getString(_selectedCityNameKey);
+        if (cityName != null) {
+          _selectedCity = CityModel(
+            id: cityId,
+            titleEn: cityName, // Will be corrected when API loads
+            titleAr: cityName,
+            countryId: 1,
+            image: cityImage,
+          );
+          print('📂 Loaded saved city (old format): $cityName');
+        }
       }
-
-      if (regionId != null && regionName != null) {
-        _selectedRegion = Region(
+      
+      // Load saved region with both languages
+      final regionId = prefs.getInt(_selectedRegionKey);
+      final regionTitleEn = prefs.getString('${_selectedRegionNameKey}_en');
+      final regionTitleAr = prefs.getString('${_selectedRegionNameKey}_ar');
+      
+      if (regionId != null && regionTitleEn != null && regionTitleAr != null && _selectedCity != null) {
+        _selectedRegion = RegionModel(
           id: regionId,
-          titleAr: regionName,
-          titleEn: regionName,
-          cityId: cityId ?? 1,
+          titleEn: regionTitleEn,
+          titleAr: regionTitleAr,
+          cityId: _selectedCity!.id,
         );
+        print('📂 Loaded saved region: ${_selectedRegion!.titleEn} / ${_selectedRegion!.titleAr}');
+      } else if (regionId != null && _selectedCity != null) {
+        // Fallback for old format (single language)
+        final regionName = prefs.getString(_selectedRegionNameKey);
+        if (regionName != null) {
+          _selectedRegion = RegionModel(
+            id: regionId,
+            titleEn: regionName, // Will be corrected when API loads
+            titleAr: regionName,
+            cityId: _selectedCity!.id,
+          );
+          print('📂 Loaded saved region (old format): $regionName');
+        }
       }
     } catch (e) {
-      // Handle error silently
+      print('❌ Error loading saved location: $e');
     }
   }
 
@@ -304,7 +428,9 @@ class LocationService extends ChangeNotifier {
 
       if (_selectedCity != null) {
         await prefs.setInt(_selectedCityKey, _selectedCity!.id);
-        await prefs.setString(_selectedCityNameKey, _selectedCity!.titleAr);
+        // Save both English and Arabic titles
+        await prefs.setString('${_selectedCityNameKey}_en', _selectedCity!.titleEn);
+        await prefs.setString('${_selectedCityNameKey}_ar', _selectedCity!.titleAr);
         if (_selectedCity!.image != null) {
           await prefs.setString(_selectedCityImageKey, _selectedCity!.image!);
         }
@@ -312,21 +438,28 @@ class LocationService extends ChangeNotifier {
 
       if (_selectedRegion != null) {
         await prefs.setInt(_selectedRegionKey, _selectedRegion!.id);
-        await prefs.setString(_selectedRegionNameKey, _selectedRegion!.titleAr);
+        // Save both English and Arabic titles
+        await prefs.setString('${_selectedRegionNameKey}_en', _selectedRegion!.titleEn);
+        await prefs.setString('${_selectedRegionNameKey}_ar', _selectedRegion!.titleAr);
       }
     } catch (e) {
       // Handle error silently
     }
   }
 
+
   Future<void> _clearSavedLocation() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_selectedCityKey);
       await prefs.remove(_selectedCityNameKey);
+      await prefs.remove('${_selectedCityNameKey}_en');
+      await prefs.remove('${_selectedCityNameKey}_ar');
       await prefs.remove(_selectedCityImageKey);
       await prefs.remove(_selectedRegionKey);
       await prefs.remove(_selectedRegionNameKey);
+      await prefs.remove('${_selectedRegionNameKey}_en');
+      await prefs.remove('${_selectedRegionNameKey}_ar');
     } catch (e) {
       // Handle error silently
     }

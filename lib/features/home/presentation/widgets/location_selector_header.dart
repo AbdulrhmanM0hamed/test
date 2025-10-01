@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/services/location_service.dart';
-import '../../../../core/services/language_service.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
 import '../../../../core/utils/theme/app_colors.dart';
@@ -38,24 +36,19 @@ class LocationSelectorHeader extends StatelessWidget {
                 const SizedBox(width: 4),
                 // Location text
                 Flexible(
-                  child: Consumer2<LocationService, LanguageService>(
-                    builder:
-                        (context, locationService, languageService, child) {
-                          return Text(
-                            _getLocationText(
-                              context,
-                              locationService,
-                              languageService,
-                            ),
-                            style: getMediumStyle(
-                              fontFamily: FontConstant.cairo,
-                              fontSize: FontSize.size11,
-                              color: Colors.white.withValues(alpha: 0.9),
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          );
-                        },
+                  child: Consumer<LocationService>(
+                    builder: (context, locationService, child) {
+                      return Text(
+                        _getLocationText(context, locationService),
+                        style: getMediumStyle(
+                          fontFamily: FontConstant.cairo,
+                          fontSize: FontSize.size11,
+                          color: Colors.white.withValues(alpha: 0.9),
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(width: 2),
@@ -76,25 +69,78 @@ class LocationSelectorHeader extends StatelessWidget {
   String _getLocationText(
     BuildContext context,
     LocationService locationService,
-    LanguageService languageService,
   ) {
+    // Get current locale directly from context as fallback
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+
+    // Debug logging
+    print(
+      '🌍 LocationSelector - Current locale: ${Localizations.localeOf(context).languageCode}',
+    );
+    print('📍 LocationSelector - Using isArabic: $isArabic');
+
     if (locationService.hasCompleteLocation) {
-      final region = locationService.selectedRegionLocalizedTitle;
-      final city = locationService.selectedCityLocalizedTitle;
-      return '$region، $city';
+      // Always use context-based locale, never fallback to service
+      print('🔍 Debug - selectedRegion: ${locationService.selectedRegion}');
+      print('🔍 Debug - selectedCity: ${locationService.selectedCity}');
+      print('🔍 Debug - regions.length: ${locationService.regions.length}');
+      print('🔍 Debug - cities.length: ${locationService.cities.length}');
+      
+      final region = locationService.selectedRegion?.getLocalizedTitle(isArabic) ??
+          (locationService.regions.isNotEmpty
+              ? locationService.regions.first.getLocalizedTitle(isArabic)
+              : null);
+      final city = locationService.selectedCity?.getLocalizedTitle(isArabic) ??
+          (locationService.cities.isNotEmpty
+              ? locationService.cities.first.getLocalizedTitle(isArabic)
+              : null);
+
+      print('🔍 Debug - region result: $region (isArabic: $isArabic)');
+      print('🔍 Debug - city result: $city (isArabic: $isArabic)');
+      
+      if (locationService.selectedRegion != null) {
+        print('🔍 Debug - selectedRegion.titleEn: ${locationService.selectedRegion!.titleEn}');
+        print('🔍 Debug - selectedRegion.titleAr: ${locationService.selectedRegion!.titleAr}');
+      }
+      if (locationService.selectedCity != null) {
+        print('🔍 Debug - selectedCity.titleEn: ${locationService.selectedCity!.titleEn}');
+        print('🔍 Debug - selectedCity.titleAr: ${locationService.selectedCity!.titleAr}');
+      }
+
+      final finalText = '${region ?? (isArabic ? 'المنطقة' : 'Region')}، ${city ?? (isArabic ? 'المدينة' : 'City')}';
+      print('🏙️ LocationSelector - Final text: $finalText');
+      return finalText;
     } else if (locationService.hasSelectedCity) {
-      return locationService.selectedCityLocalizedTitle!;
+      final cityText = locationService.selectedCity != null
+          ? locationService.selectedCity!.getLocalizedTitle(isArabic)
+          : (locationService.cities.isNotEmpty
+                ? locationService.cities.first.getLocalizedTitle(isArabic)
+                : null);
+      print('🏙️ LocationSelector - City only: $cityText');
+      return cityText ?? (isArabic ? 'اختر المدينة' : 'Select City');
     } else {
       // Show first available city and region from API
-      final cityTitle = locationService.selectedCityLocalizedTitle;
-      final regionTitle = locationService.selectedRegionLocalizedTitle;
+      final cityTitle = locationService.selectedCity?.getLocalizedTitle(isArabic) ?? 
+                       (locationService.cities.isNotEmpty 
+                           ? locationService.cities.first.getLocalizedTitle(isArabic)
+                           : null);
+      final regionTitle = locationService.selectedRegion?.getLocalizedTitle(isArabic) ?? 
+                         (locationService.regions.isNotEmpty 
+                             ? locationService.regions.first.getLocalizedTitle(isArabic)
+                             : null);
 
       if (cityTitle != null && regionTitle != null) {
+        print('🏙️ LocationSelector - API fallback: $regionTitle، $cityTitle');
         return '$regionTitle، $cityTitle';
       } else if (cityTitle != null) {
+        print('🏙️ LocationSelector - API city only: $cityTitle');
         return cityTitle;
       } else {
-        return AppLocalizations.of(context)!.selectLocation;
+        final fallbackText =
+            AppLocalizations.of(context)?.selectLocation ??
+            (isArabic ? 'اختر الموقع' : 'Select Location');
+        print('🏙️ LocationSelector - Fallback: $fallbackText');
+        return fallbackText;
       }
     }
   }
@@ -472,12 +518,15 @@ class _LocationSelectorBottomSheetState
                           const SizedBox(height: 4),
 
                           // City Name
-                          Consumer<LanguageService>(
-                            builder: (context, languageService, child) {
+                          Builder(
+                            builder: (context) {
+                              final isArabic =
+                                  Localizations.localeOf(
+                                    context,
+                                  ).languageCode ==
+                                  'ar';
                               return Text(
-                                city.getLocalizedTitle(
-                                  languageService.isArabic,
-                                ),
+                                city.getLocalizedTitle(isArabic),
                                 style: getMediumStyle(
                                   fontFamily: FontConstant.cairo,
                                   fontSize: FontSize.size12,
@@ -694,10 +743,13 @@ class _LocationSelectorBottomSheetState
                     ],
                   ),
                   child: Center(
-                    child: Consumer<LanguageService>(
-                      builder: (context, languageService, child) {
+                    child: Builder(
+                      builder: (context) {
+                        final isArabic =
+                            Localizations.localeOf(context).languageCode ==
+                            'ar';
                         return Text(
-                          region.getLocalizedTitle(languageService.isArabic),
+                          region.getLocalizedTitle(isArabic),
                           style: getMediumStyle(
                             fontFamily: FontConstant.cairo,
                             fontSize: FontSize.size13,
