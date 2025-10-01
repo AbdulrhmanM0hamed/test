@@ -666,5 +666,10 @@
   "privacyPolicy": "Privacy Policy",
   "iAgreeToThe": "I agree to the",
   "language": "Language",
-  "settings": "Settings"
+  "settings": "Settings",
+  "failedToLoadCartItems": "Failed to load cart items",
+  "failedToRemoveItemFromCart": "Failed to remove item from cart",
+  "failedToUpdateQuantity": "Failed to update quantity",
+  "cartClearedSuccessfully": "Cart cleared successfully",
+  "failedToClearCart": "Failed to clear cart"
 }

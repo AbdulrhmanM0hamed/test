@@ -663,5 +663,10 @@
   "youHaveNoNotifications": "لا توجد إشعارات",
   "youHave": "لديك",
   "unreadNotifications": "إشعارات غير مقروءة",
-  "noNotifications": "لا توجد إشعارات"
+  "noNotifications": "لا توجد إشعارات",
+  "failedToLoadCartItems": "فشل في تحميل عناصر السلة",
+  "failedToRemoveItemFromCart": "فشل في حذف العنصر من السلة",
+  "failedToUpdateQuantity": "فشل في تحديث الكمية",
+  "cartClearedSuccessfully": "تم مسح السلة بنجاح",
+  "failedToClearCart": "فشل في مسح السلة"
 }

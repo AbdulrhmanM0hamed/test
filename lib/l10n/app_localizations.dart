@@ -1886,7 +1886,7 @@ abstract class AppLocalizations {
   /// No description provided for @failedToClearCart.
   ///
   /// In en, this message translates to:
-  /// **'Failed to clear all products from cart'**
+  /// **'Failed to clear cart'**
   String get failedToClearCart;
 
   /// No description provided for @failedToRemoveFromCart.
@@ -3310,6 +3310,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Language'**
   String get language;
+
+  /// No description provided for @failedToLoadCartItems.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load cart items'**
+  String get failedToLoadCartItems;
+
+  /// No description provided for @failedToRemoveItemFromCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to remove item from cart'**
+  String get failedToRemoveItemFromCart;
+
+  /// No description provided for @cartClearedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Cart cleared successfully'**
+  String get cartClearedSuccessfully;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

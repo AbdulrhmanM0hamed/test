@@ -903,7 +903,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cartCleared => 'تم حذف جميع المنتجات من السلة';
 
   @override
-  String get failedToClearCart => 'فشل في حذف جميع المنتجات من السلة';
+  String get failedToClearCart => 'فشل في مسح السلة';
 
   @override
   String get failedToRemoveFromCart => 'فشل في حذف المنتج من السلة';
@@ -1615,4 +1615,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get language => 'اللغة';
+
+  @override
+  String get failedToLoadCartItems => 'فشل في تحميل عناصر السلة';
+
+  @override
+  String get failedToRemoveItemFromCart => 'فشل في حذف العنصر من السلة';
+
+  @override
+  String get cartClearedSuccessfully => 'تم مسح السلة بنجاح';
 }

@@ -101,7 +101,7 @@ class _OfflineCartViewState extends State<OfflineCartView>
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Failed to load cart items: ${e.toString()}',
+              '${AppLocalizations.of(context)!.failedToLoadCartItems}: ${e.toString()}',
               style: const TextStyle(color: Colors.white),
             ),
             backgroundColor: Colors.red,
@@ -138,7 +138,7 @@ class _OfflineCartViewState extends State<OfflineCartView>
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Failed to remove item from cart: ${e.toString()}',
+              '${AppLocalizations.of(context)!.failedToRemoveItemFromCart}: ${e.toString()}',
               style: const TextStyle(color: Colors.white),
             ),
             backgroundColor: Colors.red,
@@ -168,7 +168,7 @@ class _OfflineCartViewState extends State<OfflineCartView>
     } catch (e) {
       CustomSnackbar.showError(
         context: context,
-        message: 'Failed to update quantity',
+        message: AppLocalizations.of(context)!.failedToUpdateQuantity,
       );
     }
   }
@@ -179,12 +179,12 @@ class _OfflineCartViewState extends State<OfflineCartView>
       await _loadCartItems(); // Refresh the cart
       CustomSnackbar.showSuccess(
         context: context,
-        message: 'Cart cleared successfully',
+        message: AppLocalizations.of(context)!.cartClearedSuccessfully,
       );
     } catch (e) {
       CustomSnackbar.showError(
         context: context,
-        message: 'Failed to clear cart',
+        message: AppLocalizations.of(context)!.failedToClearCart,
       );
     }
   }

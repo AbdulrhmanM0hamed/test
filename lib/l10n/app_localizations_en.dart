@@ -903,7 +903,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cartCleared => 'All products removed from cart';
 
   @override
-  String get failedToClearCart => 'Failed to clear all products from cart';
+  String get failedToClearCart => 'Failed to clear cart';
 
   @override
   String get failedToRemoveFromCart => 'Failed to remove product from cart';
@@ -1615,4 +1615,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get language => 'Language';
+
+  @override
+  String get failedToLoadCartItems => 'Failed to load cart items';
+
+  @override
+  String get failedToRemoveItemFromCart => 'Failed to remove item from cart';
+
+  @override
+  String get cartClearedSuccessfully => 'Cart cleared successfully';
 }
