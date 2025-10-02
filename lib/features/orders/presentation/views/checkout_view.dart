@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
+import 'package:test/core/utils/formatters/price_formatter.dart';
 import 'package:test/core/widgets/order_success_dialog.dart';
 import 'package:test/features/profile/presentation/view/my_orders_view.dart';
 import 'package:test/l10n/app_localizations.dart';
@@ -316,7 +317,7 @@ class _CheckoutViewState extends State<CheckoutView> {
 
             return CustomButton(
               text:
-                  '${AppLocalizations.of(context)!.placeOrder} • ${finalTotal.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
+                  '${AppLocalizations.of(context)!.placeOrder} • ${PriceFormatter.formatPriceWithCurrency(finalTotal, AppLocalizations.of(context)!.currency)}',
               onPressed: _proceedToCheckout,
               isLoading: isLoading,
               width: double.infinity,

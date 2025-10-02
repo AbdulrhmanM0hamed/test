@@ -662,6 +662,7 @@
   "pleaseSelectRating": "Please select a star rating",
   "maxAllowedQuantity": "Maximum allowed quantity",
   "forThisProduct": "for this product",
+  "selectedprice": "Selected Price",
   "onlyAvailable": "Only available",
   "inStock": "in stock",
   "cannotAddMoreItems": "Cannot add more items",

@@ -3233,6 +3233,12 @@ abstract class AppLocalizations {
   /// **'for this product'**
   String get forThisProduct;
 
+  /// No description provided for @selectedprice.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected Price'**
+  String get selectedprice;
+
   /// No description provided for @onlyAvailable.
   ///
   /// In en, this message translates to:
@@ -3490,6 +3496,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copy Link'**
   String get copyLink;
+
+  /// No description provided for @linkCopiedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Link copied successfully'**
+  String get linkCopiedSuccessfully;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

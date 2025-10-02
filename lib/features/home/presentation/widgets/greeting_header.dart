@@ -427,7 +427,7 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                           fontFamily: FontConstant.cairo,
                           fontSize: FontSize.size20,
                           color: Colors.white,
-                        ),
+                        ).copyWith(decoration: TextDecoration.none),
                       ),
                     ),
                     // Close button

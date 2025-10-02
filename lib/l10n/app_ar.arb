@@ -703,7 +703,7 @@
   "failedToUpdateQuantity": "فشل في تحديث الكمية",
   "cartClearedSuccessfully": "تم مسح السلة بنجاح",
   "failedToClearCart": "فشل في مسح السلة",
-  
+  "selectedprice": "السعر المحدد",
   "shareProduct": "شارك المنتج",
   "shareWithFriends": "شارك هذا المنتج مع أصدقائك",
   "more": "المزيد",

@@ -6,9 +6,10 @@ import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
+import 'package:test/core/utils/formatters/price_formatter.dart';
+import 'package:test/l10n/app_localizations.dart';
 import 'package:test/features/orders/presentation/cubit/orders_cubit/orders_cubit.dart';
 import 'package:test/features/orders/presentation/cubit/orders_cubit/orders_state.dart';
-import 'package:test/l10n/app_localizations.dart';
 import '../../../orders/domain/entities/order_details.dart';
 import '../../../orders/domain/entities/order_status.dart';
 import '../../../orders/domain/entities/order_actions_helper.dart';
@@ -60,6 +61,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView>
         child: BlocConsumer<OrdersCubit, OrdersState>(
           listener: (context, state) {
             if (state is OrderDetailsError) {
+              print(state.message);
               CustomSnackbar.showError(
                 context: context,
                 message: state.message,
@@ -436,7 +438,10 @@ class _OrderDetailsViewState extends State<OrderDetailsView>
           _buildSummaryRow(
             context,
             AppLocalizations.of(context)!.subtotal,
-            '${orderDetails.totalProductPrice.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
+            PriceFormatter.formatPriceWithCurrency(
+              orderDetails.totalProductPrice,
+              AppLocalizations.of(context)!.currency,
+            ),
           ),
 
           const SizedBox(height: 8),
@@ -444,7 +449,10 @@ class _OrderDetailsViewState extends State<OrderDetailsView>
           _buildSummaryRow(
             context,
             AppLocalizations.of(context)!.shipping,
-            '${orderDetails.shipping.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
+            PriceFormatter.formatPriceWithCurrency(
+              orderDetails.shipping,
+              AppLocalizations.of(context)!.currency,
+            ),
           ),
 
           const SizedBox(height: 8),
@@ -452,7 +460,10 @@ class _OrderDetailsViewState extends State<OrderDetailsView>
           _buildSummaryRow(
             context,
             AppLocalizations.of(context)!.taxes,
-            '${orderDetails.totalTax.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
+            PriceFormatter.formatPriceWithCurrency(
+              orderDetails.totalTax,
+              AppLocalizations.of(context)!.currency,
+            ),
           ),
 
           if (orderDetails.promoCodeDiscountAmount > 0) ...[
@@ -460,7 +471,10 @@ class _OrderDetailsViewState extends State<OrderDetailsView>
             _buildSummaryRow(
               context,
               AppLocalizations.of(context)!.discount,
-              '-${orderDetails.promoCodeDiscountAmount.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
+              '-${PriceFormatter.formatPriceWithCurrency(
+                orderDetails.promoCodeDiscountAmount,
+                AppLocalizations.of(context)!.currency,
+              )}',
               isDiscount: true,
             ),
           ],
@@ -474,7 +488,10 @@ class _OrderDetailsViewState extends State<OrderDetailsView>
           _buildSummaryRow(
             context,
             AppLocalizations.of(context)!.total,
-            '${orderDetails.totalOrderPrice.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
+            PriceFormatter.formatPriceWithCurrency(
+              orderDetails.totalOrderPrice,
+              AppLocalizations.of(context)!.currency,
+            ),
             isTotal: true,
           ),
         ],

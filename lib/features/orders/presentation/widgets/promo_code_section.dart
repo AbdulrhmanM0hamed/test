@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/common/custom_button.dart';
-import '../../../../core/utils/constant/font_manger.dart';
-import '../../../../core/utils/constant/styles_manger.dart';
-import '../../../../core/utils/theme/app_colors.dart';
-import '../../../../core/utils/widgets/custom_snackbar.dart';
-import '../../../../l10n/app_localizations.dart';
+import 'package:test/core/utils/constant/font_manger.dart';
+import 'package:test/core/utils/constant/styles_manger.dart';
+import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:test/core/utils/widgets/custom_snackbar.dart';
+import 'package:test/core/utils/formatters/price_formatter.dart';
+import 'package:test/l10n/app_localizations.dart';
 import '../cubit/promo_code_cubit/promo_code_cubit.dart';
 import '../../domain/entities/promo_code.dart';
 
@@ -127,8 +128,8 @@ class _PromoCodeSectionState extends State<PromoCodeSection> {
                 const SizedBox(height: 4),
                 Text(
                   promoCode.type == 'amount'
-                      ? '${AppLocalizations.of(context)!.discount} ${promoCode.value.toStringAsFixed(0)} ${AppLocalizations.of(context)!.currency}'
-                      : '${AppLocalizations.of(context)!.discount} ${promoCode.value.toStringAsFixed(0)}%',
+                      ? '${AppLocalizations.of(context)!.discount} ${PriceFormatter.formatPrice(promoCode.value)} ${AppLocalizations.of(context)!.currency}'
+                      : '${AppLocalizations.of(context)!.discount} ${PriceFormatter.formatPrice(promoCode.value)}%',
                   style: getMediumStyle(
                     fontSize: FontSize.size12,
                     fontFamily: FontConstant.cairo,

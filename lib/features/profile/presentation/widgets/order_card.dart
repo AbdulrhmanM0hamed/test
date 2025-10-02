@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:test/core/utils/formatters/price_formatter.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../orders/domain/entities/order_item.dart';
 import '../../../orders/domain/entities/order_status.dart';
@@ -128,7 +129,10 @@ class OrderCard extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      '${order.totalPrice.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
+                      PriceFormatter.formatPriceWithCurrency(
+                        order.totalPrice,
+                        AppLocalizations.of(context)!.currency,
+                      ),
                       style: getBoldStyle(
                         fontSize: FontSize.size16,
                         fontFamily: FontConstant.cairo,
@@ -164,7 +168,7 @@ class OrderCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          '${AppLocalizations.of(context)!.refunded}: ${order.refunded!.toStringAsFixed(2)} ${order.currency.ar}',
+                          '${AppLocalizations.of(context)!.refunded}: ${PriceFormatter.formatPriceWithCurrency(order.refunded!, order.currency.ar)}',
                           style: getSemiBoldStyle(
                             fontSize: FontSize.size12,
                             fontFamily: FontConstant.cairo,

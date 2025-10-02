@@ -1578,6 +1578,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get forThisProduct => 'لهذا المنتج';
 
   @override
+  String get selectedprice => 'السعر المحدد';
+
+  @override
   String get onlyAvailable => 'متوفر فقط';
 
   @override
@@ -1705,4 +1708,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get copyLink => 'نسخ الرابط';
+
+  @override
+  String get linkCopiedSuccessfully => 'تم نسخ الرابط بنجاح';
 }

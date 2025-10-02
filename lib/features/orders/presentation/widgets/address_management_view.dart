@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
-import '../../../../core/utils/constant/font_manger.dart';
-import '../../../../core/utils/constant/styles_manger.dart';
-import '../../../../core/utils/theme/app_colors.dart';
-import '../../../../core/utils/widgets/custom_snackbar.dart';
-import '../../../../l10n/app_localizations.dart';
+import 'package:test/core/utils/common/custom_app_bar.dart';
+import 'package:test/core/utils/constant/font_manger.dart';
+import 'package:test/core/utils/constant/styles_manger.dart';
+import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:test/core/utils/widgets/custom_snackbar.dart';
+import 'package:test/core/utils/formatters/price_formatter.dart';
+import 'package:test/l10n/app_localizations.dart';
 import '../cubit/addresses_cubit/addresses_cubit.dart';
 import '../../domain/entities/address.dart';
 
@@ -199,7 +201,7 @@ class _AddressManagementViewState extends State<AddressManagementView> {
               ),
               const SizedBox(width: 4),
               Text(
-                '${AppLocalizations.of(context)!.shippingCost}: ${address.shippingCost.toStringAsFixed(0)} ${AppLocalizations.of(context)!.currency}',
+                '${AppLocalizations.of(context)!.shippingCost}: ${PriceFormatter.formatPriceWithCurrency(address.shippingCost, AppLocalizations.of(context)!.currency)}',
                 style: getMediumStyle(
                   fontSize: FontSize.size12,
                   fontFamily: FontConstant.cairo,

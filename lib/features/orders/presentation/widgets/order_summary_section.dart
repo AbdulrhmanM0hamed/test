@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../../core/utils/constant/font_manger.dart';
-import '../../../../core/utils/constant/styles_manger.dart';
-import '../../../../core/utils/theme/app_colors.dart';
-import '../../../../l10n/app_localizations.dart';
+import 'package:test/core/utils/constant/font_manger.dart';
+import 'package:test/core/utils/constant/styles_manger.dart';
+import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:test/core/utils/formatters/price_formatter.dart';
+import 'package:test/l10n/app_localizations.dart';
 
 class OrderSummarySection extends StatelessWidget {
   final double cartTotal;
@@ -50,8 +51,10 @@ class OrderSummarySection extends StatelessWidget {
           _buildSummaryRow(
             context: context,
             label: AppLocalizations.of(context)!.subtotal,
-            value:
-                '${cartTotal.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
+            value: PriceFormatter.formatPriceWithCurrency(
+              cartTotal,
+              AppLocalizations.of(context)!.currency,
+            ),
             isRegular: true,
           ),
 
@@ -62,7 +65,10 @@ class OrderSummarySection extends StatelessWidget {
             context: context,
             label: AppLocalizations.of(context)!.shipping,
             value: shippingCost > 0
-                ? '${shippingCost.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}'
+                ? PriceFormatter.formatPriceWithCurrency(
+                    shippingCost,
+                    AppLocalizations.of(context)!.currency,
+                  )
                 : AppLocalizations.of(context)!.free,
             isRegular: true,
           ),
@@ -74,7 +80,7 @@ class OrderSummarySection extends StatelessWidget {
               context: context,
               label: AppLocalizations.of(context)!.discount,
               value:
-                  '-${discountAmount.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
+                  '-${PriceFormatter.formatPriceWithCurrency(discountAmount, AppLocalizations.of(context)!.currency)}',
               isRegular: true,
               valueColor: Colors.green,
             ),
@@ -91,8 +97,10 @@ class OrderSummarySection extends StatelessWidget {
           _buildSummaryRow(
             context: context,
             label: AppLocalizations.of(context)!.total,
-            value:
-                '${finalTotal.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
+            value: PriceFormatter.formatPriceWithCurrency(
+              finalTotal,
+              AppLocalizations.of(context)!.currency,
+            ),
             isRegular: false,
           ),
 
@@ -116,7 +124,7 @@ class OrderSummarySection extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    '${AppLocalizations.of(context)!.youSave} ${discountAmount.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
+                    '${AppLocalizations.of(context)!.youSave} ${PriceFormatter.formatPriceWithCurrency(discountAmount, AppLocalizations.of(context)!.currency)}',
                     style: getMediumStyle(
                       fontSize: FontSize.size12,
                       fontFamily: FontConstant.cairo,

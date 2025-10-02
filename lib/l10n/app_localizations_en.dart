@@ -1578,6 +1578,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get forThisProduct => 'for this product';
 
   @override
+  String get selectedprice => 'Selected Price';
+
+  @override
   String get onlyAvailable => 'Only available';
 
   @override
@@ -1705,4 +1708,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get copyLink => 'Copy Link';
+
+  @override
+  String get linkCopiedSuccessfully => 'Link copied successfully';
 }

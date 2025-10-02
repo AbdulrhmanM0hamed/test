@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test/core/utils/common/custom_button.dart';
 import 'package:test/features/product_details/presentation/cubit/product_review_cubit.dart';
 import '../../../../core/utils/constant/font_manger.dart';
 import '../../../../core/utils/constant/styles_manger.dart';
@@ -100,7 +101,8 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
                   onTap: () {
                     setState(() {
                       _selectedStars = index + 1;
-                      _validationError = null; // Clear error when user selects stars
+                      _validationError =
+                          null; // Clear error when user selects stars
                     });
                   },
                   child: Container(
@@ -377,25 +379,15 @@ class _AddReviewDialogState extends State<AddReviewDialog> {
               ),
             ),
           ),
-          ElevatedButton(
+          CustomButton(
+            width: 150,
+            height: 50,
             onPressed: () {
               Navigator.of(context).pop();
               Navigator.pushNamed(context, '/login');
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: Text(
-              AppLocalizations.of(context)!.login,
-              style: getBoldStyle(
-                fontSize: FontSize.size14,
-                fontFamily: FontConstant.cairo,
-                color: Colors.white,
-              ),
-            ),
+
+            text: AppLocalizations.of(context)!.login,
           ),
         ],
       ),

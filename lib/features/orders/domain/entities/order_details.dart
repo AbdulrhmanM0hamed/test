@@ -54,40 +54,59 @@ class OrderDetails extends Equatable {
   });
 
   factory OrderDetails.fromJson(Map<String, dynamic> json) {
-    return OrderDetails(
-      id: json['id'] as int,
-      currency: Currency.fromJson(json['currancy'] as Map<String, dynamic>),
-      orderNumber: json['order_number'] as String,
-      status: json['status'] as String,
-      statusColor: json['status_color'] as String,
-      customerEmail: json['customer_email'] as String,
-      customerAddress: json['customer_address'] as String,
-      customerPhone: json['customer_phone'] as String,
-      shipping: double.parse(json['shipping'].toString()),
-      customerPromoCodeTitle: json['customer_promo_code_title'] as String?,
-      customerPromoCodeValue: double.parse(
-        json['customer_promo_code_value'].toString(),
-      ),
-      customerPromoCodeType: json['customer_promo_code_type'] as String?,
-      promoCodeDiscountAmount: double.parse(
-        json['promo_code_discount_amount'].toString(),
-      ),
-      totalTax: double.parse(json['total_tax'].toString()),
-      totalProductPrice: double.parse(json['total_product_price'].toString()),
-      quantity: json['quantity'] as int,
-      totalPrice: double.parse(json['total_price'].toString()),
-      issueDate: json['issue_date'] as String,
-      orderProducts: (json['orderProducts'] as List<dynamic>)
-          .map(
-            (item) => OrderProductItem.fromJson(item as Map<String, dynamic>),
-          )
-          .toList(),
-      totalOrderPrice: double.parse(json['total_order_price'].toString()),
-      extras: json['extras'] as List<dynamic>,
-      refunded: json['refunded'] != null
-          ? double.parse(json['refunded'].toString())
-          : null,
-    );
+    try {
+      return OrderDetails(
+        id: json['id'] as int,
+        currency: Currency.fromJson(json['currancy'] as Map<String, dynamic>),
+        orderNumber: json['order_number'] as String,
+        status: json['status'] as String,
+        statusColor: json['status_color'] as String,
+        customerEmail: json['customer_email'] as String,
+        customerAddress: json['customer_address'] as String,
+        customerPhone: json['customer_phone'] as String,
+        shipping: _parseDouble(json['shipping']),
+        customerPromoCodeTitle: json['customer_promo_code_title'] as String?,
+        customerPromoCodeValue: _parseDouble(json['customer_promo_code_value']),
+        customerPromoCodeType: json['customer_promo_code_type'] as String?,
+        promoCodeDiscountAmount: _parseDouble(
+          json['promo_code_discount_amount'],
+        ),
+        totalTax: _parseDouble(json['total_tax']),
+        totalProductPrice: _parseDouble(json['total_product_price']),
+        quantity: json['quantity'] as int,
+        totalPrice: _parseDouble(json['total_price']),
+        issueDate: json['issue_date'] as String,
+        orderProducts: (json['orderProducts'] as List<dynamic>)
+            .map(
+              (item) => OrderProductItem.fromJson(item as Map<String, dynamic>),
+            )
+            .toList(),
+        totalOrderPrice: json['total_order_price'] != null
+            ? _parseDouble(json['total_order_price'])
+            : _parseDouble(json['total_price']), // fallback to total_price
+        extras: json['extras'] as List<dynamic>? ?? [],
+        refunded: json['refunded'] != null
+            ? _parseDouble(json['refunded'])
+            : null,
+      );
+    } catch (e) {
+      print('❌ Error parsing OrderDetails: $e');
+      print('📥 JSON data: $json');
+      rethrow;
+    }
+  }
+
+  static double _parseDouble(dynamic value) {
+    if (value == null) return 0.0;
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is String) {
+      if (value.isEmpty) return 0.0;
+      // Remove thousands separators (commas) before parsing
+      String cleanValue = value.replaceAll(',', '');
+      return double.parse(cleanValue);
+    }
+    throw FormatException('Cannot parse $value to double');
   }
 
   OrderDetails copyWith({

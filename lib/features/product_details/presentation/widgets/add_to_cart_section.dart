@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/core/utils/common/custom_button.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
-import 'package:test/core/utils/animations/custom_progress_indcator.dart';
+import 'package:test/core/utils/formatters/price_formatter.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/services/hybrid_cart_service.dart';
 import '../../../cart/presentation/cubit/cart_cubit.dart';
@@ -211,7 +212,7 @@ class _AddToCartSectionState extends State<AddToCartSection> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'السعر المحدد:',
+                  '  ${AppLocalizations.of(context)!.selectedprice} :',
                   style: getMediumStyle(
                     fontSize: FontSize.size12,
                     fontFamily: FontConstant.cairo,
@@ -222,7 +223,10 @@ class _AddToCartSectionState extends State<AddToCartSection> {
                 Row(
                   children: [
                     Text(
-                      '${_selectedVariant!.realPrice} ${AppLocalizations.of(context)!.currency}',
+                      PriceFormatter.formatPriceWithCurrency(
+                        double.tryParse(_selectedVariant!.realPrice) ?? 0.0,
+                        AppLocalizations.of(context)!.currency,
+                      ),
                       style: getBoldStyle(
                         fontSize: FontSize.size18,
                         fontFamily: FontConstant.cairo,
@@ -232,7 +236,10 @@ class _AddToCartSectionState extends State<AddToCartSection> {
                     if (hasOffer) ...[
                       const SizedBox(width: 8),
                       Text(
-                        '${_selectedVariant!.fakePrice} ${AppLocalizations.of(context)!.currency}',
+                        PriceFormatter.formatPriceWithCurrency(
+                          double.tryParse(_selectedVariant!.fakePrice!) ?? 0.0,
+                          AppLocalizations.of(context)!.currency,
+                        ),
                         style: getMediumStyle(
                           fontSize: FontSize.size14,
                           fontFamily: FontConstant.cairo,
