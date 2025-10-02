@@ -1693,4 +1693,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get cartClearedSuccessfully => 'تم مسح السلة بنجاح';
+
+  @override
+  String get shareProduct => 'شارك المنتج';
+
+  @override
+  String get shareWithFriends => 'شارك هذا المنتج مع أصدقائك';
+
+  @override
+  String get more => 'المزيد';
+
+  @override
+  String get copyLink => 'نسخ الرابط';
 }

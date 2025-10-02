@@ -1693,4 +1693,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cartClearedSuccessfully => 'Cart cleared successfully';
+
+  @override
+  String get shareProduct => 'Share Product';
+
+  @override
+  String get shareWithFriends => 'Share this product with your friends';
+
+  @override
+  String get more => 'More';
+
+  @override
+  String get copyLink => 'Copy Link';
 }

@@ -704,5 +704,11 @@
   "failedToRemoveItemFromCart": "Failed to remove item from cart",
   "failedToUpdateQuantity": "Failed to update quantity",
   "cartClearedSuccessfully": "Cart cleared successfully",
-  "failedToClearCart": "Failed to clear cart"
+  "failedToClearCart": "Failed to clear cart",
+  
+  "shareProduct": "Share Product",
+  "shareWithFriends": "Share this product with your friends",
+  "more": "More",
+  "copyLink": "Copy Link",
+  "linkCopiedSuccessfully": "Link copied successfully"
 }

@@ -3466,6 +3466,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cart cleared successfully'**
   String get cartClearedSuccessfully;
+
+  /// No description provided for @shareProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Product'**
+  String get shareProduct;
+
+  /// No description provided for @shareWithFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'Share this product with your friends'**
+  String get shareWithFriends;
+
+  /// No description provided for @more.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get more;
+
+  /// No description provided for @copyLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Link'**
+  String get copyLink;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

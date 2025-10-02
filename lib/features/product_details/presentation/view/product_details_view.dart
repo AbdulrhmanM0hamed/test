@@ -18,6 +18,7 @@ import '../widgets/product_info_section.dart';
 import '../widgets/product_reviews_section.dart';
 import '../widgets/product_video_section.dart';
 import '../widgets/cart_floating_button.dart';
+import '../widgets/social_share_section.dart';
 
 class ProductDetailsView extends StatefulWidget {
   static const String routeName = '/product-details';
@@ -283,6 +284,14 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
                   );
                 },
               ),
+
+              // Social Share section
+              SocialShareSection(
+                productName: product.name,
+                productSlug: product.slug,
+                productImage: product.image,
+              ),
+
               const SizedBox(height: 100), // Space for floating cart
             ],
           ),

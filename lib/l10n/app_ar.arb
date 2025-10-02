@@ -702,5 +702,11 @@
   "failedToRemoveItemFromCart": "فشل في حذف العنصر من السلة",
   "failedToUpdateQuantity": "فشل في تحديث الكمية",
   "cartClearedSuccessfully": "تم مسح السلة بنجاح",
-  "failedToClearCart": "فشل في مسح السلة"
+  "failedToClearCart": "فشل في مسح السلة",
+  
+  "shareProduct": "شارك المنتج",
+  "shareWithFriends": "شارك هذا المنتج مع أصدقائك",
+  "more": "المزيد",
+  "copyLink": "نسخ الرابط",
+  "linkCopiedSuccessfully": "تم نسخ الرابط بنجاح"
 }
