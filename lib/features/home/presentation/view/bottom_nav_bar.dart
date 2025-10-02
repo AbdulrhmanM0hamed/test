@@ -530,7 +530,7 @@ class _HomeViewState extends State<BottomNavBar> {
                             return _buildBadge(itemCount);
                           }
                           return const SizedBox.shrink();
-                        },
+                      },
                       );
                     },
                   ),

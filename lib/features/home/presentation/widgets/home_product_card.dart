@@ -762,11 +762,10 @@ class _HomeProductCardState extends State<HomeProductCard>
     // Use stock as the total inventory and countOfAvailable as current available
     final int totalStock = widget.product.stock;
     final int availableStock = widget.product.countOfAvailable;
-    final int soldStock = totalStock - availableStock;
 
-    // Calculate progress (0.0 to 1.0) - how much has been sold
+    // Calculate progress (0.0 to 1.0) - how much stock is available
     final double progress = totalStock > 0
-        ? (soldStock / totalStock).clamp(0.0, 1.0)
+        ? (availableStock / totalStock).clamp(0.0, 1.0)
         : 0.0;
 
     // Determine color based on availability
