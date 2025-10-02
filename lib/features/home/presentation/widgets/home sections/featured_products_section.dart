@@ -31,10 +31,10 @@ class FeaturedProductsSection extends StatelessWidget {
         // featured_products_section.dart
         SectionHeader(
           onSeeAll: onSeeAll,
-          title: AppLocalizations.of(context)!.featuredProducts,
-          icon: Icons.star,
-          iconColor: Colors.orange,
-          backgroundColor: Colors.orange.withValues(alpha: 0.1),
+          title: AppLocalizations.of(context)!.hotDeals,
+          icon: Icons.local_fire_department,
+          iconColor: Colors.red,
+          backgroundColor: Colors.red.withValues(alpha: 0.1),
         ),
         const SizedBox(height: 16),
         _buildProductsGrid(),

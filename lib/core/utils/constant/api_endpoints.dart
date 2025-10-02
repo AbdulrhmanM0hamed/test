@@ -22,7 +22,7 @@ class ApiEndpoints {
       '$baseUrl/product-review/$productId';
 
   // Home page products endpoints
-  static const String featuredProducts = '/featured-products';
+  static const String featuredProducts = '/mobile/hot_deals';
   static const String bestSellerProducts = '/best-seller-products';
   static const String latestProducts = '/latest-products';
   static const String specialOfferProducts = '/special-offer-products';

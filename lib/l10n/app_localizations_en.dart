@@ -1723,4 +1723,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get twitter => 'Twitter';
+
+  @override
+  String get hotDeals => 'Hot Deals';
 }

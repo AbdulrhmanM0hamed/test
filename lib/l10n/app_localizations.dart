@@ -3526,6 +3526,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Twitter'**
   String get twitter;
+
+  /// No description provided for @hotDeals.
+  ///
+  /// In en, this message translates to:
+  /// **'Hot Deals'**
+  String get hotDeals;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

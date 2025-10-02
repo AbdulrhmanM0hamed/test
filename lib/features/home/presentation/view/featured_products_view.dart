@@ -73,24 +73,23 @@ class _FeaturedProductsViewState extends State<FeaturedProductsView> {
       }
     }
 
-    return MultiBlocProvider(
-      providers: [
-        // Remove the BlocProvider creation - use existing one from navigation
-        if (isLoggedIn) ...[
-          if (existingWishlistCubit != null)
-            BlocProvider.value(value: existingWishlistCubit)
-          else
-            BlocProvider(
-              create: (context) => DependencyInjection.getIt<WishlistCubit>(),
-            ),
-          if (existingCartCubit != null)
-            BlocProvider.value(value: existingCartCubit)
-          else
-            BlocProvider(
-              create: (context) => DependencyInjection.getIt<CartCubit>(),
-            ),
-        ],
+    final providers = <BlocProvider>[
+      // Always add at least one provider to avoid empty list
+      BlocProvider<WishlistCubit>(
+        create: (context) => DependencyInjection.getIt<WishlistCubit>(),
+      ),
+      if (isLoggedIn) ...[
+        if (existingCartCubit != null)
+          BlocProvider.value(value: existingCartCubit)
+        else
+          BlocProvider(
+            create: (context) => DependencyInjection.getIt<CartCubit>(),
+          ),
       ],
+    ];
+
+    return MultiBlocProvider(
+      providers: providers,
       child: Scaffold(
         appBar: CustomAppBar(
           title: AppLocalizations.of(context)!.featuredProducts,

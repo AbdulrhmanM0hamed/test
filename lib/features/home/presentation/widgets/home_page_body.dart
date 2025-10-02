@@ -4,7 +4,9 @@ import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/services/global_cubit_service.dart';
 import 'package:test/features/categories/presentation/cubit/sub_category_cubit.dart';
 import 'package:test/features/categories/domain/usecases/get_sub_categories_usecase.dart';
+import 'package:test/features/home/presentation/view/featured_products_view.dart';
 import 'package:test/features/home/presentation/widgets/greeting_header.dart';
+import 'package:test/features/home/presentation/widgets/home%20sections/featured_products_section.dart';
 import 'package:test/features/home/presentation/widgets/offers_section.dart';
 import 'package:test/features/home/presentation/widgets/categories_section.dart';
 import 'package:test/features/home/presentation/widgets/home%20sections/special_offers_section.dart';
@@ -150,25 +152,25 @@ class HomePageBody extends StatelessWidget {
 
                             // Featured Products Section
                             const SizedBox(height: 24),
-                            // FeaturedProductsSection(
-                            //   onProductTap: (product) {
-                            //     Navigator.pushNamed(
-                            //       context,
-                            //       '/product-details',
-                            //       arguments: product.id,
-                            //     );
-                            //   },
-                            //   onFavoritePressed: (product) {
-                            //     // TODO: Toggle favorite
-                            //     ////print('Favorite pressed: ${product.name}');
-                            //   },
-                            //   onSeeAll: () {
-                            //     Navigator.pushNamed(
-                            //       context,
-                            //       '/featured-products',
-                            //     );
-                            //   },
-                            // ),
+                            FeaturedProductsSection(
+                              onProductTap: (product) {
+                                Navigator.pushNamed(
+                                  context,
+                                  '/product-details',
+                                  arguments: product.id,
+                                );
+                              },
+                              onFavoritePressed: (product) {
+                                // TODO: Toggle favorite
+                                ////print('Favorite pressed: ${product.name}');
+                              },
+                              onSeeAll: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  '/featured-products',
+                                );
+                              },
+                            ),
 
                             // Best Seller Products Section
                             const SizedBox(height: 24),
