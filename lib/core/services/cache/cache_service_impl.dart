@@ -30,7 +30,7 @@
 //     try {
 //       await _prefs.setString(_userKey, jsonEncode(user));
 //     } catch (e) {
-//       //  //print('❌ Error saving user: $e');
+//       //  ////print('❌ Error saving user: $e');
 //     }
 //   }
 
@@ -75,17 +75,17 @@
 //     try {
 //       final userStr = _prefs.getString(_userKey);
 //       if (userStr == null) {
-//         ////print('🔍 No user data found in cache');
+//         //////print('🔍 No user data found in cache');
 //         return null;
 //       }
 
 //       final userData = jsonDecode(userStr) as Map<String, dynamic>;
 //       final userId = userData['id'] as int?;
 
-//       ////print('📱 Retrieved user ID from cache: $userId');
+//       //////print('📱 Retrieved user ID from cache: $userId');
 //       return userId;
 //     } catch (e) {
-//       ////print('❌ Error getting user ID: $e');
+//       //////print('❌ Error getting user ID: $e');
 //       return null;
 //     }
 //   }

@@ -34,8 +34,8 @@ class OrderItem extends Equatable {
             : null,
       );
     } catch (e) {
-      print('❌ Error parsing OrderItem: $e');
-      print('📥 JSON data: $json');
+      //print('❌ Error parsing OrderItem: $e');
+      //print('📥 JSON data: $json');
       rethrow;
     }
   }
@@ -83,8 +83,8 @@ class Currency extends Equatable {
     try {
       return Currency(en: json['en'] as String, ar: json['ar'] as String);
     } catch (e) {
-      print('❌ Error parsing Currency: $e');
-      print('📥 JSON data: $json');
+      //print('❌ Error parsing Currency: $e');
+      //print('📥 JSON data: $json');
       rethrow;
     }
   }

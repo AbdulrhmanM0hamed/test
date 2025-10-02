@@ -21,7 +21,7 @@ class FirebaseNotificationService {
 
   // Initialize Firebase Messaging
   Future<void> initialize() async {
-    print('🔥 FirebaseNotificationService: Initializing...');
+    //print('🔥 FirebaseNotificationService: Initializing...');
 
     try {
       // Request permission for notifications
@@ -39,11 +39,9 @@ class FirebaseNotificationService {
       // Test notification functionality
       await _testNotificationSetup();
 
-      print(
-        '✅ FirebaseNotificationService: Initialization completed successfully',
-      );
+      //print('✅ FirebaseNotificationService: Initialization completed successfully',);
     } catch (e) {
-      print('❌ FirebaseNotificationService: Initialization failed: $e');
+      //print('❌ FirebaseNotificationService: Initialization failed: $e');
       rethrow;
     }
   }
@@ -51,28 +49,26 @@ class FirebaseNotificationService {
   // Test notification setup
   Future<void> _testNotificationSetup() async {
     try {
-      print('🧪 Testing notification setup...');
+      //print('🧪 Testing notification setup...');
 
       // Check if notifications are enabled
       final settings = await _firebaseMessaging.getNotificationSettings();
-      print(
-        '🔔 Current notification settings: ${settings.authorizationStatus}',
-      );
+      //print('🔔 Current notification settings: ${settings.authorizationStatus}',);
 
       // Get current token
       final token = await _firebaseMessaging.getToken();
       if (token != null) {
-        print('✅ FCM Token is available: ${token.substring(0, 20)}...');
+        //print('✅ FCM Token is available: ${token.substring(0, 20)}...');
       } else {
-        print('❌ FCM Token is null');
+        //print('❌ FCM Token is null');
       }
 
       // Test local notification
       // await _showTestLocalNotification();
 
-      print('✅ Notification setup test completed');
+      //print('✅ Notification setup test completed');
     } catch (e) {
-      print('❌ Notification setup test failed: $e');
+      //print('❌ Notification setup test failed: $e');
     }
   }
 
@@ -111,9 +107,9 @@ class FirebaseNotificationService {
   //       payload: '{"type": "test", "message": "Test notification"}',
   //     );
 
-  //     print('✅ Test local notification sent');
+  //     //print('✅ Test local notification sent');
   //   } catch (e) {
-  //     print('❌ Failed to send test local notification: $e');
+  //     //print('❌ Failed to send test local notification: $e');
   //   }
   // }
 
@@ -129,15 +125,15 @@ class FirebaseNotificationService {
       sound: true,
     );
 
-    print('🔔 Notification permission status: ${settings.authorizationStatus}');
+    //print('🔔 Notification permission status: ${settings.authorizationStatus}');
 
     if (settings.authorizationStatus == AuthorizationStatus.denied) {
-      print('❌ User denied notification permissions');
+      //print('❌ User denied notification permissions');
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.notDetermined) {
-      print('⚠️ User has not yet granted notification permissions');
+      //print('⚠️ User has not yet granted notification permissions');
     } else {
-      print('✅ User granted notification permissions');
+      //print('✅ User granted notification permissions');
     }
   }
 
@@ -199,22 +195,18 @@ class FirebaseNotificationService {
   // Get FCM token
   Future<String?> _getFCMToken() async {
     try {
-      print('🎯 Getting FCM token...');
+      //print('🎯 Getting FCM token...');
       final token = await _firebaseMessaging.getToken();
 
       if (token != null) {
-        print('✅ FCM Token received successfully');
-        print(
-          '🎯 Token (first 50 chars): ${token.substring(0, token.length > 50 ? 50 : token.length)}...',
-        );
-        print('🎯 Token length: ${token.length} characters');
+        //print('✅ FCM Token received successfully');
+        //print('🎯 Token (first 50 chars): ${token.substring(0, token.length > 50 ? 50 : token.length)}...',);
+        //print('🎯 Token length: ${token.length} characters');
 
         // Listen for token refresh
         _firebaseMessaging.onTokenRefresh.listen((newToken) {
-          print('🔄 FCM Token refreshed');
-          print(
-            '🔄 New token (first 50 chars): ${newToken.substring(0, newToken.length > 50 ? 50 : newToken.length)}...',
-          );
+          //print('🔄 FCM Token refreshed');
+          //print('🔄 New token (first 50 chars): ${newToken.substring(0, newToken.length > 50 ? 50 : newToken.length)}...',);
           _sendTokenToServer(newToken);
         });
 
@@ -223,14 +215,12 @@ class FirebaseNotificationService {
 
         return token;
       } else {
-        print(
-          '❌ FCM Token is null - this might indicate a problem with Firebase setup',
-        );
+        //print('❌ FCM Token is null - this might indicate a problem with Firebase setup',);
         return null;
       }
     } catch (e) {
-      print('❌ Error getting FCM token: $e');
-      print('❌ This might indicate Firebase is not properly configured');
+      //print('❌ Error getting FCM token: $e');
+      //print('❌ This might indicate Firebase is not properly configured');
       return null;
     }
   }
@@ -239,27 +229,27 @@ class FirebaseNotificationService {
   Future<void> _sendTokenToServer(String token) async {
     try {
       // TODO: Implement API call to send token to server
-      print('📤 Sending FCM token to server: $token');
+      //print('📤 Sending FCM token to server: $token');
 
       // Example API call:
       // final dioService = DependencyInjection.getIt<DioService>();
       // await dioService.post('/fcm-token', data: {'token': token});
     } catch (e) {
-      print('❌ Error sending token to server: $e');
+      //print('❌ Error sending token to server: $e');
     }
   }
 
   // Handle foreground messages
   void _handleForegroundMessage(RemoteMessage message) {
-    print('📱 ========== FOREGROUND MESSAGE RECEIVED ==========');
-    print('📱 Message ID: ${message.messageId}');
-    print('📱 Title: ${message.notification?.title}');
-    print('📱 Body: ${message.notification?.body}');
-    print('📱 Data: ${message.data}');
-    print('📱 From: ${message.from}');
-    print('📱 Sent Time: ${message.sentTime}');
-    print('📱 TTL: ${message.ttl}');
-    print('📱 ===============================================');
+    //print('📱 ========== FOREGROUND MESSAGE RECEIVED ==========');
+    //print('📱 Message ID: ${message.messageId}');
+    //print('📱 Title: ${message.notification?.title}');
+    //print('📱 Body: ${message.notification?.body}');
+    //print('📱 Data: ${message.data}');
+    //print('📱 From: ${message.from}');
+    //print('📱 Sent Time: ${message.sentTime}');
+    //print('📱 TTL: ${message.ttl}');
+    //print('📱 ===============================================');
 
     // Show local notification when app is in foreground
     _showLocalNotification(message);
@@ -270,8 +260,8 @@ class FirebaseNotificationService {
 
   // Handle notification tap
   void _handleNotificationTap(RemoteMessage message) {
-    print('👆 Notification tapped: ${message.messageId}');
-    print('👆 Data: ${message.data}');
+    //print('👆 Notification tapped: ${message.messageId}');
+    //print('👆 Data: ${message.data}');
 
     // Navigate to appropriate screen based on notification data
     _navigateToScreen(message.data);
@@ -282,7 +272,7 @@ class FirebaseNotificationService {
 
   // Handle local notification tap
   void _onNotificationTapped(NotificationResponse response) {
-    print('👆 Local notification tapped: ${response.id}');
+    //print('👆 Local notification tapped: ${response.id}');
 
     if (response.payload != null) {
       final data = jsonDecode(response.payload!);
@@ -335,7 +325,7 @@ class FirebaseNotificationService {
     if (context != null) {
       NotificationHelper.handleNotificationNavigation(context, data);
     } else {
-      print('❌ No context available for navigation');
+      //print('❌ No context available for navigation');
     }
   }
 
@@ -344,7 +334,7 @@ class FirebaseNotificationService {
     try {
       return navigatorKey.currentContext;
     } catch (e) {
-      print('❌ Error getting navigator context: $e');
+      //print('❌ Error getting navigator context: $e');
       return null;
     }
   }
@@ -355,9 +345,9 @@ class FirebaseNotificationService {
       final notificationsCubit =
           DependencyInjection.getIt<NotificationsCubit>();
       notificationsCubit.refreshNotifications();
-      print('🔄 Notifications list refreshed');
+      //print('🔄 Notifications list refreshed');
     } catch (e) {
-      print('❌ Error refreshing notifications list: $e');
+      //print('❌ Error refreshing notifications list: $e');
     }
   }
 
@@ -365,9 +355,9 @@ class FirebaseNotificationService {
   Future<void> subscribeToTopic(String topic) async {
     try {
       await _firebaseMessaging.subscribeToTopic(topic);
-      print('📢 Subscribed to topic: $topic');
+      //print('📢 Subscribed to topic: $topic');
     } catch (e) {
-      print('❌ Error subscribing to topic $topic: $e');
+      //print('❌ Error subscribing to topic $topic: $e');
     }
   }
 
@@ -375,9 +365,9 @@ class FirebaseNotificationService {
   Future<void> unsubscribeFromTopic(String topic) async {
     try {
       await _firebaseMessaging.unsubscribeFromTopic(topic);
-      print('🔇 Unsubscribed from topic: $topic');
+      //print('🔇 Unsubscribed from topic: $topic');
     } catch (e) {
-      print('❌ Error unsubscribing from topic $topic: $e');
+      //print('❌ Error unsubscribing from topic $topic: $e');
     }
   }
 
@@ -386,7 +376,7 @@ class FirebaseNotificationService {
     try {
       return await _firebaseMessaging.getToken();
     } catch (e) {
-      print('❌ Error getting current token: $e');
+      //print('❌ Error getting current token: $e');
       return null;
     }
   }
@@ -395,9 +385,9 @@ class FirebaseNotificationService {
   Future<void> clearAllNotifications() async {
     try {
       await _localNotifications.cancelAll();
-      print('🧹 All local notifications cleared');
+      //print('🧹 All local notifications cleared');
     } catch (e) {
-      print('❌ Error clearing notifications: $e');
+      //print('❌ Error clearing notifications: $e');
     }
   }
 
@@ -405,9 +395,9 @@ class FirebaseNotificationService {
   Future<void> deleteToken() async {
     try {
       await _firebaseMessaging.deleteToken();
-      print('🗑️ FCM token deleted');
+      //print('🗑️ FCM token deleted');
     } catch (e) {
-      print('❌ Error deleting token: $e');
+      //print('❌ Error deleting token: $e');
     }
   }
 
@@ -415,16 +405,16 @@ class FirebaseNotificationService {
   Future<void> setAutoInitEnabled(bool enabled) async {
     try {
       await _firebaseMessaging.setAutoInitEnabled(enabled);
-      print('🔧 Auto initialization set to: $enabled');
+      //print('🔧 Auto initialization set to: $enabled');
     } catch (e) {
-      print('❌ Error setting auto initialization: $e');
+      //print('❌ Error setting auto initialization: $e');
     }
   }
 
   // Send test notification manually
   Future<void> sendTestNotification() async {
     try {
-      print('🧪 Sending manual test notification...');
+      //print('🧪 Sending manual test notification...');
 
       await _localNotifications.show(
         DateTime.now().millisecondsSinceEpoch ~/ 1000,
@@ -454,9 +444,9 @@ class FirebaseNotificationService {
             '{"type": "manual_test", "timestamp": "${DateTime.now().toIso8601String()}"}',
       );
 
-      print('✅ Manual test notification sent successfully');
+      //print('✅ Manual test notification sent successfully');
     } catch (e) {
-      print('❌ Failed to send manual test notification: $e');
+      //print('❌ Failed to send manual test notification: $e');
     }
   }
 
@@ -477,7 +467,7 @@ class FirebaseNotificationService {
         'isInitialized': true,
       };
     } catch (e) {
-      print('❌ Error getting notification status: $e');
+      //print('❌ Error getting notification status: $e');
       return {
         'permissionStatus': 'error',
         'hasToken': false,
@@ -492,15 +482,15 @@ class FirebaseNotificationService {
 // Background message handler (must be top-level function)
 @pragma('vm:entry-point')
 Future<void> _handleBackgroundMessage(RemoteMessage message) async {
-  print('🌙 ========== BACKGROUND MESSAGE RECEIVED ==========');
-  print('🌙 Message ID: ${message.messageId}');
-  print('🌙 Title: ${message.notification?.title}');
-  print('🌙 Body: ${message.notification?.body}');
-  print('🌙 Data: ${message.data}');
-  print('🌙 From: ${message.from}');
-  print('🌙 Sent Time: ${message.sentTime}');
-  print('🌙 TTL: ${message.ttl}');
-  print('🌙 ===============================================');
+  //print('🌙 ========== BACKGROUND MESSAGE RECEIVED ==========');
+  //print('🌙 Message ID: ${message.messageId}');
+  //print('🌙 Title: ${message.notification?.title}');
+  //print('🌙 Body: ${message.notification?.body}');
+  //print('🌙 Data: ${message.data}');
+  //print('🌙 From: ${message.from}');
+  //print('🌙 Sent Time: ${message.sentTime}');
+  //print('🌙 TTL: ${message.ttl}');
+  //print('🌙 ===============================================');
 
   // Handle background message processing here
   // Note: UI operations are not allowed in background handlers
@@ -519,8 +509,8 @@ Future<void> _handleBackgroundMessage(RemoteMessage message) async {
     // }));
     // await prefs.setStringList('background_notifications', notifications);
 
-    print('✅ Background message processed successfully');
+    //print('✅ Background message processed successfully');
   } catch (e) {
-    print('❌ Error processing background message: $e');
+    //print('❌ Error processing background message: $e');
   }
 }

@@ -48,7 +48,7 @@ class _LatestProductsViewState extends State<LatestProductsView> {
     final maxExtent = _scrollController.position.maxScrollExtent;
 
     if (pixels >= maxExtent - 200) {
-      print('🎯 LatestProducts: Scroll threshold reached, calling loadMore');
+      //print('🎯 LatestProducts: Scroll threshold reached, calling loadMore');
       context.read<LatestProductsCubit>().loadMore();
     }
   }
@@ -67,9 +67,9 @@ class _LatestProductsViewState extends State<LatestProductsView> {
       try {
         existingWishlistCubit = context.read<WishlistCubit>();
         existingCartCubit = context.read<CartCubit>();
-        //  debugPrint('🔗 LatestProductsView: Using existing cubits from parent context');
+        //  debug//print('🔗 LatestProductsView: Using existing cubits from parent context');
       } catch (e) {
-        //    debugPrint('⚠️ LatestProductsView: No existing cubits found, creating new ones');
+        //    debug//print('⚠️ LatestProductsView: No existing cubits found, creating new ones');
       }
     }
 

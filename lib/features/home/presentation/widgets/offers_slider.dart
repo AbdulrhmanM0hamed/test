@@ -116,10 +116,10 @@ class _OffersSliderState extends State<OffersSlider>
 
             final Uri url = Uri.parse(urlString);
             try {
-              print('Attempting to open URL: $urlString');
+              //print('Attempting to open URL: $urlString');
               await launchUrl(url, mode: LaunchMode.externalApplication);
             } catch (e) {
-              print('Failed to open link: ${e.toString()}');
+              //print('Failed to open link: ${e.toString()}');
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

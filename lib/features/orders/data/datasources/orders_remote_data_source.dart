@@ -50,12 +50,12 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
   @override
   Future<ApiResponse<MyOrdersResponse>> getMyOrders() async {
     try {
-      print('🔍 Starting getMyOrders...');
+      //print('🔍 Starting getMyOrders...');
       final response = await dioService.get(ApiEndpoints.myOrders);
-      print('🔍 Raw response: ${response.data}');
+      //print('🔍 Raw response: ${response.data}');
 
       final myOrdersResponse = MyOrdersResponse.fromJson(response.data);
-      print('🔍 Parsed successfully!');
+      //print('🔍 Parsed successfully!');
 
       return ApiResponse.success(data: myOrdersResponse, message: 'Success');
     } on DioException catch (e) {
@@ -73,7 +73,7 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
         );
       }
     } catch (e) {
-      // print('❌ Unexpected error in getMyOrders: $e');
+      // //print('❌ Unexpected error in getMyOrders: $e');
       return ApiResponse.error(message: 'Failed to parse server response: $e');
     }
   }
@@ -104,7 +104,7 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
         );
       }
     } catch (e) {
-      print('❌ Unexpected error in getOrderDetails: $e');
+      //print('❌ Unexpected error in getOrderDetails: $e');
       return ApiResponse.error(message: 'Failed to parse order details: $e');
     }
   }
@@ -112,9 +112,9 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
   @override
   Future<ApiResponse<Map<String, dynamic>>> cancelOrder(int orderId) async {
     try {
-      print('🔍 Starting cancelOrder for order: $orderId');
+      //print('🔍 Starting cancelOrder for order: $orderId');
       final response = await dioService.put(ApiEndpoints.cancelOrder(orderId));
-      print('🔍 Cancel order response: ${response.data}');
+      //print('🔍 Cancel order response: ${response.data}');
 
       return ApiResponse.success(
         data: response.data as Map<String, dynamic>,
@@ -135,7 +135,7 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
         );
       }
     } catch (e) {
-      print('❌ Unexpected error in cancelOrder: $e');
+      //print('❌ Unexpected error in cancelOrder: $e');
       return ApiResponse.error(message: 'Failed to cancel order: $e');
     }
   }
@@ -143,9 +143,9 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
   @override
   Future<ApiResponse<Map<String, dynamic>>> returnOrder(int orderId) async {
     try {
-      print('🔍 Starting returnOrder for order: $orderId');
+      //print('🔍 Starting returnOrder for order: $orderId');
       final response = await dioService.put(ApiEndpoints.returnOrder(orderId));
-      print('🔍 Return order response: ${response.data}');
+      //print('🔍 Return order response: ${response.data}');
 
       return ApiResponse.success(
         data: response.data as Map<String, dynamic>,
@@ -168,7 +168,7 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
         );
       }
     } catch (e) {
-      print('❌ Unexpected error in returnOrder: $e');
+      //print('❌ Unexpected error in returnOrder: $e');
       return ApiResponse.error(message: 'Failed to request order return: $e');
     }
   }

@@ -48,7 +48,7 @@ class _FeaturedProductsViewState extends State<FeaturedProductsView> {
     final maxExtent = _scrollController.position.maxScrollExtent;
 
     if (pixels >= maxExtent - 200) {
-      print('🎯 FeaturedProducts: Scroll threshold reached, calling loadMore');
+      //print('🎯 FeaturedProducts: Scroll threshold reached, calling loadMore');
       context.read<FeaturedProductsCubit>().loadMore();
     }
   }
@@ -67,9 +67,9 @@ class _FeaturedProductsViewState extends State<FeaturedProductsView> {
       try {
         existingWishlistCubit = context.read<WishlistCubit>();
         existingCartCubit = context.read<CartCubit>();
-        //debugprint('🔗 FeaturedProductsView: Using existing cubits from parent context');
+        //debug//print('🔗 FeaturedProductsView: Using existing cubits from parent context');
       } catch (e) {
-        //debugprint('⚠️ FeaturedProductsView: No existing cubits found, creating new ones');
+        //debug//print('⚠️ FeaturedProductsView: No existing cubits found, creating new ones');
       }
     }
 

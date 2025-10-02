@@ -22,8 +22,8 @@ class MyOrdersResponse {
             .toList(),
       );
     } catch (e) {
-      print('❌ Error parsing MyOrdersResponse: $e');
-      print('📥 JSON data: $json');
+      //print('❌ Error parsing MyOrdersResponse: $e');
+      //print('📥 JSON data: $json');
       rethrow;
     }
   }

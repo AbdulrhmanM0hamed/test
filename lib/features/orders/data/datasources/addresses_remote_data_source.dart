@@ -69,9 +69,9 @@ class AddressesRemoteDataSourceImpl implements AddressesRemoteDataSource {
 
   @override
   Future<ApiResponse<AddressModel>> addAddress(AddressModel address) async {
-    print('🌐 AddressesRemoteDataSource.addAddress called');
-    print('   - Endpoint: ${ApiEndpoints.addresses}');
-    print('   - Address data: ${address.toCreateJson()}');
+    //print('🌐 AddressesRemoteDataSource.addAddress called');
+    //print('   - Endpoint: ${ApiEndpoints.addresses}');
+    //print('   - Address data: ${address.toCreateJson()}');
 
     try {
       final response = await dioService.postWithResponse(
@@ -98,10 +98,10 @@ class AddressesRemoteDataSourceImpl implements AddressesRemoteDataSource {
         },
       );
 
-      print('🌐 API Response received:');
-      print('   - Success: ${response.success}');
-      print('   - Message: ${response.message}');
-      print('   - Data: ${response.data?.toJson()}');
+      //print('🌐 API Response received:');
+      //print('   - Success: ${response.success}');
+      //print('   - Message: ${response.message}');
+      //print('   - Data: ${response.data?.toJson()}');
 
       return response;
     } on ApiException catch (e) {

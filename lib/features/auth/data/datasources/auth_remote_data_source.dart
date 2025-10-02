@@ -37,21 +37,21 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<ApiResponse<UserModel>> login(LoginRequestModel loginRequest) async {
-    print('🚀 Sending login request to API...');
-    print('📧 Email: ${loginRequest.email}');
-    print('🔑 FCM Token: ${loginRequest.fcmToken ?? "null"}');
-    print('📤 Login data: ${loginRequest.toJson()}');
-    
+    //print('🚀 Sending login request to API...');
+    //print('📧 Email: ${loginRequest.email}');
+    //print('🔑 FCM Token: ${loginRequest.fcmToken ?? "null"}');
+    //print('📤 Login data: ${loginRequest.toJson()}');
+
     final response = await dioService.postWithResponse<UserModel>(
       ApiEndpoints.login,
       data: loginRequest.toJson(),
       dataParser: (data) => UserModel.fromJson(data),
     );
-    
-    print('📥 Login response received');
-    print('✅ Login success: ${response.success}');
-    print('📝 Login message: ${response.message}');
-    
+
+    //print('📥 Login response received');
+    //print('✅ Login success: ${response.success}');
+    //print('📝 Login message: ${response.message}');
+
     return response;
   }
 
@@ -117,9 +117,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<Map<String, dynamic>> refreshToken() async {
     try {
-      final response = await dioService.post(
-        ApiEndpoints.refreshToken,
-      );
+      final response = await dioService.post(ApiEndpoints.refreshToken);
 
       if (response.statusCode == 200 && response.data['status'] == 200) {
         return response.data['data'] as Map<String, dynamic>;
@@ -149,7 +147,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<void>> forgetPassword(ForgetPasswordRequestModel request) async {
+  Future<ApiResponse<void>> forgetPassword(
+    ForgetPasswordRequestModel request,
+  ) async {
     return await dioService.postWithResponse<void>(
       ApiEndpoints.forgetPassword,
       data: request.toJson(),
@@ -165,7 +165,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<void>> changePassword(ChangePasswordRequestModel request) async {
+  Future<ApiResponse<void>> changePassword(
+    ChangePasswordRequestModel request,
+  ) async {
     return await dioService.postWithResponse<void>(
       ApiEndpoints.changePassword,
       data: request.toJson(),

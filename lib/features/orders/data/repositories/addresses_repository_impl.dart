@@ -31,52 +31,64 @@ class AddressesRepositoryImpl implements AddressesRepository {
 
   @override
   Future<Either<Failure, Address>> addAddress(Address address) async {
-    print('🏪 AddressesRepository.addAddress called');
-    print('   - Network connected: ${await networkInfo.isConnected}');
-    
+    //print('🏪 AddressesRepository.addAddress called');
+    //print('   - Network connected: ${await networkInfo.isConnected}');
+
     if (await networkInfo.isConnected) {
       final addressModel = AddressModel(
         id: address.id,
         address: address.address,
         addressType: address.addressType,
-        country: CountryModel(id: address.country.id, name: address.country.name),
+        country: CountryModel(
+          id: address.country.id,
+          name: address.country.name,
+        ),
         city: CityModel(id: address.city.id, name: address.city.name),
         region: RegionModel(id: address.region.id, name: address.region.name),
         shippingCost: address.shippingCost,
       );
-      
-      print('📡 Calling remote data source...');
+
+      //print('📡 Calling remote data source...');
       final response = await remoteDataSource.addAddress(addressModel);
-      print('📡 Remote data source response:');
-      print('   - Success: ${response.success}');
-      print('   - Message: ${response.message}');
-      print('   - Data: ${response.data != null ? 'Address ID ${response.data!.id}' : 'null'}');
-      
+      //print('📡 Remote data source response:');
+      //print('   - Success: ${response.success}');
+      //print('   - Message: ${response.message}');
+      //print('   - Data: ${response.data != null ? 'Address ID ${response.data!.id}' : 'null'}');
+
       if (response.success && response.data != null) {
         return Right(response.data!);
       } else {
         return Left(ServerFailure(message: response.message));
       }
     } else {
-      print('❌ No internet connection');
+      //print('❌ No internet connection');
       return Left(NetworkFailure(message: 'No internet connection'));
     }
   }
 
   @override
-  Future<Either<Failure, Address>> updateAddress(int addressId, Address address) async {
+  Future<Either<Failure, Address>> updateAddress(
+    int addressId,
+    Address address,
+  ) async {
     if (await networkInfo.isConnected) {
       final addressModel = AddressModel(
         id: addressId,
         address: address.address,
         addressType: address.addressType,
-        country: CountryModel(id: address.country.id, name: address.country.name),
+        country: CountryModel(
+          id: address.country.id,
+          name: address.country.name,
+        ),
         city: CityModel(id: address.city.id, name: address.city.name),
         region: RegionModel(id: address.region.id, name: address.region.name),
         shippingCost: address.shippingCost,
       );
-      
-      final response = await remoteDataSource.updateAddress(addressId, addressModel);
+
+      final response = await remoteDataSource.updateAddress(
+        addressId,
+        addressModel,
+      );
       if (response.success && response.data != null) {
         return Right(response.data!);
       } else {

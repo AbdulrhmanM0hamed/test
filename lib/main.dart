@@ -55,8 +55,8 @@ class MyApp extends StatelessWidget {
     // Get initial route based on app state
     final initialRoute = '/splash';
 
-    //print(' App: Initial route determined as: $initialRoute');
-    //print(
+    ////print(' App: Initial route determined as: $initialRoute');
+    ////print(
     // ' App: Onboarding completed: ${appStateService.isOnboardingCompleted()}',
     //);
 

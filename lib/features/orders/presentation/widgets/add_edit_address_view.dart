@@ -165,19 +165,19 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
 
               return BlocConsumer<AddressesCubit, AddressesState>(
                 listener: (context, state) {
-                  //  print('🎯 BlocConsumer listener received state: ${state.runtimeType}',);
-                  //print('🔍 BlocConsumer context: ${context.hashCode}');
-                  //print('🔍 Current widget mounted: $mounted');
+                  //  //print('🎯 BlocConsumer listener received state: ${state.runtimeType}',);
+                  ////print('🔍 BlocConsumer context: ${context.hashCode}');
+                  ////print('🔍 Current widget mounted: $mounted');
 
                   if (state is AddressesLoading) {
-                    //print('⏳ AddressesLoading state received');
+                    ////print('⏳ AddressesLoading state received');
                     setState(() {
                       _isLoading = true;
                     });
                   } else if (state is AddressAdded) {
-                    //print('✅ AddressAdded state received');
-                    //print('   - Address: ${state.address.address}');
-                    //print('   - Message: ${state.message}');
+                    ////print('✅ AddressAdded state received');
+                    ////print('   - Address: ${state.address.address}');
+                    ////print('   - Message: ${state.message}');
                     setState(() {
                       _isLoading = false;
                     });
@@ -553,11 +553,11 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
   }
 
   void _saveAddress() {
-    //print('🔧 _saveAddress called - Button pressed!');
+    ////print('🔧 _saveAddress called - Button pressed!');
 
     // Prevent multiple submissions
     if (_isLoading) {
-      //print('❌ Already loading, returning');
+      ////print('❌ Already loading, returning');
       return;
     }
 
@@ -566,29 +566,29 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
       listen: false,
     );
 
-    //print('🏙️ Selected city: ${locationService.selectedCity?.titleAr}');
-    //print('🏘️ Selected region: ${locationService.selectedRegion?.titleAr}');
-    //print('📝 Address text: ${_addressController.text}');
-    //print('🏠 Address type: $_selectedAddressType');
+    ////print('🏙️ Selected city: ${locationService.selectedCity?.titleAr}');
+    ////print('🏘️ Selected region: ${locationService.selectedRegion?.titleAr}');
+    ////print('📝 Address text: ${_addressController.text}');
+    ////print('🏠 Address type: $_selectedAddressType');
 
     // Check if address type is selected
     if (_selectedAddressType == null) {
-      //print('❌ No address type selected - showing snackbar');
+      ////print('❌ No address type selected - showing snackbar');
       try {
         CustomSnackbar.showError(
           context: context,
           message: AppLocalizations.of(context)!.pleaseSelectAddressType,
         );
-        //print('✅ Snackbar shown successfully');
+        ////print('✅ Snackbar shown successfully');
       } catch (e) {
-        //print('❌ Error showing snackbar: $e');
+        ////print('❌ Error showing snackbar: $e');
       }
       return;
     }
 
     // Check if address text is empty
     if (_addressController.text.trim().isEmpty) {
-      //print('❌ Address text is empty');
+      ////print('❌ Address text is empty');
       CustomSnackbar.showError(
         context: context,
         message: AppLocalizations.of(context)!.pleaseEnterDetailedAddress,
@@ -598,7 +598,7 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
 
     // Check if city is selected
     if (locationService.selectedCity == null) {
-      //print('❌ No city selected');
+      ////print('❌ No city selected');
       CustomSnackbar.showError(
         context: context,
         message: AppLocalizations.of(context)!.pleaseSelectCity,
@@ -608,7 +608,7 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
 
     // Check if region is selected
     if (locationService.selectedRegion == null) {
-      //print('❌ No region selected');
+      ////print('❌ No region selected');
       CustomSnackbar.showError(
         context: context,
         message: AppLocalizations.of(context)!.pleaseSelectRegion,
@@ -617,17 +617,17 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
     }
 
     if (_formKey.currentState!.validate()) {
-      //print('✅ Validation passed, creating address');
+      ////print('✅ Validation passed, creating address');
 
       setState(() {
         _isLoading = true;
       });
-      //print('🔄 Set loading to true');
+      ////print('🔄 Set loading to true');
 
       // Add timeout as fallback in case BlocListener doesn't work
       Timer(const Duration(seconds: 5), () {
         if (mounted && _isLoading) {
-          //print('⏰ Loading timeout - forcing stop');
+          ////print('⏰ Loading timeout - forcing stop');
           setState(() {
             _isLoading = false;
           });
@@ -658,17 +658,17 @@ class _AddEditAddressViewState extends State<AddEditAddressView> {
       );
 
       if (widget.address == null) {
-        //print('➕ Adding new address');
+        ////print('➕ Adding new address');
         context.read<AddressesCubit>().addAddress(address);
       } else {
-        //print('✏️ Updating existing address');
+        ////print('✏️ Updating existing address');
         context.read<AddressesCubit>().updateAddress(
           widget.address!.id,
           address,
         );
       }
     } else {
-      //print('❌ Form validation failed');
+      ////print('❌ Form validation failed');
       // The individual validations above should have already shown the error
     }
   }

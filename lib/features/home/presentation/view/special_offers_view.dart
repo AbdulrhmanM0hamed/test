@@ -48,12 +48,10 @@ class _SpecialOffersViewState extends State<SpecialOffersView> {
     final maxExtent = _scrollController.position.maxScrollExtent;
     final threshold = maxExtent - 200;
 
-    print(
-      '📜 Scroll: pixels=$pixels, maxExtent=$maxExtent, threshold=$threshold',
-    );
+    //print('📜 Scroll: pixels=$pixels, maxExtent=$maxExtent, threshold=$threshold',);
 
     if (pixels >= threshold) {
-      print('🎯 Scroll threshold reached, calling loadMore');
+      //print('🎯 Scroll threshold reached, calling loadMore');
       context.read<SpecialOfferProductsCubit>().loadMore();
     }
   }
@@ -72,9 +70,9 @@ class _SpecialOffersViewState extends State<SpecialOffersView> {
       try {
         existingWishlistCubit = context.read<WishlistCubit>();
         existingCartCubit = context.read<CartCubit>();
-        //debugprint('🔗 SpecialOffersView: Using existing cubits from parent context');
+        //debug//print('🔗 SpecialOffersView: Using existing cubits from parent context');
       } catch (e) {
-        //debugprint('⚠️ SpecialOffersView: No existing cubits found, creating new ones');
+        //debug//print('⚠️ SpecialOffersView: No existing cubits found, creating new ones');
       }
     }
 

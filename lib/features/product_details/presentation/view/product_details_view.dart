@@ -122,7 +122,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
       }
     } catch (error) {
       // Error handling is done in the HybridWishlistService
-      //print('Error toggling wishlist: $error');
+      ////print('Error toggling wishlist: $error');
     } finally {
       if (mounted) {
         setState(() {

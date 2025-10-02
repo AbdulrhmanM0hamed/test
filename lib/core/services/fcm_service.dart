@@ -30,7 +30,7 @@
 
 //       return null;
 //     } catch (e) {
-//       print('Error getting FCM token: $e');
+//       //print('Error getting FCM token: $e');
 //       return null;
 //     }
 //   }
@@ -40,11 +40,11 @@
 //     try {
 //       // Handle foreground messages
 //       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-//         print('Got a message whilst in the foreground!');
-//         print('Message data: ${message.data}');
+//         //print('Got a message whilst in the foreground!');
+//         //print('Message data: ${message.data}');
 
 //         if (message.notification != null) {
-//           print('Message also contained a notification: ${message.notification}');
+//           //print('Message also contained a notification: ${message.notification}');
 //         }
 //       });
 
@@ -53,11 +53,11 @@
 
 //       // Handle notification taps when app is in background
 //       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-//         print('A new onMessageOpenedApp event was published!');
+//         //print('A new onMessageOpenedApp event was published!');
 //         // Handle navigation based on notification data
 //       });
 //     } catch (e) {
-//       print('Error initializing FCM: $e');
+//       //print('Error initializing FCM: $e');
 //     }
 //   }
 
@@ -67,7 +67,7 @@
 //       await _firebaseMessaging.deleteToken();
 //       return await getFCMToken();
 //     } catch (e) {
-//       print('Error refreshing FCM token: $e');
+//       //print('Error refreshing FCM token: $e');
 //       return null;
 //     }
 //   }
@@ -76,5 +76,5 @@
 // /// Background message handler
 // @pragma('vm:entry-point')
 // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-//   print("Handling a background message: ${message.messageId}");
+//   //print("Handling a background message: ${message.messageId}");
 // }

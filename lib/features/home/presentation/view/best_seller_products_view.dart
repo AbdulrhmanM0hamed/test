@@ -48,9 +48,7 @@ class _BestSellerProductsViewState extends State<BestSellerProductsView> {
     final maxExtent = _scrollController.position.maxScrollExtent;
 
     if (pixels >= maxExtent - 200) {
-      print(
-        '🎯 BestSellerProducts: Scroll threshold reached, calling loadMore',
-      );
+      //print( '🎯 BestSellerProducts: Scroll threshold reached, calling loadMore',);
       context.read<BestSellerProductsCubit>().loadMore();
     }
   }

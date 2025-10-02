@@ -41,7 +41,7 @@ class _HomeProductCardState extends State<HomeProductCard>
 
     // Initialize wishlist state from product data
     _isInWishlist = widget.product.isFavorite;
-    //print('🔍 HomeProductCard: Product ${widget.product.id} - isFavorite: ${widget.product.isFavorite}, _isInWishlist: $_isInWishlist',);
+    ////print('🔍 HomeProductCard: Product ${widget.product.id} - isFavorite: ${widget.product.isFavorite}, _isInWishlist: $_isInWishlist',);
 
     _controller = AnimationController(
       vsync: this,
@@ -75,7 +75,7 @@ class _HomeProductCardState extends State<HomeProductCard>
       setState(() {
         _isInWishlist = isInWishlist;
       });
-      //print('🔄 HomeProductCard: Updated wishlist state for product ${widget.product.id}: $_isInWishlist');
+      ////print('🔄 HomeProductCard: Updated wishlist state for product ${widget.product.id}: $_isInWishlist');
     }
   }
 
@@ -96,7 +96,7 @@ class _HomeProductCardState extends State<HomeProductCard>
     Future.delayed(const Duration(milliseconds: 120), () {
       if (mounted) {
         setState(() => _isPressed = false);
-        //print('🔍 Home: Product tapped: ${widget.product.name}');
+        ////print('🔍 Home: Product tapped: ${widget.product.name}');
         // Let parent handle navigation
         widget.onTap?.call();
       }

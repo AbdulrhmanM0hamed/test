@@ -11,18 +11,18 @@ class AddAddressUseCase {
 
   @override
   Future<Either<Failure, Address>> call(Address address) async {
-    print('🎯 AddAddressUseCase called');
-    print('   - Address: ${address.address}');
-    print('   - City ID: ${address.city.id}');
-    print('   - Region ID: ${address.region.id}');
-    
+    //print('🎯 AddAddressUseCase called');
+    //print('   - Address: ${address.address}');
+    //print('   - City ID: ${address.city.id}');
+    //print('   - Region ID: ${address.region.id}');
+
     final result = await repository.addAddress(address);
-    
+
     result.fold(
       (failure) => print('❌ UseCase failed: ${failure.message}'),
       (newAddress) => print('✅ UseCase success: Address ID ${newAddress.id}'),
     );
-    
+
     return result;
   }
 }

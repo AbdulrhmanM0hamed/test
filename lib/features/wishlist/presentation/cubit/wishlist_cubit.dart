@@ -82,35 +82,35 @@ class WishlistCubit extends Cubit<WishlistState> {
 
   Future<void> removeAllFromWishlist() async {
     try {
-      //print('🗑️ WishlistCubit: Starting removeAllFromWishlist');
-      //print('🔍 UseCase instance: $_removeAllFromWishlistUseCase');
+      ////print('🗑️ WishlistCubit: Starting removeAllFromWishlist');
+      ////print('🔍 UseCase instance: $_removeAllFromWishlistUseCase');
 
       final result = await _removeAllFromWishlistUseCase();
 
-      //print('📋 WishlistCubit: UseCase result received');
+      ////print('📋 WishlistCubit: UseCase result received');
 
       result.fold(
         (failure) {
-          //print('❌ WishlistCubit: UseCase failed with: ${failure.message}');
+          ////print('❌ WishlistCubit: UseCase failed with: ${failure.message}');
           if (!isClosed) {
             emit(WishlistError(failure.message));
           }
         },
         (message) {
-          //print('✅ WishlistCubit: UseCase success with message: $message');
+          ////print('✅ WishlistCubit: UseCase success with message: $message');
           if (!isClosed) {
             emit(WishlistCleared(message));
-            //print('🔄 WishlistCubit: Refreshing wishlist after clear');
+            ////print('🔄 WishlistCubit: Refreshing wishlist after clear');
             // Refresh wishlist to show empty state
             getMyWishlist();
           }
         },
       );
     } catch (e) {
-      //print('💥 WishlistCubit: Unexpected error in removeAllFromWishlist');
-      //print('🔥 Error: $e');
-      //print('📍 Error type: ${e.runtimeType}');
-      //print('🔍 Stack trace: ${StackTrace.current}');
+      ////print('💥 WishlistCubit: Unexpected error in removeAllFromWishlist');
+      ////print('🔥 Error: $e');
+      ////print('📍 Error type: ${e.runtimeType}');
+      ////print('🔍 Stack trace: ${StackTrace.current}');
 
       if (!isClosed) {
         emit(WishlistError('failedToClearWishlist'));

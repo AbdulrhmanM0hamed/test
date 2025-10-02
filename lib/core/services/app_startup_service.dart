@@ -61,7 +61,7 @@ class AppStartupService extends ChangeNotifier {
   void _updateProgress(StartupProgress newProgress) {
     _progress = newProgress;
     notifyListeners();
-    //print('🚀 AppStartup: ${newProgress.phase.name} - ${newProgress.message} (${(newProgress.progress * 100).toInt()}%)');
+    ////print('🚀 AppStartup: ${newProgress.phase.name} - ${newProgress.message} (${(newProgress.progress * 100).toInt()}%)');
   }
 
   /// Start the app initialization process
@@ -97,7 +97,7 @@ class AppStartupService extends ChangeNotifier {
       final appStateService = DependencyInjection.getIt.get<AppStateService>();
       return appStateService.getInitialRoute();
     } catch (e) {
-      //print('❌ AppStartup: Initialization failed: $e');
+      ////print('❌ AppStartup: Initialization failed: $e');
       _updateProgress(
         StartupProgress(
           phase: StartupPhase.error,
@@ -152,7 +152,7 @@ class AppStartupService extends ChangeNotifier {
         await Future.delayed(const Duration(milliseconds: 1200));
       }
     } catch (e) {
-      //print('⚠️ AppStartup: Network check failed: $e');
+      ////print('⚠️ AppStartup: Network check failed: $e');
       _updateProgress(
         const StartupProgress(
           phase: StartupPhase.checkingNetwork,
@@ -189,7 +189,7 @@ class AppStartupService extends ChangeNotifier {
         ),
       );
     } catch (e) {
-      //print('⚠️ AppStartup: Essential services loading failed: $e');
+      ////print('⚠️ AppStartup: Essential services loading failed: $e');
       // Continue anyway
     }
   }
@@ -244,7 +244,7 @@ class AppStartupService extends ChangeNotifier {
         );
       }
     } catch (e) {
-      //print('⚠️ AppStartup: User data loading failed: $e');
+      ////print('⚠️ AppStartup: User data loading failed: $e');
       _updateProgress(
         const StartupProgress(
           phase: StartupPhase.loadingUserData,
@@ -264,9 +264,9 @@ class AppStartupService extends ChangeNotifier {
       // Initialize cart global service (but don't load data yet)
       await CartGlobalService.instance.initialize();
 
-      //print('✅ AppStartup: User services initialized (lazy loading enabled)');
+      ////print('✅ AppStartup: User services initialized (lazy loading enabled)');
     } catch (e) {
-      //print('⚠️ AppStartup: User services initialization failed: $e');
+      ////print('⚠️ AppStartup: User services initialization failed: $e');
       // Continue anyway
     }
   }

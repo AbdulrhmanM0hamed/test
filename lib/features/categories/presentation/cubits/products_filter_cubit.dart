@@ -141,12 +141,12 @@ class ProductsFilterCubit extends Cubit<ProductsFilterState> {
 
   /// تحميل المزيد من المنتجات
   void loadMore() {
-    print('📄 ProductsFilter: loadMore called - _isLoading=$_isLoading, hasReachedMax=${state.hasReachedMax}');
+    //print('📄 ProductsFilter: loadMore called - _isLoading=$_isLoading, hasReachedMax=${state.hasReachedMax}');
     if (_isLoading || state.hasReachedMax) {
-      print('⏹️ ProductsFilter: loadMore blocked');
+      //print('⏹️ ProductsFilter: loadMore blocked');
       return;
     }
-    print('➕ ProductsFilter: Loading next page ${_currentPage + 1}');
+    //print('➕ ProductsFilter: Loading next page ${_currentPage + 1}');
     _currentPage++;
     _loadProducts(loadMore: true);
   }
@@ -186,7 +186,7 @@ class ProductsFilterCubit extends Cubit<ProductsFilterState> {
         regionId = locationService.selectedRegion?.id;
       } catch (e) {
         // LocationService not initialized, continue without region filter
-        //print('⚠️ LocationService not available: $e');
+        ////print('⚠️ LocationService not available: $e');
       }
 
       // Create filter with current region ID and page
@@ -198,16 +198,16 @@ class ProductsFilterCubit extends Cubit<ProductsFilterState> {
 
       if (response.success && response.data != null) {
         final newProducts = response.data!.data;
-        
-        print('📦 ProductsFilter: Received ${newProducts.length} products for page $_currentPage');
-        
+
+        //print('📦 ProductsFilter: Received ${newProducts.length} products for page $_currentPage');
+
         if (_currentPage == 1) {
           _allProducts = newProducts;
         } else {
           _allProducts.addAll(newProducts);
         }
 
-        print('📋 ProductsFilter: Total products now: ${_allProducts.length}');
+        //print('📋 ProductsFilter: Total products now: ${_allProducts.length}');
 
         _isLoading = false;
 
@@ -222,8 +222,8 @@ class ProductsFilterCubit extends Cubit<ProductsFilterState> {
               error: null,
             ),
           );
-          
-          print('✅ ProductsFilter: State emitted - hasMore: ${!newProducts.isEmpty}');
+
+          //print('✅ ProductsFilter: State emitted - hasMore: ${!newProducts.isEmpty}');
         }
       } else {
         _isLoading = false;

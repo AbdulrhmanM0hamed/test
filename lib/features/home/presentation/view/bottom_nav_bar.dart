@@ -82,7 +82,7 @@ class _HomeViewState extends State<BottomNavBar> {
 
     // If login state changed, reinitialize screens
     if (_shouldReinitialize(isLoggedIn)) {
-      //debugprint( '🔄 BottomNavBar: Login state changed, reinitializing screens',);
+      //debug//print( '🔄 BottomNavBar: Login state changed, reinitializing screens',);
       // Add a small delay to ensure GlobalCubitService is properly initialized
       Future.delayed(const Duration(milliseconds: 100), () {
         if (mounted) {
@@ -107,10 +107,10 @@ class _HomeViewState extends State<BottomNavBar> {
     final isLoggedIn =
         appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
 
-    //debugprint('🔐 BottomNavBar: User logged in: $isLoggedIn');
+    //debug//print('🔐 BottomNavBar: User logged in: $isLoggedIn');
 
     if (isLoggedIn) {
-      //debugprint('🚀 BottomNavBar: Lazy loading - CartGlobalService will load when needed');
+      //debug//print('🚀 BottomNavBar: Lazy loading - CartGlobalService will load when needed');
       // Don't initialize immediately - let it load when user accesses cart/wishlist
     }
   }
@@ -127,7 +127,7 @@ class _HomeViewState extends State<BottomNavBar> {
       final currentLoginState =
           _appStateService.isLoggedIn() && !_appStateService.hasLoggedOut();
       if (currentLoginState != _lastLoginState) {
-        //debugprint('🔄 BottomNavBar: Login state changed from $_lastLoginState to $currentLoginState');
+        //debug//print('🔄 BottomNavBar: Login state changed from $_lastLoginState to $currentLoginState');
         _lastLoginState = currentLoginState;
 
         // Reinitialize screens with fresh cubit instances
@@ -155,11 +155,11 @@ class _HomeViewState extends State<BottomNavBar> {
       // Always get fresh cubit references from GlobalCubitService
       _cartCubit = GlobalCubitService.instance.cartCubit;
       _wishlistCubit = GlobalCubitService.instance.wishlistCubit;
-      //debugprint('🌍 BottomNavBar: Using global cubit instances (lazy loading enabled)');
+      //debug//print('🌍 BottomNavBar: Using global cubit instances (lazy loading enabled)');
     } else {
       // Clear global cubits if user logged out
       if (GlobalCubitService.instance.cartCubit != null) {
-        //debugprint('🧹 BottomNavBar: Clearing global cubits for logged out user',);
+        //debug//print('🧹 BottomNavBar: Clearing global cubits for logged out user',);
         GlobalCubitService.instance.reset();
       }
       _cartCubit = null;
@@ -201,15 +201,15 @@ class _HomeViewState extends State<BottomNavBar> {
   }
 
   void _forceRefreshAfterLogin() {
-    //debugprint('🔄 BottomNavBar: Force refreshing after login...');
+    //debug//print('🔄 BottomNavBar: Force refreshing after login...');
     if (mounted) {
       // Force reinitialize screens with fresh cubit instances
       _initializeScreens();
       // Force a complete rebuild
       setState(() {});
-      //debugprint('✅ BottomNavBar: Force refresh completed');
+      //debug//print('✅ BottomNavBar: Force refresh completed');
     } else {
-      //debugprint('⚠️ BottomNavBar: Widget not mounted, skipping refresh');
+      //debug//print('⚠️ BottomNavBar: Widget not mounted, skipping refresh');
     }
   }
 
@@ -430,7 +430,7 @@ class _HomeViewState extends State<BottomNavBar> {
                       if (state is WishlistLoaded) {
                         itemCount = state.wishlistResponse.count;
                       }
-                      //debugprint('❤️ BottomNavBar Badge: Wishlist state: ${state.runtimeType}, count: $itemCount');
+                      //debug//print('❤️ BottomNavBar Badge: Wishlist state: ${state.runtimeType}, count: $itemCount');
                       if (itemCount > 0) {
                         return _buildBadge(itemCount);
                       }
@@ -512,7 +512,7 @@ class _HomeViewState extends State<BottomNavBar> {
                       if (state is CartLoaded) {
                         itemCount = state.cart.totalQuantity;
                       }
-                      //debugprint('🛒 BottomNavBar Badge: Cart state: ${state.runtimeType}, count: $itemCount');
+                      //debug//print('🛒 BottomNavBar Badge: Cart state: ${state.runtimeType}, count: $itemCount');
                       if (itemCount > 0) {
                         return _buildBadge(itemCount);
                       }

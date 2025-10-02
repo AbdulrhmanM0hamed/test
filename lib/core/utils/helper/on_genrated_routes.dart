@@ -40,36 +40,38 @@ import '../../../features/product_details/presentation/view/product_details_view
 import '../../../features/product_details/presentation/cubit/product_details_cubit.dart';
 
 Route<dynamic> onGenratedRoutes(RouteSettings settings) {
-  ////print('🔍 Navigation: Attempting to navigate to route: ${settings.name}');
+  //////print('🔍 Navigation: Attempting to navigate to route: ${settings.name}');
 
   switch (settings.name) {
     case SplashView.routeName:
-      ////print('🔍 Navigation: Navigating to SplashView');
+      //////print('🔍 Navigation: Navigating to SplashView');
       return MaterialPageRoute(builder: (context) => const SplashView());
 
     case OnboardingView.routeName:
-      ////print('🔍 Navigation: Navigating to OnboardingView');
+      //////print('🔍 Navigation: Navigating to OnboardingView');
       return MaterialPageRoute(builder: (context) => const OnboardingView());
 
     case LoginView.routeName:
-      ////print('🔍 Navigation: Navigating to LoginView');
+      //////print('🔍 Navigation: Navigating to LoginView');
       return MaterialPageRoute(builder: (context) => const LoginView());
 
     case RegisterView.routeName:
-      ////print('🔍 Navigation: Navigating to RegisterView');
+      //////print('🔍 Navigation: Navigating to RegisterView');
       return MaterialPageRoute(builder: (context) => const RegisterView());
 
     case TermsAndConditionsView.routeName:
-      ////print('🔍 Navigation: Navigating to TermsAndConditionsView');
-      return MaterialPageRoute(builder: (context) => const TermsAndConditionsView());
+      //////print('🔍 Navigation: Navigating to TermsAndConditionsView');
+      return MaterialPageRoute(
+        builder: (context) => const TermsAndConditionsView(),
+      );
 
     case BottomNavBar.routeName:
-      ////print('🔍 Navigation: Navigating to BottomNavBar (Home)');
+      //////print('🔍 Navigation: Navigating to BottomNavBar (Home)');
       return MaterialPageRoute(builder: (context) => const BottomNavBar());
 
     case ProductDetailsView.routeName:
       final productId = settings.arguments as int;
-      ////print('🔍 Route: Navigating to ProductDetails with ID: $productId');
+      //////print('🔍 Route: Navigating to ProductDetails with ID: $productId');
       return MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (context) {
@@ -81,7 +83,7 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
         ),
       );
     case ForgetPasswordViewNew.routeName:
-      ////print('🔍 Navigation: Navigating to ForgotPasswordView');
+      //////print('🔍 Navigation: Navigating to ForgotPasswordView');
       return MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (context) => DependencyInjection.getIt<ForgetPasswordCubit>(),
@@ -90,7 +92,7 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       );
 
     case WishlistView.routeName:
-      ////print('🔍 Navigation: Navigating to WishlistView');
+      //////print('🔍 Navigation: Navigating to WishlistView');
       return MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (context) {
@@ -103,7 +105,7 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       );
 
     case '/all-categories':
-      ////print('🔍 Navigation: Navigating to AllCategoriesView');
+      //////print('🔍 Navigation: Navigating to AllCategoriesView');
       return MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (context) {
@@ -116,21 +118,21 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       );
 
     case '/categories':
-      ////print('🔍 Navigation: Navigating to CategoriesView');
+      //////print('🔍 Navigation: Navigating to CategoriesView');
       return MaterialPageRoute(
         builder: (context) => const CategoriesView(),
         settings: settings, // Pass arguments through settings
       );
 
     case '/categories-with-back':
-      ////print('🔍 Navigation: Navigating to CategoriesView with back button');
+      //////print('🔍 Navigation: Navigating to CategoriesView with back button');
       return MaterialPageRoute(
         builder: (context) => const CategoriesView(showBackButton: true),
         settings: settings, // Pass arguments through settings
       );
 
     case '/latest-products':
-      ////print('🔍 Navigation: Navigating to LatestProductsView');
+      //////print('🔍 Navigation: Navigating to LatestProductsView');
       return MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (context) {
@@ -143,7 +145,7 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       );
 
     case '/featured-products':
-      ////print('🔍 Navigation: Navigating to FeaturedProductsView');
+      //////print('🔍 Navigation: Navigating to FeaturedProductsView');
       return MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (context) {
@@ -156,7 +158,7 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       );
 
     case '/best-seller-products':
-      ////print('🔍 Navigation: Navigating to BestSellerProductsView');
+      //////print('🔍 Navigation: Navigating to BestSellerProductsView');
       return MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (context) {
@@ -169,7 +171,7 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       );
 
     case '/special-offers':
-      ////print('🔍 Navigation: Navigating to SpecialOffersView');
+      //////print('🔍 Navigation: Navigating to SpecialOffersView');
       return MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (context) {
@@ -183,7 +185,7 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       );
 
     case CheckoutView.routeName:
-      ////print('🔍 Navigation: Navigating to CheckoutView');
+      //////print('🔍 Navigation: Navigating to CheckoutView');
       return MaterialPageRoute(
         builder: (context) => MultiBlocProvider(
           providers: [
@@ -216,19 +218,19 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       );
 
     case '/address-management':
-      ////print('🔍 Navigation: Navigating to AddressManagementView');
+      //////print('🔍 Navigation: Navigating to AddressManagementView');
       return MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (context) {
-            //print('🔧 Creating AddressesCubit for AddressManagementView');
+            ////print('🔧 Creating AddressesCubit for AddressManagementView');
             final cubit = DependencyInjection.getIt<AddressesCubit>();
-            //print('✅ AddressesCubit created: ${cubit.runtimeType}');
+            ////print('✅ AddressesCubit created: ${cubit.runtimeType}');
             cubit.getAddresses();
             return cubit;
           },
           child: Builder(
             builder: (context) {
-              //print('🏗️ Building AddressManagementView with context');
+              ////print('🏗️ Building AddressManagementView with context');
               return const AddressManagementView();
             },
           ),
@@ -236,7 +238,7 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       );
 
     case '/add-edit-address':
-      ////print('🔍 Navigation: Navigating to AddEditAddressView');
+      //////print('🔍 Navigation: Navigating to AddEditAddressView');
       final address = settings.arguments as Address?;
       return MaterialPageRoute(
         builder: (context) => BlocProvider(
@@ -252,7 +254,7 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       );
 
     case MyOrdersView.routeName:
-      ////print('🔍 Navigation: Navigating to MyOrdersView');
+      //////print('🔍 Navigation: Navigating to MyOrdersView');
       return MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (context) {
@@ -265,7 +267,7 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       );
 
     case OrderDetailsView.routeName:
-      ////print('🔍 Navigation: Navigating to OrderDetailsView');
+      //////print('🔍 Navigation: Navigating to OrderDetailsView');
       final orderId = settings.arguments as int;
       return MaterialPageRoute(
         builder: (context) => BlocProvider(
@@ -279,11 +281,11 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       );
 
     case '/notifications':
-      ////print('🔍 Navigation: Navigating to NotificationsView');
+      //////print('🔍 Navigation: Navigating to NotificationsView');
       return MaterialPageRoute(builder: (context) => const NotificationsView());
 
     case '/notification-details':
-      ////print('🔍 Navigation: Navigating to NotificationDetailsView');
+      //////print('🔍 Navigation: Navigating to NotificationDetailsView');
       final notificationId = settings.arguments as int;
       return MaterialPageRoute(
         builder: (context) =>
@@ -291,7 +293,7 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       );
 
     default:
-      ////print('🔍 Navigation: Unknown route ${settings.name}, defaulting to OnboardingView');
+      //////print('🔍 Navigation: Unknown route ${settings.name}, defaulting to OnboardingView');
       return MaterialPageRoute(builder: (context) => const OnboardingView());
   }
 }

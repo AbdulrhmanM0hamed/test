@@ -41,10 +41,10 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthLoading());
 
       // Get FCM token
-      print('🔥 Getting FCM token for login...');
+      //print('🔥 Getting FCM token for login...');
       final fcmToken = await FirebaseNotificationService.instance
           .getCurrentToken();
-      print('🎯 FCM Token obtained: ${fcmToken ?? "null"}');
+      //print('🎯 FCM Token obtained: ${fcmToken ?? "null"}');
 
       final loginRequest = LoginRequest(
         email: email,
@@ -52,15 +52,15 @@ class AuthCubit extends Cubit<AuthState> {
         fcmToken: fcmToken,
       );
 
-      print('📤 Sending login request to use case...');
+      //print('📤 Sending login request to use case...');
       final response = await loginUseCase(loginRequest);
-      print('📥 Login use case response received');
-      print('✅ Response success: ${response.success}');
+      //print('📥 Login use case response received');
+      //print('✅ Response success: ${response.success}');
 
       if (response.success && response.data != null) {
         final user = response.data!;
-        print('👤 User logged in successfully: ${user.email}');
-        print('🎯 User ID: ${user.id}');
+        //print('👤 User logged in successfully: ${user.email}');
+        //print('🎯 User ID: ${user.id}');
 
         // Store token and user data with expiration
         await tokenStorageService.saveTokens(
@@ -87,7 +87,7 @@ class AuthCubit extends Cubit<AuthState> {
         await AuthStateService.instance.login();
 
         // Subscribe to user-specific notification topics
-        print('📢 Subscribing to notification topics for user: ${user.id}');
+        //print('📢 Subscribing to notification topics for user: ${user.id}');
         try {
           await FirebaseNotificationService.instance.subscribeToTopic(
             'user_${user.id}',
@@ -98,9 +98,9 @@ class AuthCubit extends Cubit<AuthState> {
           await FirebaseNotificationService.instance.subscribeToTopic(
             'order_notifications',
           );
-          print('✅ Successfully subscribed to notification topics');
+          //print('✅ Successfully subscribed to notification topics');
         } catch (e) {
-          print('❌ Error subscribing to notification topics: $e');
+          //print('❌ Error subscribing to notification topics: $e');
         }
 
         emit(AuthSuccess(user, message: response.message));
@@ -109,7 +109,7 @@ class AuthCubit extends Cubit<AuthState> {
         try {
           await OfflineSyncService.instance.syncOfflineDataToServer();
         } catch (e) {
-          //print('🔄 Failed to sync offline data after login: $e');
+          ////print('🔄 Failed to sync offline data after login: $e');
           // Don't fail the login process if sync fails
         }
       } else {
@@ -126,25 +126,25 @@ class AuthCubit extends Cubit<AuthState> {
         }
       }
     } catch (e) {
-      //print('🔍 LOGIN EXCEPTION: $e');
-      //print('🔍 EXCEPTION TYPE: ${e.runtimeType}');
+      ////print('🔍 LOGIN EXCEPTION: $e');
+      ////print('🔍 EXCEPTION TYPE: ${e.runtimeType}');
 
       final errorMessage = ErrorHandler.extractErrorMessage(e);
-      //print('🔍 EXTRACTED ERROR MESSAGE: $errorMessage');
+      ////print('🔍 EXTRACTED ERROR MESSAGE: $errorMessage');
 
       // Check if it's an ApiException or DioException with 401 status and Not Verified message
       if (e is DioException && e.response?.statusCode == 401) {
-        //print('🔍 DIO EXCEPTION 401 DETECTED');
+        ////print('🔍 DIO EXCEPTION 401 DETECTED');
         final responseData = e.response?.data;
-        //print('🔍 RESPONSE DATA: $responseData');
+        ////print('🔍 RESPONSE DATA: $responseData');
 
         if (responseData is Map<String, dynamic>) {
           final message = responseData['message'] ?? '';
-          //print('🔍 MESSAGE FROM RESPONSE: $message');
+          ////print('🔍 MESSAGE FROM RESPONSE: $message');
 
           if (message == 'Not Verified' ||
               message.toLowerCase().contains('not verified')) {
-            //print('🔍 EMITTING EmailNotVerified STATE');
+            ////print('🔍 EMITTING EmailNotVerified STATE');
             emit(EmailNotVerified(email, message));
             return;
           }
@@ -154,10 +154,10 @@ class AuthCubit extends Cubit<AuthState> {
       // Check if error message indicates Not Verified (for ApiException or other types)
       if (errorMessage == 'Not Verified' ||
           errorMessage.toLowerCase().contains('not verified')) {
-        //print('🔍 EMITTING EmailNotVerified FROM MESSAGE CHECK');
+        ////print('🔍 EMITTING EmailNotVerified FROM MESSAGE CHECK');
         emit(EmailNotVerified(email, errorMessage));
       } else {
-        //print('🔍 EMITTING AuthError');
+        ////print('🔍 EMITTING AuthError');
         emit(AuthError(errorMessage));
       }
     }
@@ -171,14 +171,14 @@ class AuthCubit extends Cubit<AuthState> {
 
       // Get current user ID before clearing tokens
       final userId = tokenStorageService.userId;
-      print('🚪 Logging out user: $userId');
+      //print('🚪 Logging out user: $userId');
 
       // Call logout API
       final response = await logoutUseCase();
 
       // Unsubscribe from user-specific notification topics
       if (userId != null) {
-        print('📢 Unsubscribing from notification topics for user: $userId');
+        //print('📢 Unsubscribing from notification topics for user: $userId');
         try {
           await FirebaseNotificationService.instance.unsubscribeFromTopic(
             'user_$userId',
@@ -186,9 +186,9 @@ class AuthCubit extends Cubit<AuthState> {
           await FirebaseNotificationService.instance.unsubscribeFromTopic(
             'order_notifications',
           );
-          print('✅ Successfully unsubscribed from notification topics');
+          //print('✅ Successfully unsubscribed from notification topics');
         } catch (e) {
-          print('❌ Error unsubscribing from notification topics: $e');
+          //print('❌ Error unsubscribing from notification topics: $e');
         }
       }
 
@@ -242,19 +242,19 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> resendVerificationEmail(String email) async {
-    //print('🔍 RESENDING VERIFICATION EMAIL TO: $email');
+    ////print('🔍 RESENDING VERIFICATION EMAIL TO: $email');
     emit(AuthLoading());
 
     try {
       final response = await resendVerificationEmailUseCase(email);
-      //print('🔍 RESEND EMAIL RESPONSE: $response');
+      ////print('🔍 RESEND EMAIL RESPONSE: $response');
       emit(
         VerificationEmailSentSuccess(
           response['message'] ?? 'Verification email sent successfully',
         ),
       );
     } catch (e) {
-      //print('🔍 RESEND EMAIL ERROR: $e');
+      ////print('🔍 RESEND EMAIL ERROR: $e');
       final errorMessage = ErrorHandler.extractErrorMessage(e);
       emit(AuthError(errorMessage));
     }

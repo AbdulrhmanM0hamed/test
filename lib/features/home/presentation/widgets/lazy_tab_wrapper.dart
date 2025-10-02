@@ -77,7 +77,7 @@ class _LazyTabWrapperState extends State<LazyTabWrapper> {
         try {
           await CartGlobalService.instance.initialize();
         } catch (e) {
-          //print('⚠️ LazyTabWrapper: Cart service initialization failed: $e');
+          ////print('⚠️ LazyTabWrapper: Cart service initialization failed: $e');
         }
       }
 
@@ -108,7 +108,7 @@ class _LazyTabWrapperState extends State<LazyTabWrapper> {
         _isLoading = false;
       });
     } catch (e) {
-      //print('⚠️ LazyTabWrapper: Initialization failed: $e');
+      ////print('⚠️ LazyTabWrapper: Initialization failed: $e');
       // Continue anyway - show the tab even if data loading failed
       setState(() {
         _isInitialized = true;

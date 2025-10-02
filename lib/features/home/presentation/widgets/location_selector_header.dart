@@ -74,17 +74,15 @@ class LocationSelectorHeader extends StatelessWidget {
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
 
     // Debug logging
-    print(
-      '🌍 LocationSelector - Current locale: ${Localizations.localeOf(context).languageCode}',
-    );
-    print('📍 LocationSelector - Using isArabic: $isArabic');
+    //print('🌍 LocationSelector - Current locale: ${Localizations.localeOf(context).languageCode}',);
+    //print('📍 LocationSelector - Using isArabic: $isArabic');
 
     if (locationService.hasCompleteLocation) {
       // Always use context-based locale, never fallback to service
-      print('🔍 Debug - selectedRegion: ${locationService.selectedRegion}');
-      print('🔍 Debug - selectedCity: ${locationService.selectedCity}');
-      print('🔍 Debug - regions.length: ${locationService.regions.length}');
-      print('🔍 Debug - cities.length: ${locationService.cities.length}');
+      //print('🔍 Debug - selectedRegion: ${locationService.selectedRegion}');
+      //print('🔍 Debug - selectedCity: ${locationService.selectedCity}');
+      //print('🔍 Debug - regions.length: ${locationService.regions.length}');
+      //print('🔍 Debug - cities.length: ${locationService.cities.length}');
       
       final region = locationService.selectedRegion?.getLocalizedTitle(isArabic) ??
           (locationService.regions.isNotEmpty
@@ -95,20 +93,20 @@ class LocationSelectorHeader extends StatelessWidget {
               ? locationService.cities.first.getLocalizedTitle(isArabic)
               : null);
 
-      print('🔍 Debug - region result: $region (isArabic: $isArabic)');
-      print('🔍 Debug - city result: $city (isArabic: $isArabic)');
+      //print('🔍 Debug - region result: $region (isArabic: $isArabic)');
+      //print('🔍 Debug - city result: $city (isArabic: $isArabic)');
       
       if (locationService.selectedRegion != null) {
-        print('🔍 Debug - selectedRegion.titleEn: ${locationService.selectedRegion!.titleEn}');
-        print('🔍 Debug - selectedRegion.titleAr: ${locationService.selectedRegion!.titleAr}');
+        //print('🔍 Debug - selectedRegion.titleEn: ${locationService.selectedRegion!.titleEn}');
+        //print('🔍 Debug - selectedRegion.titleAr: ${locationService.selectedRegion!.titleAr}');
       }
       if (locationService.selectedCity != null) {
-        print('🔍 Debug - selectedCity.titleEn: ${locationService.selectedCity!.titleEn}');
-        print('🔍 Debug - selectedCity.titleAr: ${locationService.selectedCity!.titleAr}');
+        //print('🔍 Debug - selectedCity.titleEn: ${locationService.selectedCity!.titleEn}');
+        //print('🔍 Debug - selectedCity.titleAr: ${locationService.selectedCity!.titleAr}');
       }
 
       final finalText = '${region ?? (isArabic ? 'المنطقة' : 'Region')}، ${city ?? (isArabic ? 'المدينة' : 'City')}';
-      print('🏙️ LocationSelector - Final text: $finalText');
+      //print('🏙️ LocationSelector - Final text: $finalText');
       return finalText;
     } else if (locationService.hasSelectedCity) {
       final cityText = locationService.selectedCity != null
@@ -116,7 +114,7 @@ class LocationSelectorHeader extends StatelessWidget {
           : (locationService.cities.isNotEmpty
                 ? locationService.cities.first.getLocalizedTitle(isArabic)
                 : null);
-      print('🏙️ LocationSelector - City only: $cityText');
+      //print('🏙️ LocationSelector - City only: $cityText');
       return cityText ?? (isArabic ? 'اختر المدينة' : 'Select City');
     } else {
       // Show first available city and region from API
@@ -130,16 +128,16 @@ class LocationSelectorHeader extends StatelessWidget {
                              : null);
 
       if (cityTitle != null && regionTitle != null) {
-        print('🏙️ LocationSelector - API fallback: $regionTitle، $cityTitle');
+        //print('🏙️ LocationSelector - API fallback: $regionTitle، $cityTitle');
         return '$regionTitle، $cityTitle';
       } else if (cityTitle != null) {
-        print('🏙️ LocationSelector - API city only: $cityTitle');
+        //print('🏙️ LocationSelector - API city only: $cityTitle');
         return cityTitle;
       } else {
         final fallbackText =
             AppLocalizations.of(context)?.selectLocation ??
             (isArabic ? 'اختر الموقع' : 'Select Location');
-        print('🏙️ LocationSelector - Fallback: $fallbackText');
+        //print('🏙️ LocationSelector - Fallback: $fallbackText');
         return fallbackText;
       }
     }

@@ -39,34 +39,34 @@ class AddressesCubit extends Cubit<AddressesState> {
   }
 
   Future<void> addAddress(Address address) async {
-    print('🏗️ AddressesCubit.addAddress called');
-    print('   - Address: ${address.address}');
-    print('   - Type: ${address.addressType}');
-    print('   - City: ${address.city.name}');
-    print('   - Region: ${address.region.name}');
+    //print('🏗️ AddressesCubit.addAddress called');
+    //print('   - Address: ${address.address}');
+    //print('   - Type: ${address.addressType}');
+    //print('   - City: ${address.city.name}');
+    //print('   - Region: ${address.region.name}');
 
     if (isClosed) return;
     emit(AddressesLoading());
-    print('⏳ Emitted AddressesLoading');
+    //print('⏳ Emitted AddressesLoading');
 
     final result = await addAddressUseCase(address);
-    print('📡 UseCase result received');
+    //print('📡 UseCase result received');
 
     if (isClosed) return;
     result.fold(
       (failure) {
-        print('❌ AddAddress failed: ${failure.message}');
+        //print('❌ AddAddress failed: ${failure.message}');
         if (!isClosed) emit(AddressesError(failure.message));
       },
       (newAddress) {
-        print('✅ AddAddress success');
-        print('   - New address ID: ${newAddress.id}');
+        //print('✅ AddAddress success');
+        //print('   - New address ID: ${newAddress.id}');
         if (!isClosed) {
-          print('🎯 About to emit AddressAdded');
-          print('🔍 Cubit state before emit: ${state.runtimeType}');
+          //print('🎯 About to emit AddressAdded');
+          //print('🔍 Cubit state before emit: ${state.runtimeType}');
           emit(AddressAdded(newAddress));
-          print('🎯 Emitted AddressAdded');
-          print('🔍 Cubit state after emit: ${state.runtimeType}');
+          //print('🎯 Emitted AddressAdded');
+          //print('🔍 Cubit state after emit: ${state.runtimeType}');
           // Don't call getAddresses here - let the UI handle the refresh
           // getAddresses();
         }

@@ -55,7 +55,7 @@ class SectionHeader extends StatelessWidget {
                 try {
                   onSeeAll?.call();
                 } catch (e) {
-                  debugPrint('Navigation error: $e');
+                  //print('Navigation error: $e');
                 }
               },
               child: Container(

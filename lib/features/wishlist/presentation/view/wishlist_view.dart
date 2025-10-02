@@ -303,7 +303,7 @@ class _WishlistViewState extends State<WishlistView>
                   item: item,
                   onTap: () {
                     // TODO: Navigate to product details
-                    ////print('Navigate to product: ${item.product.id}');
+                    //////print('Navigate to product: ${item.product.id}');
                   },
                 );
               },

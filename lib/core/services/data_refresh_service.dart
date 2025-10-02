@@ -28,7 +28,7 @@ class DataRefreshService extends ChangeNotifier {
   /// Called when language changes
   void _onLanguageChanged() {
     final currentLanguage = _languageService.currentLocale.languageCode;
-    
+
     // Only refresh if language actually changed and not during initial load
     if (_lastLanguage != null &&
         _lastLanguage != currentLanguage &&
@@ -48,7 +48,7 @@ class DataRefreshService extends ChangeNotifier {
       _isRefreshing = true;
 
       if (kDebugMode) {
-        //print('DataRefreshService: Triggering refresh for ${_refreshCallbacks.length} callbacks',);
+        ////print('DataRefreshService: Triggering refresh for ${_refreshCallbacks.length} callbacks',);
       }
 
       // Add small delay to ensure UI has updated
@@ -60,11 +60,11 @@ class DataRefreshService extends ChangeNotifier {
           callback();
         } catch (e) {
           if (kDebugMode) {
-            //print('DataRefreshService: Error in refresh callback: $e');
+            ////print('DataRefreshService: Error in refresh callback: $e');
           }
         }
       }
-      
+
       // Additional delay to ensure all data loads complete
       await Future.delayed(const Duration(milliseconds: 500));
     } finally {

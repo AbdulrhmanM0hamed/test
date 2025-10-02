@@ -349,7 +349,7 @@ class _OfflineCartItemCardState extends State<OfflineCartItemCard>
   @override
   Widget build(BuildContext context) {
     try {
-      //print('Building OfflineCartItemCard with data: ${widget.cartItem}');
+      ////print('Building OfflineCartItemCard with data: ${widget.cartItem}');
 
       // Extract product data safely
       final productData =
@@ -372,7 +372,7 @@ class _OfflineCartItemCardState extends State<OfflineCartItemCard>
       final star =
           double.tryParse(productData['star']?.toString() ?? '0') ?? 0.0;
 
-      //print('Parsed data - Name: $productName, Price: $realPrice, Quantity: $_localQuantity');
+      ////print('Parsed data - Name: $productName, Price: $realPrice, Quantity: $_localQuantity');
 
       return SlideTransition(
         position: _slideAnimation,

@@ -103,9 +103,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                 final maxExtent = _scrollController.position.maxScrollExtent;
                 final threshold = maxExtent - 200;
 
-                print(
-                  '🔄 Scroll: pixels=$pixels, maxExtent=$maxExtent, threshold=$threshold',
-                );
+                //print('🔄 Scroll: pixels=$pixels, maxExtent=$maxExtent, threshold=$threshold',);
 
                 if (pixels >= threshold) {
                   context.read<ProductsFilterCubit>().loadMore();
@@ -301,7 +299,7 @@ class _CategoriesViewState extends State<CategoriesView> {
                           isLoadingMore: state.isLoadingMore,
                           scrollController: _scrollController,
                           onProductTap: (product) {
-                            //print('🔍 Categories: Product tapped: ${product.name}');
+                            ////print('🔍 Categories: Product tapped: ${product.name}');
                             Navigator.pushNamed(
                               context,
                               '/product-details',

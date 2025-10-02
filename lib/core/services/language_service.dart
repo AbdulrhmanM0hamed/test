@@ -16,22 +16,22 @@ class LanguageService extends ChangeNotifier {
 
   Future<void> _loadLanguage() async {
     try {
-      print('🔄 LanguageService - Loading language from SharedPreferences...');
+      //print('🔄 LanguageService - Loading language from SharedPreferences...');
       final prefs = await SharedPreferences.getInstance();
       final languageCode = prefs.getString(_languageKey) ?? 'ar';
-      print('📱 LanguageService - Loaded language: $languageCode');
+      //print('📱 LanguageService - Loaded language: $languageCode');
       _currentLocale = Locale(languageCode);
-      print('🌍 LanguageService - Set currentLocale to: $_currentLocale');
+      //print('🌍 LanguageService - Set currentLocale to: $_currentLocale');
       notifyListeners();
-      print('🔔 LanguageService - Notified listeners after loading');
+      //print('🔔 LanguageService - Notified listeners after loading');
 
       // Additional notification after delay to ensure all services update
       Future.delayed(const Duration(milliseconds: 150), () {
-        print('🔔 LanguageService - Secondary notification after loading');
+        //print('🔔 LanguageService - Secondary notification after loading');
         notifyListeners();
       });
     } catch (e) {
-      print('❌ LanguageService - Error loading language: $e');
+      //print('❌ LanguageService - Error loading language: $e');
       // Fallback to Arabic if loading fails
       _currentLocale = const Locale('ar');
       notifyListeners();

@@ -141,7 +141,7 @@ class HomePageBody extends StatelessWidget {
                               },
                               onFavoritePressed: (product) {
                                 // TODO: Toggle favorite
-                                //print('Favorite pressed: ${product.name}');
+                                ////print('Favorite pressed: ${product.name}');
                               },
                               onSeeAll: () {
                                 Navigator.pushNamed(context, '/special-offers');
@@ -160,7 +160,7 @@ class HomePageBody extends StatelessWidget {
                             //   },
                             //   onFavoritePressed: (product) {
                             //     // TODO: Toggle favorite
-                            //     //print('Favorite pressed: ${product.name}');
+                            //     ////print('Favorite pressed: ${product.name}');
                             //   },
                             //   onSeeAll: () {
                             //     Navigator.pushNamed(
@@ -182,7 +182,7 @@ class HomePageBody extends StatelessWidget {
                               },
                               onFavoritePressed: (product) {
                                 // TODO: Toggle favorite
-                                //print('Favorite pressed: ${product.name}');
+                                ////print('Favorite pressed: ${product.name}');
                               },
                               onSeeAll: () {
                                 Navigator.pushNamed(
@@ -204,7 +204,7 @@ class HomePageBody extends StatelessWidget {
                               },
                               onFavoritePressed: (product) {
                                 // TODO: Toggle favorite
-                                //print('Favorite pressed: ${product.name}');
+                                ////print('Favorite pressed: ${product.name}');
                               },
                               onSeeAll: () {
                                 Navigator.pushNamed(

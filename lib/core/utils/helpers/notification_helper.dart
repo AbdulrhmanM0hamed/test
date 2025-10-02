@@ -12,20 +12,28 @@ class NotificationHelper {
   Future<void> subscribeToUserTopics(String userId) async {
     try {
       // Subscribe to user-specific notifications
-      await FirebaseNotificationService.instance.subscribeToTopic('user_$userId');
-      
+      await FirebaseNotificationService.instance.subscribeToTopic(
+        'user_$userId',
+      );
+
       // Subscribe to general notifications
-      await FirebaseNotificationService.instance.subscribeToTopic('general_notifications');
-      
+      await FirebaseNotificationService.instance.subscribeToTopic(
+        'general_notifications',
+      );
+
       // Subscribe to order notifications
-      await FirebaseNotificationService.instance.subscribeToTopic('order_notifications');
-      
+      await FirebaseNotificationService.instance.subscribeToTopic(
+        'order_notifications',
+      );
+
       // Subscribe to promotion notifications
-      await FirebaseNotificationService.instance.subscribeToTopic('promotion_notifications');
-      
-      print('✅ Subscribed to all user topics for user: $userId');
+      await FirebaseNotificationService.instance.subscribeToTopic(
+        'promotion_notifications',
+      );
+
+      //print('✅ Subscribed to all user topics for user: $userId');
     } catch (e) {
-      print('❌ Error subscribing to user topics: $e');
+      //print('❌ Error subscribing to user topics: $e');
     }
   }
 
@@ -33,34 +41,42 @@ class NotificationHelper {
   Future<void> unsubscribeFromUserTopics(String userId) async {
     try {
       // Unsubscribe from user-specific notifications
-      await FirebaseNotificationService.instance.unsubscribeFromTopic('user_$userId');
-      
+      await FirebaseNotificationService.instance.unsubscribeFromTopic(
+        'user_$userId',
+      );
+
       // Keep general notifications but unsubscribe from user-specific ones
-      await FirebaseNotificationService.instance.unsubscribeFromTopic('order_notifications');
-      
-      print('✅ Unsubscribed from user topics for user: $userId');
+      await FirebaseNotificationService.instance.unsubscribeFromTopic(
+        'order_notifications',
+      );
+
+      //print('✅ Unsubscribed from user topics for user: $userId');
     } catch (e) {
-      print('❌ Error unsubscribing from user topics: $e');
+      //print('❌ Error unsubscribing from user topics: $e');
     }
   }
 
   // Subscribe to promotion notifications
   Future<void> subscribeToPromotions() async {
     try {
-      await FirebaseNotificationService.instance.subscribeToTopic('promotion_notifications');
-      print('✅ Subscribed to promotion notifications');
+      await FirebaseNotificationService.instance.subscribeToTopic(
+        'promotion_notifications',
+      );
+      //print('✅ Subscribed to promotion notifications');
     } catch (e) {
-      print('❌ Error subscribing to promotions: $e');
+      //print('❌ Error subscribing to promotions: $e');
     }
   }
 
   // Unsubscribe from promotion notifications
   Future<void> unsubscribeFromPromotions() async {
     try {
-      await FirebaseNotificationService.instance.unsubscribeFromTopic('promotion_notifications');
-      print('✅ Unsubscribed from promotion notifications');
+      await FirebaseNotificationService.instance.unsubscribeFromTopic(
+        'promotion_notifications',
+      );
+      //print('✅ Unsubscribed from promotion notifications');
     } catch (e) {
-      print('❌ Error unsubscribing from promotions: $e');
+      //print('❌ Error unsubscribing from promotions: $e');
     }
   }
 
@@ -116,9 +132,9 @@ class NotificationHelper {
   Future<void> clearAllNotifications() async {
     try {
       await FirebaseNotificationService.instance.clearAllNotifications();
-      print('✅ All notifications cleared');
+      //print('✅ All notifications cleared');
     } catch (e) {
-      print('❌ Error clearing notifications: $e');
+      //print('❌ Error clearing notifications: $e');
     }
   }
 
@@ -127,7 +143,7 @@ class NotificationHelper {
     try {
       return await FirebaseNotificationService.instance.getCurrentToken();
     } catch (e) {
-      print('❌ Error getting FCM token: $e');
+      //print('❌ Error getting FCM token: $e');
       return null;
     }
   }
@@ -141,7 +157,7 @@ class NotificationHelper {
     final orderId = data['order_id'] as String?;
     final notificationId = data['notification_id'] as String?;
 
-    print('🧭 Handling notification navigation: type=$type, orderId=$orderId');
+    //print('🧭 Handling notification navigation: type=$type, orderId=$orderId');
 
     try {
       if (type == 'order' && orderId != null) {
@@ -166,7 +182,7 @@ class NotificationHelper {
         Navigator.pushNamed(context, '/notifications');
       }
     } catch (e) {
-      print('❌ Error navigating from notification: $e');
+      //print('❌ Error navigating from notification: $e');
       // Fallback: Navigate to notifications list
       Navigator.pushNamed(context, '/notifications');
     }
