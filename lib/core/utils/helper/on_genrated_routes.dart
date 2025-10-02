@@ -4,6 +4,7 @@ import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/features/auth/presentation/view/forget_password_view_new.dart';
 import 'package:test/features/auth/presentation/view/terms_and_conditions_view.dart';
 import 'package:test/features/auth/presentation/cubit/forget_password_cubit.dart';
+import 'package:test/features/cart/presentation/view/cart_view.dart';
 import 'package:test/features/wishlist/presentation/view/wishlist_view.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/features/auth/presentation/view/register_view.dart';
@@ -31,7 +32,6 @@ import 'package:test/features/profile/presentation/view/my_orders_view.dart';
 import 'package:test/features/profile/presentation/view/order_details_view.dart';
 import 'package:test/features/notifications/presentation/view/notifications_view.dart';
 import 'package:test/features/notifications/presentation/view/notification_details_view.dart';
-import 'package:test/features/notifications/presentation/cubit/notifications_cubit.dart';
 import '../../../features/splash/presentation/view/splash_view.dart';
 import '../../../features/onboarding/presentation/view/onboarding_view.dart';
 import '../../../features/auth/presentation/view/login_view.dart';
@@ -63,6 +63,15 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
       //////print('🔍 Navigation: Navigating to TermsAndConditionsView');
       return MaterialPageRoute(
         builder: (context) => const TermsAndConditionsView(),
+      );
+    case CartView.routeName:
+      //////print('🔍 Navigation: Navigating to CartView');
+      return MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) =>
+              DependencyInjection.getIt.get<CartCubit>()..getCart(),
+          child: const CartView(),
+        ),
       );
 
     case BottomNavBar.routeName:

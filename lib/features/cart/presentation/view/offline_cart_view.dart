@@ -474,7 +474,10 @@ class _OfflineCartViewState extends State<OfflineCartView>
     );
   }
 
-  void _showLoginPrompt() {
+  void _showLoginPrompt() async {
+    // Set flag for post-login redirect
+    await HybridCartService.instance.setPendingCartRedirect();
+    
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -506,6 +509,7 @@ class _OfflineCartViewState extends State<OfflineCartView>
           ),
           TextButton(
             onPressed: () {
+              Navigator.of(context).pop();
               Navigator.pushNamed(context, LoginView.routeName);
             },
             child: Text(

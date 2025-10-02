@@ -15,7 +15,6 @@ import 'package:test/features/auth/presentation/widgets/registration_form_fields
 import 'package:test/features/auth/presentation/widgets/registration_personal_info.dart';
 import 'package:test/features/auth/presentation/widgets/registration_location_selector.dart';
 import 'package:test/features/auth/presentation/widgets/registration_terms_checkbox.dart';
-import 'package:test/features/auth/presentation/widgets/social_auth_button.dart';
 import 'package:test/features/profile/domain/entities/country.dart';
 import 'package:test/features/profile/domain/entities/city.dart';
 import 'package:test/features/profile/domain/entities/region.dart';
@@ -166,7 +165,7 @@ class _RegisterViewState extends State<RegisterView> {
                   context: context,
                   message:
                       state.message ??
-                      s?.accountCreatedSuccessfully ??
+                      s.accountCreatedSuccessfully ??
                       'Account created successfully',
                 );
                 Navigator.pushReplacementNamed(context, '/login');

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'auth_state_service.dart';
 import 'offline_cart_service.dart';
 import 'global_cubit_service.dart';
@@ -18,6 +19,10 @@ class HybridCartService extends ChangeNotifier {
     // Listen to auth state changes
     AuthStateService.instance.addListener(_onAuthStateChanged);
   }
+
+  // Constants for SharedPreferences keys
+  static const String _pendingCartRedirectKey = 'pending_cart_redirect';
+  static const String _hasOfflineCartItemsKey = 'has_offline_cart_items';
 
   void _onAuthStateChanged() {
     notifyListeners();
@@ -253,6 +258,81 @@ class HybridCartService extends ChangeNotifier {
     } else {
       // Get from local cart
       return await OfflineCartService.instance.getTotalPrice();
+    }
+  }
+
+  // === POST-LOGIN REDIRECT METHODS ===
+
+  /// Check if there are items in offline cart (for guests)
+  Future<bool> hasOfflineCartItems() async {
+    if (_isLoggedIn) return false;
+    final count = await OfflineCartService.instance.getCartItemCount();
+    return count > 0;
+  }
+
+  /// Set flag that user should be redirected to cart after login
+  Future<void> setPendingCartRedirect() async {
+    debugPrint('🔄 Setting pending cart redirect flag...');
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_pendingCartRedirectKey, true);
+    
+    // Also save that there are offline items
+    final hasItems = await hasOfflineCartItems();
+    await prefs.setBool(_hasOfflineCartItemsKey, hasItems);
+    debugPrint('✅ Pending redirect set - hasItems: $hasItems');
+  }
+
+  /// Check if user should be redirected to cart after login
+  Future<bool> shouldRedirectToCart() async {
+    final prefs = await SharedPreferences.getInstance();
+    final pendingRedirect = prefs.getBool(_pendingCartRedirectKey) ?? false;
+    final hadOfflineItems = prefs.getBool(_hasOfflineCartItemsKey) ?? false;
+    
+    debugPrint('🔍 Checking redirect flags:');
+    debugPrint('   - pendingRedirect: $pendingRedirect');
+    debugPrint('   - hadOfflineItems: $hadOfflineItems');
+    debugPrint('   - result: ${pendingRedirect && hadOfflineItems}');
+    
+    return pendingRedirect && hadOfflineItems;
+  }
+
+  /// Clear the pending redirect flag
+  Future<void> clearPendingCartRedirect() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_pendingCartRedirectKey);
+    await prefs.remove(_hasOfflineCartItemsKey);
+  }
+
+  /// Transfer offline cart items to server after login
+  Future<void> transferOfflineCartToServer() async {
+    if (!_isLoggedIn) return;
+
+    try {
+      // Get offline cart items
+      final offlineItems = await OfflineCartService.instance.getCartItems();
+      
+      if (offlineItems.isEmpty) return;
+      // Transfer each item to server cart
+      for (final item in offlineItems) {
+        try {
+          await GlobalCubitService.instance.addToCart(
+            productId: item['productId'] as int,
+            productSizeColorId: item['productSizeColorId'] as int,
+            quantity: item['quantity'] as int,
+          );
+        } catch (e) {
+          // Continue with other items if one fails
+          debugPrint('Failed to transfer item ${item['productId']}: $e');
+        }
+      }
+
+      // Clear offline cart after successful transfer
+      await OfflineCartService.instance.clearCart();
+      // Refresh cart cubit to show updated items
+      GlobalCubitService.instance.refreshAll();
+      
+    } catch (e) {
+      debugPrint('Error transferring offline cart: $e');
     }
   }
 

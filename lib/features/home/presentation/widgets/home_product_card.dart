@@ -786,23 +786,17 @@ class _HomeProductCardState extends State<HomeProductCard>
       progressColor = Colors.orange;
       backgroundColor = Colors.orange.withValues(alpha: 0.1);
       statusText =
-          AppLocalizations.of(context)!.available +
-          ' ' +
-          availableStock.toString();
+          '${AppLocalizations.of(context)!.available} $availableStock';
     } else if (availabilityPercentage <= 0.5) {
       progressColor = Colors.amber;
       backgroundColor = Colors.amber.withValues(alpha: 0.1);
       statusText =
-          AppLocalizations.of(context)!.available +
-          ' ' +
-          availableStock.toString();
+          '${AppLocalizations.of(context)!.available} $availableStock';
     } else {
       progressColor = Colors.green;
       backgroundColor = Colors.green.withValues(alpha: 0.1);
       statusText =
-          AppLocalizations.of(context)!.available +
-          ' ' +
-          availableStock.toString();
+          '${AppLocalizations.of(context)!.available} $availableStock';
     }
 
     return Container(

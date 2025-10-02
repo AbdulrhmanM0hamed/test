@@ -7,7 +7,6 @@ import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/core/utils/constant/app_assets.dart';
-import 'package:test/core/utils/responsive/responsive_helper.dart';
 import 'package:test/features/product_details/presentation/view/product_details_view.dart';
 import 'package:test/l10n/app_localizations.dart';
 

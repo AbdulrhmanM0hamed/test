@@ -17,6 +17,8 @@ import 'package:test/features/auth/presentation/view/register_view.dart';
 import 'package:test/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:test/features/auth/presentation/cubit/auth_state.dart';
 import 'package:test/features/home/presentation/view/bottom_nav_bar.dart';
+import 'package:test/features/orders/presentation/views/checkout_view.dart';
+import 'package:test/core/services/offline_cart_service.dart';
 import 'package:test/l10n/app_localizations.dart';
 import 'package:test/core/services/app_state_service.dart';
 
@@ -72,6 +74,31 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
+  // Simple post-login navigation logic
+  void _handlePostLoginNavigation() async {
+    try {
+      // Check if there are items in offline cart
+      final cartItemCount = await OfflineCartService.instance
+          .getCartItemCount();
+
+      if (cartItemCount > 0) {
+        // Navigate to BottomNavBar and open cart tab (index 3)
+        Navigator.pushReplacementNamed(context, BottomNavBar.routeName);
+
+        // Wait a bit for navigation to complete, then switch to cart tab
+        Future.delayed(const Duration(milliseconds: 300), () {
+          BottomNavBar.navigateToCartTab();
+        });
+      } else {
+        // Navigate to home if no items
+        Navigator.pushReplacementNamed(context, BottomNavBar.routeName);
+      }
+    } catch (e) {
+      // Fallback to home on error
+      Navigator.pushReplacementNamed(context, BottomNavBar.routeName);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -91,7 +118,9 @@ class _LoginViewState extends State<LoginView> {
                   context: context,
                   message: state.message,
                 );
-                Navigator.pushReplacementNamed(context, BottomNavBar.routeName);
+
+                // Check if there are items in offline cart and redirect accordingly
+                _handlePostLoginNavigation();
               } else if (state is AuthError) {
                 ////print('🔍 AuthError received: ${state.message}');
                 CustomSnackbar.showError(

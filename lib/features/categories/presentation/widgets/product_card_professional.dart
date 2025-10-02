@@ -36,7 +36,7 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
   bool _isAddingToCart = false;
   bool _isInWishlist = false;
   bool _isWishlistLoading = false;
-  int _cartUpdateCounter = 0;
+  final int _cartUpdateCounter = 0;
 
   @override
   void initState() {
@@ -414,8 +414,8 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
                     CustomSnackbar.showSuccess(
                       context: context,
                       message: _isInWishlist
-                          ? '${AppLocalizations.of(context)!.adddedToWishlist}${widget.product.name} ${" " + AppLocalizations.of(context)!.forWishlist}'
-                          : '${AppLocalizations.of(context)!.productRemovedFromWishlist}',
+                          ? '${AppLocalizations.of(context)!.adddedToWishlist}${widget.product.name} ${" ${AppLocalizations.of(context)!.forWishlist}"}'
+                          : AppLocalizations.of(context)!.productRemovedFromWishlist,
                     );
                   }
                 })
@@ -914,23 +914,17 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
       progressColor = Colors.orange;
       backgroundColor = Colors.orange.withValues(alpha: 0.1);
       statusText =
-          AppLocalizations.of(context)!.available +
-          ' ' +
-          availableStock.toString();
+          '${AppLocalizations.of(context)!.available} $availableStock';
     } else if (totalStock > 0 && (availableStock / totalStock) <= 0.5) {
       progressColor = Colors.amber;
       backgroundColor = Colors.amber.withValues(alpha: 0.1);
       statusText =
-          AppLocalizations.of(context)!.available +
-          ' ' +
-          availableStock.toString();
+          '${AppLocalizations.of(context)!.available} $availableStock';
     } else {
       progressColor = Colors.green;
       backgroundColor = Colors.green.withValues(alpha: 0.1);
       statusText =
-          AppLocalizations.of(context)!.available +
-          ' ' +
-          availableStock.toString();
+          '${AppLocalizations.of(context)!.available} $availableStock';
     }
 
     return Container(

@@ -24,7 +24,7 @@ class ProductVariantSelector extends StatefulWidget {
 
 class _ProductVariantSelectorState extends State<ProductVariantSelector> {
   Timer? _countdownTimer;
-  Map<int, CountDown> _currentCountdowns = {};
+  final Map<int, CountDown> _currentCountdowns = {};
 
   @override
   void initState() {
@@ -110,7 +110,7 @@ class _ProductVariantSelectorState extends State<ProductVariantSelector> {
         // Variants List
         ...widget.variants
             .map((variant) => _buildVariantCard(variant))
-            .toList(),
+            ,
       ],
     );
   }

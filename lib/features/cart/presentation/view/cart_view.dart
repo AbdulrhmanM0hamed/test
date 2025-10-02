@@ -17,6 +17,7 @@ import 'package:test/l10n/app_localizations.dart';
 class CartView extends StatefulWidget {
   const CartView({super.key});
 
+  static const String routeName = "/cart" ;
   @override
   State<CartView> createState() => _CartViewState();
 }

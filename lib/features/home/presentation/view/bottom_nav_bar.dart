@@ -26,6 +26,8 @@ import 'package:test/core/services/hybrid_wishlist_service.dart';
 import 'package:test/core/services/hybrid_cart_service.dart';
 import 'package:test/features/home/presentation/widgets/login_prompt_widget.dart';
 import 'package:test/features/home/presentation/widgets/lazy_tab_wrapper.dart';
+import 'package:test/features/orders/presentation/views/checkout_view.dart';
+import 'package:test/core/utils/widgets/custom_snackbar.dart';
 
 class BottomNavBar extends StatefulWidget {
   static const String routeName = '/home';
@@ -38,6 +40,11 @@ class BottomNavBar extends StatefulWidget {
   // Static method to navigate to home tab from other widgets
   static void navigateToHome() {
     _HomeViewState._instance?._onNavItemTapped(0);
+  }
+
+  // Static method to navigate to cart tab from other widgets
+  static void navigateToCartTab() {
+    _HomeViewState._instance?._onNavItemTapped(3);
   }
 
   // Static method to force refresh after login
@@ -200,16 +207,64 @@ class _HomeViewState extends State<BottomNavBar> {
     });
   }
 
-  void _forceRefreshAfterLogin() {
+  void _forceRefreshAfterLogin() async {
     //debug//print('🔄 BottomNavBar: Force refreshing after login...');
     if (mounted) {
       // Force reinitialize screens with fresh cubit instances
       _initializeScreens();
+
+      // Check if user should be redirected to cart after login
+      await _handlePostLoginRedirect();
+
       // Force a complete rebuild
       setState(() {});
       //debug//print('✅ BottomNavBar: Force refresh completed');
     } else {
       //debug//print('⚠️ BottomNavBar: Widget not mounted, skipping refresh');
+    }
+  }
+
+  /// Handle post-login redirect to checkout if user had offline items
+  Future<void> _handlePostLoginRedirect() async {
+    try {
+      debugPrint('🔍 Checking for post-login redirect...');
+      final shouldRedirect = await HybridCartService.instance
+          .shouldRedirectToCart();
+      debugPrint('📋 Should redirect: $shouldRedirect');
+
+      if (shouldRedirect) {
+        debugPrint('🔄 Transferring offline cart items to server...');
+
+        // Transfer offline cart items to server
+        await HybridCartService.instance.transferOfflineCartToServer();
+
+        // Clear the redirect flag
+        await HybridCartService.instance.clearPendingCartRedirect();
+
+        // Show success message
+        if (mounted) {
+          CustomSnackbar.showSuccess(
+            context: context,
+            message: AppLocalizations.of(context)!.productAddedToCart,
+          );
+        }
+
+        // Navigate to checkout view after a short delay to ensure UI is ready
+        Future.delayed(const Duration(milliseconds: 800), () {
+          if (mounted) {
+            debugPrint('🛒 Navigating to checkout view...');
+            Navigator.pushNamed(context, CheckoutView.routeName);
+          }
+        });
+      }
+    } catch (e) {
+      debugPrint('❌ Error handling post-login redirect: $e');
+      if (mounted) {
+        CustomSnackbar.showError(
+          context: context,
+          message: AppLocalizations.of(context)!.failedToAddToCart,
+        );
+      }
     }
   }
 
@@ -530,7 +585,7 @@ class _HomeViewState extends State<BottomNavBar> {
                             return _buildBadge(itemCount);
                           }
                           return const SizedBox.shrink();
-                      },
+                        },
                       );
                     },
                   ),
