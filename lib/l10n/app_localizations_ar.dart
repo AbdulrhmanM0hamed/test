@@ -1711,4 +1711,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get linkCopiedSuccessfully => 'تم نسخ الرابط بنجاح';
+
+  @override
+  String get checkOutThisAmazingProduct => 'تحقق من هذا المنتج الرائع';
+
+  @override
+  String get whatsapp => 'واتساب';
+
+  @override
+  String get facebook => 'فيسبوك';
+
+  @override
+  String get twitter => 'تويتر';
 }

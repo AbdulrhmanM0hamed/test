@@ -711,5 +711,9 @@
   "shareWithFriends": "Share this product with your friends",
   "more": "More",
   "copyLink": "Copy Link",
-  "linkCopiedSuccessfully": "Link copied successfully"
+  "linkCopiedSuccessfully": "Link copied successfully",
+  "checkOutThisAmazingProduct": "Check out this amazing product",
+  "whatsapp": "WhatsApp",
+  "facebook": "Facebook",
+  "twitter": "Twitter"
 }

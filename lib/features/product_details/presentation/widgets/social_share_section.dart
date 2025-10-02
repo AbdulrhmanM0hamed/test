@@ -22,8 +22,8 @@ class SocialShareSection extends StatelessWidget {
 
   String get _shareUrl => 'https://sobiehcoffee.com/ar/details/$productSlug';
 
-  String get _shareText =>
-      'تحقق من هذا المنتج الرائع: $productName\n$_shareUrl';
+  String _getShareText(BuildContext context) =>
+      '${AppLocalizations.of(context)!.checkOutThisAmazingProduct}: $productName\n$_shareUrl';
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +33,7 @@ class SocialShareSection extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.grey[50],
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.grey[200]!,
-          width: 1,
-        ),
+        border: Border.all(color: Colors.grey[200]!, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -59,26 +56,26 @@ class SocialShareSection extends StatelessWidget {
               _buildSocialButton(
                 context: context,
                 iconPath: 'assets/images/whatsaap.svg',
-                label: 'WhatsApp',
-                onTap: () => _shareToWhatsApp(),
+                label: AppLocalizations.of(context)!.whatsapp,
+                onTap: () => _shareToWhatsApp(context),
               ),
               _buildSocialButton(
                 context: context,
                 iconPath: 'assets/images/facebook_icon.svg',
-                label: 'Facebook',
-                onTap: () => _shareToFacebook(),
+                label: AppLocalizations.of(context)!.facebook,
+                onTap: () => _shareToFacebook(context),
               ),
               _buildSocialButton(
                 context: context,
                 iconPath: 'assets/images/xTwitter.svg',
-                label: 'X (Twitter)',
-                onTap: () => _shareToTwitter(),
+                label: AppLocalizations.of(context)!.twitter,
+                onTap: () => _shareToTwitter(context),
               ),
               _buildSocialButton(
                 context: context,
                 icon: Icons.more_horiz_rounded,
                 label: AppLocalizations.of(context)!.more,
-                onTap: () => _shareGeneral(),
+                onTap: () => _shareGeneral(context),
               ),
             ],
           ),
@@ -88,11 +85,7 @@ class SocialShareSection extends StatelessWidget {
           // Copy Link Button
           TextButton.icon(
             onPressed: () => _copyLink(context),
-            icon: Icon(
-              Icons.link_rounded,
-              color: Colors.grey[600],
-              size: 18,
-            ),
+            icon: Icon(Icons.link_rounded, color: Colors.grey[600], size: 18),
             label: Text(
               AppLocalizations.of(context)!.copyLink,
               style: getMediumStyle(
@@ -150,41 +143,41 @@ class SocialShareSection extends StatelessWidget {
     );
   }
 
-  void _shareToWhatsApp() async {
+  void _shareToWhatsApp(BuildContext context) async {
     final url = Uri.parse(
-      'https://wa.me/?text=${Uri.encodeComponent(_shareText)}',
+      'https://wa.me/?text=${Uri.encodeComponent(_getShareText(context))}',
     );
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     } else {
-      _shareGeneral();
+      _shareGeneral(context);
     }
   }
 
-  void _shareToFacebook() async {
+  void _shareToFacebook(BuildContext context) async {
     final url = Uri.parse(
       'https://www.facebook.com/sharer/sharer.php?u=${Uri.encodeComponent(_shareUrl)}',
     );
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     } else {
-      _shareGeneral();
+      _shareGeneral(context);
     }
   }
 
-  void _shareToTwitter() async {
+  void _shareToTwitter(BuildContext context) async {
     final url = Uri.parse(
-      'https://twitter.com/intent/tweet?text=${Uri.encodeComponent(_shareText)}',
+      'https://twitter.com/intent/tweet?text=${Uri.encodeComponent(_getShareText(context))}',
     );
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     } else {
-      _shareGeneral();
+      _shareGeneral(context);
     }
   }
 
-  void _shareGeneral() {
-    Share.share(_shareText, subject: productName);
+  void _shareGeneral(BuildContext context) {
+    Share.share(_getShareText(context), subject: productName);
   }
 
   void _copyLink(BuildContext context) async {
@@ -193,7 +186,7 @@ class SocialShareSection extends StatelessWidget {
     if (context.mounted) {
       CustomSnackbar.showSuccess(
         context: context,
-        message: 'تم نسخ الرابط بنجاح', // Temporary hardcoded text
+        message: AppLocalizations.of(context)!.linkCopiedSuccessfully,
       );
     }
   }

@@ -44,6 +44,16 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
 
+    // Listen to tab changes to update expand toggle visibility
+    _tabController.addListener(() {
+      if (mounted) {
+        setState(() {
+          // Reset expansion when switching tabs
+          _isExpanded = false;
+        });
+      }
+    });
+
     // Product details will be loaded by the cubit in the route
   }
 
@@ -459,19 +469,22 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
               ),
             ],
           ),
-          AnimatedContainer(
+          AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
-            height: _isExpanded ? 250 : 80,
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _buildExpandableContent(_buildHtmlContent(product.details)),
-                _buildExpandableContent(_buildHtmlContent(product.features)),
-                _buildExpandableContent(_buildSpecifications(product)),
-              ],
+            child: Container(
+              key: ValueKey(_isExpanded),
+              height: _isExpanded ? 250 : 80,
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildExpandableContent(_buildHtmlContent(product.details)),
+                  _buildExpandableContent(_buildHtmlContent(product.features)),
+                  _buildExpandableContent(_buildSpecifications(product)),
+                ],
+              ),
             ),
           ),
-          _buildExpandToggle(),
+          _buildExpandToggle(product),
         ],
       ),
     );
@@ -487,7 +500,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
         .replaceAll('&gt;', '>')
         .replaceAll('&quot;', '"');
 
-    return SingleChildScrollView(
+    return Padding(
       padding: const EdgeInsets.all(16),
       child: Text(
         cleanText,
@@ -501,7 +514,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
   }
 
   Widget _buildSpecifications(ProductDetails product) {
-    return SingleChildScrollView(
+    return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -569,10 +582,22 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
   }
 
   Widget _buildExpandableContent(Widget content) {
-    return content;
+    return SingleChildScrollView(
+      physics: _isExpanded
+          ? const AlwaysScrollableScrollPhysics()
+          : const NeverScrollableScrollPhysics(),
+      child: content,
+    );
   }
 
-  Widget _buildExpandToggle() {
+  Widget _buildExpandToggle(ProductDetails product) {
+    // Check if current tab content needs expansion
+    bool needsExpansion = _needsExpansion(product);
+
+    if (!needsExpansion) {
+      return const SizedBox.shrink(); // Hide button if content is short
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Center(
@@ -618,5 +643,35 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
         ),
       ),
     );
+  }
+
+  bool _needsExpansion(ProductDetails product) {
+    // Get current tab content
+    String content = '';
+    switch (_tabController.index) {
+      case 0:
+        content = product.details;
+        break;
+      case 1:
+        content = product.features;
+        break;
+      case 2:
+        // For specifications, check if there are many specs
+        return true; // Always show for specs as they can be long
+    }
+
+    // Clean HTML content
+    final cleanText = content
+        .replaceAll(RegExp(r'<[^>]*>'), '')
+        .replaceAll('&nbsp;', ' ')
+        .replaceAll('&amp;', '&')
+        .replaceAll('&lt;', '<')
+        .replaceAll('&gt;', '>')
+        .replaceAll('&quot;', '"')
+        .trim();
+
+    // Check if content is long enough to need expansion
+    // Roughly 3 lines of text (about 150 characters)
+    return cleanText.length > 150;
   }
 }

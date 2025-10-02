@@ -3502,6 +3502,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Link copied successfully'**
   String get linkCopiedSuccessfully;
+
+  /// No description provided for @checkOutThisAmazingProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Check out this amazing product'**
+  String get checkOutThisAmazingProduct;
+
+  /// No description provided for @whatsapp.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp'**
+  String get whatsapp;
+
+  /// No description provided for @facebook.
+  ///
+  /// In en, this message translates to:
+  /// **'Facebook'**
+  String get facebook;
+
+  /// No description provided for @twitter.
+  ///
+  /// In en, this message translates to:
+  /// **'Twitter'**
+  String get twitter;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
