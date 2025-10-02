@@ -35,57 +35,77 @@ class _CategoryCardState extends State<CategoryCard> {
         });
       },
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
+        duration: const Duration(milliseconds: 200),
         transform: Matrix4.identity()..scale(_isPressed ? 0.95 : 1.0),
-        width: 80,
-        margin: const EdgeInsets.symmetric(horizontal: 6),
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        padding: const EdgeInsets.all(8),
+        width: 90,
+        decoration: BoxDecoration(
+          color: _isPressed
+              ? AppColors.primary.withValues(alpha: 0.1)
+              : Theme.of(context).cardTheme.color,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: _isPressed
+                ? AppColors.primary
+                : Colors.grey.withValues(alpha: 0.2),
+            width: _isPressed ? 2 : 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: _isPressed
+                  ? AppColors.primary.withValues(alpha: 0.2)
+                  : Colors.white,
+              blurRadius: _isPressed ? 8 : 9,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // الصورة
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              height: 65,
-              width: 65,
-              padding: const EdgeInsets.all(10),
+            // صورة القسم
+            Container(
+              width: 40,
+              height: 40,
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: _isPressed
-                        ? AppColors.secondary.withValues(alpha: 0.3)
-                        : Colors.grey.withValues(alpha: 0.05),
-                    blurRadius: _isPressed ? 12 : 8,
-                    spreadRadius: _isPressed ? 1 : 0,
-                  ),
-                ],
+                color: _isPressed
+                    ? AppColors.primary.withValues(alpha: 0.2)
+                    : Colors.grey.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
               ),
-              child: widget.category.icon.startsWith('http')
-                  ? CachedNetworkImage(
-                      imageUrl: widget.category.icon,
-                      fit: BoxFit.contain,
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.category, size: 30),
-                      placeholder: (context, url) => const Center(
-                        child: SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: widget.category.icon.startsWith('http')
+                    ? CachedNetworkImage(
+                        imageUrl: widget.category.icon,
+                        fit: BoxFit.contain,
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.category, size: 30),
+                        placeholder: (context, url) => const Center(
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
                         ),
-                      ),
-                    )
-                  : Image.asset(widget.category.icon, fit: BoxFit.contain),
+                      )
+                    : Image.asset(widget.category.icon, fit: BoxFit.contain),
+              ),
             ),
-            const SizedBox(height: 8),
-            // العنوان
+            const SizedBox(height: 6),
+            // اسم القسم
             Text(
               widget.category.title,
               style: getSemiBoldStyle(
+                fontSize: FontSize.size13,
                 fontFamily: FontConstant.cairo,
-                fontSize: 12,
+                color: _isPressed
+                    ? AppColors.primary.withValues(alpha: 0.7)
+                    : Colors.grey.withValues(alpha: 0.5),
               ),
               textAlign: TextAlign.center,
-              maxLines: 2,
+              maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ],

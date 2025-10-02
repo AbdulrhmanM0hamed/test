@@ -65,11 +65,11 @@ class ShoppingCategories extends StatelessWidget {
           final homeSubCategories = state.subCategories.take(5).toList();
 
           return SizedBox(
-            height: 130,
+            height: 110,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               itemCount: homeSubCategories.length,
               itemBuilder: (context, index) {
                 final subCategory = homeSubCategories[index];
