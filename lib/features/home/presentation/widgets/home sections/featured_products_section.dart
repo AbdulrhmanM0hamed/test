@@ -91,12 +91,14 @@ class FeaturedProductsSection extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 physics: const BouncingScrollPhysics(),
                 padding: EdgeInsets.zero, // تقليل الهوامش الجانبية
-                itemCount: (products.length / 6).ceil(),
+                itemCount: 1, // Only show one page with 6 products
                 itemBuilder: (context, pageIndex) {
+                  // Take only first 6 products
+                  final limitedProducts = products.take(6).toList();
                   return _buildProductsPage(
                     context,
                     pageIndex,
-                    products,
+                    limitedProducts,
                     cardWidth,
                     rowHeight,
                     spacingBetweenRows,
