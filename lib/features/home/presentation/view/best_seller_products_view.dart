@@ -135,7 +135,7 @@ class _BestSellerProductsViewState extends State<BestSellerProductsView> {
                       ),
                       childAspectRatio: ResponsiveHelper.getResponsiveValue(
                         context,
-                        mobile: 0.62,
+                        mobile: 0.60,
                         tablet: 0.7,
                         desktop: 0.75,
                       ),

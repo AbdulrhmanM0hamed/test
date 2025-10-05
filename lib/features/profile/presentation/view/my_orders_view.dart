@@ -9,6 +9,7 @@ import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/features/orders/presentation/cubit/orders_cubit/orders_cubit.dart';
 import 'package:test/features/orders/presentation/cubit/orders_cubit/orders_state.dart';
 import 'package:test/features/orders/domain/entities/order_actions_helper.dart';
+import 'package:test/features/orders/domain/entities/order_item.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../widgets/order_card.dart';
 
@@ -22,9 +23,99 @@ class MyOrdersView extends StatefulWidget {
 }
 
 class _MyOrdersViewState extends State<MyOrdersView>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
+  late TabController _tabController;
+
+  // Filter options
+  final List<String> _filterOptions = [
+    'all',
+    'New',
+    'Inprogress',
+    'Cancelled',
+    'Returned',
+    'InprogressReturn',
+    'WantTOReturn',
+  ];
+
+  String _selectedFilter = 'all';
+
+  // Mapping between Arabic and English status values
+  Map<String, String> _getStatusMapping() {
+    return {
+      'جديد': 'New',
+      'جاري العمل عليها': 'Inprogress',
+      'تم الالغاء': 'Cancelled',
+      'تم الارجاع': 'Returned',
+      'جاري الارجاع': 'InprogressReturn',
+      'طلب ارجاع': 'WantTOReturn',
+    };
+  }
+
+  // Get English equivalent of Arabic status
+  String _getEnglishStatus(String status) {
+    final mapping = _getStatusMapping();
+    return mapping[status] ?? status;
+  }
+
+  String _getFilterText(BuildContext context, String filter) {
+    final isArabic = AppLocalizations.of(context)?.localeName == 'ar';
+    switch (filter) {
+      case 'all':
+        return isArabic ? 'الكل' : 'All';
+      case 'New':
+        return isArabic ? 'جديد' : 'New';
+      case 'Inprogress':
+        return isArabic ? 'قيد التنفيذ' : 'In Progress';
+      case 'Cancelled':
+        return isArabic ? 'ملغي' : 'Cancelled';
+      case 'Returned':
+        return isArabic ? 'مُرجع' : 'Returned';
+      case 'InprogressReturn':
+        return isArabic ? 'إرجاع قيد التنفيذ' : 'Return in Progress';
+      case 'WantTOReturn':
+        return isArabic ? 'يريد الإرجاع' : 'Want to Return';
+      default:
+        return filter;
+    }
+  }
+
+  List<OrderItem> _getFilteredOrders(List<OrderItem> orders) {
+    if (_selectedFilter == 'all') {
+      return orders;
+    }
+
+    // Debug: Print filter and order statuses
+    print('🔍 Selected Filter: $_selectedFilter');
+    print('📋 Available Orders:');
+    for (var order in orders) {
+      print('   Order ${order.orderNumber}: ${order.status}');
+    }
+
+    final filtered = orders.where((order) {
+      // Convert Arabic status to English for comparison
+      final englishStatus = _getEnglishStatus(order.status);
+      print(
+        '   🔄 ${order.status} -> $englishStatus (comparing with $_selectedFilter)',
+      );
+      return englishStatus == _selectedFilter;
+    }).toList();
+
+    print('✅ Filtered Orders Count: ${filtered.length}');
+
+    return filtered;
+  }
+
+  int _getOrderCountForFilter(List<OrderItem> orders, String filter) {
+    if (filter == 'all') {
+      return orders.length;
+    }
+    return orders.where((order) {
+      final englishStatus = _getEnglishStatus(order.status);
+      return englishStatus == filter;
+    }).length;
+  }
 
   @override
   void initState() {
@@ -37,6 +128,8 @@ class _MyOrdersViewState extends State<MyOrdersView>
       CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
     );
 
+    _tabController = TabController(length: _filterOptions.length, vsync: this);
+
     // Load orders data
     _animationController.forward();
   }
@@ -44,6 +137,7 @@ class _MyOrdersViewState extends State<MyOrdersView>
   @override
   void dispose() {
     _animationController.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -186,6 +280,8 @@ class _MyOrdersViewState extends State<MyOrdersView>
   }
 
   Widget _buildLoadedState(BuildContext context, OrdersLoaded state) {
+    final filteredOrders = _getFilteredOrders(state.orders);
+
     return RefreshIndicator(
       onRefresh: () async {
         context.read<OrdersCubit>().getMyOrders();
@@ -241,7 +337,7 @@ class _MyOrdersViewState extends State<MyOrdersView>
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '${state.orders.length} ${AppLocalizations.of(context)!.totalOrders}',
+                        '${filteredOrders.length} ${AppLocalizations.of(context)!.totalOrders}',
                         style: getMediumStyle(
                           fontSize: FontSize.size13,
                           fontFamily: FontConstant.cairo,
@@ -255,24 +351,149 @@ class _MyOrdersViewState extends State<MyOrdersView>
             ),
           ),
 
+          // Filter Tabs
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: TabBar(
+              controller: _tabController,
+              isScrollable: true,
+              tabAlignment: TabAlignment.start,
+              indicatorColor: AppColors.primary,
+              labelColor: AppColors.primary,
+              unselectedLabelColor: Colors.grey[600],
+              indicatorSize: TabBarIndicatorSize.tab,
+              indicator: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              labelStyle: getMediumStyle(
+                fontSize: FontSize.size12,
+                fontFamily: FontConstant.cairo,
+              ),
+              unselectedLabelStyle: getRegularStyle(
+                fontSize: FontSize.size12,
+                fontFamily: FontConstant.cairo,
+              ),
+              onTap: (index) {
+                setState(() {
+                  _selectedFilter = _filterOptions[index];
+                  print(
+                    '🎯 Tab tapped: index=$index, filter=${_filterOptions[index]}',
+                  );
+                });
+              },
+              tabs: _filterOptions.map((filter) {
+                final count = _getOrderCountForFilter(state.orders, filter);
+                final filterText = _getFilterText(context, filter);
+                print('📊 Filter: $filter, Text: $filterText, Count: $count');
+                return Tab(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(filterText, style: const TextStyle(fontSize: 12)),
+                      const SizedBox(width: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          '$count',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
           // Orders list
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.only(bottom: 16),
-              itemCount: state.orders.length,
-              itemBuilder: (context, index) {
-                final order = state.orders[index];
-                return OrderCard(
-                  order: order,
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/order-details',
-                      arguments: order.id,
-                    );
-                  },
-                );
-              },
+            child: filteredOrders.isEmpty
+                ? _buildEmptyFilterState(context)
+                : ListView.builder(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    itemCount: filteredOrders.length,
+                    itemBuilder: (context, index) {
+                      final order = filteredOrders[index];
+                      return OrderCard(
+                        order: order,
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/order-details',
+                            arguments: order.id,
+                          );
+                        },
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyFilterState(BuildContext context) {
+    final isArabic = AppLocalizations.of(context)?.localeName == 'ar';
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.grey.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.filter_list_off,
+              size: 64,
+              color: Colors.grey.withValues(alpha: 0.7),
+            ),
+          ),
+          const SizedBox(height: 24),
+          Text(
+            isArabic ? 'لا توجد طلبات' : 'No Orders Found',
+            style: getBoldStyle(
+              fontSize: FontSize.size18,
+              fontFamily: FontConstant.cairo,
+              color: Colors.grey[700],
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            isArabic
+                ? 'لا توجد طلبات بهذا التصنيف حالياً'
+                : 'No orders found for this filter',
+            textAlign: TextAlign.center,
+            style: getRegularStyle(
+              fontSize: FontSize.size14,
+              fontFamily: FontConstant.cairo,
+              color: Colors.grey[600],
             ),
           ),
         ],

@@ -1569,7 +1569,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get forWishlist => 'للمفضلة';
 
   @override
-  String get selectVariant => 'اختر المتغير';
+  String get selectVariant => 'اختر الحجم';
 
   @override
   String get offerEndsIn => 'ينتهي العرض خلال:';

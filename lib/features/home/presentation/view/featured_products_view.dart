@@ -91,9 +91,7 @@ class _FeaturedProductsViewState extends State<FeaturedProductsView> {
     return MultiBlocProvider(
       providers: providers,
       child: Scaffold(
-        appBar: CustomAppBar(
-          title: AppLocalizations.of(context)!.featuredProducts,
-        ),
+        appBar: CustomAppBar(title: AppLocalizations.of(context)!.hotDeals),
         body: BlocBuilder<FeaturedProductsCubit, FeaturedProductsState>(
           builder: (context, state) {
             if (state is FeaturedProductsLoading) {
@@ -135,7 +133,7 @@ class _FeaturedProductsViewState extends State<FeaturedProductsView> {
                       ),
                       childAspectRatio: ResponsiveHelper.getResponsiveValue(
                         context,
-                        mobile: 0.62,
+                        mobile: 0.60,
                         tablet: 0.7,
                         desktop: 0.75,
                       ),

@@ -142,7 +142,7 @@ class _SpecialOffersViewState extends State<SpecialOffersView> {
                       childAspectRatio: ResponsiveHelper.getResponsiveValue(
                         context,
                         smallMobile: 0.6,
-                        mobile: 0.62,
+                        mobile: 0.60,
                         tablet: 0.7,
                         desktop: 0.75,
                       ),
