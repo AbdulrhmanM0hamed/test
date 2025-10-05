@@ -3473,6 +3473,12 @@ abstract class AppLocalizations {
   /// **'Cart cleared successfully'**
   String get cartClearedSuccessfully;
 
+  /// No description provided for @areYouSureYouWantToExitTheApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to exit the app?'**
+  String get areYouSureYouWantToExitTheApp;
+
   /// No description provided for @shareProduct.
   ///
   /// In en, this message translates to:
@@ -3490,6 +3496,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'More'**
   String get more;
+
+  /// No description provided for @exitApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit App'**
+  String get exitApp;
+
+  /// No description provided for @hotDeals.
+  ///
+  /// In en, this message translates to:
+  /// **'Hot Deals'**
+  String get hotDeals;
 
   /// No description provided for @copyLink.
   ///
@@ -3521,17 +3539,17 @@ abstract class AppLocalizations {
   /// **'Facebook'**
   String get facebook;
 
+  /// No description provided for @exit.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit'**
+  String get exit;
+
   /// No description provided for @twitter.
   ///
   /// In en, this message translates to:
   /// **'Twitter'**
   String get twitter;
-
-  /// No description provided for @hotDeals.
-  ///
-  /// In en, this message translates to:
-  /// **'Hot Deals'**
-  String get hotDeals;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:test/features/cart/presentation/cubit/cart_state.dart';
 import 'package:test/features/profile/presentation/view/profile_wrapper.dart';
 import 'package:test/l10n/app_localizations.dart';
@@ -224,6 +226,35 @@ class _HomeViewState extends State<BottomNavBar> {
     }
   }
 
+  /// Exit the app
+  Future<void> _exitApp() async {
+    // إظهار dialog للتأكيد
+    final shouldExit = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(AppLocalizations.of(context)!.exitApp),
+        content: Text(
+          AppLocalizations.of(context)!.areYouSureYouWantToExitTheApp,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(AppLocalizations.of(context)!.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(AppLocalizations.of(context)!.exit),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldExit == true) {
+      // الخروج من التطبيق
+      SystemNavigator.pop();
+    }
+  }
+
   /// Handle post-login redirect to checkout if user had offline items
   Future<void> _handlePostLoginRedirect() async {
     try {
@@ -280,27 +311,43 @@ class _HomeViewState extends State<BottomNavBar> {
         ? GlobalCubitService.instance.wishlistCubit
         : null;
 
-    return Scaffold(
-      body: isLoggedIn && cartCubit != null && wishlistCubit != null
-          ? MultiBlocProvider(
-              providers: [
-                BlocProvider.value(value: cartCubit),
-                BlocProvider.value(value: wishlistCubit),
-              ],
-              child: IndexedStack(index: _selectedIndex, children: _screens),
-            )
-          : IndexedStack(index: _selectedIndex, children: _screens),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-        child: isLoggedIn && cartCubit != null && wishlistCubit != null
+    return PopScope(
+      canPop: false, // منع الـ default pop behavior
+      onPopInvoked: (didPop) async {
+        if (didPop) return;
+
+        // إذا كان المستخدم في الصفحة الرئيسية، اخرج من التطبيق
+        if (_selectedIndex == 0) {
+          await _exitApp();
+        } else {
+          // إذا كان في صفحة أخرى، ارجع للصفحة الرئيسية
+          setState(() {
+            _selectedIndex = 0;
+          });
+        }
+      },
+      child: Scaffold(
+        body: isLoggedIn && cartCubit != null && wishlistCubit != null
             ? MultiBlocProvider(
                 providers: [
                   BlocProvider.value(value: cartCubit),
                   BlocProvider.value(value: wishlistCubit),
                 ],
-                child: _buildCustomBottomNavBar(),
+                child: IndexedStack(index: _selectedIndex, children: _screens),
               )
-            : _buildCustomBottomNavBar(),
+            : IndexedStack(index: _selectedIndex, children: _screens),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+          child: isLoggedIn && cartCubit != null && wishlistCubit != null
+              ? MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(value: cartCubit),
+                    BlocProvider.value(value: wishlistCubit),
+                  ],
+                  child: _buildCustomBottomNavBar(),
+                )
+              : _buildCustomBottomNavBar(),
+        ),
       ),
     );
   }

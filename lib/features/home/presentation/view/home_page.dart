@@ -8,8 +8,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: const HomePageBody(),
-    );
+    return Scaffold(body: const HomePageBody());
   }
 }

@@ -706,15 +706,17 @@
   "failedToUpdateQuantity": "Failed to update quantity",
   "cartClearedSuccessfully": "Cart cleared successfully",
   "failedToClearCart": "Failed to clear cart",
-  
+  "areYouSureYouWantToExitTheApp": "Are you sure you want to exit the app?",
   "shareProduct": "Share Product",
   "shareWithFriends": "Share this product with your friends",
   "more": "More",
-  "hotDeals": "Hot Deals"
+  "exitApp" : "Exit App",
+  "hotDeals": "Hot Deals",
   "copyLink": "Copy Link",
   "linkCopiedSuccessfully": "Link copied successfully",
   "checkOutThisAmazingProduct": "Check out this amazing product",
   "whatsapp": "WhatsApp",
   "facebook": "Facebook",
+  "exit": "Exit",
   "twitter": "Twitter"
 }

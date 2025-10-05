@@ -1698,6 +1698,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cartClearedSuccessfully => 'Cart cleared successfully';
 
   @override
+  String get areYouSureYouWantToExitTheApp => 'Are you sure you want to exit the app?';
+
+  @override
   String get shareProduct => 'Share Product';
 
   @override
@@ -1705,6 +1708,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get more => 'More';
+
+  @override
+  String get exitApp => 'Exit App';
+
+  @override
+  String get hotDeals => 'Hot Deals';
 
   @override
   String get copyLink => 'Copy Link';
@@ -1722,8 +1731,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get facebook => 'Facebook';
 
   @override
-  String get twitter => 'Twitter';
+  String get exit => 'Exit';
 
   @override
-  String get hotDeals => 'Hot Deals';
+  String get twitter => 'Twitter';
 }
