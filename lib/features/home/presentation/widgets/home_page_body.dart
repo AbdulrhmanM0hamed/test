@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/services/global_cubit_service.dart';
+import 'package:test/core/services/network/dio_service.dart';
+import 'package:test/features/home/presentation/widgets/home sections/sub_categories_section.dart';
+import 'package:test/core/services/network/network_info.dart';
 import 'package:test/features/categories/presentation/cubit/sub_category_cubit.dart';
 import 'package:test/features/categories/domain/usecases/get_sub_categories_usecase.dart';
-import 'package:test/features/home/presentation/view/featured_products_view.dart';
+import 'package:test/features/home/data/datasources/sub_categories_remote_data_source_impl.dart';
+import 'package:test/features/home/data/repositories/sub_categories_repository_impl.dart';
+import 'package:test/features/home/domain/usecases/get_sub_categories_usecase.dart';
+import 'package:test/features/home/presentation/cubits/sub_categories/sub_categories_cubit.dart';
 import 'package:test/features/home/presentation/widgets/greeting_header.dart';
 import 'package:test/features/home/presentation/widgets/home%20sections/featured_products_section.dart';
 import 'package:test/features/home/presentation/widgets/offers_section.dart';
@@ -75,6 +81,18 @@ class HomePageBody extends StatelessWidget {
                 DependencyInjection.getIt<GetSubCategoriesUseCase>(),
           )..getSubCategories(),
         ),
+        BlocProvider<SubCategoriesCubit>(
+          create: (context) => SubCategoriesCubit(
+            getSubCategoriesUsecase: GetSubCategoriesUsecase(
+              repository: SubCategoriesRepositoryImpl(
+                remoteDataSource: SubCategoriesRemoteDataSourceImpl(
+                  dioService: DependencyInjection.getIt<DioService>(),
+                ),
+                networkInfo: DependencyInjection.getIt<NetworkInfo>(),
+              ),
+            ),
+          )..getSubCategories(),
+        ),
       ],
       child: Column(
         children: [
@@ -103,6 +121,7 @@ class HomePageBody extends StatelessWidget {
                     innerContext.read<MainCategoryCubit>().getMainCategories();
                     innerContext.read<SubCategoryCubit>().getSubCategories();
                     innerContext.read<SliderCubit>().getSliders();
+                    innerContext.read<SubCategoriesCubit>().getSubCategories();
                   },
                   child: CustomScrollView(
                     physics: const ClampingScrollPhysics(),
@@ -213,6 +232,24 @@ class HomePageBody extends StatelessWidget {
                                   context,
                                   '/latest-products',
                                 );
+                              },
+                            ),
+
+                            // Sub-Categories Sections
+                            const SizedBox(height: 24),
+                            SubCategoriesSection(
+                              onProductTap: (product) {
+                                Navigator.pushNamed(
+                                  context,
+                                  '/product-details',
+                                  arguments: product.id,
+                                );
+                              },
+                              onFavoritePressed: (product) {
+                                // TODO: Toggle favorite
+                              },
+                              onSeeAll: (subCategory) {
+                                // TODO: Navigate to sub category products
                               },
                             ),
 

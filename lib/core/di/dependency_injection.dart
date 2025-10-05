@@ -22,6 +22,12 @@ import 'package:test/features/auth/domain/usecases/change_password_usecase.dart'
 import 'package:test/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:test/features/auth/presentation/cubit/forget_password_cubit.dart';
 import 'package:test/features/auth/data/services/terms_service.dart';
+import 'package:test/features/home/data/datasources/sub_categories_remote_data_source.dart';
+import 'package:test/features/home/data/datasources/sub_categories_remote_data_source_impl.dart';
+import 'package:test/features/home/data/repositories/sub_categories_repository_impl.dart';
+import 'package:test/features/home/domain/repositories/sub_categories_repository.dart';
+import 'package:test/features/home/domain/usecases/get_sub_categories_usecase.dart';
+import 'package:test/features/home/presentation/cubits/sub_categories/sub_categories_cubit.dart';
 import 'package:test/features/product_details/domain/usecases/get_product_details_usecase.dart';
 import 'package:test/features/profile/data/datasources/profile_remote_data_source.dart';
 import 'package:test/features/profile/data/repositories/profile_repository_impl.dart';
@@ -217,6 +223,11 @@ class DependencyInjection {
   static MainCategoryRepository? _mainCategoryRepository;
   static GetMainCategoriesUseCase? _getMainCategoriesUseCase;
 
+  // Sub-Categories Home feature
+  static SubCategoriesRemoteDataSource? _subCategoriesRemoteDataSource;
+  static SubCategoriesRepository? _subCategoriesRepository;
+  static GetSubCategoriesUsecase? _getSubCategoriesUsecase;
+
   static Future<void> init() async {
     // Initialize SharedPreferences first
     final sharedPreferences = await SharedPreferences.getInstance();
@@ -396,12 +407,16 @@ class DependencyInjection {
       repository: _mainCategoryRepository!,
     );
 
-    // Register with GetIt (Services already registered above as LazySingleton)
-    getIt.registerLazySingleton<AuthRemoteDataSource>(
-      () => AuthRemoteDataSourceImpl(dioService: getIt()),
+    // Initialize Sub-Categories dependencies
+    _subCategoriesRemoteDataSource = SubCategoriesRemoteDataSourceImpl(
+      dioService: _dioService!,
     );
-    getIt.registerLazySingleton<AuthRepository>(
-      () => AuthRepositoryImpl(remoteDataSource: getIt()),
+    _subCategoriesRepository = SubCategoriesRepositoryImpl(
+      remoteDataSource: _subCategoriesRemoteDataSource!,
+      networkInfo: getIt(),
+    );
+    _getSubCategoriesUsecase = GetSubCategoriesUsecase(
+      repository: _subCategoriesRepository!,
     );
     getIt.registerLazySingleton<LoginUseCase>(() => LoginUseCase(getIt()));
     getIt.registerLazySingleton<LogoutUseCase>(() => LogoutUseCase(getIt()));
@@ -569,6 +584,13 @@ class DependencyInjection {
       () => SubCategoryCubit(
         getSubCategoriesUseCase: getIt<GetSubCategoriesUseCase>(),
         dataRefreshService: getIt<DataRefreshService>(),
+      ),
+    );
+
+    // Sub-Categories Home Cubit
+    getIt.registerFactory<SubCategoriesCubit>(
+      () => SubCategoriesCubit(
+        getSubCategoriesUsecase: getIt<GetSubCategoriesUsecase>(),
       ),
     );
 
