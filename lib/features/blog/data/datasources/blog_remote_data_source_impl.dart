@@ -116,6 +116,7 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return ApiResponse.success(
           message: response.data['message'] ?? 'Comment added successfully',
+          data: response.data['message'] ?? 'Comment added successfully',
         );
       } else {
         return ApiResponse.error(

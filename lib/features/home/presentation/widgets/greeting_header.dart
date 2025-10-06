@@ -485,7 +485,7 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                   title: Localizations.localeOf(context).languageCode == 'ar'
                       ? 'الأسئلة الشائعة'
                       : 'FAQ',
-                  onTap: () => Navigator.pop(context),
+                  onTap: () => Navigator.pushNamed(context, '/faq'),
                 ),
                 _buildDrawerItem(
                   icon: Icons.description_outlined,

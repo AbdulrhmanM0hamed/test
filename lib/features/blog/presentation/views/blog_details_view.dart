@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/utils/common/custom_app_bar.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:test/core/utils/widgets/custom_snackbar.dart';
+import 'package:test/features/blog/presentation/widgets/add_comment_widget.dart';
+import 'package:test/features/blog/presentation/widgets/comments_section.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../cubit/blog_details/blog_details_cubit.dart';
 import '../cubit/blog_details/blog_details_state.dart';
@@ -26,20 +29,15 @@ class BlogDetailsView extends StatelessWidget {
         body: BlocConsumer<BlogDetailsCubit, BlogDetailsState>(
           listener: (context, state) {
             if (state is BlogCommentAdded) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: AppColors.success,
-                  behavior: SnackBarBehavior.floating,
-                ),
+              CustomSnackbar.showSuccess(
+               context: context,
+                message: state.message,
               );
             } else if (state is BlogCommentError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: AppColors.error,
-                  behavior: SnackBarBehavior.floating,
-                ),
+              print(state.message);
+              CustomSnackbar.showError(
+               context: context,
+                message: state.message,
               );
             }
           },
@@ -75,24 +73,23 @@ class BlogDetailsView extends StatelessWidget {
                       // Blog Content
                       BlogContentWidget(blog: blog),
 
-                      //   const SizedBox(height: 24),
+                        const SizedBox(height: 24),
 
-                      // Comments Section
-                      // CommentsSection(
-                      //   comments: blog.comments,
-                      //   commentsCount: blog.commentsCount,
-                      // ),
+                      CommentsSection(
+                       comments: blog.comments,
+                        commentsCount: blog.commentsCount,
+                       ),
                       const SizedBox(height: 16),
 
-                      // // Add Comment Section
-                      // AddCommentWidget(
-                      //   blogId: blog.id,
-                      //   isLoading: isAddingComment,
-                      //   onCommentAdded: () {
-                      //     // Comment will be added via cubit
-                      //   },
-                      // ),
-                      const SizedBox(height: 24),
+                       // Add Comment Section
+                      AddCommentWidget(
+                        blogId: blog.id,
+                        isLoading: isAddingComment,
+                        onCommentAdded: () {
+                          // Comment will be added via cubit
+                         },
+                      ),
+                      const SizedBox(height: 32),
                     ],
                   ),
                 ),

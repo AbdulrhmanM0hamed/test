@@ -169,6 +169,12 @@ import 'package:test/features/contact_us/data/repositories/contact_us_repository
 import 'package:test/features/contact_us/domain/repositories/contact_us_repository.dart';
 import 'package:test/features/contact_us/domain/usecases/get_contact_info_usecase.dart';
 import 'package:test/features/contact_us/presentation/cubit/contact_us_cubit.dart';
+// FAQ feature imports
+import 'package:test/features/faq/data/datasources/faq_remote_data_source.dart';
+import 'package:test/features/faq/data/repositories/faq_repository_impl.dart';
+import 'package:test/features/faq/domain/repositories/faq_repository.dart';
+import 'package:test/features/faq/domain/usecases/get_faqs_usecase.dart';
+import 'package:test/features/faq/presentation/cubit/faq_cubit.dart';
 
 class DependencyInjection {
   static final GetIt getIt = GetIt.instance;
@@ -521,6 +527,9 @@ class DependencyInjection {
       () => AddCommentUseCase(getIt()),
     );
 
+    // Register AuthRepository
+    getIt.registerSingleton<AuthRepository>(_authRepository!);
+    
     getIt.registerSingleton<ProfileRepository>(_profileRepository!);
     getIt.registerSingleton<GetProfileUseCase>(_getProfileUseCase!);
     getIt.registerSingleton<UpdateProfileUseCase>(_updateProfileUseCase!);
@@ -918,6 +927,32 @@ class DependencyInjection {
     getIt.registerFactory<ContactUsCubit>(
       () => ContactUsCubit(
         getContactInfoUseCase: getIt<GetContactInfoUseCase>(),
+      ),
+    );
+
+    // FAQ feature dependencies
+    // Data Sources
+    getIt.registerLazySingleton<FAQRemoteDataSource>(
+      () => FAQRemoteDataSourceImpl(dioService: getIt<DioService>()),
+    );
+
+    // Repositories
+    getIt.registerLazySingleton<FAQRepository>(
+      () => FAQRepositoryImpl(
+        remoteDataSource: getIt<FAQRemoteDataSource>(),
+        networkInfo: getIt<NetworkInfo>(),
+      ),
+    );
+
+    // Use Cases
+    getIt.registerLazySingleton<GetFAQsUseCase>(
+      () => GetFAQsUseCase(repository: getIt<FAQRepository>()),
+    );
+
+    // Cubits
+    getIt.registerFactory<FAQCubit>(
+      () => FAQCubit(
+        getFAQsUseCase: getIt<GetFAQsUseCase>(),
       ),
     );
   }

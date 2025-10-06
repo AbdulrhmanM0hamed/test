@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/core/utils/common/custom_app_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
@@ -28,7 +29,7 @@ class ContactUsView extends StatelessWidget {
         body: BlocBuilder<ContactUsCubit, ContactUsState>(
           builder: (context, state) {
             if (state is ContactUsLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CustomProgressIndicator());
             } else if (state is ContactUsError) {
               return Center(
                 child: Column(

@@ -35,6 +35,7 @@ import 'package:test/features/profile/presentation/view/order_details_view.dart'
 import 'package:test/features/notifications/presentation/view/notifications_view.dart';
 import 'package:test/features/notifications/presentation/view/notification_details_view.dart';
 import 'package:test/features/contact_us/contact_us_view.dart';
+import 'package:test/features/faq/presentation/views/faq_view.dart';
 import '../../../features/splash/presentation/view/splash_view.dart';
 import '../../../features/onboarding/presentation/view/onboarding_view.dart';
 import '../../../features/auth/presentation/view/login_view.dart';
@@ -316,6 +317,10 @@ Route<dynamic> onGenratedRoutes(RouteSettings settings) {
     case ContactUsView.routeName:
       //////print('🔍 Navigation: Navigating to ContactUsView');
       return MaterialPageRoute(builder: (context) => const ContactUsView());
+
+    case FAQView.routeName:
+      //////print('🔍 Navigation: Navigating to FAQView');
+      return MaterialPageRoute(builder: (context) => const FAQView());
 
     default:
       //////print('🔍 Navigation: Unknown route ${settings.name}, defaulting to OnboardingView');

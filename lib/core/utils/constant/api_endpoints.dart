@@ -136,4 +136,7 @@ class ApiEndpoints {
 
   // Contact Us endpoint
   static String get contactUs => '$baseUrl/contact-us';
+
+  // FAQ endpoint
+  static String get faq => '$baseUrl/faq';
 }
