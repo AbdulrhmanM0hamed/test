@@ -21,6 +21,7 @@ import 'package:test/features/home/presentation/widgets/home%20sections/latest_p
 import 'package:test/features/home/presentation/widgets/stores/stores_showcase.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/features/profile/presentation/cubit/profile_cubit.dart';
+import 'package:test/features/notifications/presentation/cubit/notifications_cubit.dart';
 import '../cubits/featured_products/featured_products_cubit.dart';
 import '../cubits/best_seller_products/best_seller_products_cubit.dart';
 import '../cubits/latest_products/latest_products_cubit.dart';
@@ -45,6 +46,11 @@ class HomePageBody extends StatelessWidget {
           value:
               GlobalCubitService.instance.wishlistCubit ??
               DependencyInjection.getIt<WishlistCubit>(),
+        ),
+        // Provide NotificationsCubit for notification badge
+        BlocProvider<NotificationsCubit>(
+          create: (context) =>
+              DependencyInjection.getIt<NotificationsCubit>()..getNotifications(),
         ),
         BlocProvider<FeaturedProductsCubit>(
           create: (context) =>

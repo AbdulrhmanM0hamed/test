@@ -10,6 +10,8 @@ import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/features/categories/presentation/cubits/products_filter_cubit.dart';
 import 'package:test/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:test/features/profile/presentation/cubit/profile_state.dart';
+import 'package:test/features/notifications/presentation/cubit/notifications_cubit.dart';
+import 'package:test/features/notifications/presentation/cubit/notifications_state.dart';
 import 'package:test/core/utils/constant/app_assets.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
@@ -158,8 +160,12 @@ class _GreetingHeaderState extends State<GreetingHeader> {
     );
   }
 
-  
   Widget _buildNotificationButton() {
+    // Check if user is logged in
+    final appStateService = DependencyInjection.getIt<AppStateService>();
+    final isLoggedIn =
+        appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, '/notifications');
@@ -187,31 +193,45 @@ class _GreetingHeaderState extends State<GreetingHeader> {
               ),
             ),
           ),
-          if (widget.notificationCount > 0)
-            Positioned(
-              top: -2,
-              right: -2,
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 2),
-                ),
-                constraints: const BoxConstraints(minWidth: 20, minHeight: 20),
-                child: Center(
-                  child: Text(
-                    widget.notificationCount > 9
-                        ? '9+'
-                        : widget.notificationCount.toString(),
-                    style: getSemiBoldStyle(
-                      fontFamily: FontConstant.cairo,
-                      fontSize: 10,
-                      color: Colors.white,
+          // Show notification badge only for logged in users
+          if (isLoggedIn)
+            BlocBuilder<NotificationsCubit, NotificationsState>(
+              builder: (context, state) {
+                int unreadCount = 0;
+                if (state is NotificationsLoaded) {
+                  unreadCount = state.unreadCount;
+                }
+
+                if (unreadCount > 0) {
+                  return Positioned(
+                    top: -2,
+                    right: -2,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 20,
+                        minHeight: 20,
+                      ),
+                      child: Center(
+                        child: Text(
+                          unreadCount > 99 ? '99+' : unreadCount.toString(),
+                          style: getSemiBoldStyle(
+                            fontFamily: FontConstant.cairo,
+                            fontSize: 10,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
             ),
         ],
       ),
@@ -388,15 +408,22 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                     Navigator.pushNamed(context, WishlistView.routeName);
                   },
                 ),
-                _buildDrawerItem(
-                  icon: Icons.notifications_outlined,
-                  title: AppLocalizations.of(context)!.notifications,
-                  badge: widget.notificationCount > 0
-                      ? widget.notificationCount.toString()
-                      : null,
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, '/notifications');
+                BlocBuilder<NotificationsCubit, NotificationsState>(
+                  builder: (context, state) {
+                    int unreadCount = 0;
+                    if (state is NotificationsLoaded) {
+                      unreadCount = state.unreadCount;
+                    }
+
+                    return _buildDrawerItem(
+                      icon: Icons.notifications_outlined,
+                      title: AppLocalizations.of(context)!.notifications,
+                      badge: unreadCount > 0 ? unreadCount.toString() : null,
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, '/notifications');
+                      },
+                    );
                   },
                 ),
                 _buildDrawerItem(
