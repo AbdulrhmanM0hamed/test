@@ -80,9 +80,9 @@ class _AddCommentWidgetState extends State<AddCommentWidget> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.05),
+        color: AppColors.primary.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
       ),
       child: Column(
         children: [
@@ -130,12 +130,12 @@ class _AddCommentWidgetState extends State<AddCommentWidget> {
         border: Border.all(
           color: _isExpanded
               ? AppColors.primary
-              : AppColors.grey.withOpacity(0.3),
+              : AppColors.grey.withValues(alpha: .03),
           width: _isExpanded ? 2 : 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -171,7 +171,7 @@ class _AddCommentWidgetState extends State<AddCommentWidget> {
 
           // Comment Actions (shown when expanded)
           if (_isExpanded) ...[
-            Container(height: 1, color: AppColors.grey.withOpacity(0.1)),
+            Container(height: 1, color: AppColors.grey.withValues(alpha: 0.1)),
             Padding(
               padding: const EdgeInsets.all(12),
               child: Row(

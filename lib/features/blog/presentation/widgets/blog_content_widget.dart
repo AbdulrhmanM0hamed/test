@@ -21,9 +21,11 @@ class BlogContentWidget extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.05),
+                color: AppColors.primary.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.primary.withOpacity(0.1)),
+                border: Border.all(
+                  color: AppColors.primary.withValues(alpha: 0.1),
+                ),
               ),
               child: Text(
                 blog.metaDescription,
@@ -94,7 +96,7 @@ class BlogContentWidget extends StatelessWidget {
                     margin: Margins.only(bottom: 8),
                   ),
                   "blockquote": Style(
-                    backgroundColor: AppColors.grey.withOpacity(0.1),
+                    backgroundColor: AppColors.grey.withValues(alpha: 0.1),
                     padding: HtmlPaddings.all(16),
                     margin: Margins.only(bottom: 16),
                     border: Border(
@@ -111,14 +113,14 @@ class BlogContentWidget extends StatelessWidget {
                     margin: Margins.only(bottom: 16),
                   ),
                   "code": Style(
-                    backgroundColor: AppColors.grey.withOpacity(0.1),
+                    backgroundColor: AppColors.grey.withValues(alpha: 0.1),
                     padding: HtmlPaddings.symmetric(horizontal: 6, vertical: 2),
                     fontSize: FontSize(14),
                     fontFamily: 'monospace',
                     color: AppColors.primary,
                   ),
                   "pre": Style(
-                    backgroundColor: AppColors.grey.withOpacity(0.1),
+                    backgroundColor: AppColors.grey.withValues(alpha: 0.1),
                     padding: HtmlPaddings.all(16),
                     margin: Margins.only(bottom: 16),
                     fontSize: FontSize(14),

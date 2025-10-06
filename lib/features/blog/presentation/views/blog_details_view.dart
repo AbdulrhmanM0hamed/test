@@ -8,8 +8,6 @@ import '../cubit/blog_details/blog_details_cubit.dart';
 import '../cubit/blog_details/blog_details_state.dart';
 import '../widgets/blog_content_widget.dart';
 import '../widgets/blog_header_widget.dart';
-import '../widgets/comments_section.dart';
-import '../widgets/add_comment_widget.dart';
 import '../widgets/blog_details_shimmer.dart';
 
 class BlogDetailsView extends StatelessWidget {

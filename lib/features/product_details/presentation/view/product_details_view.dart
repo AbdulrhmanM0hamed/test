@@ -471,7 +471,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView>
           ),
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
-            child: Container(
+            child: SizedBox(
               key: ValueKey(_isExpanded),
               height: _isExpanded ? 250 : 80,
               child: TabBarView(

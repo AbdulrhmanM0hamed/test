@@ -8,11 +8,7 @@ class BlogCard extends StatelessWidget {
   final Blog blog;
   final VoidCallback onTap;
 
-  const BlogCard({
-    super.key,
-    required this.blog,
-    required this.onTap,
-  });
+  const BlogCard({super.key, required this.blog, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +25,7 @@ class BlogCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
+                  color: Colors.black.withValues(alpha: 0.08),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -49,7 +45,7 @@ class BlogCard extends StatelessWidget {
                       imageUrl: blog.image,
                       fit: BoxFit.cover,
                       placeholder: (context, url) => Container(
-                        color: AppColors.grey.withOpacity(0.1),
+                        color: AppColors.grey.withValues(alpha: 0.1),
                         child: Center(
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
@@ -60,7 +56,7 @@ class BlogCard extends StatelessWidget {
                         ),
                       ),
                       errorWidget: (context, url, error) => Container(
-                        color: AppColors.grey.withOpacity(0.1),
+                        color: AppColors.grey.withValues(alpha: 0.1),
                         child: Icon(
                           Icons.image_not_supported_outlined,
                           size: 48,
@@ -116,9 +112,8 @@ class BlogCard extends StatelessWidget {
                           const SizedBox(width: 4),
                           Text(
                             blog.createdAtDay,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppColors.grey,
-                            ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: AppColors.grey),
                           ),
 
                           const SizedBox(width: 16),
@@ -132,9 +127,8 @@ class BlogCard extends StatelessWidget {
                           const SizedBox(width: 4),
                           Text(
                             '${blog.views}',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppColors.grey,
-                            ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: AppColors.grey),
                           ),
 
                           const SizedBox(width: 16),
@@ -148,9 +142,8 @@ class BlogCard extends StatelessWidget {
                           const SizedBox(width: 4),
                           Text(
                             '${blog.commentsCount}',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppColors.grey,
-                            ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: AppColors.grey),
                           ),
 
                           const Spacer(),
@@ -162,15 +155,16 @@ class BlogCard extends StatelessWidget {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.primary.withOpacity(0.1),
+                              color: AppColors.primary.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
                               '${blog.estimatedReadingTime} ${AppLocalizations.of(context)!.minRead}',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.w500,
-                              ),
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                             ),
                           ),
                         ],

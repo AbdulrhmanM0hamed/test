@@ -16,7 +16,7 @@ class BlogShimmer extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.08),
+                color: Colors.black.withValues(alpha: 0.08),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -27,8 +27,8 @@ class BlogShimmer extends StatelessWidget {
             children: [
               // Image Shimmer
               Shimmer.fromColors(
-                baseColor: AppColors.grey.withOpacity(0.1),
-                highlightColor: AppColors.grey.withOpacity(0.2),
+                baseColor: AppColors.grey.withValues(alpha: 0.1),
+                highlightColor: AppColors.grey.withValues(alpha: 0.2),
                 child: AspectRatio(
                   aspectRatio: 16 / 9,
                   child: Container(
@@ -46,8 +46,8 @@ class BlogShimmer extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Shimmer.fromColors(
-                  baseColor: AppColors.grey.withOpacity(0.1),
-                  highlightColor: AppColors.grey.withOpacity(0.2),
+                  baseColor: AppColors.grey.withValues(alpha: 0.1),
+                  highlightColor: AppColors.grey.withValues(alpha: 0.2),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

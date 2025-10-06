@@ -7,10 +7,7 @@ import '../../domain/entities/blog.dart';
 class BlogHeaderWidget extends StatelessWidget {
   final Blog blog;
 
-  const BlogHeaderWidget({
-    super.key,
-    required this.blog,
-  });
+  const BlogHeaderWidget({super.key, required this.blog});
 
   @override
   Widget build(BuildContext context) {
@@ -24,18 +21,16 @@ class BlogHeaderWidget extends StatelessWidget {
             imageUrl: blog.image,
             fit: BoxFit.cover,
             placeholder: (context, url) => Container(
-              color: AppColors.grey.withOpacity(0.1),
+              color: AppColors.grey.withValues(alpha: 0.1),
               child: Center(
                 child: CircularProgressIndicator(
                   strokeWidth: 3,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    AppColors.primary,
-                  ),
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
                 ),
               ),
             ),
             errorWidget: (context, url, error) => Container(
-              color: AppColors.grey.withOpacity(0.1),
+              color: AppColors.grey.withValues(alpha: 0.1),
               child: Icon(
                 Icons.image_not_supported_outlined,
                 size: 64,
@@ -79,21 +74,24 @@ class BlogHeaderWidget extends StatelessWidget {
                   _buildMetaItem(
                     context,
                     icon: Icons.visibility_outlined,
-                    text: '${blog.views} ${AppLocalizations.of(context)!.views}',
+                    text:
+                        '${blog.views} ${AppLocalizations.of(context)!.views}',
                   ),
 
                   // Comments
                   _buildMetaItem(
                     context,
                     icon: Icons.comment_outlined,
-                    text: '${blog.commentsCount} ${AppLocalizations.of(context)!.comments}',
+                    text:
+                        '${blog.commentsCount} ${AppLocalizations.of(context)!.comments}',
                   ),
 
                   // Reading Time
                   _buildMetaItem(
                     context,
                     icon: Icons.schedule_outlined,
-                    text: '${blog.estimatedReadingTime} ${AppLocalizations.of(context)!.minRead}',
+                    text:
+                        '${blog.estimatedReadingTime} ${AppLocalizations.of(context)!.minRead}',
                   ),
                 ],
               ),
@@ -111,10 +109,10 @@ class BlogHeaderWidget extends StatelessWidget {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.1),
+                        color: AppColors.primary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                          color: AppColors.primary.withOpacity(0.2),
+                          color: AppColors.primary.withValues(alpha: 0.2),
                         ),
                       ),
                       child: Text(
@@ -136,7 +134,7 @@ class BlogHeaderWidget extends StatelessWidget {
         Container(
           height: 1,
           margin: const EdgeInsets.symmetric(horizontal: 20),
-          color: AppColors.grey.withOpacity(0.2),
+          color: AppColors.grey.withValues(alpha: 0.2),
         ),
       ],
     );
@@ -150,11 +148,7 @@ class BlogHeaderWidget extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(
-          icon,
-          size: 16,
-          color: AppColors.grey,
-        ),
+        Icon(icon, size: 16, color: AppColors.grey),
         const SizedBox(width: 6),
         Text(
           text,

@@ -17,7 +17,6 @@ import 'package:test/features/auth/presentation/view/register_view.dart';
 import 'package:test/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:test/features/auth/presentation/cubit/auth_state.dart';
 import 'package:test/features/home/presentation/view/bottom_nav_bar.dart';
-import 'package:test/features/orders/presentation/views/checkout_view.dart';
 import 'package:test/core/services/offline_cart_service.dart';
 import 'package:test/l10n/app_localizations.dart';
 import 'package:test/core/services/app_state_service.dart';

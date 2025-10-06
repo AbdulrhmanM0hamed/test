@@ -15,12 +15,9 @@ class BlogDetailsShimmer extends StatelessWidget {
           AspectRatio(
             aspectRatio: 16 / 9,
             child: Shimmer.fromColors(
-              baseColor: AppColors.grey.withOpacity(0.1),
-              highlightColor: AppColors.grey.withOpacity(0.2),
-              child: Container(
-                width: double.infinity,
-                color: Colors.white,
-              ),
+              baseColor: AppColors.grey.withValues(alpha: 0.1),
+              highlightColor: AppColors.grey.withValues(alpha: 0.2),
+              child: Container(width: double.infinity, color: Colors.white),
             ),
           ),
 
@@ -32,8 +29,8 @@ class BlogDetailsShimmer extends StatelessWidget {
               children: [
                 // Title Shimmer
                 Shimmer.fromColors(
-                  baseColor: AppColors.grey.withOpacity(0.1),
-                  highlightColor: AppColors.grey.withOpacity(0.2),
+                  baseColor: AppColors.grey.withValues(alpha: 0.1),
+                  highlightColor: AppColors.grey.withValues(alpha: 0.2),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -62,8 +59,8 @@ class BlogDetailsShimmer extends StatelessWidget {
 
                 // Meta Info Shimmer
                 Shimmer.fromColors(
-                  baseColor: AppColors.grey.withOpacity(0.1),
-                  highlightColor: AppColors.grey.withOpacity(0.2),
+                  baseColor: AppColors.grey.withValues(alpha: 0.1),
+                  highlightColor: AppColors.grey.withValues(alpha: 0.2),
                   child: Wrap(
                     spacing: 20,
                     runSpacing: 8,
@@ -84,8 +81,8 @@ class BlogDetailsShimmer extends StatelessWidget {
 
                 // Keywords Shimmer
                 Shimmer.fromColors(
-                  baseColor: AppColors.grey.withOpacity(0.1),
-                  highlightColor: AppColors.grey.withOpacity(0.2),
+                  baseColor: AppColors.grey.withValues(alpha: 0.1),
+                  highlightColor: AppColors.grey.withValues(alpha: 0.2),
                   child: Wrap(
                     spacing: 8,
                     runSpacing: 8,
@@ -109,15 +106,15 @@ class BlogDetailsShimmer extends StatelessWidget {
           Container(
             height: 1,
             margin: const EdgeInsets.symmetric(horizontal: 20),
-            color: AppColors.grey.withOpacity(0.2),
+            color: AppColors.grey.withValues(alpha: 0.2),
           ),
 
           // Content Shimmer
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             child: Shimmer.fromColors(
-              baseColor: AppColors.grey.withOpacity(0.1),
-              highlightColor: AppColors.grey.withOpacity(0.2),
+              baseColor: AppColors.grey.withValues(alpha: 0.1),
+              highlightColor: AppColors.grey.withValues(alpha: 0.2),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -127,7 +124,7 @@ class BlogDetailsShimmer extends StatelessWidget {
                       padding: const EdgeInsets.only(bottom: 12),
                       child: Container(
                         height: 16,
-                        width: index == 7 
+                        width: index == 7
                             ? MediaQuery.of(context).size.width * 0.6
                             : double.infinity,
                         decoration: BoxDecoration(
@@ -146,7 +143,7 @@ class BlogDetailsShimmer extends StatelessWidget {
                       padding: const EdgeInsets.only(bottom: 12),
                       child: Container(
                         height: 16,
-                        width: index == 5 
+                        width: index == 5
                             ? MediaQuery.of(context).size.width * 0.4
                             : double.infinity,
                         decoration: BoxDecoration(
@@ -171,8 +168,8 @@ class BlogDetailsShimmer extends StatelessWidget {
               children: [
                 // Comments Header Shimmer
                 Shimmer.fromColors(
-                  baseColor: AppColors.grey.withOpacity(0.1),
-                  highlightColor: AppColors.grey.withOpacity(0.2),
+                  baseColor: AppColors.grey.withValues(alpha: 0.1),
+                  highlightColor: AppColors.grey.withValues(alpha: 0.2),
                   child: Row(
                     children: [
                       Container(
@@ -207,12 +204,12 @@ class BlogDetailsShimmer extends StatelessWidget {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: AppColors.grey.withOpacity(0.1),
+                        color: AppColors.grey.withValues(alpha: 0.1),
                       ),
                     ),
                     child: Shimmer.fromColors(
-                      baseColor: AppColors.grey.withOpacity(0.1),
-                      highlightColor: AppColors.grey.withOpacity(0.2),
+                      baseColor: AppColors.grey.withValues(alpha: 0.1),
+                      highlightColor: AppColors.grey.withValues(alpha: 0.2),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -263,7 +260,7 @@ class BlogDetailsShimmer extends StatelessWidget {
                               padding: const EdgeInsets.only(bottom: 8),
                               child: Container(
                                 height: 14,
-                                width: lineIndex == 1 
+                                width: lineIndex == 1
                                     ? MediaQuery.of(context).size.width * 0.6
                                     : double.infinity,
                                 decoration: BoxDecoration(
@@ -288,8 +285,8 @@ class BlogDetailsShimmer extends StatelessWidget {
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
             child: Shimmer.fromColors(
-              baseColor: AppColors.grey.withOpacity(0.1),
-              highlightColor: AppColors.grey.withOpacity(0.2),
+              baseColor: AppColors.grey.withValues(alpha: 0.1),
+              highlightColor: AppColors.grey.withValues(alpha: 0.2),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

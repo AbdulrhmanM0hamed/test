@@ -61,7 +61,10 @@ class HotTopicsSection extends StatelessWidget {
               else if (state is HotTopicsLoaded && state.hotTopics.isEmpty)
                 _buildEmptyState(context)
               else
-                _buildHotTopicsList(context, (state as HotTopicsLoaded).hotTopics),
+                _buildHotTopicsList(
+                  context,
+                  (state as HotTopicsLoaded).hotTopics,
+                ),
             ],
           ),
         );
@@ -70,7 +73,7 @@ class HotTopicsSection extends StatelessWidget {
   }
 
   Widget _buildLoadingState() {
-    return Container(
+    return SizedBox(
       height: 200,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
@@ -80,7 +83,7 @@ class HotTopicsSection extends StatelessWidget {
           return Container(
             width: 280,
             decoration: BoxDecoration(
-              color: AppColors.grey.withOpacity(0.1),
+              color: AppColors.grey.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
@@ -88,7 +91,7 @@ class HotTopicsSection extends StatelessWidget {
                 Container(
                   height: 120,
                   decoration: BoxDecoration(
-                    color: AppColors.grey.withOpacity(0.2),
+                    color: AppColors.grey.withValues(alpha: 0.2),
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(12),
                     ),
@@ -104,7 +107,7 @@ class HotTopicsSection extends StatelessWidget {
                           height: 16,
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: AppColors.grey.withOpacity(0.2),
+                            color: AppColors.grey.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(4),
                           ),
                         ),
@@ -113,7 +116,7 @@ class HotTopicsSection extends StatelessWidget {
                           height: 12,
                           width: 100,
                           decoration: BoxDecoration(
-                            color: AppColors.grey.withOpacity(0.2),
+                            color: AppColors.grey.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(4),
                           ),
                         ),
@@ -133,19 +136,13 @@ class HotTopicsSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.error.withOpacity(0.05),
+        color: AppColors.error.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.error.withOpacity(0.2),
-        ),
+        border: Border.all(color: AppColors.error.withValues(alpha: 0.2)),
       ),
       child: Column(
         children: [
-          Icon(
-            Icons.error_outline,
-            size: 48,
-            color: AppColors.error,
-          ),
+          Icon(Icons.error_outline, size: 48, color: AppColors.error),
           const SizedBox(height: 12),
           Text(
             AppLocalizations.of(context)!.errorLoadingHotTopics,
@@ -157,9 +154,9 @@ class HotTopicsSection extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             message,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppColors.textSecondary,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
             textAlign: TextAlign.center,
           ),
           TextButton.icon(
@@ -168,9 +165,7 @@ class HotTopicsSection extends StatelessWidget {
             },
             icon: const Icon(Icons.refresh),
             label: Text(AppLocalizations.of(context)!.retry),
-            style: TextButton.styleFrom(
-              foregroundColor: AppColors.error,
-            ),
+            style: TextButton.styleFrom(foregroundColor: AppColors.error),
           ),
         ],
       ),
@@ -181,11 +176,9 @@ class HotTopicsSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.grey.withOpacity(0.05),
+        color: AppColors.grey.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.grey.withOpacity(0.1),
-        ),
+        border: Border.all(color: AppColors.grey.withValues(alpha: 0.1)),
       ),
       child: Column(
         children: [
@@ -205,9 +198,9 @@ class HotTopicsSection extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             AppLocalizations.of(context)!.checkBackLaterForTrendingTopics,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppColors.grey,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppColors.grey),
           ),
         ],
       ),
@@ -232,10 +225,7 @@ class HotTopicsSection extends StatelessWidget {
 class HotTopicCard extends StatelessWidget {
   final Blog blog;
 
-  const HotTopicCard({
-    super.key,
-    required this.blog,
-  });
+  const HotTopicCard({super.key, required this.blog});
 
   @override
   Widget build(BuildContext context) {
@@ -253,12 +243,10 @@ class HotTopicCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: AppColors.grey.withOpacity(0.1),
-          ),
+          border: Border.all(color: AppColors.grey.withValues(alpha: 0.1)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -281,7 +269,7 @@ class HotTopicCard extends StatelessWidget {
                     fit: BoxFit.cover,
                     placeholder: (context, url) => Container(
                       height: 120,
-                      color: AppColors.grey.withOpacity(0.1),
+                      color: AppColors.grey.withValues(alpha: 0.1),
                       child: Center(
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
@@ -293,7 +281,7 @@ class HotTopicCard extends StatelessWidget {
                     ),
                     errorWidget: (context, url, error) => Container(
                       height: 120,
-                      color: AppColors.grey.withOpacity(0.1),
+                      color: AppColors.grey.withValues(alpha: 0.1),
                       child: Icon(
                         Icons.image_not_supported_outlined,
                         color: AppColors.grey,
@@ -327,11 +315,12 @@ class HotTopicCard extends StatelessWidget {
                         const SizedBox(width: 4),
                         Text(
                           AppLocalizations.of(context)!.hot,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 10,
-                          ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10,
+                              ),
                         ),
                       ],
                     ),
@@ -348,25 +337,22 @@ class HotTopicCard extends StatelessWidget {
                       vertical: 2,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
+                      color: Colors.black.withValues(alpha: 0.6),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(
-                          Icons.visibility,
-                          color: Colors.white,
-                          size: 10,
-                        ),
+                        Icon(Icons.visibility, color: Colors.white, size: 10),
                         const SizedBox(width: 2),
                         Text(
                           '${blog.views}',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500,
+                              ),
                         ),
                       ],
                     ),
@@ -399,18 +385,12 @@ class HotTopicCard extends StatelessWidget {
                     // Blog Meta
                     Row(
                       children: [
-                        Icon(
-                          Icons.schedule,
-                          size: 12,
-                          color: AppColors.grey,
-                        ),
+                        Icon(Icons.schedule, size: 12, color: AppColors.grey),
                         const SizedBox(width: 4),
                         Text(
                           blog.createdAtDay,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColors.grey,
-                            fontSize: 11,
-                          ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: AppColors.grey, fontSize: 11),
                         ),
                         const Spacer(),
                         Icon(
@@ -421,10 +401,8 @@ class HotTopicCard extends StatelessWidget {
                         const SizedBox(width: 4),
                         Text(
                           '${blog.commentsCount}',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColors.grey,
-                            fontSize: 11,
-                          ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: AppColors.grey, fontSize: 11),
                         ),
                       ],
                     ),

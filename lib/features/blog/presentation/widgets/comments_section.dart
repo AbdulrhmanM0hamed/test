@@ -24,11 +24,7 @@ class CommentsSection extends StatelessWidget {
           // Comments Header
           Row(
             children: [
-              Icon(
-                Icons.comment_outlined,
-                color: AppColors.primary,
-                size: 24,
-              ),
+              Icon(Icons.comment_outlined, color: AppColors.primary, size: 24),
               const SizedBox(width: 8),
               Text(
                 '${AppLocalizations.of(context)!.comments} ($commentsCount)',
@@ -64,19 +60,13 @@ class CommentsSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppColors.grey.withOpacity(0.05),
+        color: AppColors.grey.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.grey.withOpacity(0.1),
-        ),
+        border: Border.all(color: AppColors.grey.withValues(alpha: 0.1)),
       ),
       child: Column(
         children: [
-          Icon(
-            Icons.comment_outlined,
-            size: 48,
-            color: AppColors.grey,
-          ),
+          Icon(Icons.comment_outlined, size: 48, color: AppColors.grey),
           const SizedBox(height: 12),
           Text(
             AppLocalizations.of(context)!.noCommentsYet,
@@ -88,9 +78,9 @@ class CommentsSection extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             AppLocalizations.of(context)!.beTheFirstToComment,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppColors.grey,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppColors.grey),
           ),
         ],
       ),
@@ -101,10 +91,7 @@ class CommentsSection extends StatelessWidget {
 class CommentWidget extends StatelessWidget {
   final BlogComment comment;
 
-  const CommentWidget({
-    super.key,
-    required this.comment,
-  });
+  const CommentWidget({super.key, required this.comment});
 
   @override
   Widget build(BuildContext context) {
@@ -113,12 +100,10 @@ class CommentWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.grey.withOpacity(0.1),
-        ),
+        border: Border.all(color: AppColors.grey.withValues(alpha: 0.1)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -141,18 +126,14 @@ class CommentWidget extends StatelessWidget {
                   placeholder: (context, url) => Container(
                     width: 40,
                     height: 40,
-                    color: AppColors.grey.withOpacity(0.1),
-                    child: Icon(
-                      Icons.person,
-                      color: AppColors.grey,
-                      size: 20,
-                    ),
+                    color: AppColors.grey.withValues(alpha: 0.1),
+                    child: Icon(Icons.person, color: AppColors.grey, size: 20),
                   ),
                   errorWidget: (context, url, error) => Container(
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.1),
+                      color: AppColors.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Icon(
@@ -181,9 +162,9 @@ class CommentWidget extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       '${comment.createdAtDay} • ${comment.createdAtHour}',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.grey,
-                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodySmall?.copyWith(color: AppColors.grey),
                     ),
                   ],
                 ),
