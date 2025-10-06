@@ -3,15 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:test/core/di/dependency_injection.dart';
-import 'package:test/core/services/language_service.dart';
 import 'package:test/core/services/app_state_service.dart';
+import 'package:test/core/services/language_service.dart';
+import 'package:test/features/profile/presentation/cubit/profile_state.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/features/categories/presentation/cubits/products_filter_cubit.dart';
 import 'package:test/features/profile/presentation/cubit/profile_cubit.dart';
-import 'package:test/features/profile/presentation/cubit/profile_state.dart';
 import 'package:test/features/notifications/presentation/cubit/notifications_cubit.dart';
 import 'package:test/features/notifications/presentation/cubit/notifications_state.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:test/core/utils/constant/app_assets.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
@@ -240,7 +241,7 @@ class _GreetingHeaderState extends State<GreetingHeader> {
 
   void _showDrawer(BuildContext context) {
     final bool isArabic = Localizations.localeOf(context).languageCode == 'ar';
-    
+
     // Get NotificationsCubit from current context before opening dialog
     final notificationsCubit = BlocProvider.of<NotificationsCubit>(context);
 
@@ -256,12 +257,16 @@ class _GreetingHeaderState extends State<GreetingHeader> {
           child: SlideTransition(
             position: Tween<Offset>(
               // Arabic: slide from right (1.0, 0.0), English: slide from left (-1.0, 0.0)
-              begin: isArabic ? const Offset(1.0, 0.0) : const Offset(-1.0, 0.0),
+              begin: isArabic
+                  ? const Offset(1.0, 0.0)
+                  : const Offset(-1.0, 0.0),
               end: Offset.zero,
             ).animate(CurvedAnimation(parent: animation, curve: Curves.easeInOut)),
             child: Align(
               // Arabic: align to right, English: align to left
-              alignment: isArabic ? Alignment.centerRight : Alignment.centerLeft,
+              alignment: isArabic
+                  ? Alignment.centerRight
+                  : Alignment.centerLeft,
               child: _buildDraggableDrawer(dialogContext, isArabic),
             ),
           ),
@@ -529,6 +534,9 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                   },
                 ),
                 const SizedBox(height: 20),
+
+                // e-RAMO Developer Section
+                _buildDeveloperSection(),
               ],
             ),
           ),
@@ -868,5 +876,313 @@ class _GreetingHeaderState extends State<GreetingHeader> {
     }
 
     return '$greeting $username';
+  }
+
+  Widget _buildDeveloperSection() {
+    return GestureDetector(
+      onTap: () => _showDeveloperDialog(),
+      child: Container(
+        margin: const EdgeInsets.only(top: 16),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Text Content (Left side)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Sopieh Coffee',
+                  style: getSemiBoldStyle(
+                    fontFamily: FontConstant.cairo,
+                    fontSize: FontSize.size16,
+                    color: Colors.grey[700],
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'Developed by e-RAMO V 1.0.0',
+                  style: getRegularStyle(
+                    fontFamily: FontConstant.cairo,
+                    fontSize: FontSize.size12,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(width: 12),
+
+            // e-RAMO Logo (Right side)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset(
+                'assets/images/logo_eRamo.png',
+                width: 55,
+                height: 55,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    width: 55,
+                    height: 55,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      Icons.code_rounded,
+                      color: AppColors.primary,
+                      size: 20,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showDeveloperDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Close Button
+              Align(
+                alignment: Alignment.topRight,
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.close_rounded,
+                      size: 20,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // e-RAMO Logo (Larger)
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.asset(
+                    'assets/images/logo_eRamo.png',
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              AppColors.primary,
+                              AppColors.primary.withValues(alpha: 0.8),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Icon(
+                          Icons.code_rounded,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // Company Name
+              Text(
+                'e-RAMO for Digital Solution',
+                style: getBoldStyle(
+                  fontFamily: FontConstant.cairo,
+                  fontSize: FontSize.size20,
+                  color: AppColors.primary,
+                ),
+                textAlign: TextAlign.center,
+              ),
+
+              const SizedBox(height: 8),
+
+              // Version
+              Text(
+                'Version 1.0.0',
+                style: getRegularStyle(
+                  fontFamily: FontConstant.cairo,
+                  fontSize: FontSize.size14,
+                  color: Colors.grey[600],
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // Contact Information
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.grey[50],
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.grey[200]!, width: 1),
+                ),
+                child: Column(
+                  children: [
+                    // Phone Number
+                    _buildContactItem(
+                      icon: Icons.phone_rounded,
+                      title:
+                          Localizations.localeOf(context).languageCode == 'ar'
+                          ? 'رقم الهاتف'
+                          : 'Phone Number',
+                      value: '+20 1011559674',
+                      onTap: () => _launchPhone('+201011559674'),
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // Website
+                    _buildContactItem(
+                      icon: Icons.language_rounded,
+                      title:
+                          Localizations.localeOf(context).languageCode == 'ar'
+                          ? 'الموقع الإلكتروني'
+                          : 'Website',
+                      value: 'www.e-ramo.net',
+                      onTap: () => _launchWebsite('https://www.e-ramo.net/'),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // Thank You Message
+              Text(
+                Localizations.localeOf(context).languageCode == 'ar'
+                    ? 'شكراً لاستخدام تطبيقنا'
+                    : 'Thank you for using our app',
+                style: getRegularStyle(
+                  fontFamily: FontConstant.cairo,
+                  fontSize: FontSize.size14,
+                  color: Colors.grey[600],
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContactItem({
+    required IconData icon,
+    required String title,
+    required String value,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, color: AppColors.primary, size: 20),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: getRegularStyle(
+                        fontFamily: FontConstant.cairo,
+                        fontSize: FontSize.size12,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      value,
+                      style: getSemiBoldStyle(
+                        fontFamily: FontConstant.cairo,
+                        fontSize: FontSize.size14,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 16,
+                color: Colors.grey[400],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _launchPhone(String phoneNumber) async {
+    final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
+    try {
+      if (await canLaunchUrl(phoneUri)) {
+        await launchUrl(phoneUri);
+      }
+    } catch (e) {
+      // Handle error silently or show a snackbar
+    }
+  }
+
+  Future<void> _launchWebsite(String url) async {
+    final Uri websiteUri = Uri.parse(url);
+    try {
+      if (await canLaunchUrl(websiteUri)) {
+        await launchUrl(websiteUri, mode: LaunchMode.externalApplication);
+      }
+    } catch (e) {
+      // Handle error silently or show a snackbar
+    }
   }
 }
