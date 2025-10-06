@@ -468,7 +468,10 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                   title: Localizations.localeOf(context).languageCode == 'ar'
                       ? 'التواصل'
                       : 'Contact Us',
-                  onTap: () => Navigator.pop(context),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/contact-us');
+                  },
                 ),
                 _buildDrawerItem(
                   icon: Icons.info_outline_rounded,
@@ -489,7 +492,8 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                   title: Localizations.localeOf(context).languageCode == 'ar'
                       ? 'الشروط والأحكام'
                       : 'Terms & Conditions',
-                  onTap: () => Navigator.pop(context),
+                  onTap: () =>
+                      Navigator.pushNamed(context, '/terms-and-conditions'),
                 ),
                 const SizedBox(height: 16),
                 // Divider

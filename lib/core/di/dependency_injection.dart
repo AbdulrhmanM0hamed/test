@@ -163,6 +163,12 @@ import 'package:test/features/notifications/domain/repositories/notifications_re
 import 'package:test/features/notifications/domain/usecases/get_notifications_usecase.dart';
 import 'package:test/features/notifications/domain/usecases/get_notification_details_usecase.dart';
 import 'package:test/features/notifications/presentation/cubit/notifications_cubit.dart';
+// Contact Us feature imports
+import 'package:test/features/contact_us/data/datasources/contact_us_remote_data_source.dart';
+import 'package:test/features/contact_us/data/repositories/contact_us_repository_impl.dart';
+import 'package:test/features/contact_us/domain/repositories/contact_us_repository.dart';
+import 'package:test/features/contact_us/domain/usecases/get_contact_info_usecase.dart';
+import 'package:test/features/contact_us/presentation/cubit/contact_us_cubit.dart';
 
 class DependencyInjection {
   static final GetIt getIt = GetIt.instance;
@@ -886,6 +892,32 @@ class DependencyInjection {
     getIt.registerFactory<NotificationDetailsCubit>(
       () => NotificationDetailsCubit(
         getNotificationDetailsUseCase: getIt<GetNotificationDetailsUseCase>(),
+      ),
+    );
+
+    // Contact Us feature dependencies
+    // Data Sources
+    getIt.registerLazySingleton<ContactUsRemoteDataSource>(
+      () => ContactUsRemoteDataSourceImpl(dioService: getIt<DioService>()),
+    );
+
+    // Repositories
+    getIt.registerLazySingleton<ContactUsRepository>(
+      () => ContactUsRepositoryImpl(
+        remoteDataSource: getIt<ContactUsRemoteDataSource>(),
+        networkInfo: getIt<NetworkInfo>(),
+      ),
+    );
+
+    // Use Cases
+    getIt.registerLazySingleton<GetContactInfoUseCase>(
+      () => GetContactInfoUseCase(repository: getIt<ContactUsRepository>()),
+    );
+
+    // Cubits
+    getIt.registerFactory<ContactUsCubit>(
+      () => ContactUsCubit(
+        getContactInfoUseCase: getIt<GetContactInfoUseCase>(),
       ),
     );
   }
