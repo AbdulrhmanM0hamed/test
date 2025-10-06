@@ -420,7 +420,10 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                   title: Localizations.localeOf(context).languageCode == 'ar'
                       ? 'المدونة'
                       : 'Blog',
-                  onTap: () => Navigator.pop(context),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/blogs');
+                  },
                 ),
                 _buildDrawerItem(
                   icon: Icons.support_agent_rounded,

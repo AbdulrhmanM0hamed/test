@@ -32,6 +32,12 @@ class ApiEndpoints {
   static String get getWishlist => '$baseUrl/my-wishlist';
   static String get removeAllFromWishlist => '$baseUrl/wishlist/remove-all';
 
+  // Blog endpoints
+  static String blogs({int page = 1}) => '$baseUrl/blogs?page=$page';
+  static String blogDetails(int blogId) => '$baseUrl/blogs/$blogId';
+  static String addBlogComment(int blogId) => '$baseUrl/blogs/comment/$blogId';
+  static String get hotTopics => '$baseUrl/blogs/hot/topics';
+
   // Cart endpoints
   static String get addToCart => '$baseUrl/cart/add';
   static String get getCart => '$baseUrl/my-cart';

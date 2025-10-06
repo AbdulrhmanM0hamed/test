@@ -22,6 +22,8 @@ import 'package:test/features/auth/domain/usecases/change_password_usecase.dart'
 import 'package:test/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:test/features/auth/presentation/cubit/forget_password_cubit.dart';
 import 'package:test/features/auth/data/services/terms_service.dart';
+import 'package:test/features/blog/data/datasources/blog_remote_data_source.dart';
+import 'package:test/features/blog/data/datasources/blog_remote_data_source_impl.dart';
 import 'package:test/features/home/data/datasources/sub_categories_remote_data_source.dart';
 import 'package:test/features/home/data/datasources/sub_categories_remote_data_source_impl.dart';
 import 'package:test/features/home/data/repositories/sub_categories_repository_impl.dart';
@@ -48,6 +50,18 @@ import 'package:test/features/auth/domain/usecases/get_regions_usecase.dart';
 import 'package:test/features/auth/domain/usecases/signup_usecase.dart';
 import 'package:test/features/auth/presentation/cubit/registration_cubit.dart';
 import 'package:test/features/auth/presentation/cubit/location_cubit.dart';
+// Blog feature imports
+import 'package:test/features/blog/data/datasources/blog_remote_data_source.dart';
+import 'package:test/features/blog/data/datasources/blog_remote_data_source_impl.dart';
+import 'package:test/features/blog/data/repositories/blog_repository_impl.dart';
+import 'package:test/features/blog/domain/repositories/blog_repository.dart';
+import 'package:test/features/blog/domain/usecases/get_blogs_usecase.dart';
+import 'package:test/features/blog/domain/usecases/get_blog_details_usecase.dart';
+import 'package:test/features/blog/domain/usecases/get_hot_topics_usecase.dart';
+import 'package:test/features/blog/domain/usecases/add_comment_usecase.dart';
+import 'package:test/features/blog/presentation/cubit/blog_list/blog_list_cubit.dart';
+import 'package:test/features/blog/presentation/cubit/blog_details/blog_details_cubit.dart';
+import 'package:test/features/blog/presentation/cubit/hot_topics/hot_topics_cubit.dart';
 // Categories feature imports
 import 'package:test/features/categories/data/datasources/department_remote_data_source.dart';
 import 'package:test/features/categories/data/repositories/department_repository_impl.dart';
@@ -227,6 +241,7 @@ class DependencyInjection {
   static SubCategoriesRemoteDataSource? _subCategoriesRemoteDataSource;
   static SubCategoriesRepository? _subCategoriesRepository;
   static GetSubCategoriesUsecase? _getSubCategoriesUsecase;
+
 
   static Future<void> init() async {
     // Initialize SharedPreferences first
@@ -479,6 +494,29 @@ class DependencyInjection {
       () => RemoveAllFromCartUseCase(getIt()),
     );
 
+    // Register Blog dependencies
+    getIt.registerLazySingleton<BlogRemoteDataSource>(
+      () => BlogRemoteDataSourceImpl(dioService: getIt()),
+    );
+    getIt.registerLazySingleton<BlogRepository>(
+      () => BlogRepositoryImpl(
+        remoteDataSource: getIt(),
+        networkInfo: getIt(),
+      ),
+    );
+    getIt.registerLazySingleton<GetBlogsUseCase>(
+      () => GetBlogsUseCase(getIt()),
+    );
+    getIt.registerLazySingleton<GetBlogDetailsUseCase>(
+      () => GetBlogDetailsUseCase(getIt()),
+    );
+    getIt.registerLazySingleton<GetHotTopicsUseCase>(
+      () => GetHotTopicsUseCase(getIt()),
+    );
+    getIt.registerLazySingleton<AddCommentUseCase>(
+      () => AddCommentUseCase(getIt()),
+    );
+
     getIt.registerSingleton<ProfileRepository>(_profileRepository!);
     getIt.registerSingleton<GetProfileUseCase>(_getProfileUseCase!);
     getIt.registerSingleton<UpdateProfileUseCase>(_updateProfileUseCase!);
@@ -628,6 +666,26 @@ class DependencyInjection {
       () => SpecialOfferProductsCubit(
         getSpecialOfferProductsUseCase: getIt<GetSpecialOfferProductsUseCase>(),
         dataRefreshService: getIt<DataRefreshService>(),
+      ),
+    );
+
+    // Blog Cubits
+    getIt.registerFactory<BlogListCubit>(
+      () => BlogListCubit(
+        getBlogsUseCase: getIt<GetBlogsUseCase>(),
+      ),
+    );
+
+    getIt.registerFactory<BlogDetailsCubit>(
+      () => BlogDetailsCubit(
+        getBlogDetailsUseCase: getIt<GetBlogDetailsUseCase>(),
+        addCommentUseCase: getIt<AddCommentUseCase>(),
+      ),
+    );
+
+    getIt.registerFactory<HotTopicsCubit>(
+      () => HotTopicsCubit(
+        getHotTopicsUseCase: getIt<GetHotTopicsUseCase>(),
       ),
     );
 
