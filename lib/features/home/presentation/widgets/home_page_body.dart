@@ -18,10 +18,8 @@ import 'package:test/features/home/presentation/widgets/categories_section.dart'
 import 'package:test/features/home/presentation/widgets/home%20sections/special_offers_section.dart';
 import 'package:test/features/home/presentation/widgets/home%20sections/best_seller_products_section.dart';
 import 'package:test/features/home/presentation/widgets/home%20sections/latest_products_section.dart';
-import 'package:test/features/home/presentation/widgets/stores/stores_showcase.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/features/profile/presentation/cubit/profile_cubit.dart';
-import 'package:test/features/notifications/presentation/cubit/notifications_cubit.dart';
 import '../cubits/featured_products/featured_products_cubit.dart';
 import '../cubits/best_seller_products/best_seller_products_cubit.dart';
 import '../cubits/latest_products/latest_products_cubit.dart';
@@ -48,10 +46,7 @@ class HomePageBody extends StatelessWidget {
               DependencyInjection.getIt<WishlistCubit>(),
         ),
         // Provide NotificationsCubit for notification badge
-        BlocProvider<NotificationsCubit>(
-          create: (context) =>
-              DependencyInjection.getIt<NotificationsCubit>()..getNotifications(),
-        ),
+       
         BlocProvider<FeaturedProductsCubit>(
           create: (context) =>
               DependencyInjection.getIt<FeaturedProductsCubit>()
@@ -260,10 +255,10 @@ class HomePageBody extends StatelessWidget {
                             ),
 
                             // Stores Showcase Section
-                            const SizedBox(height: 24),
-                            const StoresShowcaseSection(),
+                            // const SizedBox(height: 24),
+                            // const StoresShowcaseSection(),
 
-                            // Footer space
+                            // // Footer space
                             const SizedBox(height: 20),
                           ],
                         ),

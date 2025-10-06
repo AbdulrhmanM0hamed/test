@@ -240,6 +240,9 @@ class _GreetingHeaderState extends State<GreetingHeader> {
 
   void _showDrawer(BuildContext context) {
     final bool isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    
+    // Get NotificationsCubit from current context before opening dialog
+    final notificationsCubit = BlocProvider.of<NotificationsCubit>(context);
 
     showGeneralDialog(
       context: context,
@@ -247,17 +250,20 @@ class _GreetingHeaderState extends State<GreetingHeader> {
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       barrierColor: Colors.black54,
       transitionDuration: const Duration(milliseconds: 300),
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return SlideTransition(
-          position: Tween<Offset>(
-            // Arabic: slide from right (1.0, 0.0), English: slide from left (-1.0, 0.0)
-            begin: isArabic ? const Offset(1.0, 0.0) : const Offset(-1.0, 0.0),
-            end: Offset.zero,
-          ).animate(CurvedAnimation(parent: animation, curve: Curves.easeInOut)),
-          child: Align(
-            // Arabic: align to right, English: align to left
-            alignment: isArabic ? Alignment.centerRight : Alignment.centerLeft,
-            child: _buildDraggableDrawer(context, isArabic),
+      pageBuilder: (dialogContext, animation, secondaryAnimation) {
+        return BlocProvider.value(
+          value: notificationsCubit,
+          child: SlideTransition(
+            position: Tween<Offset>(
+              // Arabic: slide from right (1.0, 0.0), English: slide from left (-1.0, 0.0)
+              begin: isArabic ? const Offset(1.0, 0.0) : const Offset(-1.0, 0.0),
+              end: Offset.zero,
+            ).animate(CurvedAnimation(parent: animation, curve: Curves.easeInOut)),
+            child: Align(
+              // Arabic: align to right, English: align to left
+              alignment: isArabic ? Alignment.centerRight : Alignment.centerLeft,
+              child: _buildDraggableDrawer(dialogContext, isArabic),
+            ),
           ),
         );
       },

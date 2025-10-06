@@ -54,4 +54,50 @@ class HomeProduct {
   }
 
   String get discountText => hasDiscount ? '${discount!}%' : '';
+
+  HomeProduct copyWith({
+    int? id,
+    String? name,
+    String? image,
+    String? price,
+    String? originalPrice,
+    int? discount,
+    double? star,
+    int? reviewCount,
+    String? brandName,
+    String? brandLogo,
+    int? countOfAvailable,
+    int? stock,
+    bool? isBest,
+    bool? isFeatured,
+    bool? isLatest,
+    bool? isSpecialOffer,
+    bool? isFavorite,
+    int? productSizeColorId,
+    int? quantityInCart,
+    int? limitation,
+  }) {
+    return HomeProduct(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      image: image ?? this.image,
+      price: price ?? this.price,
+      originalPrice: originalPrice ?? this.originalPrice,
+      discount: discount ?? this.discount,
+      star: star ?? this.star,
+      reviewCount: reviewCount ?? this.reviewCount,
+      brandName: brandName ?? this.brandName,
+      brandLogo: brandLogo ?? this.brandLogo,
+      countOfAvailable: countOfAvailable ?? this.countOfAvailable,
+      stock: stock ?? this.stock,
+      isBest: isBest ?? this.isBest,
+      isFeatured: isFeatured ?? this.isFeatured,
+      isLatest: isLatest ?? this.isLatest,
+      isSpecialOffer: isSpecialOffer ?? this.isSpecialOffer,
+      isFavorite: isFavorite ?? this.isFavorite,
+      productSizeColorId: productSizeColorId ?? this.productSizeColorId,
+      quantityInCart: quantityInCart ?? this.quantityInCart,
+      limitation: limitation ?? this.limitation,
+    );
+  }
 }

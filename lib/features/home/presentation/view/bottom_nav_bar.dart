@@ -26,6 +26,7 @@ import 'package:test/core/services/offline_wishlist_service.dart';
 import 'package:test/core/services/hybrid_wishlist_service.dart';
 import 'package:test/core/services/hybrid_cart_service.dart';
 import 'package:test/features/home/presentation/widgets/login_prompt_widget.dart';
+import 'package:test/features/notifications/presentation/cubit/notifications_cubit.dart';
 import 'package:test/features/home/presentation/widgets/lazy_tab_wrapper.dart';
 import 'package:test/features/orders/presentation/views/checkout_view.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
@@ -310,6 +311,9 @@ class _HomeViewState extends State<BottomNavBar> {
         ? GlobalCubitService.instance.wishlistCubit
         : null;
 
+    // NotificationsCubit is always available (for both logged in and guest users)
+    final notificationsCubit = DependencyInjection.getIt<NotificationsCubit>();
+
     return PopScope(
       canPop: false, // منع الـ default pop behavior
       onPopInvoked: (didPop) async {
@@ -326,26 +330,32 @@ class _HomeViewState extends State<BottomNavBar> {
         }
       },
       child: Scaffold(
-        body: isLoggedIn && cartCubit != null && wishlistCubit != null
-            ? MultiBlocProvider(
-                providers: [
-                  BlocProvider.value(value: cartCubit),
-                  BlocProvider.value(value: wishlistCubit),
-                ],
-                child: IndexedStack(index: _selectedIndex, children: _screens),
-              )
-            : IndexedStack(index: _selectedIndex, children: _screens),
+        body: MultiBlocProvider(
+          providers: [
+            // NotificationsCubit is always available
+            BlocProvider.value(value: notificationsCubit),
+            // Cart and Wishlist cubits only for logged in users
+            if (isLoggedIn && cartCubit != null)
+              BlocProvider.value(value: cartCubit),
+            if (isLoggedIn && wishlistCubit != null)
+              BlocProvider.value(value: wishlistCubit),
+          ],
+          child: IndexedStack(index: _selectedIndex, children: _screens),
+        ),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-          child: isLoggedIn && cartCubit != null && wishlistCubit != null
-              ? MultiBlocProvider(
-                  providers: [
-                    BlocProvider.value(value: cartCubit),
-                    BlocProvider.value(value: wishlistCubit),
-                  ],
-                  child: _buildCustomBottomNavBar(),
-                )
-              : _buildCustomBottomNavBar(),
+          child: MultiBlocProvider(
+            providers: [
+              // NotificationsCubit is always available
+              BlocProvider.value(value: notificationsCubit),
+              // Cart and Wishlist cubits only for logged in users
+              if (isLoggedIn && cartCubit != null)
+                BlocProvider.value(value: cartCubit),
+              if (isLoggedIn && wishlistCubit != null)
+                BlocProvider.value(value: wishlistCubit),
+            ],
+            child: _buildCustomBottomNavBar(),
+          ),
         ),
       ),
     );

@@ -65,7 +65,7 @@ class SubCategoriesSection extends StatelessWidget {
         SectionHeader(title: subCategory.name, icon: Icons.category),
         const SizedBox(height: 16),
         SizedBox(
-          height: 280,
+          height: 308,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: ResponsiveHelper.getResponsivePadding(context),

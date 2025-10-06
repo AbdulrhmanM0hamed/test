@@ -1,5 +1,6 @@
 import 'package:test/features/home/domain/entities/sub_category.dart';
 import 'package:test/features/home/data/models/home_product_model.dart';
+import 'package:test/features/home/data/models/sub_category_product_model.dart';
 
 class SubCategoryModel extends SubCategory {
   const SubCategoryModel({
@@ -32,7 +33,7 @@ class SubCategoryModel extends SubCategory {
           : [],
       products: json['products'] != null
           ? (json['products'] as List)
-              .map((product) => HomeProductModel.fromJson(product))
+              .map((product) => SubCategoryProductModel.fromJson(product).toHomeProduct())
               .toList()
           : [],
     );
