@@ -1082,7 +1082,7 @@ abstract class AppLocalizations {
   /// No description provided for @views.
   ///
   /// In en, this message translates to:
-  /// **'Views'**
+  /// **'views'**
   String get views;
 
   /// No description provided for @colors.
@@ -3550,6 +3550,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Twitter'**
   String get twitter;
+
+  /// No description provided for @blogDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Blog Details'**
+  String get blogDetails;
+
+  /// No description provided for @allBlogs.
+  ///
+  /// In en, this message translates to:
+  /// **'All Blogs'**
+  String get allBlogs;
+
+  /// No description provided for @noBlogsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No Blogs Found'**
+  String get noBlogsFound;
+
+  /// No description provided for @checkBackLaterForNewBlogPosts.
+  ///
+  /// In en, this message translates to:
+  /// **'Check back later for new blog posts'**
+  String get checkBackLaterForNewBlogPosts;
+
+  /// No description provided for @hotTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'Hot Topics'**
+  String get hotTopics;
+
+  /// No description provided for @errorLoadingHotTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'Error Loading Hot Topics'**
+  String get errorLoadingHotTopics;
+
+  /// No description provided for @noHotTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'No Hot Topics'**
+  String get noHotTopics;
+
+  /// No description provided for @checkBackLaterForTrendingTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'Check back later for trending topics'**
+  String get checkBackLaterForTrendingTopics;
+
+  /// No description provided for @hot.
+  ///
+  /// In en, this message translates to:
+  /// **'HOT'**
+  String get hot;
+
+  /// No description provided for @minRead.
+  ///
+  /// In en, this message translates to:
+  /// **'min read'**
+  String get minRead;
+
+  /// No description provided for @comments.
+  ///
+  /// In en, this message translates to:
+  /// **'Comments'**
+  String get comments;
+
+  /// No description provided for @noCommentsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No Comments Yet'**
+  String get noCommentsYet;
+
+  /// No description provided for @beTheFirstToComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Be the first to comment on this blog post'**
+  String get beTheFirstToComment;
+
+  /// No description provided for @addComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Comment'**
+  String get addComment;
+
+  /// No description provided for @loginToComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Login to Comment'**
+  String get loginToComment;
+
+  /// No description provided for @pleaseLoginToAddComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Please login to your account to add a comment'**
+  String get pleaseLoginToAddComment;
+
+  /// No description provided for @writeYourCommentHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Write your comment here...'**
+  String get writeYourCommentHere;
+
+  /// No description provided for @submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get submit;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

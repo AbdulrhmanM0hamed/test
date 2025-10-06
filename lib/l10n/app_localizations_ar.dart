@@ -501,7 +501,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get sales => 'المبيعات';
 
   @override
-  String get views => 'المشاهدات';
+  String get views => 'مشاهدة';
 
   @override
   String get colors => ' الألوان المتاحة ';
@@ -1735,4 +1735,58 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get twitter => 'تويتر';
+
+  @override
+  String get blogDetails => 'تفاصيل المقال';
+
+  @override
+  String get allBlogs => 'جميع المقالات';
+
+  @override
+  String get noBlogsFound => 'لا توجد مقالات';
+
+  @override
+  String get checkBackLaterForNewBlogPosts => 'تحقق لاحقاً من المقالات الجديدة';
+
+  @override
+  String get hotTopics => 'المواضيع الساخنة';
+
+  @override
+  String get errorLoadingHotTopics => 'خطأ في تحميل المواضيع الساخنة';
+
+  @override
+  String get noHotTopics => 'لا توجد مواضيع ساخنة';
+
+  @override
+  String get checkBackLaterForTrendingTopics => 'تحقق لاحقاً من المواضيع الرائجة';
+
+  @override
+  String get hot => 'ساخن';
+
+  @override
+  String get minRead => 'دقيقة قراءة';
+
+  @override
+  String get comments => 'التعليقات';
+
+  @override
+  String get noCommentsYet => 'لا توجد تعليقات بعد';
+
+  @override
+  String get beTheFirstToComment => 'كن أول من يعلق على هذا المقال';
+
+  @override
+  String get addComment => 'إضافة تعليق';
+
+  @override
+  String get loginToComment => 'سجل الدخول للتعليق';
+
+  @override
+  String get pleaseLoginToAddComment => 'يرجى تسجيل الدخول لحسابك لإضافة تعليق';
+
+  @override
+  String get writeYourCommentHere => 'اكتب تعليقك هنا...';
+
+  @override
+  String get submit => 'إرسال';
 }

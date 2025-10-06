@@ -86,14 +86,14 @@ class BlogHeaderWidget extends StatelessWidget {
                   _buildMetaItem(
                     context,
                     icon: Icons.comment_outlined,
-                    text: '${blog.commentsCount} Comments',
+                    text: '${blog.commentsCount} ${AppLocalizations.of(context)!.comments}',
                   ),
 
                   // Reading Time
                   _buildMetaItem(
                     context,
                     icon: Icons.schedule_outlined,
-                    text: '${blog.estimatedReadingTime} min read',
+                    text: '${blog.estimatedReadingTime} ${AppLocalizations.of(context)!.minRead}',
                   ),
                 ],
               ),

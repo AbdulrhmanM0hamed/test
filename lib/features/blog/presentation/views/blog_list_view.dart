@@ -104,7 +104,7 @@ class _BlogListViewState extends State<BlogListView> {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            'All Blogs',
+                            AppLocalizations.of(context)!.allBlogs,
                             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: AppColors.textPrimary,
@@ -218,7 +218,7 @@ class _BlogListViewState extends State<BlogListView> {
             ),
             const SizedBox(height: 16),
             Text(
-              'No Blogs Found',
+              AppLocalizations.of(context)!.noBlogsFound,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 color: AppColors.textSecondary,
               ),
@@ -226,7 +226,7 @@ class _BlogListViewState extends State<BlogListView> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Check back later for new blog posts',
+              AppLocalizations.of(context)!.checkBackLaterForNewBlogPosts,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: AppColors.textSecondary,
               ),

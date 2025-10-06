@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test/core/services/app_state_service.dart';
-import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/l10n/app_localizations.dart';
+import 'package:test/core/di/dependency_injection.dart';
 import '../cubit/blog_details/blog_details_cubit.dart';
 
 class AddCommentWidget extends StatefulWidget {
@@ -37,7 +37,8 @@ class _AddCommentWidgetState extends State<AddCommentWidget> {
   @override
   Widget build(BuildContext context) {
     final appStateService = DependencyInjection.getIt<AppStateService>();
-    final isLoggedIn = appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+    final isLoggedIn =
+        appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -54,7 +55,7 @@ class _AddCommentWidgetState extends State<AddCommentWidget> {
               ),
               const SizedBox(width: 8),
               Text(
-                'Add Comment',
+                AppLocalizations.of(context)!.addComment,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
@@ -81,20 +82,14 @@ class _AddCommentWidgetState extends State<AddCommentWidget> {
       decoration: BoxDecoration(
         color: AppColors.primary.withOpacity(0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.primary.withOpacity(0.2),
-        ),
+        border: Border.all(color: AppColors.primary.withOpacity(0.2)),
       ),
       child: Column(
         children: [
-          Icon(
-            Icons.login,
-            size: 48,
-            color: AppColors.primary,
-          ),
+          Icon(Icons.login, size: 48, color: AppColors.primary),
           const SizedBox(height: 12),
           Text(
-            'Login to Comment',
+            AppLocalizations.of(context)!.loginToComment,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: AppColors.textPrimary,
               fontWeight: FontWeight.w600,
@@ -103,10 +98,10 @@ class _AddCommentWidgetState extends State<AddCommentWidget> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Please login to your account to add a comment',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppColors.textSecondary,
-            ),
+            AppLocalizations.of(context)!.pleaseLoginToAddComment,
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
@@ -119,10 +114,7 @@ class _AddCommentWidgetState extends State<AddCommentWidget> {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 12,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             ),
           ),
         ],
@@ -136,8 +128,8 @@ class _AddCommentWidgetState extends State<AddCommentWidget> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: _isExpanded 
-              ? AppColors.primary 
+          color: _isExpanded
+              ? AppColors.primary
               : AppColors.grey.withOpacity(0.3),
           width: _isExpanded ? 2 : 1,
         ),
@@ -157,16 +149,14 @@ class _AddCommentWidgetState extends State<AddCommentWidget> {
             focusNode: _focusNode,
             maxLines: _isExpanded ? 4 : 1,
             decoration: InputDecoration(
-              hintText: 'Write your comment here...',
-              hintStyle: TextStyle(
-                color: AppColors.grey,
-              ),
+              hintText: AppLocalizations.of(context)!.writeYourCommentHere,
+              hintStyle: TextStyle(color: AppColors.grey),
               border: InputBorder.none,
               contentPadding: const EdgeInsets.all(16),
             ),
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppColors.textPrimary,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppColors.textPrimary),
             onTap: () {
               if (!_isExpanded) {
                 setState(() {
@@ -181,10 +171,7 @@ class _AddCommentWidgetState extends State<AddCommentWidget> {
 
           // Comment Actions (shown when expanded)
           if (_isExpanded) ...[
-            Container(
-              height: 1,
-              color: AppColors.grey.withOpacity(0.1),
-            ),
+            Container(height: 1, color: AppColors.grey.withOpacity(0.1)),
             Padding(
               padding: const EdgeInsets.all(12),
               child: Row(
@@ -205,14 +192,16 @@ class _AddCommentWidgetState extends State<AddCommentWidget> {
                     children: [
                       // Cancel button
                       TextButton(
-                        onPressed: widget.isLoading ? null : () {
-                          _commentController.clear();
-                          _focusNode.unfocus();
-                          setState(() {
-                            _isExpanded = false;
-                          });
-                        },
-                        child: const Text('Cancel'),
+                        onPressed: widget.isLoading
+                            ? null
+                            : () {
+                                _commentController.clear();
+                                _focusNode.unfocus();
+                                setState(() {
+                                  _isExpanded = false;
+                                });
+                              },
+                        child: Text(AppLocalizations.of(context)!.cancel),
                       ),
                       const SizedBox(width: 8),
 
@@ -228,7 +217,7 @@ class _AddCommentWidgetState extends State<AddCommentWidget> {
                           ),
                         ),
                         child: widget.isLoading
-                            ? SizedBox(
+                            ? const SizedBox(
                                 width: 16,
                                 height: 16,
                                 child: CircularProgressIndicator(
@@ -238,7 +227,7 @@ class _AddCommentWidgetState extends State<AddCommentWidget> {
                                   ),
                                 ),
                               )
-                            : const Text('Submit'),
+                            : Text(AppLocalizations.of(context)!.submit),
                       ),
                     ],
                   ),
@@ -253,15 +242,15 @@ class _AddCommentWidgetState extends State<AddCommentWidget> {
 
   bool _canSubmitComment() {
     return !widget.isLoading &&
-           _commentController.text.trim().isNotEmpty &&
-           _commentController.text.length <= 500;
+        _commentController.text.trim().isNotEmpty &&
+        _commentController.text.length <= 500;
   }
 
   void _submitComment() {
     if (!_canSubmitComment()) return;
 
     final comment = _commentController.text.trim();
-    
+
     context.read<BlogDetailsCubit>().addComment(
       blogId: widget.blogId,
       comment: comment,

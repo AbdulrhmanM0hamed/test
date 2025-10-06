@@ -119,8 +119,10 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
         );
       } else {
         return ApiResponse.error(
+          
           message: response.data['message'] ?? 'Failed to add comment',
         );
+        
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {

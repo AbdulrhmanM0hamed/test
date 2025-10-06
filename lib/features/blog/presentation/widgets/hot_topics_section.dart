@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:test/l10n/app_localizations.dart';
 import '../../domain/entities/blog.dart';
 import '../cubit/hot_topics/hot_topics_cubit.dart';
 import '../cubit/hot_topics/hot_topics_state.dart';
@@ -29,7 +30,7 @@ class HotTopicsSection extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Hot Topics',
+                    AppLocalizations.of(context)!.hotTopics,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
@@ -147,7 +148,7 @@ class HotTopicsSection extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            'Error Loading Hot Topics',
+            AppLocalizations.of(context)!.errorLoadingHotTopics,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: AppColors.error,
               fontWeight: FontWeight.w600,
@@ -166,7 +167,7 @@ class HotTopicsSection extends StatelessWidget {
               context.read<HotTopicsCubit>().getHotTopics();
             },
             icon: const Icon(Icons.refresh),
-            label: const Text('Retry'),
+            label: Text(AppLocalizations.of(context)!.retry),
             style: TextButton.styleFrom(
               foregroundColor: AppColors.error,
             ),
@@ -195,7 +196,7 @@ class HotTopicsSection extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            'No Hot Topics',
+            AppLocalizations.of(context)!.noHotTopics,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: AppColors.textSecondary,
               fontWeight: FontWeight.w500,
@@ -203,7 +204,7 @@ class HotTopicsSection extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Check back later for trending topics',
+            AppLocalizations.of(context)!.checkBackLaterForTrendingTopics,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: AppColors.grey,
             ),
@@ -325,7 +326,7 @@ class HotTopicCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          'HOT',
+                          AppLocalizations.of(context)!.hot,
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,

@@ -16,21 +16,15 @@ class BlogDetailsView extends StatelessWidget {
   static const String routeName = '/blog-details';
   final int blogId;
 
-  const BlogDetailsView({
-    super.key,
-    required this.blogId,
-  });
+  const BlogDetailsView({super.key, required this.blogId});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<BlogDetailsCubit>(
-      create: (context) => DependencyInjection.getIt<BlogDetailsCubit>()
-        ..getBlogDetails(blogId),
+      create: (context) =>
+          DependencyInjection.getIt<BlogDetailsCubit>()..getBlogDetails(blogId),
       child: Scaffold(
-        backgroundColor: Colors.grey[50],
-        appBar: CustomAppBar(
-          title: 'Blog Details',
-        ),
+        appBar: CustomAppBar(title: AppLocalizations.of(context)!.blog),
         body: BlocConsumer<BlogDetailsCubit, BlogDetailsState>(
           listener: (context, state) {
             if (state is BlogCommentAdded) {
@@ -61,10 +55,10 @@ class BlogDetailsView extends StatelessWidget {
               final blog = state is BlogDetailsLoaded
                   ? state.blog
                   : state is BlogCommentAdding
-                      ? state.blog
-                      : state is BlogCommentAdded
-                          ? state.blog
-                          : (state as BlogCommentError).blog;
+                  ? state.blog
+                  : state is BlogCommentAdded
+                  ? state.blog
+                  : (state as BlogCommentError).blog;
 
               final isAddingComment = state is BlogCommentAdding;
 
@@ -83,25 +77,23 @@ class BlogDetailsView extends StatelessWidget {
                       // Blog Content
                       BlogContentWidget(blog: blog),
 
-                      const SizedBox(height: 24),
+                      //   const SizedBox(height: 24),
 
                       // Comments Section
-                      CommentsSection(
-                        comments: blog.comments,
-                        commentsCount: blog.commentsCount,
-                      ),
-
+                      // CommentsSection(
+                      //   comments: blog.comments,
+                      //   commentsCount: blog.commentsCount,
+                      // ),
                       const SizedBox(height: 16),
 
-                      // Add Comment Section
-                      AddCommentWidget(
-                        blogId: blog.id,
-                        isLoading: isAddingComment,
-                        onCommentAdded: () {
-                          // Comment will be added via cubit
-                        },
-                      ),
-
+                      // // Add Comment Section
+                      // AddCommentWidget(
+                      //   blogId: blog.id,
+                      //   isLoading: isAddingComment,
+                      //   onCommentAdded: () {
+                      //     // Comment will be added via cubit
+                      //   },
+                      // ),
                       const SizedBox(height: 24),
                     ],
                   ),
@@ -125,11 +117,7 @@ class BlogDetailsView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.error_outline,
-              size: 80,
-              color: AppColors.error,
-            ),
+            Icon(Icons.error_outline, size: 80, color: AppColors.error),
             const SizedBox(height: 16),
             Text(
               AppLocalizations.of(context)!.errorOccurred,
@@ -141,9 +129,9 @@ class BlogDetailsView extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               message,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.textSecondary,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),

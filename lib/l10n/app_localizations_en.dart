@@ -501,7 +501,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sales => 'Sales';
 
   @override
-  String get views => 'Views';
+  String get views => 'views';
 
   @override
   String get colors => 'Available colors';
@@ -1735,4 +1735,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get twitter => 'Twitter';
+
+  @override
+  String get blogDetails => 'Blog Details';
+
+  @override
+  String get allBlogs => 'All Blogs';
+
+  @override
+  String get noBlogsFound => 'No Blogs Found';
+
+  @override
+  String get checkBackLaterForNewBlogPosts => 'Check back later for new blog posts';
+
+  @override
+  String get hotTopics => 'Hot Topics';
+
+  @override
+  String get errorLoadingHotTopics => 'Error Loading Hot Topics';
+
+  @override
+  String get noHotTopics => 'No Hot Topics';
+
+  @override
+  String get checkBackLaterForTrendingTopics => 'Check back later for trending topics';
+
+  @override
+  String get hot => 'HOT';
+
+  @override
+  String get minRead => 'min read';
+
+  @override
+  String get comments => 'Comments';
+
+  @override
+  String get noCommentsYet => 'No Comments Yet';
+
+  @override
+  String get beTheFirstToComment => 'Be the first to comment on this blog post';
+
+  @override
+  String get addComment => 'Add Comment';
+
+  @override
+  String get loginToComment => 'Login to Comment';
+
+  @override
+  String get pleaseLoginToAddComment => 'Please login to your account to add a comment';
+
+  @override
+  String get writeYourCommentHere => 'Write your comment here...';
+
+  @override
+  String get submit => 'Submit';
 }

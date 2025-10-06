@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:test/l10n/app_localizations.dart';
 import '../../domain/entities/blog_comment.dart';
 
 class CommentsSection extends StatelessWidget {
@@ -30,7 +31,7 @@ class CommentsSection extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                'Comments ($commentsCount)',
+                '${AppLocalizations.of(context)!.comments} ($commentsCount)',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
@@ -78,7 +79,7 @@ class CommentsSection extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            'No Comments Yet',
+            AppLocalizations.of(context)!.noCommentsYet,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: AppColors.textSecondary,
               fontWeight: FontWeight.w500,
@@ -86,7 +87,7 @@ class CommentsSection extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Be the first to comment on this blog post',
+            AppLocalizations.of(context)!.beTheFirstToComment,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: AppColors.grey,
             ),

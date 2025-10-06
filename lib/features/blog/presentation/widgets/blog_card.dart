@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:test/l10n/app_localizations.dart';
 import '../../domain/entities/blog.dart';
 
 class BlogCard extends StatelessWidget {
@@ -165,7 +166,7 @@ class BlogCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
-                              '${blog.estimatedReadingTime} min read',
+                              '${blog.estimatedReadingTime} ${AppLocalizations.of(context)!.minRead}',
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.w500,
