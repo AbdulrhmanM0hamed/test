@@ -45,7 +45,7 @@ class ProfileStatsCard extends StatelessWidget {
                 Text(
                   value,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

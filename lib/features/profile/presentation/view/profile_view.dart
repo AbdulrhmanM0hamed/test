@@ -6,6 +6,7 @@ import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/core/utils/widgets/logout_confirmation_dialog.dart';
+import 'package:test/features/contact_us/contact_us_view.dart';
 import 'package:test/features/profile/domain/entities/user_profile.dart';
 import 'package:test/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:test/features/profile/presentation/cubit/profile_state.dart';
@@ -261,9 +262,9 @@ class _ProfileViewState extends State<ProfileView> {
                             ProfileActionButton(
                               title: AppLocalizations.of(
                                 context,
-                              )!.helpAndSupport,
+                              )!.contactUs,
                               icon: Icons.help,
-                              onTap: () => _showHelpCenter(context),
+                              onTap: () => Navigator.pushNamed(context, ContactUsView.routeName),
                             ),
 
                             ProfileActionButton(
@@ -341,7 +342,7 @@ class _ProfileViewState extends State<ProfileView> {
             children: <Widget>[
               ListTile(
                 leading: const Icon(Icons.photo_library),
-                title: const Text('المعرض'),
+                title:  Text(AppLocalizations.of(context)!.gallery),
                 onTap: () {
                   Navigator.of(context).pop();
                   _pickImage(ImageSource.gallery);
@@ -349,7 +350,7 @@ class _ProfileViewState extends State<ProfileView> {
               ),
               ListTile(
                 leading: const Icon(Icons.photo_camera),
-                title: const Text('الكاميرا'),
+                title:  Text(AppLocalizations.of(context)!.camera),
                 onTap: () {
                   Navigator.of(context).pop();
                   _pickImage(ImageSource.camera);

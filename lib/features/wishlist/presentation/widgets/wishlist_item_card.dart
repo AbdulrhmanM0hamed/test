@@ -341,7 +341,7 @@ class _WishlistItemCardState extends State<WishlistItemCard>
               if (widget.item.product.hasDiscount) ...[
                 const SizedBox(width: 8),
                 Text(
-                  '${widget.item.product.fakePrice} ج.م',
+                  '${widget.item.product.fakePrice} ${AppLocalizations.of(context)!.currency}',
                   style: TextStyle(
                     fontSize: FontSize.size12,
                     fontFamily: FontConstant.cairo,
@@ -357,7 +357,7 @@ class _WishlistItemCardState extends State<WishlistItemCard>
 
           // Stock status
           Text(
-            widget.item.product.availabilityText,
+            AppLocalizations.of(context)!.available,
             style: getMediumStyle(
               fontSize: FontSize.size11,
               fontFamily: FontConstant.cairo,
