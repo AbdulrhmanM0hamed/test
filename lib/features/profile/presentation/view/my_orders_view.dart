@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test/core/di/dependency_injection.dart';
+import 'package:test/core/services/app_state_service.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
 import 'package:test/core/utils/common/custom_app_bar.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
+import 'package:test/features/home/presentation/widgets/login_prompt_widget.dart';
 import 'package:test/features/orders/presentation/cubit/orders_cubit/orders_cubit.dart';
 import 'package:test/features/orders/presentation/cubit/orders_cubit/orders_state.dart';
 import 'package:test/features/orders/domain/entities/order_actions_helper.dart';
@@ -13,16 +16,39 @@ import 'package:test/features/orders/domain/entities/order_item.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../widgets/order_card.dart';
 
-class MyOrdersView extends StatefulWidget {
+class MyOrdersView extends StatelessWidget {
   static const String routeName = '/my-orders';
 
   const MyOrdersView({super.key});
 
   @override
-  State<MyOrdersView> createState() => _MyOrdersViewState();
+  Widget build(BuildContext context) {
+    // Check if user is logged in before creating cubit
+    final appStateService = DependencyInjection.getIt<AppStateService>();
+    final isLoggedIn =
+        appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+
+    if (isLoggedIn) {
+      return BlocProvider(
+        create: (context) =>
+            DependencyInjection.getIt<OrdersCubit>()..getMyOrders(),
+        child: const MyOrdersViewBody(),
+      );
+    } else {
+      // For guests, show login prompt directly without cubit
+      return const MyOrdersViewBody();
+    }
+  }
 }
 
-class _MyOrdersViewState extends State<MyOrdersView>
+class MyOrdersViewBody extends StatefulWidget {
+  const MyOrdersViewBody({super.key});
+
+  @override
+  State<MyOrdersViewBody> createState() => _MyOrdersViewBodyState();
+}
+
+class _MyOrdersViewBodyState extends State<MyOrdersViewBody>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
@@ -143,10 +169,16 @@ class _MyOrdersViewState extends State<MyOrdersView>
 
   @override
   Widget build(BuildContext context) {
+    // Check if user is logged in
+    final appStateService = DependencyInjection.getIt<AppStateService>();
+    final isLoggedIn =
+        appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: CustomAppBar(title: AppLocalizations.of(context)!.myOrders),
-      body: BlocListener<OrdersCubit, OrdersState>(
+      body: isLoggedIn
+          ? BlocListener<OrdersCubit, OrdersState>(
         listenWhen: (previous, current) {
           return current is OrderActionSuccess || current is OrderActionError;
         },
@@ -197,7 +229,8 @@ class _MyOrdersViewState extends State<MyOrdersView>
             return _buildInitialState(context);
           },
         ),
-      ),
+      )
+          : const LoginPromptWidget(), // Show login prompt for guests
     );
   }
 
