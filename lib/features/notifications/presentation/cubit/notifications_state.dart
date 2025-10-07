@@ -34,6 +34,15 @@ class NotificationsError extends NotificationsState {
   List<Object?> get props => [message];
 }
 
+class NotificationsDeletedSuccessfully extends NotificationsState {
+  final String message;
+
+  const NotificationsDeletedSuccessfully(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
 // Notification Details States
 abstract class NotificationDetailsState extends Equatable {
   const NotificationDetailsState();

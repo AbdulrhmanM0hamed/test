@@ -745,5 +745,8 @@
   "loadingRegions": "جاري تحميل المناطق...",
   "noCitiesAvailable": "لا توجد مدن متاحة",
   "noRegionsAvailable": "لا توجد مناطق متاحة",
-  "selectCityFirst": "اختر المدينة أولاً"
+  "selectCityFirst": "اختر المدينة أولاً",
+  "deleteAllNotifications": "حذف جميع الإشعارات",
+  "deleteAllNotificationsConfirmation": "هل أنت متأكد من أنك تريد حذف جميع الإشعارات؟ لا يمكن التراجع عن هذا الإجراء.",
+  "notificationsDeletedSuccessfully": "تم حذف جميع الإشعارات بنجاح"
 }

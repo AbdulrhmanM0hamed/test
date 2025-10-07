@@ -3658,6 +3658,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Submit'**
   String get submit;
+
+  /// No description provided for @loadingRegions.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading regions...'**
+  String get loadingRegions;
+
+  /// No description provided for @deleteAllNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete All Notifications'**
+  String get deleteAllNotifications;
+
+  /// No description provided for @deleteAllNotificationsConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete all notifications? This action cannot be undone.'**
+  String get deleteAllNotificationsConfirmation;
+
+  /// No description provided for @notificationsDeletedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'All notifications deleted successfully'**
+  String get notificationsDeletedSuccessfully;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

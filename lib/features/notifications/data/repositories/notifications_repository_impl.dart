@@ -53,4 +53,22 @@ class NotificationsRepositoryImpl implements NotificationsRepository {
       return Left(NetworkFailure(message: 'لا يوجد اتصال بالإنترنت'));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> deleteAllNotifications() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final response = await remoteDataSource.deleteAllNotifications();
+        if (response.success) {
+          return const Right(null);
+        } else {
+          return Left(ServerFailure(message: response.message));
+        }
+      } catch (e) {
+        return Left(ServerFailure(message: e.toString()));
+      }
+    } else {
+      return Left(NetworkFailure(message: 'لا يوجد اتصال بالإنترنت'));
+    }
+  }
 }

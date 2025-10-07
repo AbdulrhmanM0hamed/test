@@ -38,21 +38,38 @@ class _RegistrationLocationSelectorState
   @override
   void initState() {
     super.initState();
-    // Auto-load cities for default country (Egypt) with error handling
+    // Load countries first, then cities for default country (Egypt)
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        try {
-          context.read<LocationCubit>().getCities(defaultCountryId);
-        } catch (e) {
-          // Handle potential context issues on first app launch
-          Future.delayed(const Duration(milliseconds: 500), () {
-            if (mounted) {
-              context.read<LocationCubit>().getCities(defaultCountryId);
-            }
-          });
-        }
+        _loadInitialData();
       }
     });
+  }
+
+  Future<void> _loadInitialData() async {
+    try {
+      final cubit = context.read<LocationCubit>();
+      
+      // First load countries if not already loaded
+      if (cubit.state is LocationInitial) {
+        await cubit.getCountries();
+      }
+      
+      // Then load cities for default country
+      if (mounted) {
+        await cubit.getCities(defaultCountryId);
+      }
+    } catch (e) {
+      // Handle errors gracefully
+      if (mounted) {
+        // Retry after a delay
+        Future.delayed(const Duration(seconds: 2), () {
+          if (mounted) {
+            _loadInitialData();
+          }
+        });
+      }
+    }
   }
 
   @override
@@ -480,7 +497,7 @@ class _RegistrationLocationSelectorState
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
-              context.read<LocationCubit>().getCities(defaultCountryId);
+              _loadInitialData();
             },
             child: Text(
               AppLocalizations.of(context)!.retry,
@@ -515,7 +532,7 @@ class _RegistrationLocationSelectorState
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
-              context.read<LocationCubit>().getCities(defaultCountryId);
+              _loadInitialData();
             },
             child: Text(
               AppLocalizations.of(context)!.retry,
@@ -533,8 +550,8 @@ class _RegistrationLocationSelectorState
       if (mounted) {
         final currentState = context.read<LocationCubit>().state;
         if (currentState is LocationInitial || currentState is LocationCitiesLoading) {
-          // If still loading after 10 seconds, try to reload
-          context.read<LocationCubit>().getCities(defaultCountryId);
+          // If still loading after 10 seconds, try to reload with proper sequence
+          _loadInitialData();
         }
       }
     });

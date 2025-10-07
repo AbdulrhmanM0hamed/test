@@ -1789,4 +1789,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get submit => 'Submit';
+
+  @override
+  String get loadingRegions => 'Loading regions...';
+
+  @override
+  String get deleteAllNotifications => 'Delete All Notifications';
+
+  @override
+  String get deleteAllNotificationsConfirmation => 'Are you sure you want to delete all notifications? This action cannot be undone.';
+
+  @override
+  String get notificationsDeletedSuccessfully => 'All notifications deleted successfully';
 }

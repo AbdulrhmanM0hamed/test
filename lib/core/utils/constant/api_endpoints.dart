@@ -133,6 +133,7 @@ class ApiEndpoints {
   static String get notifications => '$baseUrl/notifications';
   static String notificationDetails(int notificationId) =>
       '$baseUrl/notifications/$notificationId';
+  static String get deleteAllNotifications => '$baseUrl/notifications-delete';
 
   // Contact Us endpoint
   static String get contactUs => '$baseUrl/contact-us';

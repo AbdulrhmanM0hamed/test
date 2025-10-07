@@ -7,6 +7,7 @@ import 'package:test/core/utils/common/custom_app_bar.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/l10n/app_localizations.dart';
 import 'package:test/features/home/presentation/widgets/login_prompt_widget.dart';
 import '../cubit/notifications_cubit.dart';
@@ -48,17 +49,42 @@ class NotificationsViewBody extends StatelessWidget {
         appStateService.isLoggedIn() && !appStateService.hasLoggedOut();
 
     return Scaffold(
-      appBar: CustomAppBar(title: AppLocalizations.of(context)!.notifications),
+      appBar: CustomAppBar(
+        title: AppLocalizations.of(context)!.notifications,
+        actions: isLoggedIn ? [
+          BlocBuilder<NotificationsCubit, NotificationsState>(
+            builder: (context, state) {
+              if (state is NotificationsLoaded && state.notifications.isNotEmpty) {
+                return IconButton(
+                  onPressed: () => _showDeleteConfirmationDialog(context),
+                  icon: const Icon(Icons.delete_outline),
+                  tooltip: AppLocalizations.of(context)!.deleteAllNotifications,
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+        ] : null,
+      ),
       body: isLoggedIn
-          ? BlocBuilder<NotificationsCubit, NotificationsState>(
-              builder: (context, state) {
-                if (state is NotificationsLoading) {
-                  return const Center(child: CustomProgressIndicator());
+          ? BlocListener<NotificationsCubit, NotificationsState>(
+              listener: (context, state) {
+                if (state is NotificationsDeletedSuccessfully) {
+                  CustomSnackbar.showSuccess(
+                    message: state.message,
+                    context: context,
+                  );
                 }
+              },
+              child: BlocBuilder<NotificationsCubit, NotificationsState>(
+                builder: (context, state) {
+                  if (state is NotificationsLoading) {
+                    return const Center(child: CustomProgressIndicator());
+                  }
 
-                if (state is NotificationsError) {
-                  return _buildErrorState(context, state.message);
-                }
+                  if (state is NotificationsError) {
+                    return _buildErrorState(context, state.message);
+                  }
 
                 if (state is NotificationsLoaded) {
                   if (state.notifications.isEmpty) {
@@ -69,7 +95,8 @@ class NotificationsViewBody extends StatelessWidget {
                 }
 
                 return const SizedBox.shrink();
-              },
+                },
+              ),
             )
           : const LoginPromptWidget(), // Show login prompt for guests
     );
@@ -274,4 +301,62 @@ class NotificationsViewBody extends StatelessWidget {
       ),
     );
   }
-}
+
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text(
+            AppLocalizations.of(context)!.deleteAllNotifications,
+            style: getBoldStyle(
+              fontFamily: FontConstant.cairo,
+              fontSize: 18,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          content: Text(
+            AppLocalizations.of(context)!.deleteAllNotificationsConfirmation,
+            style: getRegularStyle(
+              fontFamily: FontConstant.cairo,
+              fontSize: 14,
+              color: AppColors.textSecondary,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(
+                AppLocalizations.of(context)!.cancel,
+                style: getMediumStyle(
+                  fontFamily: FontConstant.cairo,
+                  fontSize: 14,
+                  color: AppColors.grey,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+                context.read<NotificationsCubit>().deleteAllNotifications();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+              ),
+              child: Text(
+                'حذف',
+                style: getMediumStyle(
+                  fontFamily: FontConstant.cairo,
+                  fontSize: 14,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+ }

@@ -162,6 +162,7 @@ import 'package:test/features/notifications/data/repositories/notifications_repo
 import 'package:test/features/notifications/domain/repositories/notifications_repository.dart';
 import 'package:test/features/notifications/domain/usecases/get_notifications_usecase.dart';
 import 'package:test/features/notifications/domain/usecases/get_notification_details_usecase.dart';
+import 'package:test/features/notifications/domain/usecases/delete_all_notifications_usecase.dart';
 import 'package:test/features/notifications/presentation/cubit/notifications_cubit.dart';
 // Contact Us feature imports
 import 'package:test/features/contact_us/data/datasources/contact_us_remote_data_source.dart';
@@ -872,6 +873,9 @@ class DependencyInjection {
     getIt.registerLazySingleton<GetNotificationDetailsUseCase>(
       () => GetNotificationDetailsUseCase(getIt<NotificationsRepository>()),
     );
+    getIt.registerLazySingleton<DeleteAllNotificationsUseCase>(
+      () => DeleteAllNotificationsUseCase(getIt<NotificationsRepository>()),
+    );
 
     // Cubits
     getIt.registerFactory<AddressesCubit>(
@@ -902,6 +906,7 @@ class DependencyInjection {
     getIt.registerFactory<NotificationsCubit>(
       () => NotificationsCubit(
         getNotificationsUseCase: getIt<GetNotificationsUseCase>(),
+        deleteAllNotificationsUseCase: getIt<DeleteAllNotificationsUseCase>(),
       ),
     );
     getIt.registerFactory<NotificationDetailsCubit>(

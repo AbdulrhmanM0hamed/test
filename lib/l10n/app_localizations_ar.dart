@@ -1500,7 +1500,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get errorLoadingRegions => 'فشل فى تحميل المناطق';
 
   @override
-  String get selectCityFirst => 'اختر المدينة اولا';
+  String get selectCityFirst => 'اختر المدينة أولاً';
 
   @override
   String get errorLoadingCities => 'فشل فى تحميل المدن';
@@ -1789,4 +1789,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get submit => 'إرسال';
+
+  @override
+  String get loadingRegions => 'جاري تحميل المناطق...';
+
+  @override
+  String get deleteAllNotifications => 'حذف جميع الإشعارات';
+
+  @override
+  String get deleteAllNotificationsConfirmation => 'هل أنت متأكد من أنك تريد حذف جميع الإشعارات؟ لا يمكن التراجع عن هذا الإجراء.';
+
+  @override
+  String get notificationsDeletedSuccessfully => 'تم حذف جميع الإشعارات بنجاح';
 }

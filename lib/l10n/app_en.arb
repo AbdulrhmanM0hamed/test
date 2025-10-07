@@ -746,5 +746,8 @@
   "loadingRegions": "Loading regions...",
   "noCitiesAvailable": "No cities available",
   "noRegionsAvailable": "No regions available",
-  "selectCityFirst": "Select city first"
+  "selectCityFirst": "Select city first",
+  "deleteAllNotifications": "Delete All Notifications",
+  "deleteAllNotificationsConfirmation": "Are you sure you want to delete all notifications? This action cannot be undone.",
+  "notificationsDeletedSuccessfully": "All notifications deleted successfully"
 }
