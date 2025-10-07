@@ -166,6 +166,9 @@ class _OfflineCartViewState extends State<OfflineCartView>
         newQuantity: newQuantity,
       );
       await _loadCartItems(); // Refresh the cart
+      
+      // Notify hybrid service to update badges in real-time
+      HybridCartService.instance.notifyListeners();
     } catch (e) {
       CustomSnackbar.showError(
         context: context,
@@ -178,6 +181,10 @@ class _OfflineCartViewState extends State<OfflineCartView>
     try {
       await OfflineCartService.instance.clearCart();
       await _loadCartItems(); // Refresh the cart
+      
+      // Notify hybrid service to update badges in real-time
+      HybridCartService.instance.notifyListeners();
+      
       CustomSnackbar.showSuccess(
         context: context,
         message: AppLocalizations.of(context)!.cartClearedSuccessfully,
