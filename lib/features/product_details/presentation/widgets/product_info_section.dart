@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
+import 'package:test/core/utils/formatters/price_formatter.dart';
 import 'package:test/features/product_details/domain/entities/product_details.dart';
 import 'package:test/l10n/app_localizations.dart';
 import 'add_to_cart_section.dart';
@@ -166,7 +167,7 @@ class ProductInfoSection extends StatelessWidget {
     return Row(
       children: [
         Text(
-          '${double.tryParse(mainVariant.realPrice.replaceAll(',', ''))?.toStringAsFixed(0) ?? mainVariant.realPrice} ${AppLocalizations.of(context)!.egp}',
+          '${PriceFormatter.formatPrice(mainVariant.realPrice)} ${AppLocalizations.of(context)!.egp}',
           style: getBoldStyle(
             fontSize: FontSize.size24,
             fontFamily: FontConstant.cairo,
@@ -176,7 +177,7 @@ class ProductInfoSection extends StatelessWidget {
         if (hasDiscount) ...[
           const SizedBox(width: 12),
           Text(
-            '${double.tryParse(mainVariant.fakePrice!.replaceAll(',', ''))?.toStringAsFixed(0) ?? mainVariant.fakePrice} ${AppLocalizations.of(context)!.egp}',
+            '${PriceFormatter.formatPrice(mainVariant.fakePrice!)} ${AppLocalizations.of(context)!.egp}',
             style: TextStyle(
               fontSize: FontSize.size16,
               fontFamily: FontConstant.cairo,
