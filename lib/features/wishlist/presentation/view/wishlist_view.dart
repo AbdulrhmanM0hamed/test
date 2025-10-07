@@ -7,6 +7,7 @@ import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/core/utils/responsive/responsive_helper.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
+import 'package:test/features/wishlist/presentation/cubit/wishlist_state.dart';
 import 'package:test/features/wishlist/presentation/widgets/wishlist_item_card.dart';
 import 'package:test/features/home/presentation/view/bottom_nav_bar.dart';
 import 'package:test/l10n/app_localizations.dart';
@@ -95,15 +96,15 @@ class _WishlistViewState extends State<WishlistView>
         child: BlocConsumer<WishlistCubit, WishlistState>(
           listener: (context, state) {
             if (state is WishlistItemAdded) {
-              CustomSnackbar.showSuccess(
-                context: context,
-                message: state.message,
-              );
+              // CustomSnackbar.showSuccess(
+              //   context: context,
+              //   message: state.message,
+              // );
             } else if (state is WishlistItemRemoved) {
-              CustomSnackbar.showWarning(
-                context: context,
-                message: state.message,
-              );
+              // CustomSnackbar.showWarning(
+              //   context: context,
+              //   message: state.message,
+              // );
             } else if (state is WishlistCleared) {
               CustomSnackbar.showSuccess(
                 context: context,

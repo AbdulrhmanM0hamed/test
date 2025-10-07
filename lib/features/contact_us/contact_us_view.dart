@@ -57,40 +57,43 @@ class ContactUsView extends StatelessWidget {
                 ),
               );
             } else if (state is ContactUsLoaded) {
-              return SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Header Section
-                    _buildHeaderSection(context, isArabic),
+              return CustomScrollView(
+                slivers: [
+                  SliverPadding(
+                    padding: const EdgeInsets.all(20),
+                    sliver: SliverList(
+                      delegate: SliverChildListDelegate([
+                        // Header Section
+                        _buildHeaderSection(context, isArabic),
 
-                    const SizedBox(height: 30),
+                        const SizedBox(height: 30),
 
-                    // Contact Information Cards
-                    _buildContactInfoSection(
-                      context,
-                      isArabic,
-                      state.contactInfo,
+                        // Contact Information Cards
+                        _buildContactInfoSection(
+                          context,
+                          isArabic,
+                          state.contactInfo,
+                        ),
+
+                        const SizedBox(height: 30),
+
+                        // Social Media Section
+                        _buildSocialMediaSection(
+                          context,
+                          isArabic,
+                          state.contactInfo,
+                        ),
+
+                        const SizedBox(height: 30),
+
+                        // Map Section
+                        _buildMapSection(context, isArabic, state.contactInfo),
+
+                        const SizedBox(height: 20),
+                      ]),
                     ),
-
-                    const SizedBox(height: 30),
-
-                    // Social Media Section
-                    _buildSocialMediaSection(
-                      context,
-                      isArabic,
-                      state.contactInfo,
-                    ),
-
-                    const SizedBox(height: 30),
-
-                    // Map Section
-                    _buildMapSection(context, isArabic, state.contactInfo),
-
-                    const SizedBox(height: 20),
-                  ],
-                ),
+                  ),
+                ],
               );
             }
 
@@ -315,7 +318,7 @@ class ContactUsView extends StatelessWidget {
                 const Color(0xFF1877F2),
               ),
               _buildSocialIcon(
-                'assets/images/instgram.svg',
+                'assets/images/instagram.svg',
                 contactInfo.instagram,
                 const Color(0xFFE4405F),
               ),
@@ -370,6 +373,7 @@ class ContactUsView extends StatelessWidget {
 
         Container(
           height: 200,
+          width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),

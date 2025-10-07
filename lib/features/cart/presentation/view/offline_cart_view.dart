@@ -8,6 +8,7 @@ import 'package:test/core/services/offline_cart_service.dart';
 import 'package:test/core/services/hybrid_cart_service.dart';
 import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/core/utils/responsive/responsive_helper.dart';
+import 'package:test/core/utils/formatters/price_formatter.dart';
 import 'package:test/features/auth/presentation/view/login_view.dart';
 import 'package:test/features/cart/presentation/widgets/offline_cart_item_card.dart';
 import 'package:test/features/home/presentation/view/bottom_nav_bar.dart';
@@ -404,7 +405,10 @@ class _OfflineCartViewState extends State<OfflineCartView>
                 ),
               ),
               Text(
-                '${_totalPrice.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
+                PriceFormatter.formatPriceWithCurrency(
+                  _totalPrice,
+                  AppLocalizations.of(context)!.currency,
+                ),
                 style: getBoldStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
@@ -427,7 +431,10 @@ class _OfflineCartViewState extends State<OfflineCartView>
                 ),
               ),
               Text(
-                '0${AppLocalizations.of(context)!.currency}',
+                PriceFormatter.formatPriceWithCurrency(
+                  0.0,
+                  AppLocalizations.of(context)!.currency,
+                ),
                 style: getBoldStyle(
                   fontSize: FontSize.size14,
                   fontFamily: FontConstant.cairo,
@@ -449,7 +456,10 @@ class _OfflineCartViewState extends State<OfflineCartView>
                 ),
               ),
               Text(
-                '${_totalPrice.toStringAsFixed(2)} ${AppLocalizations.of(context)!.currency}',
+                PriceFormatter.formatPriceWithCurrency(
+                  _totalPrice,
+                  AppLocalizations.of(context)!.currency,
+                ),
                 style: getBoldStyle(
                   fontSize: FontSize.size18,
                   fontFamily: FontConstant.cairo,

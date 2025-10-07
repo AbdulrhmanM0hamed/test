@@ -361,10 +361,10 @@ class DioService {
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
-        message = localizations?.sendTimeout ?? 'انتهت مهلة الإرسال';
+        message = localizations?.sendTimeout ?? 'الاتصال بطيء جداً! تحقق من سرعة الإنترنت وحاول مرة أخرى';
         break;
       case DioExceptionType.receiveTimeout:
-        message = localizations?.receiveTimeout ?? 'انتهت مهلة الاستقبال';
+        message = localizations?.receiveTimeout ?? 'الخادم يستغرق وقتاً أطول من المعتاد. حاول مرة أخرى';
         break;
       case DioExceptionType.badCertificate:
         message = localizations?.badCertificate ?? 'شهادة أمان غير صالحة';
@@ -393,7 +393,7 @@ class DioService {
             errorString.contains('timed out')) {
           message =
               localizations?.connectionTimeout ??
-              'انتهت مهلة الاتصال. تأكد من سرعة الإنترنت وحاول مرة أخرى';
+              'الاتصال بطيء جداً! تحقق من سرعة الإنترنت وحاول مرة أخرى';
         } else if (errorString.contains('socket') ||
             errorString.contains('network unreachable')) {
           message =

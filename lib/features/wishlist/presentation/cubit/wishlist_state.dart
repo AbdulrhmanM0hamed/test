@@ -1,4 +1,6 @@
-part of 'wishlist_cubit.dart';
+
+import 'package:equatable/equatable.dart';
+import 'package:test/features/wishlist/domain/entities/wishlist_item.dart';
 
 abstract class WishlistState extends Equatable {
   const WishlistState();

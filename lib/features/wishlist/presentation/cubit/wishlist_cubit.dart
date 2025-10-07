@@ -1,13 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:test/core/services/data_refresh_service.dart';
-import '../../domain/entities/wishlist_item.dart';
+import 'package:test/features/wishlist/presentation/cubit/wishlist_state.dart';
 import '../../domain/usecases/get_my_wishlist_use_case.dart';
 import '../../domain/usecases/add_to_wishlist_use_case.dart';
 import '../../domain/usecases/remove_from_wishlist_use_case.dart';
 import '../../domain/usecases/remove_all_from_wishlist_use_case.dart';
 
-part 'wishlist_state.dart';
 
 class WishlistCubit extends Cubit<WishlistState> {
   final GetMyWishlistUseCase _getMyWishlistUseCase;

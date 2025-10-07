@@ -6,6 +6,7 @@ import 'package:test/core/services/global_cubit_service.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/core/services/app_state_service.dart';
+import 'package:test/features/wishlist/presentation/cubit/wishlist_state.dart';
 
 class HybridWishlistService extends ChangeNotifier {
   static HybridWishlistService? _instance;

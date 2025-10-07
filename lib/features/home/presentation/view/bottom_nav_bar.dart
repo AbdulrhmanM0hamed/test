@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:test/features/cart/presentation/cubit/cart_state.dart';
 import 'package:test/features/profile/presentation/view/profile_wrapper.dart';
+import 'package:test/features/wishlist/presentation/cubit/wishlist_state.dart';
 import 'package:test/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

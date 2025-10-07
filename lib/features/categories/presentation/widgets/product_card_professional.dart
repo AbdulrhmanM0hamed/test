@@ -7,6 +7,7 @@ import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/core/services/hybrid_cart_service.dart';
 import 'package:test/core/services/hybrid_wishlist_service.dart';
 import 'package:test/features/home/domain/entities/home_product.dart';
+import 'package:test/features/wishlist/presentation/cubit/wishlist_state.dart';
 import 'package:test/l10n/app_localizations.dart';
 import '../../../../core/utils/constant/app_assets.dart';
 import '../../../../core/utils/constant/font_manger.dart';
@@ -414,7 +415,7 @@ class _ProductCardProfessionalState extends State<ProductCardProfessional>
                     CustomSnackbar.showSuccess(
                       context: context,
                       message: _isInWishlist
-                          ? '${AppLocalizations.of(context)!.adddedToWishlist}${widget.product.name} ${" ${AppLocalizations.of(context)!.forWishlist}"}'
+                          ? '${AppLocalizations.of(context)!.adddedToWishlist + " "}${widget.product.name} ${" ${AppLocalizations.of(context)!.forWishlist}"}'
                           : AppLocalizations.of(context)!.productRemovedFromWishlist,
                     );
                   }

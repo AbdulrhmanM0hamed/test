@@ -411,14 +411,14 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                     Navigator.pushNamed(context, MyOrdersView.routeName);
                   },
                 ),
-                _buildDrawerItem(
-                  icon: Icons.favorite_outline_rounded,
-                  title: AppLocalizations.of(context)!.favorite,
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.pushNamed(context, WishlistView.routeName);
-                  },
-                ),
+                // _buildDrawerItem(
+                //   icon: Icons.favorite_outline_rounded,
+                //   title: AppLocalizations.of(context)!.favorite,
+                //   onTap: () {
+                //     Navigator.pop(context);
+                //     Navigator.pushNamed(context, WishlistView.routeName);
+                //   },
+                // ),
                 BlocBuilder<NotificationsCubit, NotificationsState>(
                   builder: (context, state) {
                     int unreadCount = 0;
