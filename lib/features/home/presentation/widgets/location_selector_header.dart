@@ -678,7 +678,7 @@ class _LocationSelectorBottomSheetState
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
-            AppLocalizations.of(context)!.selectRegion,
+            AppLocalizations.of(context)!.selectCity,
             style: getBoldStyle(
               fontFamily: FontConstant.cairo,
               fontSize: FontSize.size16,
@@ -688,78 +688,194 @@ class _LocationSelectorBottomSheetState
         ),
         const SizedBox(height: 12),
         Expanded(
-          child: GridView.builder(
+          child: ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 3,
-            ),
-            itemCount: locationService.regions.length,
+            itemCount: locationService.regions.length + 1, // +1 for "الكل" option
             itemBuilder: (context, index) {
-              final region = locationService.regions[index];
-              final isSelected =
-                  locationService.selectedRegion?.id == region.id;
+              // First item is "الكل" (All)
+              if (index == 0) {
+                final isSelected = locationService.selectedRegion == null;
+                final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+                
+                return GestureDetector(
+                  onTap: () {
+                    locationService.clearSelectedRegion();
+                  },
+                  child: Container(
+                    height: 60,
+                    margin: const EdgeInsets.only(bottom: 12),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColors.primary.withValues(alpha: 0.8),
+                          AppColors.primary.withValues(alpha: 0.6),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withValues(alpha: 0.3),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                      border: isSelected ? Border.all(
+                        color: Colors.white,
+                        width: 3,
+                      ) : null,
+                    ),
+                    child: Stack(
+                      children: [
+                        // Background pattern or gradient
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.black.withValues(alpha: 0.3),
+                                Colors.transparent,
+                              ],
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                            ),
+                          ),
+                        ),
+                        // Text
+                        Center(
+                          child: Text(
+                            isArabic ? 'الكل' : 'All',
+                            style: getBoldStyle(
+                              fontFamily: FontConstant.cairo,
+                              fontSize: FontSize.size18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+
+              // Region items
+              final region = locationService.regions[index - 1];
+              final isSelected = locationService.selectedRegion?.id == region.id;
 
               return GestureDetector(
                 onTap: () {
                   locationService.selectRegion(region);
-                  Navigator.pop(context);
                 },
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
-                  ),
+                child: Container(
+                  height: 80,
+                  margin: const EdgeInsets.only(bottom: 12),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: isSelected ? AppColors.primary : AppColors.border,
-                      width: isSelected ? 2 : 1,
-                    ),
-                    gradient: isSelected
-                        ? LinearGradient(
-                            colors: [
-                              AppColors.primary.withValues(alpha: 0.15),
-                              AppColors.primary.withValues(alpha: 0.05),
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          )
-                        : null,
-                    color: isSelected ? null : Colors.white,
                     boxShadow: [
                       BoxShadow(
                         color: isSelected
-                            ? AppColors.primary.withValues(alpha: 0.2)
-                            : Colors.black.withValues(alpha: 0.05),
-                        blurRadius: isSelected ? 8 : 4,
-                        offset: const Offset(0, 2),
+                            ? AppColors.primary.withValues(alpha: 0.3)
+                            : Colors.black.withValues(alpha: 0.15),
+                        blurRadius: isSelected ? 12 : 8,
+                        offset: const Offset(0, 4),
                       ),
                     ],
+                    border: isSelected ? Border.all(
+                      color: AppColors.primary,
+                      width: 3,
+                    ) : null,
                   ),
-                  child: Center(
-                    child: Builder(
-                      builder: (context) {
-                        final isArabic =
-                            Localizations.localeOf(context).languageCode ==
-                            'ar';
-                        return Text(
-                          region.getLocalizedTitle(isArabic),
-                          style: getMediumStyle(
-                            fontFamily: FontConstant.cairo,
-                            fontSize: FontSize.size13,
-                            color: isSelected
-                                ? AppColors.primary
-                                : AppColors.textPrimary,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Stack(
+                      children: [
+                        // Background Image
+                        if (region.image != null)
+                          Positioned.fill(
+                            child: CachedNetworkImage(
+                              imageUrl: region.image!,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => Container(
+                                color: AppColors.primary.withValues(alpha: 0.2),
+                                child: Center(
+                                  child: Icon(
+                                    Icons.location_on,
+                                    color: AppColors.primary,
+                                    size: 32,
+                                  ),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                color: AppColors.primary.withValues(alpha: 0.2),
+                                child: Center(
+                                  child: Icon(
+                                    Icons.location_on,
+                                    color: AppColors.primary,
+                                    size: 32,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        else
+                          Positioned.fill(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    AppColors.primary.withValues(alpha: 0.7),
+                                    AppColors.primary.withValues(alpha: 0.5),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                              ),
+                            ),
                           ),
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        );
-                      },
+                        
+                        // Dark overlay for text readability
+                        Positioned.fill(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.black.withValues(alpha: 0.6),
+                                  Colors.black.withValues(alpha: 0.3),
+                                  Colors.transparent,
+                                ],
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                              ),
+                            ),
+                          ),
+                        ),
+                        
+                        // Region Name
+                        Center(
+                          child: Positioned(
+                            bottom: 16,
+                            left: 16,
+                            right: 16,
+                            child: Builder(
+                              builder: (context) {
+                                final isArabic =
+                                    Localizations.localeOf(context).languageCode == 'ar';
+                                return Text(
+                                  region.getLocalizedTitle(isArabic),
+                                  style: getBoldStyle(
+                                    fontFamily: FontConstant.cairo,
+                                    fontSize: FontSize.size16,
+                                    color: Colors.white,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -767,6 +883,36 @@ class _LocationSelectorBottomSheetState
             },
           ),
         ),
+        // Confirmation Button
+        if (locationService.hasCompleteLocation)
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 2,
+                ),
+                child: Text(
+                  AppLocalizations.of(context)!.confirm,
+                  style: getBoldStyle(
+                    fontFamily: FontConstant.cairo,
+                    fontSize: FontSize.size16,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }

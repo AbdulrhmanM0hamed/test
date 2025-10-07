@@ -8,7 +8,7 @@ import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/features/auth/presentation/cubit/location_cubit.dart';
 import 'package:test/features/auth/presentation/cubit/location_state.dart';
 import 'package:test/features/profile/domain/entities/city.dart';
-import 'package:test/features/profile/domain/entities/region.dart';
+import 'package:test/features/auth/domain/entities/region.dart';
 import 'package:provider/provider.dart';
 import 'package:test/l10n/app_localizations.dart';
 
@@ -333,7 +333,7 @@ class _RegistrationLocationSelectorState
             onTap: () => widget.onRegionSelected(region),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
@@ -361,24 +361,72 @@ class _RegistrationLocationSelectorState
                   ),
                 ],
               ),
-              child: Center(
-                child: Consumer<LanguageService>(
-                  builder: (context, languageService, child) {
-                    return Text(
-                      region.getLocalizedTitle(languageService.isArabic),
-                      style: getMediumStyle(
-                        fontFamily: FontConstant.cairo,
-                        fontSize: FontSize.size13,
-                        color: isSelected
-                            ? AppColors.primary
-                            : AppColors.textPrimary,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Region Image
+                  if (region.image != null) ...[
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.1),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
                       ),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    );
-                  },
-                ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: CachedNetworkImage(
+                          imageUrl: region.image!,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Container(
+                            color: AppColors.primary.withValues(alpha: 0.1),
+                            child: Icon(
+                              Icons.location_on,
+                              color: AppColors.primary,
+                              size: 20,
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => Container(
+                            color: AppColors.primary.withValues(alpha: 0.1),
+                            child: Icon(
+                              Icons.location_on,
+                              color: AppColors.primary,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                  ],
+                  
+                  // Region Name
+                  Expanded(
+                    child: Consumer<LanguageService>(
+                      builder: (context, languageService, child) {
+                        return Text(
+                          region.getLocalizedTitle(languageService.isArabic),
+                          style: getMediumStyle(
+                            fontFamily: FontConstant.cairo,
+                            fontSize: FontSize.size11,
+                            color: isSelected
+                                ? AppColors.primary
+                                : AppColors.textPrimary,
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           );

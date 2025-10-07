@@ -3682,6 +3682,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All notifications deleted successfully'**
   String get notificationsDeletedSuccessfully;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// No description provided for @noUnreadNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'No unread notifications'**
+  String get noUnreadNotifications;
+
+  /// No description provided for @notificationTypeOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Notification'**
+  String get notificationTypeOrder;
+
+  /// No description provided for @notificationTypePromotion.
+  ///
+  /// In en, this message translates to:
+  /// **'Special Offer'**
+  String get notificationTypePromotion;
+
+  /// No description provided for @notificationTypeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System Notification'**
+  String get notificationTypeSystem;
+
+  /// No description provided for @notificationTypeDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery Notification'**
+  String get notificationTypeDelivery;
+
+  /// No description provided for @notificationTypeDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification'**
+  String get notificationTypeDefault;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

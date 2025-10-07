@@ -337,6 +337,18 @@ class LocationService extends ChangeNotifier {
     dataRefreshService.refreshAll();
   }
 
+  Future<void> clearSelectedRegion() async {
+    _selectedRegion = null;
+    await _saveSelectedLocation();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
+
+    // Trigger app-wide refresh
+    final dataRefreshService = GetIt.instance<DataRefreshService>();
+    dataRefreshService.refreshAll();
+  }
+
   Future<void> clearSelectedLocation() async {
     _selectedCity = null;
     _selectedRegion = null;

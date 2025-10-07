@@ -749,5 +749,13 @@
   "selectCityFirst": "Select city first",
   "deleteAllNotifications": "Delete All Notifications",
   "deleteAllNotificationsConfirmation": "Are you sure you want to delete all notifications? This action cannot be undone.",
-  "notificationsDeletedSuccessfully": "All notifications deleted successfully"
+  "notificationsDeletedSuccessfully": "All notifications deleted successfully",
+  "confirm": "Confirm",
+  "noUnreadNotifications": "No unread notifications",
+  "deleteAllNotifications": "Delete All Notifications",
+  "notificationTypeOrder": "Order Notification",
+  "notificationTypePromotion": "Special Offer",
+  "notificationTypeSystem": "System Notification",
+  "notificationTypeDelivery": "Delivery Notification",
+  "notificationTypeDefault": "Notification"
 }

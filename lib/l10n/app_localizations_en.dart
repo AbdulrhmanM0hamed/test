@@ -1801,4 +1801,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationsDeletedSuccessfully => 'All notifications deleted successfully';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get noUnreadNotifications => 'No unread notifications';
+
+  @override
+  String get notificationTypeOrder => 'Order Notification';
+
+  @override
+  String get notificationTypePromotion => 'Special Offer';
+
+  @override
+  String get notificationTypeSystem => 'System Notification';
+
+  @override
+  String get notificationTypeDelivery => 'Delivery Notification';
+
+  @override
+  String get notificationTypeDefault => 'Notification';
 }

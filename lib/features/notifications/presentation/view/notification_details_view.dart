@@ -115,7 +115,7 @@ class NotificationDetailsViewBody extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              _getNotificationTypeLabel(notification.type),
+                              _getNotificationTypeLabel(context, notification.type),
                               style: getMediumStyle(
                                 fontFamily: FontConstant.cairo,
                                 fontSize: 12,
@@ -394,18 +394,18 @@ class NotificationDetailsViewBody extends StatelessWidget {
     }
   }
 
-  String _getNotificationTypeLabel(String type) {
+  String _getNotificationTypeLabel(BuildContext context, String type) {
     switch (type.toLowerCase()) {
       case 'order':
-        return 'إشعار طلب';
+        return AppLocalizations.of(context)!.notificationTypeOrder;
       case 'promotion':
-        return 'عرض خاص';
+        return AppLocalizations.of(context)!.notificationTypePromotion;
       case 'system':
-        return 'إشعار النظام';
+        return AppLocalizations.of(context)!.notificationTypeSystem;
       case 'delivery':
-        return 'إشعار التوصيل';
+        return AppLocalizations.of(context)!.notificationTypeDelivery;
       default:
-        return 'إشعار';
+        return AppLocalizations.of(context)!.notificationTypeDefault;
     }
   }
 }

@@ -3,7 +3,7 @@ import 'package:test/features/auth/data/datasources/location_remote_data_source.
 import 'package:test/features/auth/presentation/cubit/location_state.dart';
 import 'package:test/features/profile/domain/entities/country.dart';
 import 'package:test/features/profile/domain/entities/city.dart';
-import 'package:test/features/profile/domain/entities/region.dart';
+import 'package:test/features/auth/domain/entities/region.dart';
 
 class LocationCubit extends Cubit<LocationState> {
   final LocationRemoteDataSource locationRemoteDataSource;
@@ -102,9 +102,8 @@ class LocationCubit extends Cubit<LocationState> {
           id: model.id,
           titleEn: model.titleEn,
           titleAr: model.titleAr,
-          code: model.code,
-          status: model.status,
           cityId: model.cityId,
+          image: model.image,
         );
       }).toList();
 

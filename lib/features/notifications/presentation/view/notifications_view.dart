@@ -51,20 +51,6 @@ class NotificationsViewBody extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         title: AppLocalizations.of(context)!.notifications,
-        actions: isLoggedIn ? [
-          BlocBuilder<NotificationsCubit, NotificationsState>(
-            builder: (context, state) {
-              if (state is NotificationsLoaded && state.notifications.isNotEmpty) {
-                return IconButton(
-                  onPressed: () => _showDeleteConfirmationDialog(context),
-                  icon: const Icon(Icons.delete_outline),
-                  tooltip: AppLocalizations.of(context)!.deleteAllNotifications,
-                );
-              }
-              return const SizedBox.shrink();
-            },
-          ),
-        ] : null,
       ),
       body: isLoggedIn
           ? BlocListener<NotificationsCubit, NotificationsState>(
@@ -113,38 +99,84 @@ class NotificationsViewBody extends StatelessWidget {
       color: AppColors.primary,
       child: Column(
         children: [
-          // Header with unread count
-          if (state.unreadCount > 0)
-            Container(
-              width: double.infinity,
-              margin: const EdgeInsets.all(16),
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: AppColors.primary.withValues(alpha: 0.3),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.notifications_active,
-                    color: AppColors.primary,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    '${AppLocalizations.of(context)!.youHave} ${state.unreadCount} ${AppLocalizations.of(context)!.unreadNotifications}',
-                    style: getMediumStyle(
-                      fontFamily: FontConstant.cairo,
-                      fontSize: 13,
-                      color: AppColors.primary,
+          // Header with unread count and delete button
+          Container(
+            margin: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                // Unread count section
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.notifications_active,
+                          color: AppColors.primary,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            state.unreadCount > 0
+                                ? '${AppLocalizations.of(context)!.youHave} ${state.unreadCount} ${AppLocalizations.of(context)!.unreadNotifications}'
+                                : AppLocalizations.of(context)!.noUnreadNotifications,
+                            style: getMediumStyle(
+                              fontFamily: FontConstant.cairo,
+                              fontSize: 13,
+                              color: AppColors.primary,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(width: 12),
+                // Delete all button
+                if (state.notifications.isNotEmpty)
+                  Expanded(
+                    flex: 0,
+                    child: ElevatedButton.icon(
+                      onPressed: () => _showDeleteConfirmationDialog(context),
+                      icon: const Icon(
+                        Icons.delete_sweep,
+                        size: 18,
+                      ),
+                      label: Text(
+                        AppLocalizations.of(context)!.deleteAllNotifications,
+                        style: getMediumStyle(
+                          fontFamily: FontConstant.cairo,
+                          fontSize: 10,
+                          color: Colors.white,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red[400],
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 2,
+                      ),
+                    ),
+                  ),
+              ],
             ),
+          ),
 
           // Notifications List
           Expanded(
@@ -345,7 +377,7 @@ class NotificationsViewBody extends StatelessWidget {
                 foregroundColor: Colors.white,
               ),
               child: Text(
-                'حذف',
+                AppLocalizations.of(context)!.delete,
                 style: getMediumStyle(
                   fontFamily: FontConstant.cairo,
                   fontSize: 14,

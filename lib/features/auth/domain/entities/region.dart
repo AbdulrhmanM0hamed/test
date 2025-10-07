@@ -3,13 +3,19 @@ class Region {
   final String titleEn;
   final String titleAr;
   final int cityId;
+  final String? image;
 
   const Region({
     required this.id,
     required this.titleEn,
     required this.titleAr,
     required this.cityId,
+    this.image,
   });
+
+  String getLocalizedTitle(bool isArabic) {
+    return isArabic ? titleAr : titleEn;
+  }
 
   @override
   bool operator ==(Object other) =>

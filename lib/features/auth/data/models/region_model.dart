@@ -6,6 +6,7 @@ class RegionModel extends Region {
     required super.titleEn,
     required super.titleAr,
     required super.cityId,
+    super.image,
   });
 
   factory RegionModel.fromJson(Map<String, dynamic> json) {
@@ -14,6 +15,7 @@ class RegionModel extends Region {
       titleEn: json['title_en'] as String,
       titleAr: json['title_ar'] as String,
       cityId: json['city_id'] as int,
+      image: json['image'] as String?,
     );
   }
 
@@ -23,6 +25,7 @@ class RegionModel extends Region {
       'title_en': titleEn,
       'title_ar': titleAr,
       'city_id': cityId,
+      'image': image,
     };
   }
 }

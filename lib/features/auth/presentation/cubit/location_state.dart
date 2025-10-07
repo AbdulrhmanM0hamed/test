@@ -1,6 +1,6 @@
 import 'package:test/features/profile/domain/entities/city.dart';
 import 'package:test/features/profile/domain/entities/country.dart';
-import 'package:test/features/profile/domain/entities/region.dart';
+import 'package:test/features/auth/domain/entities/region.dart';
 
 abstract class LocationState {}
 

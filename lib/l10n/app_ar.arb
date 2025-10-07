@@ -748,5 +748,13 @@
   "selectCityFirst": "اختر المدينة أولاً",
   "deleteAllNotifications": "حذف جميع الإشعارات",
   "deleteAllNotificationsConfirmation": "هل أنت متأكد من أنك تريد حذف جميع الإشعارات؟ لا يمكن التراجع عن هذا الإجراء.",
-  "notificationsDeletedSuccessfully": "تم حذف جميع الإشعارات بنجاح"
+  "notificationsDeletedSuccessfully": "تم حذف جميع الإشعارات بنجاح",
+  "confirm": "تأكيد",
+  "noUnreadNotifications": "لا توجد إشعارات غير مقروءة",
+  "deleteAllNotifications": "مسح جميع الاشعارات",
+  "notificationTypeOrder": "إشعار طلب",
+  "notificationTypePromotion": "عرض خاص",
+  "notificationTypeSystem": "إشعار النظام",
+  "notificationTypeDelivery": "إشعار التوصيل",
+  "notificationTypeDefault": "إشعار"
 }

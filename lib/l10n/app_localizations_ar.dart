@@ -1794,11 +1794,32 @@ class AppLocalizationsAr extends AppLocalizations {
   String get loadingRegions => 'جاري تحميل المناطق...';
 
   @override
-  String get deleteAllNotifications => 'حذف جميع الإشعارات';
+  String get deleteAllNotifications => 'مسح جميع الاشعارات';
 
   @override
   String get deleteAllNotificationsConfirmation => 'هل أنت متأكد من أنك تريد حذف جميع الإشعارات؟ لا يمكن التراجع عن هذا الإجراء.';
 
   @override
   String get notificationsDeletedSuccessfully => 'تم حذف جميع الإشعارات بنجاح';
+
+  @override
+  String get confirm => 'تأكيد';
+
+  @override
+  String get noUnreadNotifications => 'لا توجد إشعارات غير مقروءة';
+
+  @override
+  String get notificationTypeOrder => 'إشعار طلب';
+
+  @override
+  String get notificationTypePromotion => 'عرض خاص';
+
+  @override
+  String get notificationTypeSystem => 'إشعار النظام';
+
+  @override
+  String get notificationTypeDelivery => 'إشعار التوصيل';
+
+  @override
+  String get notificationTypeDefault => 'إشعار';
 }

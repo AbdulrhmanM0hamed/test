@@ -5,12 +5,14 @@ class Region extends Equatable {
   final String titleEn;
   final String titleAr;
   final int cityId;
+  final String? image;
 
   const Region({
     required this.id,
     required this.titleEn,
     required this.titleAr,
     required this.cityId,
+    this.image,
   });
 
   /// Get localized title based on language
@@ -19,7 +21,7 @@ class Region extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, titleEn, titleAr, cityId];
+  List<Object?> get props => [id, titleEn, titleAr, cityId, image];
 
   @override
   String toString() => 'Region(id: $id, titleAr: $titleAr, titleEn: $titleEn)';

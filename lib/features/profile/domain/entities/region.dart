@@ -7,6 +7,7 @@ class Region {
   final int cityId;
   final String? createdAt;
   final String? updatedAt;
+  final String? image;
 
   const Region({
     required this.id,
@@ -17,6 +18,7 @@ class Region {
     required this.cityId,
     this.createdAt,
     this.updatedAt,
+    this.image,
   });
 
   /// Get localized title based on language

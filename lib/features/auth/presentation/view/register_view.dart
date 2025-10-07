@@ -17,7 +17,8 @@ import 'package:test/features/auth/presentation/widgets/registration_location_se
 import 'package:test/features/auth/presentation/widgets/registration_terms_checkbox.dart';
 import 'package:test/features/profile/domain/entities/country.dart';
 import 'package:test/features/profile/domain/entities/city.dart';
-import 'package:test/features/profile/domain/entities/region.dart';
+import 'package:test/features/auth/domain/entities/region.dart' as AuthRegion;
+import 'package:test/features/profile/domain/entities/region.dart' as ProfileRegion;
 import 'package:test/l10n/app_localizations.dart';
 
 class RegisterView extends StatefulWidget {
@@ -44,7 +45,7 @@ class _RegisterViewState extends State<RegisterView> {
   DateTime? _selectedBirthDate;
   String? _selectedGender;
   City? _selectedCity;
-  Region? _selectedRegion;
+  AuthRegion.Region? _selectedRegion;
 
   @override
   void dispose() {
@@ -73,6 +74,18 @@ class _RegisterViewState extends State<RegisterView> {
         _selectedBirthDate = picked;
       });
     }
+  }
+
+  ProfileRegion.Region? _convertToProfileRegion(AuthRegion.Region? authRegion) {
+    if (authRegion == null) return null;
+    
+    return ProfileRegion.Region(
+      id: authRegion.id,
+      titleEn: authRegion.titleEn,
+      titleAr: authRegion.titleAr,
+      cityId: authRegion.cityId,
+      image: authRegion.image,
+    );
   }
 
   void _register(BuildContext context) {
@@ -135,7 +148,7 @@ class _RegisterViewState extends State<RegisterView> {
           code: '+20',
         ),
         city: _selectedCity,
-        region: _selectedRegion,
+        region: _convertToProfileRegion(_selectedRegion),
       );
     }
   }

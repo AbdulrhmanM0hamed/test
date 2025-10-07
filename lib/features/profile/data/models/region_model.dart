@@ -10,6 +10,7 @@ class RegionModel extends Region {
     required super.cityId,
     super.createdAt,
     super.updatedAt,
+    super.image,
   });
 
   factory RegionModel.fromJson(Map<String, dynamic> json) {
@@ -22,6 +23,7 @@ class RegionModel extends Region {
       cityId: json['city_id'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
+      image: json['image'],
     );
   }
 
@@ -35,6 +37,7 @@ class RegionModel extends Region {
       'city_id': cityId,
       'created_at': createdAt,
       'updated_at': updatedAt,
+      'image': image,
     };
   }
 }
