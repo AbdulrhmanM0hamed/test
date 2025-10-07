@@ -8,11 +8,13 @@ import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/utils/theme/app_colors.dart';
 import 'package:test/core/utils/animations/custom_animations.dart';
+import 'package:test/features/categories/presentation/cubit/department_cubit.dart';
 import 'package:test/features/categories/presentation/widgets/product_card_professional.dart';
 import 'package:test/features/categories/presentation/cubits/products_filter_cubit.dart';
 import 'package:test/features/categories/presentation/cubits/products_filter_state.dart';
 import 'package:test/features/categories/domain/entities/product.dart';
 import 'package:test/features/product_details/presentation/view/product_details_view.dart';
+import 'package:test/features/categories/presentation/widgets/advanced_filter_bottom_sheet.dart';
 import 'package:test/l10n/app_localizations.dart';
 
 class SearchBottomSheet extends StatefulWidget {
@@ -82,6 +84,38 @@ class _SearchBottomSheetState extends State<SearchBottomSheet>
     _debounceTimer?.cancel();
     _searchController.clear();
     context.read<ProductsFilterCubit>().updateKeyword('');
+  }
+
+  bool _hasActiveFilters(ProductsFilterState state) {
+    final filter = state.filter;
+    return filter.departmentId != null ||
+           filter.mainCategoryId != null ||
+           filter.subCategoryId != null ||
+           (filter.price != null && filter.price!.isNotEmpty) ||
+           filter.rate != null ||
+           filter.brandId != null ||
+           filter.colorId != null ||
+           filter.sizeId != null ||
+           filter.tags != null;
+  }
+
+  void _showAdvancedFilter() {
+    // Get required dependencies for AdvancedFilterBottomSheet
+    final productsFilterCubit = context.read<ProductsFilterCubit>();
+    final departmentCubit = context.read<DepartmentCubit>();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => MultiBlocProvider(
+        providers: [
+          BlocProvider<ProductsFilterCubit>.value(value: productsFilterCubit),
+          BlocProvider<DepartmentCubit>.value(value: departmentCubit),
+        ],
+        child: const AdvancedFilterBottomSheet(),
+      ),
+    );
   }
 
   @override
@@ -240,15 +274,18 @@ class _SearchBottomSheetState extends State<SearchBottomSheet>
                       ),
                     ),
                   )
-                : Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: SvgPicture.asset(
-                      AppAssets.icon_filter,
-                      width: 18,
-                      height: 18,
-                      colorFilter: ColorFilter.mode(
-                        Colors.white.withValues(alpha: 0.8),
-                        BlendMode.srcIn,
+                : GestureDetector(
+                    onTap: _showAdvancedFilter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: SvgPicture.asset(
+                        AppAssets.icon_filter,
+                        width: 18,
+                        height: 18,
+                        colorFilter: ColorFilter.mode(
+                          Colors.white.withValues(alpha: 0.8),
+                          BlendMode.srcIn,
+                        ),
                       ),
                     ),
                   ),
@@ -289,7 +326,8 @@ class _SearchBottomSheetState extends State<SearchBottomSheet>
 
         final products = state.products;
 
-        if (!_isSearching) {
+        // Show empty state only if no search and no filters applied
+        if (!_isSearching && !_hasActiveFilters(state)) {
           return _buildEmptySearchState();
         }
 
@@ -417,7 +455,7 @@ class _SearchBottomSheetState extends State<SearchBottomSheet>
         padding: const EdgeInsets.only(bottom: 20),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.66,
+          childAspectRatio: 0.62,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
         ),

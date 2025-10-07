@@ -2,8 +2,7 @@
 class ProductFilter {
   final int? mainCategoryId;
   final int? subCategoryId;
-  final double? minPrice;
-  final double? maxPrice;
+  final List<double>? price; // [minPrice, maxPrice]
   final int? rate;
   final String? departmentId;
   final int? brandId;
@@ -18,8 +17,7 @@ class ProductFilter {
   const ProductFilter({
     this.mainCategoryId,
     this.subCategoryId,
-    this.minPrice,
-    this.maxPrice,
+    this.price,
     this.rate,
     this.departmentId,
     this.brandId,
@@ -35,8 +33,7 @@ class ProductFilter {
   ProductFilter copyWith({
     int? mainCategoryId,
     int? subCategoryId,
-    double? minPrice,
-    double? maxPrice,
+    List<double>? price,
     int? rate,
     String? departmentId,
     int? brandId,
@@ -51,8 +48,7 @@ class ProductFilter {
     return ProductFilter(
       mainCategoryId: mainCategoryId ?? this.mainCategoryId,
       subCategoryId: subCategoryId ?? this.subCategoryId,
-      minPrice: minPrice ?? this.minPrice,
-      maxPrice: maxPrice ?? this.maxPrice,
+      price: price ?? this.price,
       rate: rate ?? this.rate,
       departmentId: departmentId ?? this.departmentId,
       brandId: brandId ?? this.brandId,
@@ -84,8 +80,7 @@ class ProductFilter {
   bool get hasActiveFilters {
     return mainCategoryId != null ||
         subCategoryId != null ||
-        minPrice != null ||
-        maxPrice != null ||
+        (price != null && price!.isNotEmpty) ||
         rate != null ||
         departmentId != null ||
         brandId != null ||
@@ -99,6 +94,6 @@ class ProductFilter {
 
   @override
   String toString() {
-    return 'ProductFilter(mainCategoryId: $mainCategoryId, subCategoryId: $subCategoryId, departmentId: $departmentId, keyword: $keyword, page: $page)';
+    return 'ProductFilter(mainCategoryId: $mainCategoryId, subCategoryId: $subCategoryId, departmentId: $departmentId, price: $price, keyword: $keyword, page: $page)';
   }
 }

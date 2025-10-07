@@ -1822,4 +1822,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get notificationTypeDefault => 'إشعار';
+
+  @override
+  String get priceRange => 'نطاق السعر';
+
+  @override
+  String get enterPriceRange => 'أدخل نطاق السعر المطلوب';
+
+  @override
+  String get from => 'من';
+
+  @override
+  String get to => 'إلى';
 }

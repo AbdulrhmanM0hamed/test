@@ -61,8 +61,7 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
       final url = ApiEndpoints.getAllProducts(
         mainCategoryId: filter.mainCategoryId,
         subCategoryId: filter.subCategoryId,
-        minPrice: filter.minPrice,
-        maxPrice: filter.maxPrice,
+        price: filter.price,
         rate: filter.rate,
         departmentId: filter.departmentId,
         brandId: filter.brandId,

@@ -756,5 +756,10 @@
   "notificationTypePromotion": "عرض خاص",
   "notificationTypeSystem": "إشعار النظام",
   "notificationTypeDelivery": "إشعار التوصيل",
-  "notificationTypeDefault": "إشعار"
+  "notificationTypeDefault": "إشعار",
+  "priceRange": "نطاق السعر",
+  "enterPriceRange": "أدخل نطاق السعر المطلوب",
+  "from": "من",
+  "to": "إلى",
+  "currency": "ج.م"
 }

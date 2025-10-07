@@ -1822,4 +1822,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationTypeDefault => 'Notification';
+
+  @override
+  String get priceRange => 'Price Range';
+
+  @override
+  String get enterPriceRange => 'Enter your desired price range';
+
+  @override
+  String get from => 'From';
+
+  @override
+  String get to => 'To';
 }

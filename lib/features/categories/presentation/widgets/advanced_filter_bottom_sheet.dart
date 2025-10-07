@@ -22,6 +22,10 @@ class _AdvancedFilterBottomSheetState extends State<AdvancedFilterBottomSheet> {
   Department? selectedDepartment;
   Category? selectedMainCategory;
   SubCategory? selectedSubCategory;
+  
+  // Price filter controllers
+  final TextEditingController _priceFromController = TextEditingController();
+  final TextEditingController _priceToController = TextEditingController();
 
   @override
   void initState() {
@@ -80,6 +84,16 @@ class _AdvancedFilterBottomSheetState extends State<AdvancedFilterBottomSheet> {
         }
       }
 
+      // Initialize price controllers with current filter values
+      if (filterState.filter.price != null && filterState.filter.price!.isNotEmpty) {
+        if (filterState.filter.price!.length >= 1) {
+          _priceFromController.text = filterState.filter.price![0].toString();
+        }
+        if (filterState.filter.price!.length >= 2) {
+          _priceToController.text = filterState.filter.price![1].toString();
+        }
+      }
+
       if (mounted) {
         setState(() {});
       }
@@ -87,11 +101,29 @@ class _AdvancedFilterBottomSheetState extends State<AdvancedFilterBottomSheet> {
   }
 
   void _applyFilters() {
+    // Parse price values and create price array
+    List<double>? priceArray;
+    
+    final minPriceText = _priceFromController.text.trim();
+    final maxPriceText = _priceToController.text.trim();
+    
+    if (minPriceText.isNotEmpty || maxPriceText.isNotEmpty) {
+      final minPrice = minPriceText.isNotEmpty ? double.tryParse(minPriceText) : null;
+      final maxPrice = maxPriceText.isNotEmpty ? double.tryParse(maxPriceText) : null;
+      
+      if (minPrice != null || maxPrice != null) {
+        priceArray = [minPrice ?? 0.0, maxPrice ?? double.infinity];
+      }
+    }
+
+    // Apply all filters at once
     context.read<ProductsFilterCubit>().updateFilter(
       departmentId: selectedDepartment?.id,
       mainCategoryId: selectedMainCategory?.id,
       subCategoryId: selectedSubCategory?.id,
+      price: priceArray,
     );
+    
     Navigator.pop(context);
   }
 
@@ -107,6 +139,10 @@ class _AdvancedFilterBottomSheetState extends State<AdvancedFilterBottomSheet> {
     selectedDepartment = null;
     selectedMainCategory = null;
     selectedSubCategory = null;
+    
+    // Clear price controllers
+    _priceFromController.clear();
+    _priceToController.clear();
 
     context.read<ProductsFilterCubit>().clearFilters(
       defaultDepartmentId: defaultDepartmentId,
@@ -221,6 +257,12 @@ class _AdvancedFilterBottomSheetState extends State<AdvancedFilterBottomSheet> {
             const SizedBox(height: 12),
             _buildSubCategoryCards(selectedMainCategory!.subCategories),
           ],
+          
+          // Price Range Section
+          const SizedBox(height: 24),
+          _buildSectionTitle(AppLocalizations.of(context)!.priceRange),
+          const SizedBox(height: 12),
+          _buildPriceRangeSection(),
         ],
       ),
     );
@@ -657,5 +699,183 @@ class _AdvancedFilterBottomSheetState extends State<AdvancedFilterBottomSheet> {
         ],
       ),
     );
+  }
+
+  Widget _buildPriceRangeSection() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.grey.withValues(alpha: 0.2),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withValues(alpha: 0.08),
+            blurRadius: 3,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            AppLocalizations.of(context)!.enterPriceRange,
+            style: getRegularStyle(
+              fontSize: FontSize.size14,
+              fontFamily: FontConstant.cairo,
+              color: Colors.grey[600]!,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.from,
+                      style: getSemiBoldStyle(
+                        fontSize: FontSize.size13,
+                        fontFamily: FontConstant.cairo,
+                        color: AppColors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: _priceFromController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        hintText: '0',
+                        hintStyle: getRegularStyle(
+                          fontSize: FontSize.size14,
+                          fontFamily: FontConstant.cairo,
+                          color: Colors.grey[400]!,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: Colors.grey.withValues(alpha: 0.3),
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: AppColors.primary,
+                            width: 2,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: Colors.grey.withValues(alpha: 0.3),
+                          ),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        suffixText: AppLocalizations.of(context)!.currency,
+                        suffixStyle: getRegularStyle(
+                          fontSize: FontSize.size12,
+                          fontFamily: FontConstant.cairo,
+                          color: Colors.grey[600]!,
+                        ),
+                      ),
+                      style: getRegularStyle(
+                        fontSize: FontSize.size14,
+                        fontFamily: FontConstant.cairo,
+                        color: AppColors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 16),
+              Container(
+                width: 20,
+                height: 2,
+                color: Colors.grey.withValues(alpha: 0.4),
+                margin: const EdgeInsets.only(top: 20),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.to,
+                      style: getSemiBoldStyle(
+                        fontSize: FontSize.size13,
+                        fontFamily: FontConstant.cairo,
+                        color: AppColors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    TextField(
+                      controller: _priceToController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        hintText: '1000',
+                        hintStyle: getRegularStyle(
+                          fontSize: FontSize.size14,
+                          fontFamily: FontConstant.cairo,
+                          color: Colors.grey[400]!,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: Colors.grey.withValues(alpha: 0.3),
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: AppColors.primary,
+                            width: 2,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: Colors.grey.withValues(alpha: 0.3),
+                          ),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                        suffixText: AppLocalizations.of(context)!.currency,
+                        suffixStyle: getRegularStyle(
+                          fontSize: FontSize.size12,
+                          fontFamily: FontConstant.cairo,
+                          color: Colors.grey[600]!,
+                        ),
+                      ),
+                      style: getRegularStyle(
+                        fontSize: FontSize.size14,
+                        fontFamily: FontConstant.cairo,
+                        color: AppColors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _priceFromController.dispose();
+    _priceToController.dispose();
+    super.dispose();
   }
 }

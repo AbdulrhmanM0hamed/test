@@ -6,8 +6,10 @@ import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
 import 'package:test/core/widgets/search_bottom_sheet.dart';
 import 'package:test/features/categories/presentation/cubits/products_filter_cubit.dart';
+import 'package:test/features/categories/presentation/cubit/department_cubit.dart';
 import 'package:test/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:test/core/di/dependency_injection.dart';
 import 'package:test/l10n/app_localizations.dart';
 
 class HeaderSearchBar extends StatefulWidget {
@@ -25,6 +27,10 @@ class _HeaderSearchBarState extends State<HeaderSearchBar> {
     final productsFilterCubit = context.read<ProductsFilterCubit>();
     final wishlistCubit = context.read<WishlistCubit>();
     final cartCubit = context.read<CartCubit>();
+    
+    // Create DepartmentCubit instance
+    final departmentCubit = DependencyInjection.getIt.get<DepartmentCubit>()
+      ..getDepartments();
 
     showModalBottomSheet(
       context: context,
@@ -34,6 +40,7 @@ class _HeaderSearchBarState extends State<HeaderSearchBar> {
         return MultiBlocProvider(
           providers: [
             BlocProvider<ProductsFilterCubit>.value(value: productsFilterCubit),
+            BlocProvider<DepartmentCubit>.value(value: departmentCubit),
             BlocProvider<WishlistCubit>.value(value: wishlistCubit),
             BlocProvider<CartCubit>.value(value: cartCubit),
           ],

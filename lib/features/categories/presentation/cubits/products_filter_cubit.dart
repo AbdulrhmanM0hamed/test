@@ -100,10 +100,9 @@ class ProductsFilterCubit extends Cubit<ProductsFilterState> {
   }
 
   /// تحديد نطاق السعر
-  void updatePriceRange(double? minPrice, double? maxPrice) {
+  void updatePriceRange(List<double>? price) {
     final newFilter = state.filter.copyWith(
-      minPrice: minPrice,
-      maxPrice: maxPrice,
+      price: price,
     );
     emit(state.copyWith(filter: newFilter));
     _currentPage = 1;
@@ -116,11 +115,13 @@ class ProductsFilterCubit extends Cubit<ProductsFilterState> {
     int? departmentId,
     int? mainCategoryId,
     int? subCategoryId,
+    List<double>? price,
   }) {
     final newFilter = state.filter.copyWith(
       departmentId: departmentId?.toString(),
       mainCategoryId: mainCategoryId,
       subCategoryId: subCategoryId,
+      price: price,
     );
     emit(state.copyWith(filter: newFilter));
     _currentPage = 1;

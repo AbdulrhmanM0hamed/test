@@ -757,5 +757,10 @@
   "notificationTypePromotion": "Special Offer",
   "notificationTypeSystem": "System Notification",
   "notificationTypeDelivery": "Delivery Notification",
-  "notificationTypeDefault": "Notification"
+  "notificationTypeDefault": "Notification",
+  "priceRange": "Price Range",
+  "enterPriceRange": "Enter your desired price range",
+  "from": "From",
+  "to": "To",
+  "currency": "EGP"
 }

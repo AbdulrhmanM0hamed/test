@@ -73,8 +73,7 @@ class ApiEndpoints {
   static String getAllProducts({
     int? mainCategoryId,
     int? subCategoryId,
-    double? minPrice,
-    double? maxPrice,
+    List<double>? price,
     int? rate,
     String? departmentId,
     int? brandId,
@@ -90,8 +89,12 @@ class ApiEndpoints {
 
     if (mainCategoryId != null) params['main_category_id'] = mainCategoryId;
     if (subCategoryId != null) params['sub_category_id'] = subCategoryId;
-    if (minPrice != null) params['min_price'] = minPrice;
-    if (maxPrice != null) params['max_price'] = maxPrice;
+    
+    // Send price as array format: price=[min,max]
+    if (price != null && price.isNotEmpty) {
+      params['price'] = '[${price.join(',')}]';
+    }
+    
     if (rate != null) params['rate'] = rate;
     if (departmentId != null) params['department_id'] = departmentId;
     if (brandId != null) params['brand_id'] = brandId;

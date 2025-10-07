@@ -4,8 +4,7 @@ class ProductFilterModel extends ProductFilter {
   const ProductFilterModel({
     super.mainCategoryId,
     super.subCategoryId,
-    super.minPrice,
-    super.maxPrice,
+    super.price,
     super.rate,
     super.departmentId,
     super.brandId,
@@ -19,11 +18,15 @@ class ProductFilterModel extends ProductFilter {
   });
 
   factory ProductFilterModel.fromJson(Map<String, dynamic> json) {
+    List<double>? priceList;
+    if (json['price'] != null && json['price'] is List) {
+      priceList = (json['price'] as List).map((e) => (e as num).toDouble()).toList();
+    }
+    
     return ProductFilterModel(
       mainCategoryId: json['main_category_id'],
       subCategoryId: json['sub_category_id'],
-      minPrice: json['min_price']?.toDouble(),
-      maxPrice: json['max_price']?.toDouble(),
+      price: priceList,
       rate: json['rate'],
       departmentId: json['department_id'],
       brandId: json['brand_id'],
@@ -42,8 +45,7 @@ class ProductFilterModel extends ProductFilter {
     
     if (mainCategoryId != null) data['main_category_id'] = mainCategoryId;
     if (subCategoryId != null) data['sub_category_id'] = subCategoryId;
-    if (minPrice != null) data['min_price'] = minPrice;
-    if (maxPrice != null) data['max_price'] = maxPrice;
+    if (price != null && price!.isNotEmpty) data['price'] = price;
     if (rate != null) data['rate'] = rate;
     if (departmentId != null) data['department_id'] = departmentId;
     if (brandId != null) data['brand_id'] = brandId;
@@ -62,8 +64,7 @@ class ProductFilterModel extends ProductFilter {
   ProductFilterModel copyWith({
     int? mainCategoryId,
     int? subCategoryId,
-    double? minPrice,
-    double? maxPrice,
+    List<double>? price,
     int? rate,
     String? departmentId,
     int? brandId,
@@ -78,8 +79,7 @@ class ProductFilterModel extends ProductFilter {
     return ProductFilterModel(
       mainCategoryId: mainCategoryId ?? this.mainCategoryId,
       subCategoryId: subCategoryId ?? this.subCategoryId,
-      minPrice: minPrice ?? this.minPrice,
-      maxPrice: maxPrice ?? this.maxPrice,
+      price: price ?? this.price,
       rate: rate ?? this.rate,
       departmentId: departmentId ?? this.departmentId,
       brandId: brandId ?? this.brandId,
