@@ -741,5 +741,10 @@
   "writeYourCommentHere": "Write your comment here...",
   "cancel": "Cancel",
   "submit": "Submit",
-  "retry": "Retry"
+  "retry": "Retry",
+  "loadingCities": "Loading cities...",
+  "loadingRegions": "Loading regions...",
+  "noCitiesAvailable": "No cities available",
+  "noRegionsAvailable": "No regions available",
+  "selectCityFirst": "Select city first"
 }

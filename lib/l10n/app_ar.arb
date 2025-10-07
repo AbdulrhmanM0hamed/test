@@ -740,5 +740,10 @@
   "writeYourCommentHere": "اكتب تعليقك هنا...",
   "cancel": "إلغاء",
   "submit": "إرسال",
-  "retry": "إعادة المحاولة"
+  "retry": "إعادة المحاولة",
+  "loadingCities": "جاري تحميل المدن...",
+  "loadingRegions": "جاري تحميل المناطق...",
+  "noCitiesAvailable": "لا توجد مدن متاحة",
+  "noRegionsAvailable": "لا توجد مناطق متاحة",
+  "selectCityFirst": "اختر المدينة أولاً"
 }

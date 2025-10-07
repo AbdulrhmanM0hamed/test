@@ -38,9 +38,20 @@ class _RegistrationLocationSelectorState
   @override
   void initState() {
     super.initState();
-    // Auto-load cities for default country (Egypt)
+    // Auto-load cities for default country (Egypt) with error handling
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<LocationCubit>().getCities(defaultCountryId);
+      if (mounted) {
+        try {
+          context.read<LocationCubit>().getCities(defaultCountryId);
+        } catch (e) {
+          // Handle potential context issues on first app launch
+          Future.delayed(const Duration(milliseconds: 500), () {
+            if (mounted) {
+              context.read<LocationCubit>().getCities(defaultCountryId);
+            }
+          });
+        }
+      }
     });
   }
 
@@ -78,7 +89,7 @@ class _RegistrationLocationSelectorState
     Size size,
   ) {
     if (state is LocationCitiesLoading) {
-      return _buildLoadingState(context, 'جاري تحميل المدن...');
+      return _buildLoadingState(context, AppLocalizations.of(context)!.loadingCities);
     }
 
     if (state is LocationCitiesLoaded ||
@@ -94,7 +105,7 @@ class _RegistrationLocationSelectorState
       }
 
       if (cities.isEmpty) {
-        return _buildEmptyState(context, 'لا توجد مدن متاحة');
+        return _buildEmptyStateWithRetry(context, AppLocalizations.of(context)!.noCitiesAvailable);
       }
 
       return _buildCityGrid(context, cities, size);
@@ -104,7 +115,8 @@ class _RegistrationLocationSelectorState
       return _buildErrorState(context, state.message);
     }
 
-    return _buildLoadingState(context, 'جاري تحميل المدن...');
+    // Handle initial state with timeout
+    return _buildInitialLoadingWithTimeout(context);
   }
 
   Widget _buildRegionSelector(
@@ -113,18 +125,18 @@ class _RegistrationLocationSelectorState
     Size size,
   ) {
     if (state is LocationRegionsLoading) {
-      return _buildLoadingState(context, 'جاري تحميل المناطق...');
+      return _buildLoadingState(context, AppLocalizations.of(context)!.loadingCities);
     }
 
     if (state is LocationRegionsLoaded) {
       if (state.regions.isEmpty) {
-        return _buildEmptyState(context, 'لا توجد مناطق متاحة');
+        return _buildEmptyState(context, AppLocalizations.of(context)!.noRegionsAvailable);
       }
 
       return _buildRegionGrid(context, state.regions, size);
     }
 
-    return _buildEmptyState(context, 'اختر المدينة أولاً');
+    return _buildEmptyState(context, AppLocalizations.of(context)!.selectCityFirst);
   }
 
   Widget _buildCityGrid(BuildContext context, List<City> cities, Size size) {
@@ -433,9 +445,9 @@ class _RegistrationLocationSelectorState
     );
   }
 
-  Widget _buildErrorState(BuildContext context, String message) {
+  Widget _buildEmptyStateWithRetry(BuildContext context, String message) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         gradient: LinearGradient(
@@ -450,50 +462,84 @@ class _RegistrationLocationSelectorState
       ),
       child: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.red.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(Icons.error_outline, color: Colors.red, size: 32),
+          Icon(
+            Icons.location_off,
+            size: 48,
+            color: Colors.grey[400],
           ),
           const SizedBox(height: 16),
           Text(
             message,
-            style: getMediumStyle(
-              fontFamily: FontConstant.cairo,
-              fontSize: FontSize.size14,
-              color: Colors.red,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey[600],
+              fontFamily: 'Cairo',
             ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-          ElevatedButton.icon(
-            onPressed: () =>
-                context.read<LocationCubit>().getCities(defaultCountryId),
-            icon: const Icon(Icons.refresh, size: 18),
-            label: Text(
-              'إعادة المحاولة',
-              style: getBoldStyle(
-                fontFamily: FontConstant.cairo,
-                fontSize: FontSize.size14,
-                color: Colors.white,
-              ),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              elevation: 2,
+          ElevatedButton(
+            onPressed: () {
+              context.read<LocationCubit>().getCities(defaultCountryId);
+            },
+            child: Text(
+              AppLocalizations.of(context)!.retry,
+              style: const TextStyle(fontFamily: 'Cairo'),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildErrorState(BuildContext context, String message) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          Icon(
+            Icons.error_outline,
+            size: 48,
+            color: Colors.red[400],
+          ),
+          const SizedBox(height: 16),
+          Text(
+            message,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.red[600],
+              fontFamily: 'Cairo',
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
+              context.read<LocationCubit>().getCities(defaultCountryId);
+            },
+            child: Text(
+              AppLocalizations.of(context)!.retry,
+              style: const TextStyle(fontFamily: 'Cairo'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInitialLoadingWithTimeout(BuildContext context) {
+    // Set a timeout to prevent infinite loading
+    Future.delayed(const Duration(seconds: 10), () {
+      if (mounted) {
+        final currentState = context.read<LocationCubit>().state;
+        if (currentState is LocationInitial || currentState is LocationCitiesLoading) {
+          // If still loading after 10 seconds, try to reload
+          context.read<LocationCubit>().getCities(defaultCountryId);
+        }
+      }
+    });
+
+    return _buildLoadingState(context, AppLocalizations.of(context)!.loadingCities);
   }
 
   Widget _buildFieldWithLabel({required String label, required Widget child}) {
