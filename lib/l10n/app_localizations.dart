@@ -98,37 +98,37 @@ abstract class AppLocalizations {
   /// No description provided for @fastDelivery.
   ///
   /// In en, this message translates to:
-  /// **'Fast & Reliable Delivery'**
+  /// **'Fast Delivery for Your Favorite Coffee'**
   String get fastDelivery;
 
   /// No description provided for @fastDeliveryDesc.
   ///
   /// In en, this message translates to:
-  /// **'Experience trust in fast and reliable delivery, ensuring your orders reach you promptly and in excellent condition.'**
+  /// **'Get your fresh coffee delivered to your doorstep in record time with our fast and reliable delivery service, so you can enjoy authentic coffee taste at home.'**
   String get fastDeliveryDesc;
 
   /// No description provided for @highQualityProducts.
   ///
   /// In en, this message translates to:
-  /// **'High Quality Products'**
+  /// **'Premium Coffee from the World\'s Best Farms'**
   String get highQualityProducts;
 
   /// No description provided for @highQualityProductsDesc.
   ///
   /// In en, this message translates to:
-  /// **'We offer you the best high-quality products that have been carefully selected to meet your needs.'**
+  /// **'We select the finest coffee beans from the world\'s best farms, expertly roasted with exceptional care to deliver an extraordinary flavor in every sip.'**
   String get highQualityProductsDesc;
 
   /// No description provided for @easyShoppingExperience.
   ///
   /// In en, this message translates to:
-  /// **'Easy Shopping Experience'**
+  /// **'Discover the World of Coffee with Ease'**
   String get easyShoppingExperience;
 
   /// No description provided for @easyShoppingExperienceDesc.
   ///
   /// In en, this message translates to:
-  /// **'Enjoy a smooth and easy shopping experience through a simple and user-friendly interface.'**
+  /// **'Browse our extensive collection of different coffee varieties and order your favorite coffee with just one tap through our simple and intuitive app.'**
   String get easyShoppingExperienceDesc;
 
   /// No description provided for @goodMorning.

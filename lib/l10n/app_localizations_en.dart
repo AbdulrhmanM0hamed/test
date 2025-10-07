@@ -9,22 +9,22 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get fastDelivery => 'Fast & Reliable Delivery';
+  String get fastDelivery => 'Fast Delivery for Your Favorite Coffee';
 
   @override
-  String get fastDeliveryDesc => 'Experience trust in fast and reliable delivery, ensuring your orders reach you promptly and in excellent condition.';
+  String get fastDeliveryDesc => 'Get your fresh coffee delivered to your doorstep in record time with our fast and reliable delivery service, so you can enjoy authentic coffee taste at home.';
 
   @override
-  String get highQualityProducts => 'High Quality Products';
+  String get highQualityProducts => 'Premium Coffee from the World\'s Best Farms';
 
   @override
-  String get highQualityProductsDesc => 'We offer you the best high-quality products that have been carefully selected to meet your needs.';
+  String get highQualityProductsDesc => 'We select the finest coffee beans from the world\'s best farms, expertly roasted with exceptional care to deliver an extraordinary flavor in every sip.';
 
   @override
-  String get easyShoppingExperience => 'Easy Shopping Experience';
+  String get easyShoppingExperience => 'Discover the World of Coffee with Ease';
 
   @override
-  String get easyShoppingExperienceDesc => 'Enjoy a smooth and easy shopping experience through a simple and user-friendly interface.';
+  String get easyShoppingExperienceDesc => 'Browse our extensive collection of different coffee varieties and order your favorite coffee with just one tap through our simple and intuitive app.';
 
   @override
   String get goodMorning => 'Good Morning,';

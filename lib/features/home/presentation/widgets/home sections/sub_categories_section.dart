@@ -8,7 +8,7 @@ import '../../../../../features/home/presentation/cubits/sub_categories/sub_cate
 import '../../../../../features/home/presentation/cubits/sub_categories/sub_categories_state.dart';
 import '../../../../../features/home/presentation/widgets/home_product_card.dart';
 
-class SubCategoriesSection extends StatelessWidget {
+class SubCategoriesSection extends StatefulWidget {
   final Function(HomeProduct) onProductTap;
   final Function(HomeProduct) onFavoritePressed;
   final Function(SubCategory) onSeeAll;
@@ -18,6 +18,27 @@ class SubCategoriesSection extends StatelessWidget {
     required this.onFavoritePressed,
     required this.onSeeAll,
   });
+
+  @override
+  State<SubCategoriesSection> createState() => _SubCategoriesSectionState();
+}
+
+class _SubCategoriesSectionState extends State<SubCategoriesSection> {
+  String? _currentLocale;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final newLocale = Localizations.localeOf(context).languageCode;
+    
+    // If locale changed, refresh the data
+    if (_currentLocale != null && _currentLocale != newLocale) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.read<SubCategoriesCubit>().getSubCategories(refresh: true);
+      });
+    }
+    _currentLocale = newLocale;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +102,7 @@ class SubCategoriesSection extends StatelessWidget {
                 ),
                 child: HomeProductCard(
                   product: product,
-                  onTap: () => onProductTap(product),
+                  onTap: () => widget.onProductTap(product),
                 ),
               );
             },

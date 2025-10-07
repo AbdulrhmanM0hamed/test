@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:test/core/utils/animations/custom_progress_indcator.dart';
+import 'package:test/core/utils/widgets/custom_snackbar.dart';
 import 'package:test/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:test/features/cart/presentation/cubit/cart_state.dart';
 import 'package:test/features/product_details/presentation/view/product_details_view.dart';
@@ -92,6 +93,25 @@ class _CartItemCardState extends State<CartItemCard>
     _debounceTimer = Timer(const Duration(milliseconds: 800), () {
       widget.onQuantityChanged?.call(newQuantity);
     });
+  }
+
+  void _showLimitationMessage(int maxQuantity, int limitation) {
+    String message;
+
+    if (limitation > 0 && _localQuantity >= limitation) {
+      // Product-specific limitation reached
+      message =
+          '${AppLocalizations.of(context)!.maxAllowedQuantity} $limitation ${AppLocalizations.of(context)!.forThisProduct}';
+    } else if (_localQuantity >= maxQuantity) {
+      // Stock limitation reached
+      message =
+          '${AppLocalizations.of(context)!.onlyAvailable} $maxQuantity ${AppLocalizations.of(context)!.inStock}';
+    } else {
+      // General limitation message
+      message = AppLocalizations.of(context)!.cannotAddMoreItems;
+    }
+
+    CustomSnackbar.showWarning(context: context, message: message);
   }
 
   void _handleRemove() async {
@@ -416,14 +436,12 @@ class _CartItemCardState extends State<CartItemCard>
         cartState.cartItemId == widget.cartItem.id;
 
     final currentQuantity = _localQuantity;
-    final maxAllowed = widget.cartItem.product.limitation > 0
-        ? (widget.cartItem.product.limitation < widget.cartItem.countOfAvailable
-              ? widget.cartItem.product.limitation
-              : widget.cartItem.countOfAvailable)
-        : widget.cartItem.countOfAvailable;
-    final canIncrease =
-        currentQuantity < maxAllowed &&
-        currentQuantity < widget.cartItem.countOfAvailable;
+    // Get product limitation and stock from cart item
+    final limitation = widget.cartItem.product.limitation;
+    final stock = widget.cartItem.product.stock;
+    final maxQuantity = limitation > 0 ? (limitation < stock ? limitation : stock) : stock;
+    
+    final canIncrease = currentQuantity < maxQuantity;
     final canDecrease = currentQuantity > 1;
 
     return Column(
@@ -500,8 +518,8 @@ class _CartItemCardState extends State<CartItemCard>
                   icon: Icons.add,
                   onPressed: canIncrease
                       ? () => _updateQuantityWithDebounce(currentQuantity + 1)
-                      : null,
-                  isDisabled: !canIncrease,
+                      : () => _showLimitationMessage(maxQuantity, limitation),
+                  isDisabled: false, // Always enabled to show limitation message
                 ),
               ],
             ),

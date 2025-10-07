@@ -33,8 +33,29 @@ class CategoriesSection extends StatelessWidget {
   }
 }
 
-class ShoppingCategories extends StatelessWidget {
+class ShoppingCategories extends StatefulWidget {
   const ShoppingCategories({super.key});
+
+  @override
+  State<ShoppingCategories> createState() => _ShoppingCategoriesState();
+}
+
+class _ShoppingCategoriesState extends State<ShoppingCategories> {
+  String? _currentLocale;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final newLocale = Localizations.localeOf(context).languageCode;
+    
+    // If locale changed, refresh the data
+    if (_currentLocale != null && _currentLocale != newLocale) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.read<SubCategoryCubit>().getSubCategories();
+      });
+    }
+    _currentLocale = newLocale;
+  }
 
   void _handleSubCategoryTap(
     BuildContext context,

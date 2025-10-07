@@ -478,7 +478,7 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                   title: Localizations.localeOf(context).languageCode == 'ar'
                       ? 'حول التطبيق'
                       : 'About App',
-                  onTap: () => Navigator.pop(context),
+                  onTap: () => Navigator.pushNamed(context, '/about-us'),
                 ),
                 _buildDrawerItem(
                   icon: Icons.help_outline_rounded,
@@ -901,6 +901,8 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                     fontFamily: FontConstant.cairo,
                     fontSize: FontSize.size16,
                     color: Colors.grey[700],
+                  ).copyWith(
+                    decoration: TextDecoration.none,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -910,6 +912,8 @@ class _GreetingHeaderState extends State<GreetingHeader> {
                     fontFamily: FontConstant.cairo,
                     fontSize: FontSize.size12,
                     color: Colors.grey[600],
+                  ).copyWith(
+                    decoration: TextDecoration.none,
                   ),
                 ),
               ],

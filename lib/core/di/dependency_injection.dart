@@ -175,6 +175,12 @@ import 'package:test/features/faq/data/repositories/faq_repository_impl.dart';
 import 'package:test/features/faq/domain/repositories/faq_repository.dart';
 import 'package:test/features/faq/domain/usecases/get_faqs_usecase.dart';
 import 'package:test/features/faq/presentation/cubit/faq_cubit.dart';
+// About Us feature imports
+import 'package:test/features/about_us/data/datasources/about_us_remote_data_source.dart';
+import 'package:test/features/about_us/data/repositories/about_us_repository_impl.dart';
+import 'package:test/features/about_us/domain/repositories/about_us_repository.dart';
+import 'package:test/features/about_us/domain/usecases/get_about_us_usecase.dart';
+import 'package:test/features/about_us/presentation/cubit/about_us_cubit.dart';
 
 class DependencyInjection {
   static final GetIt getIt = GetIt.instance;
@@ -953,6 +959,32 @@ class DependencyInjection {
     getIt.registerFactory<FAQCubit>(
       () => FAQCubit(
         getFAQsUseCase: getIt<GetFAQsUseCase>(),
+      ),
+    );
+
+    // About Us feature dependencies
+    // Data Sources
+    getIt.registerLazySingleton<AboutUsRemoteDataSource>(
+      () => AboutUsRemoteDataSourceImpl(dioService: getIt<DioService>()),
+    );
+
+    // Repositories
+    getIt.registerLazySingleton<AboutUsRepository>(
+      () => AboutUsRepositoryImpl(
+        remoteDataSource: getIt<AboutUsRemoteDataSource>(),
+        networkInfo: getIt<NetworkInfo>(),
+      ),
+    );
+
+    // Use Cases
+    getIt.registerLazySingleton<GetAboutUsUseCase>(
+      () => GetAboutUsUseCase(repository: getIt<AboutUsRepository>()),
+    );
+
+    // Cubits
+    getIt.registerFactory<AboutUsCubit>(
+      () => AboutUsCubit(
+        getAboutUsUseCase: getIt<GetAboutUsUseCase>(),
       ),
     );
   }

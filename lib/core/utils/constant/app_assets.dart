@@ -11,9 +11,9 @@ class AppAssets {
   static const String logoWithoutName = '$_imagesPath/logoWithoutName.png';
 
   // Onboarding
-  static const String onboarding_1 = '$_imagesPath/on_boarding_1.png';
-  static const String onboarding_2 = '$_imagesPath/on_boarding_2.png';
-  static const String onboarding_3 = '$_imagesPath/on_boarding_3.png';
+  static const String onboarding_1 = '$_imagesPath/on_boarding_1.svg';
+  static const String onboarding_2 = '$_imagesPath/on_boarding_2.svg';
+  static const String onboarding_3 = '$_imagesPath/on_boarding_3.svg';
   static const String onboardingBackground1 = '$_imagesPath/on_boarding_background_1.png';
   static const String onboardingBackground2 = '$_imagesPath/on_boarding_background_2.png';
   static const String onboardingBackground3 = '$_imagesPath/on_boarding_background_3.png';

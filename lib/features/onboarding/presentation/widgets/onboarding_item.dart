@@ -1,3 +1,4 @@
+import 'package:flutter_svg/svg.dart';
 import 'package:test/core/utils/constant/app_assets.dart';
 import 'package:test/core/utils/constant/font_manger.dart';
 import 'package:test/core/utils/constant/styles_manger.dart';
@@ -68,11 +69,11 @@ class OnboardingItem extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   children: [
                     // Center image
-                    Image.asset(model.image, fit: BoxFit.contain),
+                    SvgPicture.asset(model.image, fit: BoxFit.contain),
                   ],
                 ),
               ),
-
+              SizedBox(height: 55),
               // Title text
               Text(
                 model.title,

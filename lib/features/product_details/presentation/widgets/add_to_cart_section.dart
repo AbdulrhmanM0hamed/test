@@ -260,7 +260,7 @@ class _AddToCartSectionState extends State<AddToCartSection> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                'خصم ${_selectedVariant!.discount}%',
+                '${AppLocalizations.of(context)!.discount} ${_selectedVariant!.discount}%',
                 style: getBoldStyle(
                   fontSize: FontSize.size12,
                   fontFamily: FontConstant.cairo,

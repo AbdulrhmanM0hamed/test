@@ -9,25 +9,22 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get fastDelivery => 'تسليم سريع وموثوق';
+  String get fastDelivery => 'توصيل سريع لقهوتك المفضلة';
 
   @override
-  String get fastDeliveryDesc =>
-      'جرب الثقة في التسليم السريع والموثوق به ، مما يضمن وصول طلباتك إليك على الفور وفي حالة ممتازة.';
+  String get fastDeliveryDesc => 'احصل على قهوتك الطازجة في أسرع وقت ممكن مع خدمة التوصيل السريع والموثوق، لتستمتع بطعم القهوة الأصيل في منزلك.';
 
   @override
-  String get highQualityProducts => 'منتجات عالية الجودة';
+  String get highQualityProducts => 'قهوة عالية الجودة من أفضل المزارع';
 
   @override
-  String get highQualityProductsDesc =>
-      'نقدم لك أفضل المنتجات ذات الجودة العالية التي تم اختيارها بعناية لتلبية احتياجاتك.';
+  String get highQualityProductsDesc => 'نختار لك أجود أنواع القهوة من أفضل المزارع حول العالم، محمصة بعناية فائقة لتحصل على نكهة استثنائية في كل رشفة.';
 
   @override
-  String get easyShoppingExperience => 'تجربة تسوق سهلة';
+  String get easyShoppingExperience => 'اكتشف عالم القهوة بسهولة';
 
   @override
-  String get easyShoppingExperienceDesc =>
-      'استمتع بتجربة تسوق سلسة وسهلة من خلال واجهة بسيطة وسهلة الاستخدام.';
+  String get easyShoppingExperienceDesc => 'تصفح مجموعتنا الواسعة من أنواع القهوة المختلفة واطلب قهوتك المفضلة بضغطة واحدة من خلال تطبيقنا السهل والبسيط.';
 
   @override
   String get goodMorning => 'صباح الخير،';
@@ -63,8 +60,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get emailVerificationRequired => 'تفعيل البريد الإلكتروني مطلوب';
 
   @override
-  String get emailNotVerifiedMessage =>
-      'يرجى تفعيل بريدك الإلكتروني للمتابعة. تم إرسال رابط التفعيل إلى بريدك الإلكتروني.';
+  String get emailNotVerifiedMessage => 'يرجى تفعيل بريدك الإلكتروني للمتابعة. تم إرسال رابط التفعيل إلى بريدك الإلكتروني.';
 
   @override
   String get resendVerificationEmail => 'إعادة إرسال بريد التفعيل';
@@ -310,8 +306,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get retry => 'إعادة المحاولة';
 
   @override
-  String get errorLoadingBestSellers =>
-      'حدث خطأ في تحميل المنتجات الأكثر مبيعاً';
+  String get errorLoadingBestSellers => 'حدث خطأ في تحميل المنتجات الأكثر مبيعاً';
 
   @override
   String get errorLoadingFeatured => 'حدث خطأ في تحميل المنتجات المميزة';
@@ -635,12 +630,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get passwordTooLongMax50 => 'كلمة المرور طويلة جداً';
 
   @override
-  String get passwordMustContainUppercase =>
-      'كلمة المرور يجب أن تحتوي على حرف كبير';
+  String get passwordMustContainUppercase => 'كلمة المرور يجب أن تحتوي على حرف كبير';
 
   @override
-  String get passwordMustContainLowercase =>
-      'كلمة المرور يجب أن تحتوي على حرف صغير';
+  String get passwordMustContainLowercase => 'كلمة المرور يجب أن تحتوي على حرف صغير';
 
   @override
   String get passwordMustContainNumber => 'كلمة المرور يجب أن تحتوي على رقم';
@@ -709,8 +702,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get confirmNewPasswordHint => 'تأكيد كلمة المرور الجديدة';
 
   @override
-  String get phoneNumberMinLength =>
-      'رقم الهاتف يجب أن يكون 10 أرقام على الأقل';
+  String get phoneNumberMinLength => 'رقم الهاتف يجب أن يكون 10 أرقام على الأقل';
 
   @override
   String get nameMinLength => 'الاسم يجب أن يكون حرفين على الأقل';
@@ -761,20 +753,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get confirmNewPasswordLabel => 'تأكيد كلمة المرور الجديدة';
 
   @override
-  String get securityTip =>
-      'حافظ على أمان حسابك بتحديث كلمة المرور بانتظام واستخدام كلمة مرور قوية.';
+  String get securityTip => 'حافظ على أمان حسابك بتحديث كلمة المرور بانتظام واستخدام كلمة مرور قوية.';
 
   @override
-  String get nameUpdateTip =>
-      'يمكنك تغيير اسمك الكامل هنا. سيظهر الاسم الجديد في ملفك الشخصي.';
+  String get nameUpdateTip => 'يمكنك تغيير اسمك الكامل هنا. سيظهر الاسم الجديد في ملفك الشخصي.';
 
   @override
-  String get phoneUpdateTip =>
-      'يمكنك تحديث رقم هاتفك هنا. تأكد من إدخال رقم صحيح للتواصل.';
+  String get phoneUpdateTip => 'يمكنك تحديث رقم هاتفك هنا. تأكد من إدخال رقم صحيح للتواصل.';
 
   @override
-  String get birthDateUpdateTip =>
-      'يمكنك تحديث تاريخ ميلادك هنا. هذه المعلومة تساعد في تخصيص تجربتك.';
+  String get birthDateUpdateTip => 'يمكنك تحديث تاريخ ميلادك هنا. هذه المعلومة تساعد في تخصيص تجربتك.';
 
   @override
   String get notSpecifiedValue => 'غير محدد';
@@ -795,23 +783,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get addressNotChanged => 'لم يتم تغيير العنوان';
 
   @override
-  String get addressUpdateTip =>
-      'يمكنك تحديث عنوانك هنا. هذا يساعد في تحسين خدمات التوصيل.';
+  String get addressUpdateTip => 'يمكنك تحديث عنوانك هنا. هذا يساعد في تحسين خدمات التوصيل.';
 
   @override
   String get addressTipsTitle => 'نصائح لكتابة العنوان:';
 
   @override
-  String get addressTips =>
-      '• اكتب اسم الشارع والحي\n• أضف رقم المبنى أو الشقة\n• اذكر المدينة والمحافظة\n• يمكنك إضافة علامات مميزة';
+  String get addressTips => '• اكتب اسم الشارع والحي\n• أضف رقم المبنى أو الشقة\n• اذكر المدينة والمحافظة\n• يمكنك إضافة علامات مميزة';
 
   @override
-  String get addressUpdateNotAvailable =>
-      'تعديل العنوان غير متاح حالياً - سيتم إضافة هذه الميزة قريباً';
+  String get addressUpdateNotAvailable => 'تعديل العنوان غير متاح حالياً - سيتم إضافة هذه الميزة قريباً';
 
   @override
-  String get passwordUpdateTip =>
-      'حافظ على أمان حسابك بتحديث كلمة المرور بانتظام واستخدام كلمة مرور قوية.';
+  String get passwordUpdateTip => 'حافظ على أمان حسابك بتحديث كلمة المرور بانتظام واستخدام كلمة مرور قوية.';
 
   @override
   String get imageUpdatedSuccessfully => 'تم تحديث الصورة الشخصية بنجاح';
@@ -826,12 +810,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get errorSelectingImage => 'خطأ في اختيار الصورة';
 
   @override
-  String get logoutConfirmationTitle =>
-      'هل أنت متأكد من رغبتك في تسجيل الخروج؟';
+  String get logoutConfirmationTitle => 'هل أنت متأكد من رغبتك في تسجيل الخروج؟';
 
   @override
-  String get logoutConfirmationMessage =>
-      'سيتم إنهاء جلستك الحالية وستحتاج لتسجيل الدخول مرة أخرى';
+  String get logoutConfirmationMessage => 'سيتم إنهاء جلستك الحالية وستحتاج لتسجيل الدخول مرة أخرى';
 
   @override
   String get cancelButton => 'إلغاء';
@@ -885,8 +867,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get errorLoadingCountries => 'حدث خطأ في تحميل الدول';
 
   @override
-  String get checkInternetConnection =>
-      'تأكد من اتصالك بالإنترنت وحاول مرة أخرى';
+  String get checkInternetConnection => 'تأكد من اتصالك بالإنترنت وحاول مرة أخرى';
 
   @override
   String get selectYourCountry => 'اختر دولتك';
@@ -910,8 +891,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clearCart => 'حذف السلة';
 
   @override
-  String get clearCartConfirmation =>
-      'هل أنت متأكد من حذف جميع المنتجات من السلة؟';
+  String get clearCartConfirmation => 'هل أنت متأكد من حذف جميع المنتجات من السلة؟';
 
   @override
   String get yes => 'نعم';
@@ -965,8 +945,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get notLoggedIn => 'أنت غير مسجل دخول';
 
   @override
-  String get loginToAccessAccount =>
-      'يرجى تسجيل الدخول للوصول إلى حسابك الشخصي وإدارة معلوماتك';
+  String get loginToAccessAccount => 'يرجى تسجيل الدخول للوصول إلى حسابك الشخصي وإدارة معلوماتك';
 
   @override
   String get dontHaveAccountQuestion => 'ليس لديك حساب؟';
@@ -1041,8 +1020,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clearWishlist => 'حذف المفضلة';
 
   @override
-  String get clearWishlistConfirmation =>
-      'هل أنت متأكد من حذف جميع المنتجات من المفضلة؟';
+  String get clearWishlistConfirmation => 'هل أنت متأكد من حذف جميع المنتجات من المفضلة؟';
 
   @override
   String get wishlistCleared => 'تم حذف جميع المنتجات من المفضلة';
@@ -1108,8 +1086,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get discoverAllCategories => 'اكتشف جميع الفئات';
 
   @override
-  String get browseCategorizedProducts =>
-      'تصفح مجموعة واسعة من المنتجات المصنفة حسب الفئات';
+  String get browseCategorizedProducts => 'تصفح مجموعة واسعة من المنتجات المصنفة حسب الفئات';
 
   @override
   String get bestSellerProducts => 'الأكثر مبيعاً';
@@ -1205,8 +1182,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clientPreconditionRequired => 'شرط مسبق مطلوب';
 
   @override
-  String get clientTooManyRequests =>
-      'عدد كبير جداً من الطلبات - يرجى المحاولة لاحقاً';
+  String get clientTooManyRequests => 'عدد كبير جداً من الطلبات - يرجى المحاولة لاحقاً';
 
   @override
   String get clientRequestHeaderFieldsTooLarge => 'حقول رأس الطلب كبيرة جداً';
@@ -1434,8 +1410,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get orderId => 'رقم الطلب: #%s';
 
   @override
-  String get orderConfirmationMessage =>
-      'سيتم التواصل معك قريباً لتأكيد الطلب وتحديد موعد التوصيل';
+  String get orderConfirmationMessage => 'سيتم التواصل معك قريباً لتأكيد الطلب وتحديد موعد التوصيل';
 
   @override
   String get trackOrder => 'تتبع الطلب';
@@ -1450,16 +1425,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tryDifferentKeywords => 'جرب كلمات مختلفة أو تصفح الأقسام';
 
   @override
-  String get connectionClosed =>
-      'فشل الاتصال بالخادم. تأكد من اتصالك بالإنترنت وحاول مرة أخرى';
+  String get connectionClosed => 'فشل الاتصال بالخادم. تأكد من اتصالك بالإنترنت وحاول مرة أخرى';
 
   @override
-  String get connectionTimeout =>
-      'انتهت مهلة الاتصال. تأكد من سرعة الإنترنت وحاول مرة أخرى';
+  String get connectionTimeout => 'انتهت مهلة الاتصال. تأكد من سرعة الإنترنت وحاول مرة أخرى';
 
   @override
-  String get noInternetConnection =>
-      'لا يوجد اتصال بالإنترنت. تحقق من اتصالك وحاول مرة أخرى';
+  String get noInternetConnection => 'لا يوجد اتصال بالإنترنت. تحقق من اتصالك وحاول مرة أخرى';
 
   @override
   String get serverNotResponding => 'الخادم لا يستجيب. حاول مرة أخرى لاحقاً';
@@ -1489,8 +1461,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noOrdersYet => 'لا توجد طلبات بعد';
 
   @override
-  String get noOrdersMessage =>
-      'يبدو أنك لم تقم بأي طلب حتى الآن. ابدأ التسوق لاكتشاف منتجاتنا المميزة!';
+  String get noOrdersMessage => 'يبدو أنك لم تقم بأي طلب حتى الآن. ابدأ التسوق لاكتشاف منتجاتنا المميزة!';
 
   @override
   String get orderHistory => 'سجل الطلبات';
@@ -1538,8 +1509,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clear => 'مسح';
 
   @override
-  String get discoverSetsOfProducts =>
-      'اكتشف مجموعة واسعة من المنتجات المميزة في كل فئة';
+  String get discoverSetsOfProducts => 'اكتشف مجموعة واسعة من المنتجات المميزة في كل فئة';
 
   @override
   String get customerInformation => 'معلومات العميل';
@@ -1599,8 +1569,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get reviewSubmittedSuccessfully => 'تم إرسال التقييم بنجاح';
 
   @override
-  String get loginRequiredToReview =>
-      'يجب تسجيل الدخول أولاً لإضافة تقييم للمنتج';
+  String get loginRequiredToReview => 'يجب تسجيل الدخول أولاً لإضافة تقييم للمنتج';
 
   @override
   String get maxAllowedQuantity => 'الحد الأقصى المسموح';
@@ -1633,8 +1602,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get pleaseEnterDetailedAddress => 'يرجى إدخال العنوان التفصيلي';
 
   @override
-  String get addressMustBeAtLeast5Characters =>
-      'العنوان يجب أن يكون 5 أحرف على الأقل';
+  String get addressMustBeAtLeast5Characters => 'العنوان يجب أن يكون 5 أحرف على الأقل';
 
   @override
   String get pleaseSelectCity => 'يرجى اختيار المدينة';
@@ -1670,8 +1638,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get errorOccurred => 'حدث خطأ';
 
   @override
-  String get couldNotLoadNotificationDetails =>
-      'تعذر تحميل تفاصيل الإشعار، يرجى المحاولة مرة أخرى';
+  String get couldNotLoadNotificationDetails => 'تعذر تحميل تفاصيل الإشعار، يرجى المحاولة مرة أخرى';
 
   @override
   String get back => 'العودة';
@@ -1731,8 +1698,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cartClearedSuccessfully => 'تم مسح السلة بنجاح';
 
   @override
-  String get areYouSureYouWantToExitTheApp =>
-      'هل أنت متأكد من الخروج من التطبيق؟';
+  String get areYouSureYouWantToExitTheApp => 'هل أنت متأكد من الخروج من التطبيق؟';
 
   @override
   String get shareProduct => 'شارك المنتج';
@@ -1789,11 +1755,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get errorLoadingHotTopics => 'خطأ في تحميل المواضيع الساخنة';
 
   @override
-  String get noHotTopics => 'لا توجد مواضيع مهمة';
+  String get noHotTopics => 'لا توجد مواضيع ساخنة';
 
   @override
-  String get checkBackLaterForTrendingTopics =>
-      'تحقق لاحقاً من المواضيع الرائجة';
+  String get checkBackLaterForTrendingTopics => 'تحقق لاحقاً من المواضيع الرائجة';
 
   @override
   String get hot => 'ساخن';

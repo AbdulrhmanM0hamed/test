@@ -139,4 +139,7 @@ class ApiEndpoints {
 
   // FAQ endpoint
   static String get faq => '$baseUrl/faq';
+
+  // About Us endpoint
+  static String get aboutUs => '$baseUrl/old-about-us';
 }
